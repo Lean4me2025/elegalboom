@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>E-LegalBoom – Document Catalog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --primary:#0056b3;
+      --primary-light:#e6f0ff;
+      --accent:#17a24a;
+      --bg:#f7f7f9;
+      --text:#222;
+    }
+    * { box-sizing:border-box; }
+    body {
+      margin:0;
+      font-family: system-ui, sans-serif;
+      background:var(--bg);
+      color:var(--text);
+    }
+    header {
+      background:#ffffff;
+      border-bottom:1px solid #ddd;
+      padding:16px 24px;
+    }
+    .nav-inner {
+      max-width:1000px;
+      margin:0 auto;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+    }
+    .brand { font-weight:700; font-size:1.25rem; }
+    .brand span { color:var(--primary); }
+    nav a {
+      margin-left:18px;
+      text-decoration:none;
+      color:var(--primary);
+      font-weight:600;
+    }
+    nav a:hover { text-decoration:underline; }
+
+    main {
+      max-width:1000px;
+      margin:32px auto;
+      padding:0 16px;
+    }
+    h1 {
+      font-size:2rem;
+      margin-bottom:10px;
+    }
+    .lead {
+      margin-top:0;
+      margin-bottom:28px;
+      max-width:650px;
+      line-height:1.55;
+      color:#444;
+    }
+
+    .grid {
+      display:grid;
+      grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));
+      gap:22px;
+    }
+
+    .card {
+      background:#fff;
+      border-radius:10px;
+      padding:22px;
+      border:1px solid #e4e4e4;
+      box-shadow:0 4px 10px rgba(0,0,0,0.04);
+      display:flex;
+      flex-direction:column;
+    }
+
+    .card h2 { margin:0 0 4px; }
+    .price { color:var(--primary); font-weight:700; margin-bottom:10px; }
+    .tagline { margin:0 0 14px; font-size:0.95rem; color:#555; }
+
+    ul {
+      padding-left:20px;
+      margin:0 0 18px;
+      line-height:1.45;
+    }
+
+    .btn {
+      display:inline-block;
+      margin-top:auto;
+      padding:10px 18px;
+      background:var(--accent);
+      color:white;
+      text-decoration:none;
+      border-radius:999px;
+      font-weight:600;
+      text-align:center;
+      font-size:0.92rem;
+    }
+    .btn:hover { opacity:0.85; }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <div class="nav-inner">
+    <div class="brand">E-<span>LegalBoom</span></div>
+    <nav>
+      <a href="index.html">Catalog</a>
+      <a href="orders.html">Customer Input</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <h1>Document Catalog</h1>
+  <p class="lead">
+    Fast, accurate, digital legal documents delivered in minutes.
+    Select your package below.
+  </p>
+
+  <div class="grid">
+
+    <!-- Tier 1 -->
+    <div class="card">
+      <h2>Tier 1 – Basic Filing Support</h2>
+      <div class="price">$39</div>
+      <p class="tagline">Simple business filings & essential documents.</p>
+      <ul>
+        <li>NDA (Mutual)</li>
+        <li>Promissory Note</li>
+        <li>Single-Member LLC Operating Agreement</li>
+      </ul>
+      <a class="btn" href="https://pay.elegalboom.org/e4b79a60-0fd7-431c-8bfc-ae0">Activate Tier 1</a>
+    </div>
+
+    <!-- Tier 2 -->
+    <div class="card">
+      <h2>Tier 2 – Standard Legal Foundation</h2>
+      <div class="price">$59</div>
+      <p class="tagline">Stronger legal foundation for growing businesses.</p>
+      <ul>
+        <li>Partnership Agreement</li>
+        <li>Two-Member LLC Operating Agreement</li>
+      </ul>
+      <a class="btn" href="https://pay.elegalboom.org/aeda586f-65f5-4bf0-98f3-7a2">Activate Tier 2</a>
+    </div>
+
+    <!-- Tier 3 -->
+    <div class="card">
+      <h2>Tier 3 – Premium Business Package</h2>
+      <div class="price">$99</div>
+      <p class="tagline">A comprehensive package for established businesses.</p>
+      <ul>
+        <li>All Tier 1 & 2 Documents</li>
+        <li>Plus Additional Premium Templates</li>
+      </ul>
+      <a class="btn" href="https://pay.elegalboom.org/71ca7144-e537-4fbd-823d-c10">Activate Tier 3</a>
+    </div>
+
+    <!-- Entrepreneur Bundle -->
+    <div class="card">
+      <h2>Entrepreneur Starter Bundle</h2>
+      <div class="price">$149</div>
+      <p class="tagline">The full launch kit for new entrepreneurs.</p>
+      <ul>
+        <li>Formation Filings</li>
+        <li>Operating Agreements</li>
+        <li>Starter Contracts</li>
+        <li>Compliance Templates</li>
+      </ul>
+      <a class="btn" href="https://pay.elegalboom.org/55c7cd3d-1048-4b8c-aadb-843">Purchase Bundle</a>
+    </div>
+
+  </div>
+</main>
+
+</body>
+</html>
