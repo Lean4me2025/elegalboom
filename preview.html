@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Package Preview – E-LegalBoom</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="elb-body">
+
+  <header class="elb-header">
+    <div class="elb-logo">E-LegalBoom</div>
+    <nav class="elb-nav">
+      <a href="index.html">Catalog</a>
+      <a href="tier1.html">Tier 1</a>
+      <a href="tier2.html">Tier 2</a>
+      <a href="tier3.html">Tier 3</a>
+      <a href="bundle.html">Starter Bundle</a>
+      <a href="orders.html">Customer Input</a>
+    </nav>
+  </header>
+
+  <main class="preview-layout">
+    <!-- LEFT: Tier selector -->
+    <aside class="preview-sidebar">
+      <h1 class="preview-title">Choose Your Package</h1>
+
+      <button class="tier-chip" data-tier="tier1">
+        <span class="tier-chip-title">Tier 1</span>
+        <span class="tier-chip-sub">Basic Filing Support</span>
+        <span class="tier-chip-price">$39</span>
+      </button>
+
+      <button class="tier-chip" data-tier="tier2">
+        <span class="tier-chip-title">Tier 2</span>
+        <span class="tier-chip-sub">Standard Legal Foundation</span>
+        <span class="tier-chip-price">$59</span>
+      </button>
+
+      <button class="tier-chip" data-tier="tier3">
+        <span class="tier-chip-title">Tier 3</span>
+        <span class="tier-chip-sub">Premium Business Package</span>
+        <span class="tier-chip-price">$99</span>
+      </button>
+
+      <button class="tier-chip" data-tier="starter">
+        <span class="tier-chip-title">Starter Bundle</span>
+        <span class="tier-chip-sub">Full Launch Kit</span>
+        <span class="tier-chip-price">$149</span>
+      </button>
+
+      <p class="preview-note">
+        Pick the package you’re considering, then choose a document and state
+        to see a sample and what information you’ll need.
+      </p>
+    </aside>
+
+    <!-- RIGHT: Viewing area -->
+    <section class="preview-main">
+      <header class="preview-main-header">
+        <div>
+          <h2 id="previewTierName">Tier 1 – Basic Filing Support</h2>
+          <p id="previewTierTagline" class="preview-tagline">
+            Essential starter documents for new LLCs and side-hustles.
+          </p>
+        </div>
+
+        <div class="preview-price-box">
+          <div id="previewTierPrice" class="preview-price">$39</div>
+          <div class="preview-price-caption">Digital delivery</div>
+        </div>
+      </header>
+
+      <!-- State + document selectors -->
+      <div class="preview-controls">
+        <div class="preview-control">
+          <label for="previewState">Your state (for filing guidance):</label>
+          <select id="previewState">
+            <option value="">Select a state…</option>
+            <option value="CA">California</option>
+            <option value="TX">Texas</option>
+            <option value="FL">Florida</option>
+            <option value="NY">New York</option>
+            <option value="DE">Delaware</option>
+            <option value="WA">Washington</option>
+            <option value="GA">Georgia</option>
+            <option value="IL">Illinois</option>
+            <option value="AZ">Arizona</option>
+            <option value="NC">North Carolina</option>
+            <option value="Other">Other U.S. state</option>
+          </select>
+          <p id="stateHint" class="preview-hint">
+            We’ll adapt your documents and filing checklist for your state.
+          </p>
+        </div>
+
+        <div class="preview-control">
+          <span class="preview-label">Document sample:</span>
+          <div id="documentTabs" class="preview-doc-tabs">
+            <!-- Filled by JS -->
+          </div>
+        </div>
+      </div>
+
+      <!-- The big viewing box -->
+      <section class="preview-view">
+        <div class="preview-view-inner">
+          <h3 id="docTitle">Mutual NDA (sample excerpt)</h3>
+          <p id="docIntro" class="preview-doc-intro">
+            This is a short sample of the language and structure your document will use.
+            Your final version will be tailored to your details and state-specific requirements.
+          </p>
+
+          <pre id="docSample" class="preview-doc-sample"></pre>
+
+          <div class="preview-columns">
+            <div>
+              <h4>What we’ll provide</h4>
+              <ul id="docDeliverables"></ul>
+            </div>
+            <div>
+              <h4>What you’ll need ready</h4>
+              <ul id="docRequirements"></ul>
+            </div>
+          </div>
+
+          <p class="preview-footnote">
+            State filing fees are paid directly to your state. E-LegalBoom prepares your
+            templates and gives you clear, written instructions on where and how to file.
+          </p>
+        </div>
+      </section>
+
+      <!-- Pay button -->
+      <div class="preview-pay-row">
+        <a id="payLink" href="#" target="_blank" rel="noopener" class="elb-btn-primary">
+          Continue to secure checkout
+        </a>
+        <p class="preview-pay-note">
+          You’ll complete payment through our secure E-LegalBoom checkout.
+          After purchase, we’ll send your intake link and deliver your documents by email.
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="elb-footer">
+    <p>© <span id="year"></span> E-LegalBoom. Templates only; not a law firm. For complex or
+      state-specific questions, consult a licensed attorney.</p>
+  </footer>
+
+  <script>
+    // ----- Tier + document data -----
+    const tiers = {
+      tier1: {
+        name: "Tier 1 – Basic Filing Support",
+        price: "$39",
+        tagline: "Essential NDA, promissory note, and single-member LLC operating agreement.",
+        payUrl: "https://pay.elegalboom.org/e4b79a60-0fd7-431c-8bfc-ae0",
+        documents: [
+          {
+            id: "nda",
+            label: "Mutual NDA",
+            title: "Mutual NDA – sample excerpt",
+            sample: `THIS MUTUAL NON-DISCLOSURE AGREEMENT ("Agreement") is made between
+[Your Business Name], located at [Address], and [Other Party Name].
+
+Each party may disclose certain confidential information ("Confidential Information")
+for the purpose of evaluating or pursuing a business relationship.
+
+Both parties agree to:
+  • Use Confidential Information only for the stated purpose; and
+  • Not disclose it to any third party without written permission.`,
+            deliverables: [
+              "Editable mutual NDA template in Word/PDF",
+              "Clear signature and effective-date blocks",
+              "Fields for both parties’ names and addresses"
+            ],
+            requirements: [
+              "Legal names of both parties or entities",
+              "Mailing addresses for each party",
+              "Short description of what you’re protecting",
+              "Desired effective date and term (how long it lasts)"
+            ]
+          },
+          {
+            id: "note",
+            label: "Promissory Note",
+            title: "Promissory Note – sample excerpt",
+            sample: `FOR VALUE RECEIVED, [Borrower Name] promises to pay [Lender Name]
+the principal sum of $[Amount] with interest at the rate of [Rate]% per year.
+
+Payments of principal and interest shall be made on the [Day] of each month,
+starting on [Start Date], until the full amount is paid.`,
+            deliverables: [
+              "Loan/repayment template with payment schedule",
+              "Sections for collateral and late-payment terms",
+              "Clear payoff and prepayment language"
+            ],
+            requirements: [
+              "Names of lender and borrower",
+              "Loan amount and interest rate (if any)",
+              "Payment frequency and start date",
+              "Whether the loan is secured or unsecured"
+            ]
+          },
+          {
+            id: "smlc",
+            label: "Single-Member LLC Operating Agreement",
+            title: "Single-Member LLC Operating Agreement – sample excerpt",
+            sample: `This Operating Agreement ("Agreement") is entered into by [Member Name],
+the sole member ("Member") of [LLC Name], a [State] limited liability company.
+
+The Member is the exclusive owner of 100% of the membership interests of the Company
+and has full authority to manage and control the Company.`,
+            deliverables: [
+              "Single-member LLC operating agreement template",
+              "Ownership and management provisions",
+              "Capital contribution and profit-distribution sections"
+            ],
+            requirements: [
+              "Legal name of the LLC",
+              "State of formation",
+              "Member’s full legal name and address",
+              "Effective date of the agreement"
+            ]
+          }
+        ]
+      },
+
+      tier2: {
+        name: "Tier 2 – Standard Legal Foundation",
+        price: "$59",
+        tagline: "Everything in Tier 1 plus partnership and two-member LLC coverage.",
+        payUrl: "https://pay.elegalboom.org/aeda586f-65f5-4bf0-98f3-7a2",
+        documents: [
+          {
+            id: "partnership",
+            label: "Partnership Agreement",
+            title: "Partnership Agreement – sample excerpt",
+            sample: `This Partnership Agreement ("Agreement") is made between
+[Partner 1] and [Partner 2] (collectively, the "Partners").
+
+The Partners agree to operate a business under the name [Business Name] and
+share profits and losses in accordance with the ownership percentages set out below.`,
+            deliverables: [
+              "Partnership agreement template for two or more partners",
+              "Ownership, profit-sharing, and decision-making clauses",
+              "Dissolution and buy-out provisions"
+            ],
+            requirements: [
+              "Full legal names and addresses of each partner",
+              "Ownership percentages",
+              "Description of the business",
+              "Initial capital contributions (cash, assets, or services)"
+            ]
+          },
+          {
+            id: "twomember",
+            label: "Two-Member LLC Operating Agreement",
+            title: "Two-Member LLC Operating Agreement – sample excerpt",
+            sample: `This Operating Agreement is entered into by [Member 1] and [Member 2]
+(together, the "Members") of [LLC Name], a [State] limited liability company.
+
+The Members own the Company as follows:
+  Member 1: [Percentage]%
+  Member 2: [Percentage]%`,
+            deliverables: [
+              "Two-member LLC operating agreement template",
+              "Ownership, voting, and management structure",
+              "Capital, profit, and loss allocation language"
+            ],
+            requirements: [
+              "Legal name of the LLC and state of formation",
+              "Names and addresses of each member",
+              "Ownership percentages",
+              "Initial capital contributions from each member"
+            ]
+          }
+        ]
+      },
+
+      tier3: {
+        name: "Tier 3 – Premium Business Package",
+        price: "$99",
+        tagline: "All Tier 1 & 2 documents plus premium business templates.",
+        payUrl: "https://pay.elegalboom.org/71ca7144-e537-4fbd-823d-c10",
+        documents: [
+          {
+            id: "service",
+            label: "Service Agreement",
+            title: "Service Agreement – sample excerpt",
+            sample: `[Provider Name] agrees to perform the services described in
+Exhibit A ("Services") for [Client Name] in exchange for the fees set
+out in Exhibit B ("Fees").`,
+
+            deliverables: [
+              "Client service agreement template",
+              "Scope of work, payment, and timeline sections",
+              "Change-order and termination language"
+            ],
+            requirements: [
+              "Your business name and contact information",
+              "Client name and contact information",
+              "High-level description of services",
+              "How and when you’ll be paid"
+            ]
+          },
+          {
+            id: "independent",
+            label: "Independent Contractor Agreement",
+            title: "Independent Contractor Agreement – sample excerpt",
+            sample: `This Independent Contractor Agreement is between
+[Company Name] ("Company") and [Contractor Name] ("Contractor").
+
+Contractor is engaged as an independent contractor and not an employee.
+Contractor is responsible for all taxes, insurance, and expenses.`,
+            deliverables: [
+              "Independent contractor agreement template",
+              "Relationship and tax-status clauses",
+              "Confidentiality and work-product ownership options"
+            ],
+            requirements: [
+              "Company legal name and address",
+              "Contractor name and address",
+              "Description of services",
+              "Rate, payment terms, and duration"
+            ]
+          }
+        ]
+      },
+
+      starter: {
+        name: "Entrepreneur Starter Bundle – Full Launch Kit",
+        price: "$149",
+        tagline: "Formation + operating agreements + starter contracts and compliance.",
+        payUrl: "https://pay.elegalboom.org/55c7cd3d-1048-4b8c-aadb-843",
+        documents: [
+          {
+            id: "formation",
+            label: "Formation Filing Support",
+            title: "Formation Filing Support – sample overview",
+            sample: `Your launch kit includes state-specific formation templates
+and a step-by-step filing checklist. You complete the filing directly with your
+state; we give you the documents and instructions to do it quickly and correctly.`,
+            deliverables: [
+              "Formation template for your entity type",
+              "State-specific filing checklist",
+              "Sample completed forms for reference"
+            ],
+            requirements: [
+              "Proposed business name (plus backup name)",
+              "State of formation",
+              "Registered agent information (if known)",
+              "Names and ownership percentages of owners"
+            ]
+          },
+          {
+            id: "ops",
+            label: "Operating Agreements",
+            title: "Operating Agreements – sample overview",
+            sample: `Your bundle includes operating agreement templates for
+single-member and two-member structures so you can choose the one that fits
+your business and ownership model.`,
+            deliverables: [
+              "Single-member and two-member operating agreements",
+              "Ownership and management provisions",
+              "Capital and distribution sections"
+            ],
+            requirements: [
+              "Entity name and state",
+              "Owner names and addresses",
+              "Ownership percentages",
+              "Effective date"
+            ]
+          }
+        ]
+      }
+    };
+
+    // ----- Small helper: read ?tier=... from URL -----
+    function getTierFromQuery() {
+      const params = new URLSearchParams(window.location.search);
+      const t = params.get("tier");
+      if (t && tiers[t]) return t;
+      return "tier1";
+    }
+
+    // ----- DOM wiring -----
+    const yearEl = document.getElementById("year");
+    const stateSelect = document.getElementById("previewState");
+    const stateHint = document.getElementById("stateHint");
+    const docTabsEl = document.getElementById("documentTabs");
+    const previewTierNameEl = document.getElementById("previewTierName");
+    const previewTierTaglineEl = document.getElementById("previewTierTagline");
+    const previewTierPriceEl = document.getElementById("previewTierPrice");
+    const docTitleEl = document.getElementById("docTitle");
+    const docIntroEl = document.getElementById("docIntro");
+    const docSampleEl = document.getElementById("docSample");
+    const docDeliverablesEl = document.getElementById("docDeliverables");
+    const docRequirementsEl = document.getElementById("docRequirements");
+    const payLinkEl = document.getElementById("payLink");
+    const tierChips = Array.from(document.querySelectorAll(".tier-chip"));
+
+    yearEl.textContent = new Date().getFullYear();
+
+    let currentTierKey = getTierFromQuery();
+    let currentDocId = null;
+
+    function renderTier(tierKey) {
+      const tier = tiers[tierKey];
+      if (!tier) return;
+
+      currentTierKey = tierKey;
+      currentDocId = tier.documents[0]?.id || null;
+
+      // Highlight selected chip
+      tierChips.forEach(chip => {
+        chip.classList.toggle("is-active", chip.dataset.tier === tierKey);
+      });
+
+      // Header
+      previewTierNameEl.textContent = tier.name;
+      previewTierTaglineEl.textContent = tier.tagline;
+      previewTierPriceEl.textContent = tier.price;
+
+      // Pay button
+      payLinkEl.href = tier.payUrl;
+
+      // Build document tabs
+      docTabsEl.innerHTML = "";
+      tier.documents.forEach(doc => {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "preview-doc-tab";
+        btn.textContent = doc.label;
+        btn.dataset.docId = doc.id;
+        if (doc.id === currentDocId) btn.classList.add("is-active");
+        btn.addEventListener("click", () => {
+          currentDocId = doc.id;
+          renderDocument();
+          Array.from(docTabsEl.children).forEach(tab => {
+            tab.classList.toggle("is-active", tab.dataset.docId === doc.id);
+          });
+        });
+        docTabsEl.appendChild(btn);
+      });
+
+      renderDocument();
+    }
+
+    function renderDocument() {
+      const tier = tiers[currentTierKey];
+      if (!tier) return;
+
+      const doc = tier.documents.find(d => d.id === currentDocId) || tier.documents[0];
+      if (!doc) return;
+
+      docTitleEl.textContent = doc.title;
+      docSampleEl.textContent = doc.sample;
+
+      // Deliverables
+      docDeliverablesEl.innerHTML = "";
+      doc.deliverables.forEach(item => {
+        const li = document.createElement("li");
+        li.textContent = item;
+        docDeliverablesEl.appendChild(li);
+      });
+
+      // Requirements
+      docRequirementsEl.innerHTML = "";
+      doc.requirements.forEach(item => {
+        const li = document.createElement("li");
+        li.textContent = item;
+        docRequirementsEl.appendChild(li);
+      });
+    }
+
+    // State hint
+    stateSelect.addEventListener("change", () => {
+      const val = stateSelect.value;
+      if (!val) {
+        stateHint.textContent =
+          "We’ll adapt your documents and filing checklist for your state.";
+      } else if (val === "Other") {
+        stateHint.textContent =
+          "We’ll provide U.S.-friendly language and general filing guidance. For highly specialized states, we may recommend local counsel.";
+      } else {
+        stateHint.textContent =
+          `Your templates and filing checklist will be tailored for ${stateSelect.options[stateSelect.selectedIndex].text}.`;
+      }
+    });
+
+    // Tier chip clicks
+    tierChips.forEach(chip => {
+      chip.addEventListener("click", () => {
+        const t = chip.dataset.tier;
+        renderTier(t);
+        const params = new URLSearchParams(window.location.search);
+        params.set("tier", t);
+        history.replaceState({}, "", `${window.location.pathname}?${params.toString()}`);
+      });
+    });
+
+    // Initial render
+    renderTier(currentTierKey);
+  </script>
+</body>
+</html>
