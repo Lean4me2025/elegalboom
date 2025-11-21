@@ -2,190 +2,128 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>E-LegalBoom – Tier 2 Standard Legal Foundation</title>
+  <title>Tier 2 – Standard Legal Foundation | E-LegalBoom</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="style.css" />
   <style>
-    :root {
-      --primary:#0056b3;
-      --primary-light:#e6f0ff;
-      --accent:#17a24a;
-      --bg:#f7f7f9;
-      --text:#222;
-    }
-    * { box-sizing:border-box; }
-    body {
-      margin:0;
-      font-family: system-ui, sans-serif;
-      background:var(--bg);
-      color:var(--text);
-    }
-    header {
-      background:#ffffff;
-      border-bottom:1px solid #ddd;
-      padding:16px 24px;
-    }
-    .nav-inner {
-      max-width:900px;
-      margin:0 auto;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-    }
-    .brand { font-weight:700; font-size:1.25rem; }
-    .brand span { color:var(--primary); }
-    nav a {
-      margin-left:18px;
-      text-decoration:none;
-      color:var(--primary);
-      font-weight:600;
-      font-size:0.95rem;
-    }
-    nav a:hover { text-decoration:underline; }
-
-    main {
-      max-width:900px;
-      margin:32px auto 40px;
-      padding:0 16px 40px;
-      background:#fff;
-      border-radius:10px;
-      border:1px solid #e4e4e4;
-      box-shadow:0 4px 10px rgba(0,0,0,0.04);
-    }
-    .inner { padding:24px 22px 28px; }
-    h1 { margin-top:0; margin-bottom:6px; font-size:1.8rem; }
-    .price-line { font-weight:700; color:var(--primary); margin-bottom:12px; }
-    .tagline { margin-top:0; margin-bottom:18px; color:#444; line-height:1.5; }
-
-    h2 { margin-top:20px; margin-bottom:8px; font-size:1.15rem; }
-    ul {
-      padding-left:20px;
-      margin-top:0;
-      margin-bottom:18px;
-      line-height:1.5;
-    }
-    .callout {
-      background:var(--primary-light);
-      border-left:4px solid var(--primary);
-      padding:12px 14px;
-      border-radius:6px;
-      font-size:0.95rem;
-      margin-bottom:20px;
-    }
-    .btn-row {
-      margin-top:10px;
-      display:flex;
-      flex-wrap:wrap;
-      gap:10px;
-      align-items:center;
-    }
-    .btn-primary {
-      display:inline-block;
-      padding:11px 22px;
-      background:var(--accent);
-      color:#fff;
-      text-decoration:none;
-      border-radius:999px;
-      font-weight:700;
-      font-size:0.95rem;
-      text-align:center;
-    }
-    .btn-primary:hover { opacity:0.9; }
-    .sub-link {
-      font-size:0.9rem;
-    }
-    .sub-link a { color:var(--primary); text-decoration:none; }
-    .sub-link a:hover { text-decoration:underline; }
-    .compare {
-      font-size:0.9rem;
-      color:#555;
-      margin-top:22px;
-    }
-    .compare a {
-      color:var(--primary);
-      text-decoration:none;
-      font-weight:600;
-    }
-    .compare a:hover { text-decoration:underline; }
-
-    footer {
-      max-width:900px;
-      margin:0 auto 24px;
-      padding:0 16px;
-      font-size:0.78rem;
-      color:#777;
-    }
+    /* reuse the same scoped tier styles */
+    .tier-page { max-width: 960px; margin: 0 auto; padding: 2rem 1rem 3rem; }
+    .tier-breadcrumb { font-size: 0.9rem; margin-bottom: 0.75rem; }
+    .tier-breadcrumb a { color: #337ab7; text-decoration: none; }
+    .tier-breadcrumb a:hover { text-decoration: underline; }
+    .tier-header h1 { margin-bottom: 0.25rem; }
+    .tier-price { font-weight: 700; color: #1a7f3b; margin-bottom: 0.5rem; }
+    .tier-delivery-note { font-size: 0.95rem; color: #555; margin-bottom: 1.5rem; }
+    .tier-highlight { background: #e6f4ea; border-left: 4px solid #1f9d4c; padding: 0.9rem 1rem; margin-bottom: 1.5rem; border-radius: 4px; }
+    .tier-layout { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 2fr); gap: 2rem; margin-bottom: 2rem; }
+    @media (max-width: 768px) { .tier-layout { grid-template-columns: 1fr; } }
+    .tier-section h2 { margin-bottom: 0.5rem; }
+    .tier-section ul { padding-left: 1.2rem; }
+    .tier-section li { margin-bottom: 0.35rem; }
+    .tier-section ol { padding-left: 1.3rem; }
+    .tier-cta-block { margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid #e0e0e0; }
+    .tier-cta-button { display: inline-block; background: #1f9d4c; color: #fff; padding: 0.85rem 1.8rem; border-radius: 999px; font-weight: 600; text-decoration: none; font-size: 1rem; }
+    .tier-cta-button:hover { background: #187b3f; }
+    .tier-link-note { margin-top: 0.75rem; font-size: 0.9rem; color: #555; }
+    .tier-meta { margin-top: 1.5rem; font-size: 0.9rem; color: #666; }
+    .tier-disclaimer { margin-top: 1.5rem; font-size: 0.85rem; color: #777; }
   </style>
 </head>
 <body>
-
-<header>
-  <div class="nav-inner">
-    <div class="brand">E-<span>LegalBoom</span></div>
-    <nav>
+  <header class="site-header">
+    <div class="logo">E-LegalBoom</div>
+    <nav class="nav">
       <a href="index.html">Catalog</a>
       <a href="tier1.html">Tier 1</a>
-      <a href="tier2.html">Tier 2</a>
+      <a href="tier2.html" class="active">Tier 2</a>
       <a href="tier3.html">Tier 3</a>
       <a href="bundle.html">Starter Bundle</a>
       <a href="orders.html">Customer Input</a>
     </nav>
-  </div>
-</header>
+  </header>
 
-<main>
-  <div class="inner">
-    <h1>Tier 2 – Standard Legal Foundation</h1>
-    <p class="price-line">$59 – Digital delivery</p>
-    <p class="tagline">
-      Tier 2 strengthens your legal foundation with agreements for
-      partnerships and multi-member LLCs, on top of the Tier 1 essentials.
-    </p>
-
-    <div class="callout">
-      <strong>Includes everything in Tier 1, plus:</strong>
-      Partnership and two-member LLC agreements to support growing businesses
-      with more than one owner.
+  <main class="tier-page">
+    <div class="tier-breadcrumb">
+      <a href="index.html">← Back to Document Catalog</a>
     </div>
 
-    <h2>What’s Included</h2>
-    <ul>
-      <li><strong>Partnership Agreement</strong> – Defines roles, responsibilities, and profit-sharing between partners.</li>
-      <li><strong>Two-Member LLC Operating Agreement</strong> – Lays out how a two-member LLC is structured and managed.</li>
-      <li><strong>All Tier 1 Documents</strong> (NDA, Promissory Note, Single-Member LLC Operating Agreement).</li>
-    </ul>
+    <section class="tier-header">
+      <h1>Tier 2 – Standard Legal Foundation</h1>
+      <p class="tier-price">$59 – Digital delivery</p>
+      <p class="tier-delivery-note">
+        Tier 2 strengthens your legal foundation with agreements for partnerships and multi-member LLCs,
+        on top of the Tier 1 essentials.
+      </p>
 
-    <h2>How It Works</h2>
-    <ul>
-      <li>Click the button below to activate Tier 2 and complete secure payment.</li>
-      <li>After payment, you’ll receive your documents digitally.</li>
-      <li>Use them to formalize partnerships and multi-member entities.</li>
-    </ul>
+      <div class="tier-highlight">
+        <strong>Best for:</strong>
+        Growing businesses with more than one owner who need clear roles, responsibilities, and profit-sharing terms.
+      </div>
+    </section>
 
-    <div class="btn-row">
-      <a class="btn-primary" href="https://pay.elegalboom.org/aeda586f-65f5-4bf0-98f3-7a2">
-        Activate Tier 2 – $59
+    <section class="tier-layout">
+      <div class="tier-section">
+        <h2>What’s Included</h2>
+        <p>Tier 2 includes everything in <strong>Tier 1</strong>, plus:</p>
+        <ul>
+          <li><strong>Partnership Agreement</strong> – Defines roles, responsibilities, and profit-sharing between partners.</li>
+          <li><strong>Two-Member LLC Operating Agreement</strong> – Lays out how a two-member LLC is structured and managed.</li>
+          <li><strong>All Tier 1 documents</strong> (NDA, Promissory Note, Single-Member LLC Operating Agreement).</li>
+        </ul>
+      </div>
+
+      <div class="tier-section">
+        <h2>What You’ll Need Ready</h2>
+        <ul>
+          <li>Legal names and contact details for all owners/partners.</li>
+          <li>Ownership percentages or units for each owner.</li>
+          <li>Business name, mailing address, and state of formation.</li>
+          <li>Who manages day-to-day operations (member-managed vs. manager-managed).</li>
+          <li>Effective date for the partnership or multi-member LLC.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="tier-section">
+      <h2>How It Works</h2>
+      <ol>
+        <li><strong>Purchase Tier 2 securely.</strong> Use the button below to complete payment through our E-LegalBoom checkout.</li>
+        <li><strong>Complete the Customer Information Form.</strong> After purchase, you’ll fill out a guided form so we can capture all owner details and ownership percentages.</li>
+        <li><strong>We assemble your full Tier 2 package.</strong> Your partnership and two-member LLC agreements are built from your answers and aligned to your state.</li>
+        <li><strong>Receive your documents by email.</strong> You’ll get ready-to-use files you can sign, share, and reuse as needed.</li>
+        <li><strong>Follow our filing & signing guide.</strong> We provide clear, step-by-step instructions so you can execute and store your agreements properly.</li>
+      </ol>
+
+      <div class="tier-meta">
+        <strong>State fees are separate:</strong> Any state or agency filing fees are paid directly by you.
+        E-LegalBoom prepares your documents and gives you guidance; we do not submit or pay filings on your behalf.
+      </div>
+    </section>
+
+    <section class="tier-cta-block">
+      <a
+        href="https://pay.elegalboom.org/aeda586f-65f5-4bf0-98f3-7a2"
+        class="tier-cta-button"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Purchase Tier 2 – $59
       </a>
-      <div class="sub-link">
-        or copy/paste this link:<br>
-        <a href="https://pay.elegalboom.org/aeda586f-65f5-4bf0-98f3-7a2">
+
+      <p class="tier-link-note">
+        or copy/paste this link into your browser:
+        <br />
+        <a href="https://pay.elegalboom.org/aeda586f-65f5-4bf0-98f3-7a2" target="_blank" rel="noopener noreferrer">
           https://pay.elegalboom.org/aeda586f-65f5-4bf0-98f3-7a2
         </a>
-      </div>
-    </div>
+      </p>
 
-    <p class="compare">
-      Looking for a more extensive package? See
-      <a href="tier3.html">Tier 3 – Premium Business Package</a> or the
-      <a href="bundle.html">Entrepreneur Starter Bundle</a>.
-    </p>
-  </div>
-</main>
-
-<footer>
-  E-LegalBoom provides ready-to-use legal document templates delivered digitally. 
-  Use does not create an attorney–client relationship. For complex or state-specific
-  legal issues, consult a licensed attorney.
-</footer>
-
+      <p class="tier-disclaimer">
+        E-LegalBoom provides ready-to-use legal document templates delivered digitally.  
+        We are not a law firm and do not provide legal advice. For complex or state-specific legal issues,
+        consult a licensed attorney in your jurisdiction.
+      </p>
+    </section>
+  </main>
 </body>
 </html>
