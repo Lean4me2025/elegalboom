@@ -1,0 +1,151 @@
+/* --------------------------------------------------
+   GLOBAL RESET & BASE
+-------------------------------------------------- */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  background: #f5f7fa;
+  color: #222;
+  line-height: 1.6;
+  padding-bottom: 60px;
+}
+
+main {
+  width: 90%;
+  max-width: 1100px;
+  margin: 40px auto;
+}
+
+/* --------------------------------------------------
+   HEADER & NAVIGATION
+-------------------------------------------------- */
+header {
+  background: #ffffff;
+  padding: 20px 0;
+  border-bottom: 2px solid #e0e0e0;
+}
+
+.logo {
+  font-size: 28px;
+  font-weight: bold;
+  color: #0077cc;
+}
+
+nav {
+  margin-top: 10px;
+}
+
+nav a {
+  margin-right: 20px;
+  color: #0077cc;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+nav a:hover {
+  text-decoration: underline;
+}
+
+/* --------------------------------------------------
+   PAGE TITLES / HEADERS
+-------------------------------------------------- */
+h1 {
+  font-size: 32px;
+  margin-bottom: 20px;
+}
+
+h2 {
+  margin: 20px 0 10px;
+  font-size: 26px;
+}
+
+h3 {
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+/* --------------------------------------------------
+   SECTIONS (Soft Cards)
+-------------------------------------------------- */
+.section-box {
+  background: #ffffff;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.07);
+  margin-bottom: 40px;
+}
+
+/* --------------------------------------------------
+   TWO-COLUMN GRID
+-------------------------------------------------- */
+.columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 30px;
+}
+
+@media (max-width: 800px) {
+  .columns {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* --------------------------------------------------
+   GREEN BUTTONS (Pay Buttons)
+-------------------------------------------------- */
+.pay-btn {
+  background: #22a745;
+  color: #fff;
+  padding: 14px 22px;
+  font-size: 18px;
+  border-radius: 8px;
+  text-decoration: none;
+  display: inline-block;
+  font-weight: bold;
+  margin-top: 20px;
+  transition: background 0.2s ease;
+}
+
+.pay-btn:hover {
+  background: #1d8a3c;
+}
+
+/* --------------------------------------------------
+   DOCUMENT PREVIEW AREA (Future Upgrade Zone)
+-------------------------------------------------- */
+.preview-box {
+  background: #ffffff;
+  border: 2px dashed #cccccc;
+  border-radius: 12px;
+  padding: 30px;
+  min-height: 320px;
+  margin-top: 25px;
+}
+
+.preview-title {
+  font-size: 22px;
+  font-weight: bold;
+  color: #0077cc;
+  margin-bottom: 15px;
+}
+
+.preview-content {
+  font-size: 16px;
+  color: #333;
+  white-space: pre-line;
+}
+
+/* --------------------------------------------------
+   FOOTER
+-------------------------------------------------- */
+footer {
+  text-align: center;
+  margin-top: 40px;
+  color: #777;
+  font-size: 14px;
+}
