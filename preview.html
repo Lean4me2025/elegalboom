@@ -1,203 +1,278 @@
 <!DOCTYPE html>
 <html lang="en">
-<head> 
+<head>
   <meta charset="UTF-8" />
-  <title>E-LegalBoom – Package Preview</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Document Preview | E-LegalBoom</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 <header class="site-header">
-  <div class="logo">E-LegalBoom</div>
-  <nav class="nav">
-    <a href="index.html" class="active">Catalog</a>
+  <div class="header-logo">E-LegalBoom</div>
+  <nav class="site-nav">
+    <a href="index.html">Catalog</a>
     <a href="tier1.html">Tier 1</a>
     <a href="tier2.html">Tier 2</a>
     <a href="tier3.html">Tier 3</a>
     <a href="bundle.html">Starter Bundle</a>
+    <a href="preview.html">Document Preview</a>
     <a href="orders.html">Customer Input</a>
   </nav>
 </header>
 
-<main class="page preview-page">
-  <a href="index.html" class="back-link">← Back to Catalog</a>
-
-  <h1 id="preview-title">Package Preview</h1>
-  <p id="preview-intro" class="preview-intro"></p>
+<main class="page">
+  <h1 class="page-title">Document Preview & Info Checklist</h1>
+  <p class="page-subtitle">
+    Click a template on the left to see a short sample and what information you’ll need ready.
+    This is a preview only — your final documents will be customized based on your intake answers.
+  </p>
 
   <div class="preview-layout">
-    <section class="preview-main" id="preview-main">
-      <!-- JS will inject the sample here -->
-    </section>
+    <!-- LEFT: selection -->
+    <aside class="preview-sidebar">
+      <h2>Choose a document</h2>
 
-    <aside class="preview-side" id="preview-side">
-      <!-- JS will inject the “What you’ll need ready” here -->
+      <div class="preview-group">
+        <div class="preview-group-title">Tier 1 – Basic Filing Support</div>
+        <button class="doc-select-btn" data-doc="nda">NDA (Mutual)</button>
+        <button class="doc-select-btn" data-doc="promissory">Promissory Note</button>
+        <button class="doc-select-btn" data-doc="sm-operating">Single-Member LLC Operating Agreement</button>
+      </div>
+
+      <div class="preview-group">
+        <div class="preview-group-title">Tier 2 – Standard Legal Foundation</div>
+        <button class="doc-select-btn" data-doc="partnership">Partnership Agreement</button>
+        <button class="doc-select-btn" data-doc="tm-operating">Two-Member LLC Operating Agreement</button>
+      </div>
+
+      <div class="preview-group">
+        <div class="preview-group-title">Tier 3 & Starter Bundle</div>
+        <button class="doc-select-btn" data-doc="service-agreement">Service Agreement</button>
+        <button class="doc-select-btn" data-doc="contractor">Independent Contractor Agreement</button>
+      </div>
+
+      <div class="state-row">
+        <label for="stateSelect">State focus:</label>
+        <select id="stateSelect">
+          <option value="general" selected>General (most states)</option>
+          <option value="ca">California</option>
+          <option value="tx">Texas</option>
+          <option value="de">Delaware</option>
+          <option value="ny">New York</option>
+        </select>
+      </div>
+
+      <p class="fine-print" style="margin-top:10px;">
+        State selection adjusts the guidance notes in the preview.  
+        Your actual templates will be tuned further as E-LegalBoom’s library grows.
+      </p>
     </aside>
-  </div>
 
-  <section class="preview-notes">
-    <h2>How We Deliver Your Documents</h2>
-    <ol>
-      <li><strong>Secure Payment:</strong> Complete checkout for your selected tier or bundle.</li>
-      <li><strong>Guided Intake:</strong> We send you a short, guided intake form to capture your names, percentages, addresses, and details.</li>
-      <li><strong>Document Assembly:</strong> We merge your information into our templates that match your state and entity type.</li>
-      <li><strong>Delivery in 24–48 business hours:</strong> You receive your completed documents by email in ready-to-use format (usually PDF + Word).</li>
-      <li><strong>DIY Filing:</strong> We provide clear written guidance on where to file, how to sign, and how to keep copies organized.<br>
-          <em>State filing fees are paid directly by you to your state or agency.</em>
-      </li>
-    </ol>
-  </section>
+    <!-- RIGHT: preview panel -->
+    <section class="preview-panel">
+      <h2 id="previewTitle">Select a document to see a preview</h2>
+      <div class="preview-meta" id="previewMeta">
+        Choose a document on the left and a state above to see a short example clause and information checklist.
+      </div>
+
+      <div class="preview-snippet" id="previewSnippet">
+        <!-- snippet text injected here -->
+      </div>
+
+      <div class="preview-needs" id="previewNeeds" style="margin-top:16px;">
+        <!-- info checklist injected here -->
+      </div>
+
+      <p class="preview-note">
+        This preview is for illustration only and is not legal advice.  
+        For complex situations or state-specific questions, consult a licensed attorney.
+      </p>
+
+      <div style="margin-top:18px;">
+        <a href="index.html" class="btn-ghost">Back to Catalog</a>
+      </div>
+    </section>
+  </div>
 </main>
 
 <footer class="site-footer">
-  <p>© <span id="year"></span> E-LegalBoom. All rights reserved.</p>
+  E-LegalBoom provides ready-to-use legal document templates delivered digitally.  
+  Use does not create an attorney–client relationship. For complex or state-specific issues, consult a licensed attorney.
 </footer>
 
 <script>
-  document.getElementById("year").textContent = new Date().getFullYear();
+  // Simple data model for previews
+  const docData = {
+    nda: {
+      title: "NDA (Mutual)",
+      tier: "Tier 1 – Basic Filing Support",
+      snippet: `This Mutual Non-Disclosure Agreement ("Agreement") is entered into as of [Effective Date] by and between [Party A] and [Party B].
 
-  // --- Data model for each package ---
-  const packages = {
-    tier1: {
-      title: "Tier 1 – Basic Filing Support",
-      intro: "Entry-level package for side-hustles, solopreneurs, and new LLC owners who need core documents without law-firm pricing.",
-      sampleHtml: `
-        <h2>Sample: NDA (Mutual) – First Page</h2>
-        <div class="doc-sample">
-          <h3>Mutual Non-Disclosure Agreement (Excerpt)</h3>
-          <p>
-            This Mutual Non-Disclosure Agreement (the “Agreement”) is made between
-            <span class="sample-highlight">[Party A]</span> and
-            <span class="sample-highlight">[Party B]</span> as of
-            <span class="sample-highlight">[Effective Date]</span>.
-          </p>
-          <p><strong>1. Purpose.</strong> The parties wish to explore a business opportunity and may share
-            certain confidential information for that purpose.</p>
-          <p><strong>2. Confidential Information.</strong> “Confidential Information” includes non-public
-            business, technical, and financial information disclosed by either party.</p>
-          <p class="sample-fade">
-            …full agreement continues in your completed document.
-          </p>
-        </div>
-      `,
-      needHtml: `
-        <h2>What You’ll Need Ready</h2>
-        <ul>
-          <li>Legal names of both parties (individuals or business entities).</li>
-          <li>Business name and mailing address.</li>
-          <li>Short description of what you’re protecting (idea, design, data, etc.).</li>
-          <li>Preferred effective date of the agreement.</li>
-        </ul>
-      `
+Each party may disclose certain confidential and proprietary information ("Confidential Information") for the purpose of exploring a potential business relationship.
+
+Both parties agree that:
+1. Confidential Information will be used solely for the Purpose;
+2. Confidential Information will not be disclosed to third parties, except to advisors with a need to know; and
+3. Each party will use reasonable care to protect the other party's Confidential Information.`,
+      needs: [
+        "Names and contact information for both parties",
+        "Purpose of sharing information (e.g., potential partnership, evaluation, vendor review)",
+        "Effective date and how long confidentiality should last",
+        "Which state’s law should govern the agreement"
+      ]
     },
-    tier2: {
-      title: "Tier 2 – Standard Legal Foundation",
-      intro: "Built for businesses with more than one owner that need solid partnership and multi-member LLC agreements.",
-      sampleHtml: `
-        <h2>Sample: Partnership Agreement – Excerpt</h2>
-        <div class="doc-sample">
-          <h3>Partnership Agreement (Excerpt)</h3>
-          <p>
-            This Partnership Agreement is entered into by
-            <span class="sample-highlight">[Partner 1]</span> and
-            <span class="sample-highlight">[Partner 2]</span> to form
-            <span class="sample-highlight">[Business Name]</span>.
-          </p>
-          <p><strong>1. Ownership.</strong> The partners agree to the following ownership percentages:
-            <span class="sample-highlight">[Partner 1 %]</span> and
-            <span class="sample-highlight">[Partner 2 %]</span>.</p>
-          <p><strong>2. Capital Contributions.</strong> Each partner’s initial contribution is recorded and
-            attached as <em>Schedule A</em>.</p>
-          <p class="sample-fade">
-            …full terms, management, voting, and exit provisions are included in your finished document.
-          </p>
-        </div>
-      `,
-      needHtml: `
-        <h2>What You’ll Need Ready</h2>
-        <ul>
-          <li>Business or proposed business name and address.</li>
-          <li>Names and addresses of all partners or members.</li>
-          <li>Ownership percentages for each person.</li>
-          <li>Who will manage the business (manager-managed or member-managed).</li>
-          <li>Your state of formation.</li>
-        </ul>
-      `
+    promissory: {
+      title: "Promissory Note",
+      tier: "Tier 1 – Basic Filing Support",
+      snippet: `FOR VALUE RECEIVED, [Borrower Name] ("Borrower") promises to pay to the order of [Lender Name] ("Lender") the principal sum of $[Amount], together with interest at the rate of [Rate]% per year.
+
+1. Payments will be made in the amount of $[Payment Amount] on the [Day] of each month until the principal and interest are paid in full.
+2. Borrower may prepay all or any portion of the outstanding balance at any time without penalty.
+3. This Note is governed by the laws of the State of [State].`,
+      needs: [
+        "Lender and borrower names and contact details",
+        "Loan amount, interest rate, and start date",
+        "Payment frequency and term length",
+        "State whose law will apply"
+      ]
     },
-    tier3: {
-      title: "Tier 3 – Premium Business Package",
-      intro: "For serious businesses that want a broader library of agreements, contractor templates, and ongoing protection.",
-      sampleHtml: `
-        <h2>Sample: Service Agreement – Excerpt</h2>
-        <div class="doc-sample">
-          <h3>Service Agreement (Excerpt)</h3>
-          <p>
-            This Service Agreement is between
-            <span class="sample-highlight">[Service Provider]</span>
-            and
-            <span class="sample-highlight">[Client]</span>.
-          </p>
-          <p><strong>1. Scope of Services.</strong> Provider agrees to perform the services described in
-            <em>Schedule A</em>.</p>
-          <p><strong>2. Payment Terms.</strong> Client agrees to pay
-            <span class="sample-highlight">[Rate / Fixed Fee]</span> according to the billing schedule.</p>
-          <p class="sample-fade">
-            …full clauses on change orders, intellectual property, and limitation of liability appear in your final documents.
-          </p>
-        </div>
-      `,
-      needHtml: `
-        <h2>What You’ll Need Ready</h2>
-        <ul>
-          <li>Business information (legal name, address, contact email).</li>
-          <li>List of services you provide and how you charge.</li>
-          <li>Any subcontractors or independent contractors you regularly use.</li>
-          <li>States where you operate or have clients.</li>
-        </ul>
-      `
+    "sm-operating": {
+      title: "Single-Member LLC Operating Agreement",
+      tier: "Tier 1 – Basic Filing Support",
+      snippet: `This Single-Member Limited Liability Company Operating Agreement ("Agreement") is made effective as of [Effective Date] for [LLC Name], a limited liability company organized under the laws of the State of [State].
+
+The Member is [Member Name] ("Member"), who owns 100% of the membership interests.
+
+The purpose of the Company is to engage in any lawful business for which limited liability companies may be organized in [State].`,
+      needs: [
+        "Exact LLC name (or proposed name) and state of formation",
+        "Full legal name and address of the sole member",
+        "Effective date of the agreement",
+        "Short description of the business purpose"
+      ]
     },
-    bundle: {
-      title: "Entrepreneur Starter Bundle",
-      intro: "All-in-one launch kit for new entrepreneurs who want formation support, agreements, and compliance tools in one place.",
-      sampleHtml: `
-        <h2>Sample: Launch Kit Cover Page</h2>
-        <div class="doc-sample">
-          <h3>Entrepreneur Starter Bundle – Launch Kit</h3>
-          <p>Your bundle includes:</p>
-          <ul>
-            <li>Formation filings support templates</li>
-            <li>Single-member &amp; two-member operating agreements</li>
-            <li>Starter service/client contracts</li>
-            <li>Compliance checklists and reference templates</li>
-          </ul>
-          <p class="sample-fade">
-            …inside your kit, each document has a short explanation and a place for your details.
-          </p>
-        </div>
-      `,
-      needHtml: `
-        <h2>What You’ll Need Ready</h2>
-        <ul>
-          <li>Your business idea and preferred business name (plus a backup name).</li>
-          <li>State where you plan to form your LLC or business entity.</li>
-          <li>Owner names and ownership percentages.</li>
-          <li>Basic description of the services or products you offer.</li>
-          <li>Preferred launch date and any key partners/contractors.</li>
-        </ul>
-      `
+    partnership: {
+      title: "Partnership Agreement",
+      tier: "Tier 2 – Standard Legal Foundation",
+      snippet: `This Partnership Agreement ("Agreement") is entered into by and between [Partner 1 Name] and [Partner 2 Name] (collectively, the "Partners") for the purpose of carrying on the business of [Business Name].
+
+Each Partner's initial ownership interest is as follows:
+- [Partner 1]: [Percent 1]%
+- [Partner 2]: [Percent 2]%
+
+Profits and losses of the Partnership shall be shared in proportion to the Partners' ownership interests, unless otherwise agreed in writing.`,
+      needs: [
+        "Names and contact details of all partners",
+        "Ownership percentages or profit-sharing split",
+        "Business name and purpose",
+        "Which state the partnership will be governed under"
+      ]
+    },
+    "tm-operating": {
+      title: "Two-Member LLC Operating Agreement",
+      tier: "Tier 2 – Standard Legal Foundation",
+      snippet: `This Limited Liability Company Operating Agreement ("Agreement") is made for [LLC Name], a [State] limited liability company.
+
+Members:
+- [Member 1 Name] – [Percent 1]%
+- [Member 2 Name] – [Percent 2]%
+
+The Members agree to share profits, losses, and distributions in accordance with their respective Percentage Interests, subject to the terms of this Agreement.`,
+      needs: [
+        "LLC name and state of formation",
+        "Member names, addresses, and percentage interests",
+        "How major decisions will be made (one-member veto, majority, etc.)",
+        "Effective date and starting capital contributions (if any)"
+      ]
+    },
+    "service-agreement": {
+      title: "Service Agreement",
+      tier: "Tier 3 / Starter Bundle",
+      snippet: `This Service Agreement ("Agreement") is made between [Provider Name] ("Provider") and [Client Name] ("Client").
+
+Provider agrees to perform the services described in Exhibit A (the "Services") in exchange for the fees described in Exhibit B (the "Fees").
+
+Client agrees to pay all undisputed invoices within [Number] days of receipt. Provider will retain ownership of all pre-existing intellectual property used to deliver the Services.`,
+      needs: [
+        "Your business name and contact information",
+        "Client name(s) and contact information",
+        "Scope of services and how you deliver them",
+        "How and when you will be paid (fixed fee, hourly, retainer, etc.)"
+      ]
+    },
+    contractor: {
+      title: "Independent Contractor Agreement",
+      tier: "Tier 3 / Starter Bundle",
+      snippet: `This Independent Contractor Agreement ("Agreement") is entered into between [Company Name] ("Company") and [Contractor Name] ("Contractor").
+
+Contractor is engaged as an independent contractor and not as an employee. Contractor is responsible for all taxes, insurance, and expenses associated with the services.
+
+Contractor will perform the services described in Exhibit A and will invoice Company according to the schedule in Exhibit B.`,
+      needs: [
+        "Company and contractor names and contact details",
+        "Description of services the contractor will perform",
+        "Compensation structure and payment schedule",
+        "Confidentiality, IP ownership, and termination terms"
+      ]
     }
   };
 
-  // Read ?pkg= from URL
-  const params = new URLSearchParams(window.location.search);
-  const pkgKey = params.get("pkg") || "tier1";
+  const stateNotes = {
+    general: "",
+    ca: "Note for California: Certain industries may trigger additional state forms or registration. We will flag any common CA-specific issues in your guidance sheet.",
+    tx: "Note for Texas: Many small businesses form LLCs in-state for simplicity. Your guidance sheet will remind you about state franchise tax thresholds and filings.",
+    de: "Note for Delaware: Popular for holding companies and startups. Your guidance sheet will emphasize registered agent requirements and annual franchise reports.",
+    ny: "Note for New York: Publication and local notice requirements may apply for some entities. We will include a reminder in your guidance sheet if relevant."
+  };
 
-  const pkg = packages[pkgKey] || packages["tier1"];
+  const buttons = document.querySelectorAll(".doc-select-btn");
+  const stateSelect = document.getElementById("stateSelect");
+  const previewTitle = document.getElementById("previewTitle");
+  const previewMeta = document.getElementById("previewMeta");
+  const previewSnippet = document.getElementById("previewSnippet");
+  const previewNeeds = document.getElementById("previewNeeds");
 
-  document.getElementById("preview-title").textContent = pkg.title;
-  document.getElementById("preview-intro").textContent = pkg.intro;
-  document.getElementById("preview-main").innerHTML = pkg.sampleHtml;
-  document.getElementById("preview-side").innerHTML = pkg.needHtml;
+  let currentDocKey = null;
+
+  function renderPreview() {
+    if (!currentDocKey || !docData[currentDocKey]) return;
+
+    const doc = docData[currentDocKey];
+    const state = stateSelect.value;
+
+    previewTitle.textContent = doc.title;
+    previewMeta.textContent = doc.tier;
+
+    previewSnippet.textContent = doc.snippet;
+
+    const needsItems = doc.needs
+      .map(item => `<li>${item}</li>`)
+      .join("");
+    previewNeeds.innerHTML =
+      `<h3>Information you’ll need ready</h3><ul>${needsItems}</ul>` +
+      (stateNotes[state]
+        ? `<p class="preview-note">${stateNotes[state]}</p>`
+        : "");
+  }
+
+  buttons.forEach(btn => {
+    btn.addEventListener("click", () => {
+      buttons.forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      currentDocKey = btn.getAttribute("data-doc");
+      renderPreview();
+    });
+  });
+
+  stateSelect.addEventListener("change", renderPreview);
+
+  // Initialize panel text
+  previewSnippet.textContent =
+    "Use this page to get comfortable with what each template looks like.\n\n" +
+    "You’ll see:\n" +
+    "• A short sample of real clauses (not the full document)\n" +
+    "• A checklist of information we’ll ask you for in the intake\n" +
+    "• A short note when your chosen state has extra points to watch for.\n\n" +
+    "When you’re ready, head back to the Catalog or a specific Tier page to purchase your package.";
 </script>
 </body>
 </html>
