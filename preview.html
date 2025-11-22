@@ -1,123 +1,33 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <title>Document Preview | E-LegalBoom</title>
-  <link rel="stylesheet" href="style.css" />
-</head>
-<body>
-  <!-- Header / Navigation -->
-  <header class="site-header">
-    <div class="header-logo">E-LegalBoom</div>
-    <nav class="site-nav">
-      <a href="index.html">Catalog</a>
-      <a href="tier1.html">Tier 1</a>
-      <a href="tier2.html">Tier 2</a>
-      <a href="tier3.html">Tier 3</a>
-      <a href="orders.html">Starter Bundle</a>
-      <a href="preview.html" class="active">Document Preview</a>
-      <a href="customer.html">Customer Input</a>
-    </nav>
-  </header>
+<div class="preview-list">
+  <h2 class="preview-tier-title">Tier 1 – Basic Filing Support</h2>
+  <button class="preview-btn doc-btn active" data-file="samples/nda.html">
+    NDA (Mutual)
+  </button>
+  <button class="preview-btn doc-btn" data-file="samples/promissory.html">
+    Promissory Note
+  </button>
+  <button class="preview-btn doc-btn" data-file="samples/singlemember.html">
+    Single-Member LLC Operating Agreement
+  </button>
 
-  <!-- Main Preview Content -->
-  <main class="preview-container">
-    <h1 class="page-title">Document Preview</h1>
-    <p class="preview-subtext">
-      See the <strong>style and structure</strong> of the templates you’ll receive.
-      Sample content only — final documents are customized from your intake.
-      <strong>Click any button on the left to load a sample.</strong>
-    </p>
+  <h2 class="preview-tier-title">Tier 2 – Standard Legal Foundation</h2>
+  <button class="preview-btn doc-btn" data-file="samples/partnership.html">
+    Partnership Agreement
+  </button>
+  <button class="preview-btn doc-btn" data-file="samples/twomember.html">
+    Two-Member LLC Operating Agreement
+  </button>
 
-    <div class="preview-layout">
-      <!-- LEFT: Document buttons -->
-      <aside class="preview-list">
-        <div class="preview-tier-title">Tier 1 – Basic Filing Support</div>
-        <button class="preview-btn doc-btn" data-file="samples/nda.html">
-          NDA (Mutual)
-        </button>
-        <button class="preview-btn doc-btn" data-file="samples/promissory.html">
-          Promissory Note
-        </button>
-        <button class="preview-btn doc-btn" data-file="samples/singlemember-llc.html">
-          Single-Member LLC Operating Agreement
-        </button>
+  <h2 class="preview-tier-title">Tier 3 – Premium Business Package</h2>
+  <button class="preview-btn doc-btn" data-file="samples/service.html">
+    Service Agreement (Sample)
+  </button>
+  <button class="preview-btn doc-btn" data-file="samples/contractor.html">
+    Independent Contractor Agreement (Sample)
+  </button>
 
-        <div class="preview-tier-title">Tier 2 – Standard Legal Foundation</div>
-        <button class="preview-btn doc-btn" data-file="samples/partnership.html">
-          Partnership Agreement
-        </button>
-        <button class="preview-btn doc-btn" data-file="samples/twomember-llc.html">
-          Two-Member LLC Operating Agreement
-        </button>
-
-        <div class="preview-tier-title">Tier 3 – Premium Business Package</div>
-        <button class="preview-btn doc-btn" data-file="samples/service-agreement.html">
-          Service Agreement (Sample)
-        </button>
-        <button class="preview-btn doc-btn" data-file="samples/independent-contractor.html">
-          Independent Contractor Agreement (Sample)
-        </button>
-
-        <div class="preview-tier-title">Starter Bundle</div>
-        <button class="preview-btn doc-btn" data-file="samples/launchkit.html">
-          Launch Kit Overview (Sample)
-        </button>
-      </aside>
-
-      <!-- RIGHT: Document "page" preview -->
-      <section class="preview-window">
-        <!-- Default doc so it never starts blank -->
-        <iframe
-          id="preview-frame"
-          class="preview-iframe"
-          src="samples/nda.html"
-          title="Document preview"
-        ></iframe>
-      </section>
-    </div>
-  </main>
-
-  <footer class="site-footer">
-    <p>
-      E-LegalBoom provides ready-to-use legal document templates delivered digitally.
-      We are not a law firm. This does not create an attorney–client relationship.
-      For complex or state-specific legal issues, consult a licensed attorney.
-    </p>
-  </footer>
-
-  <!-- Preview script -->
-  <script>
-    // Get the iframe and all preview buttons
-    const previewFrame = document.getElementById('preview-frame');
-    const buttons = document.querySelectorAll('.doc-btn');
-
-    function loadSample(filePath) {
-      previewFrame.src = filePath;
-    }
-
-    // Attach click handlers to each button
-    buttons.forEach((btn) => {
-      btn.addEventListener('click', () => {
-        const file = btn.getAttribute('data-file');
-
-        // 1) Load the selected sample
-        if (file) {
-          loadSample(file);
-        }
-
-        // 2) Clear active state from ALL buttons
-        buttons.forEach((b) => b.classList.remove('active'));
-
-        // 3) Mark THIS button as active
-        btn.classList.add('active');
-      });
-    });
-
-    // Optional: set a default active button on page load (first Tier 1 button)
-    if (buttons.length > 0) {
-      buttons[0].classList.add('active');
-    }
-  </script>
-</body>
-</html>
+  <h2 class="preview-tier-title">Starter Bundle</h2>
+  <button class="preview-btn doc-btn" data-file="samples/launchkit.html">
+    Launch Kit Overview
+  </button>
+</div>
