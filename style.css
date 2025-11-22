@@ -361,4 +361,9 @@ body {
   .page {
     padding: 0 16px;
   }
+   /* Active (selected) preview document button */
+.doc-btn.active {
+  background-color: #0057ff !important;
+  color: #ffffff !important;
+  border-color: #0057ff !important;
 }
