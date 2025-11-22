@@ -1,241 +1,68 @@
-/* ================================
-   GLOBAL RESET & BASE STYLES
-=================================== */
-body {
-    margin: 0;
-    padding: 0;
-    font-family: "Segoe UI", Helvetica, Arial, sans-serif;
-    background: #f8f9fb;
-    color: #1a1a1a;
-    line-height: 1.6;
-}
+/* ------------------------------ */
+/* DOCUMENT PREVIEW PAGE LAYOUT  */
+/* ------------------------------ */
 
-h1, h2, h3 {
-    font-weight: 700;
-}
-
-a {
-    color: #004fbb;
-    text-decoration: none;
-}
-
-/* ================================
-   HEADER & NAV
-=================================== */
-.site-header {
-    background: #0b3d91;
-    padding: 16px 24px;
-    color: white;
-}
-
-.site-header .header-logo {
-    font-size: 24px;
-    font-weight: 700;
-}
-
-.site-nav {
-    margin-top: 8px;
-}
-
-.site-nav a {
-    margin-right: 18px;
-    font-weight: 500;
-    color: #b7d6ff;
-}
-
-.site-nav a:hover {
-    color: white;
-}
-
-/* ================================
-   PAGE LAYOUT
-=================================== */
-.page {
-    max-width: 1100px;
+.preview-container {
+    max-width: 1200px;
     margin: 40px auto;
-    padding: 0 24px;
+    padding: 0 40px;
 }
 
-/* ================================
-   CATALOG CARDS
-=================================== */
-.card {
-    background: white;
-    padding: 24px 28px;
-    margin-bottom: 32px;
-    border-radius: 12px;
-    box-shadow: 0 3px 10px rgba(0,0,0,0.08);
-}
-
-.card h2 {
-    margin-top: 0;
-    font-size: 26px;
-}
-
-.price {
-    font-size: 24px;
-    font-weight: 700;
-    color: #0b3d91;
-    margin-bottom: 8px;
-}
-
-.tagline {
-    font-style: italic;
-    margin-bottom: 16px;
-}
-
-/* ================================
-   BUTTONS
-=================================== */
-.btn-primary {
-    display: inline-block;
-    background: #2ecc71;
-    padding: 12px 20px;
-    border-radius: 8px;
-    color: white;
-    font-weight: 600;
-    margin-right: 12px;
-    margin-top: 12px;
-}
-
-.btn-primary:hover {
-    background: #27ae60;
-}
-
-/* Blue-outline button (Preview) */
-.btn-outline {
-    display: inline-block;
-    padding: 10px 18px;
-    border: 2px solid #0b3d91;
-    border-radius: 8px;
-    color: #0b3d91;
-    background: white;
-    font-weight: 600;
-    margin-top: 12px;
-}
-
-.btn-outline:hover {
-    background: #e9f2ff;
-}
-
-/* ================================
-   FOOTER
-=================================== */
-.site-footer {
-    margin-top: 50px;
-    padding: 20px 24px;
-    background: #0b3d91;
-    color: #dfeaff;
-    text-align: center;
-    font-size: 14px;
-}
-
-/* ================================
-   PREVIEW PAGE LAYOUT
-=================================== */
 .preview-layout {
     display: flex;
-    gap: 24px;
+    gap: 40px;
+    margin-top: 30px;
 }
 
-/* LEFT COLUMN */
-.preview-menu {
-    width: 320px;
-    background: linear-gradient(180deg, #0b3d91, #0053c7);
-    color: white;
-    border-radius: 16px;
-    padding: 24px 20px 28px;
-    box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+/* LEFT LIST */
+.preview-list {
+    width: 30%;
+    background: #f3f7ff;
+    padding: 20px;
+    border-radius: 10px;
+    border: 1px solid #d3ddf0;
 }
 
-.preview-menu h1 {
-    margin-top: 0;
-    margin-bottom: 8px;
+.preview-tier-title {
+    font-weight: bold;
+    margin-top: 20px;
+    margin-bottom: 10px;
 }
 
-.preview-intro {
-    font-size: 14px;
-    margin-bottom: 6px;
-}
-
-.preview-hint {
-    font-size: 13px;
-    margin-bottom: 18px;
-    color: #f5ffcc;
-}
-
-.preview-group-title {
-    margin-top: 18px;
-    margin-bottom: 8px;
-    font-size: 16px;
-    text-transform: uppercase;
-    letter-spacing: 0.02em;
-}
-
-/* Individual buttons for documents */
-.preview-button {
-    display: block;
+/* Buttons */
+.preview-btn {
     width: 100%;
-    text-align: left;
+    display: block;
     margin-bottom: 8px;
-    padding: 8px 12px;
-    border-radius: 999px;
-    border: 2px solid #ffffff;
-    background: #ffffff;
-    color: #0b3d91;
-    font-size: 13px;
-    font-weight: 600;
-    cursor: pointer;
-}
-
-.preview-button:hover {
-    background: #eaf2ff;
-}
-
-.preview-button.active {
-    background: #2ecc71;
-    border-color: #2ecc71;
-    color: #ffffff;
-}
-
-/* RIGHT COLUMN */
-.preview-viewer {
-    flex: 1;
-    min-width: 0;
-}
-
-.preview-document {
-    background: #e4e7f0;
-    border-radius: 16px;
-    padding: 24px 16px;
-    box-shadow: 0 4px 16px rgba(0,0,0,0.08);
-    min-height: 400px;
-}
-
-.preview-placeholder,
-.preview-loading,
-.preview-error {
+    padding: 10px;
+    background: white;
+    color: #0055cc;
+    border: 2px solid #0055cc;
+    border-radius: 8px;
     font-size: 15px;
-    text-align: center;
-    margin-top: 40px;
+    cursor: pointer;
+    text-align: left;
+    transition: 0.2s;
 }
 
-/* “Printed page” inside the viewer */
-.preview-page {
-    background: #ffffff;
-    margin: 0 auto;
-    max-width: 720px;
-    min-height: 420px;
-    padding: 40px 50px;
-    box-shadow: 0 0 0 1px #dddddd;
-    font-size: 14px;
-    line-height: 1.5;
+.preview-btn:hover {
+    background: #0055cc;
+    color: white;
 }
 
-/* Make sure long headings in samples look good */
-.preview-page h1,
-.preview-page h2,
-.preview-page h3 {
-    text-align: center;
-    margin-top: 0;
+/* PREVIEW WINDOW (RIGHT) */
+.preview-window {
+    flex-grow: 1;
+    background: white;
+    border: 1px solid #cccccc;
+    border-radius: 12px;
+    padding: 10px;
+    height: 780px;
+}
+
+.preview-iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+    background: white;
 }
