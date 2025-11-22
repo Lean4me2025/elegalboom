@@ -3,160 +3,147 @@
 <head>
   <meta charset="UTF-8" />
   <title>Entrepreneur Starter Bundle | E-LegalBoom</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <header class="site-header">
-    <div class="header-logo">E-LegalBoom</div>
-    <nav class="site-nav">
-      <a href="index.html">Catalog</a>
-      <a href="tier1.html">Tier 1</a>
-      <a href="tier2.html">Tier 2</a>
-      <a href="tier3.html">Tier 3</a>
-      <a href="orders.html" aria-current="page">Starter Bundle</a>
-      <a href="preview.html">Document Preview</a>
-      <a href="customer.html">Customer Input</a>
-    </nav>
-  </header>
+<header class="site-header">
+  <div class="header-logo">E-LegalBoom</div>
+  <nav class="site-nav">
+    <a href="index.html">Catalog</a>
+    <a href="tier1.html">Tier 1</a>
+    <a href="tier2.html">Tier 2</a>
+    <a href="tier3.html">Tier 3</a>
+    <a href="orders.html" class="active">Starter Bundle</a>
+    <a href="preview.html">Document Preview</a>
+    <a href="customer-input.html">Customer Input</a>
+  </nav>
+</header>
 
-  <main class="page" style="max-width:1100px;margin:32px auto 48px;padding:0 16px;">
-    <!-- Top row: title + buttons -->
-    <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:24px;margin-bottom:24px;flex-wrap:wrap;">
-      <div>
-        <h1 style="margin:0 0 4px;font-size:2.2rem;">Entrepreneur Starter Bundle</h1>
-        <p style="margin:0;color:#444;">
-          <strong>$149 – Full launch kit.</strong> Formation documents, operating agreements,
-          starter contracts, and compliance templates — everything from Tier 1 &amp; Tier 2 in one place.
-        </p>
-      </div>
-
-      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px;min-width:240px;">
-        <a
-          href="https://pay.elegalboom.org/55c7cd3d-1048-4b8c-aadb-843"
-          style="
-            display:inline-block;
-            padding:10px 22px;
-            border-radius:999px;
-            background:#00a651;
-            color:#fff;
-            font-weight:600;
-            text-decoration:none;
-            text-align:center;
-            box-shadow:0 6px 16px rgba(0,0,0,0.15);
-          "
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Purchase Starter Bundle – $149
-        </a>
-
-        <a
-          href="preview.html#bundle"
-          style="
-            display:inline-block;
-            padding:9px 20px;
-            border-radius:999px;
-            border:2px solid #0070f3;
-            color:#0070f3;
-            font-weight:500;
-            text-decoration:none;
-            background:#ffffff;
-            text-align:center;
-          "
-        >
-          Preview Sample Documents
-        </a>
-      </div>
+<main class="page">
+  <!-- TOP ROW: title/description on left, buttons on right -->
+  <div class="page-header-row">
+    <div>
+      <h1 class="page-title">Entrepreneur Starter Bundle</h1>
+      <p class="page-subtitle">
+        $149 – A complete business launch kit including formation documents,
+        agreements, templates, and everything from Tier 1 &amp; Tier 2.
+      </p>
     </div>
 
-    <!-- First row: Included + Need Ready (white boxes) -->
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:24px;margin-bottom:24px;">
-      <section
-        style="
-          background:#ffffff;
-          border-radius:18px;
-          padding:24px 28px;
-          box-shadow:0 10px 30px rgba(0,0,0,0.04);
-        "
+    <div class="page-header-actions">
+      <a
+        class="btn btn-primary"
+        href="https://pay.elegalboom.org/55c7cd3d-1048-4b8c-aadb-843"
+        target="_blank"
+        rel="noopener noreferrer"
       >
-        <h2 style="margin-top:0;margin-bottom:12px;font-size:1.2rem;">What’s Included</h2>
-        <p style="margin-top:0;margin-bottom:12px;">
-          The Starter Bundle provides every document needed to launch your business with clarity and protection.
-        </p>
-        <ul style="margin:0 0 8px 1.1rem;padding:0;">
-          <li><strong>Business formation templates</strong> – Organize your business structure.</li>
-          <li><strong>Operating agreements</strong> – Single-member and multi-member options.</li>
-          <li><strong>NDAs &amp; promissory notes</strong> – Included from Tier 1.</li>
-          <li><strong>Two-member LLC agreement</strong> – Included from Tier 2.</li>
-          <li><strong>Contractor agreements</strong> – Basic and advanced versions.</li>
-          <li><strong>Compliance starter pack</strong> – Helpful state-level filing guidance.</li>
-          <li><strong>Client agreement templates</strong> – For service-based businesses.</li>
-          <li><strong>Everything from Tier 1 &amp; Tier 2</strong> – All included at no extra cost.</li>
-        </ul>
-        <p style="margin:12px 0 0;font-size:0.9rem;color:#666;">
-          Ideal for new entrepreneurs who want a full legal foundation without hiring a law firm.
-        </p>
-      </section>
+        Purchase Starter Bundle – $149
+      </a>
+      <a class="btn btn-secondary-outline" href="preview.html#starter">
+        Preview Sample Documents
+      </a>
+    </div>
+  </div>
 
-      <section
-        style="
-          background:#ffffff;
-          border-radius:18px;
-          padding:24px 28px;
-          box-shadow:0 10px 30px rgba(0,0,0,0.04);
-        "
-      >
-        <h2 style="margin-top:0;margin-bottom:12px;font-size:1.2rem;">What You’ll Need Ready</h2>
-        <ul style="margin:0 0 0 1.1rem;padding:0;">
-          <li>Business name ideas (in case your first choice is taken).</li>
-          <li>Owner / partner names, emails, and basic roles.</li>
-          <li>Ownership percentages and initial contributions.</li>
-          <li>Mailing address, business phone, and primary contact email.</li>
-          <li>Short description of your services or products.</li>
-          <li>State where you plan to form your LLC or business entity.</li>
-        </ul>
-      </section>
+  <!-- ROW 1: What's Included / What You'll Need Ready -->
+  <section class="section-grid">
+    <div class="card-box">
+      <h2 class="subheading">What’s Included</h2>
+      <p>
+        The Starter Bundle provides every document needed to launch your
+        business with clarity and protection.
+      </p>
+      <ul>
+        <li>
+          <strong>Business Formation Templates</strong> – Organize your business
+          structure.
+        </li>
+        <li>
+          <strong>Operating Agreements</strong> – Single-member and multi-member
+          options.
+        </li>
+        <li>
+          <strong>NDAs &amp; Promissory Notes</strong> – Included from Tier 1.
+        </li>
+        <li>
+          <strong>2-Member LLC Agreement</strong> – Included from Tier 2.
+        </li>
+        <li>
+          <strong>Contractor Agreements</strong> – Basic and advanced versions.
+        </li>
+        <li>
+          <strong>Compliance Starter Pack</strong> – Helpful state-level filing
+          guidance.
+        </li>
+        <li>
+          <strong>Client Agreement Templates</strong> – For service-based
+          businesses.
+        </li>
+        <li>
+          <strong>Everything from Tier 1 + Tier 2</strong> – All included with
+          no extra cost.
+        </li>
+      </ul>
+      <p class="fine-print">
+        This package is ideal for new entrepreneurs who want a full legal
+        foundation without hiring an attorney.
+      </p>
     </div>
 
-    <!-- Second row: How It Works (white box) -->
-    <section
-      style="
-        background:#ffffff;
-        border-radius:18px;
-        padding:24px 28px;
-        box-shadow:0 10px 30px rgba(0,0,0,0.04);
-        margin-bottom:16px;
-      "
-    >
-      <h2 style="margin-top:0;margin-bottom:12px;font-size:1.2rem;">How It Works</h2>
-      <ol style="margin:0 0 0 1.2rem;padding:0;">
-        <li><strong>Purchase the Starter Bundle.</strong> Use the secure payment link above.</li>
+    <div class="card-box">
+      <h2 class="subheading">What You’ll Need Ready</h2>
+      <ul>
+        <li>Business name ideas (in case your first choice is taken).</li>
+        <li>Owner / partner names and emails.</li>
+        <li>Ownership percentages.</li>
+        <li>Mailing address and business phone.</li>
+        <li>Description of services or products.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ROW 2: How It Works -->
+  <section class="section-grid single-row">
+    <div class="card-box">
+      <h2 class="subheading">How It Works</h2>
+      <ol>
         <li>
-          <strong>Complete the Customer Input form.</strong> The “Customer Input” link in the top navigation walks
-          you through each step.
+          <strong>Purchase the Starter Bundle.</strong>
+          Use the secure payment link above.
         </li>
         <li>
-          <strong>We assemble your launch kit.</strong> You receive formation support templates, operating agreements,
-          starter contracts, and compliance references in one organized package.
+          <strong>Complete the Customer Input form.</strong>
+          The top navigation link “Customer Input” takes you there.
         </li>
-        <li><strong>Digital delivery within 24–48 business hours.</strong> Everything is delivered by email.</li>
         <li>
-          <strong>DIY filing &amp; follow-through.</strong> We provide written guidance on where to file, how to
-          sign, and which steps your state typically requires. State filing fees are always paid directly by you.
+          <strong>We build your full document set</strong> using your submitted
+          details.
+        </li>
+        <li>
+          <strong>Delivery within 24–48 business hours.</strong>
+          Your complete bundle arrives by email, ready for review and use.
+        </li>
+        <li>
+          <strong>Self-filing &amp; follow-through.</strong>
+          We provide clear, written guidance on where to file, how to sign, and
+          which steps your state requires. State filing fees are always paid
+          directly by you.
         </li>
       </ol>
-    </section>
+      <p class="fine-print">
+        Filing fees are paid directly to your state. E-LegalBoom provides
+        ready-to-use, customizable templates and clear instructions to complete
+        your registration.
+      </p>
+    </div>
+  </section>
+</main>
 
-    <p style="margin:4px 0 0;font-size:0.8rem;color:#777;">
-      Filing fees are paid directly to your state or agency. E-LegalBoom provides ready-to-use, customizable templates and clear
-      instructions to complete your registration. We are not a law firm. For complex or state-specific legal issues, consult a
-      licensed attorney.
-    </p>
-  </main>
-
-  <footer class="site-footer" style="text-align:center;margin:32px 0 16px;font-size:0.8rem;color:#777;">
-    © E-LegalBoom. Ready-to-use legal templates delivered digitally.
-  </footer>
+<footer class="site-footer">
+  <p>
+    © E-LegalBoom. Ready-to-use legal templates delivered digitally. We are not a law firm.
+    This does not create an attorney-client relationship.
+  </p>
+</footer>
 </body>
 </html>
