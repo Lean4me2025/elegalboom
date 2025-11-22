@@ -1,275 +1,135 @@
-* E-LegalBoom base styling
-   Shared across catalog, tier pages, and preview page
-*/
-
-/* Layout basics */
-* {
-  box-sizing: border-box;
-}
+/* --------------------------------------------------
+   GENERAL LAYOUT & BRANDING
+-------------------------------------------------- */
 
 body {
-  margin: 0;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  color: #1f2933;
-  background: #f4f6f8;
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f4f7fb;
+    color: #222;
 }
 
-/* Top bar / logo */
-header.site-header {
-  background: #0b5cab;          /* E-LegalBoom blue */
-  color: #ffffff;
-  padding: 14px 24px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+.header {
+    background: #003366;
+    color: white;
+    padding: 1rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 
-.header-logo {
-  font-weight: 700;
-  letter-spacing: 0.04em;
+.site-title {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 700;
 }
 
-nav.site-nav a {
-  color: #e5f0ff;
-  text-decoration: none;
-  margin-left: 18px;
-  font-size: 0.95rem;
+.nav a {
+    color: white;
+    text-decoration: none;
+    margin-left: 1.2rem;
+    font-weight: 500;
 }
 
-nav.site-nav a:hover {
-  text-decoration: underline;
+.nav a:hover {
+    text-decoration: underline;
 }
 
-/* Page container */
-main.page {
-  max-width: 1100px;
-  margin: 32px auto 40px;
-  padding: 0 16px 40px;
+.preview-container {
+    max-width: 1400px;
+    margin: auto;
+    padding: 2rem;
 }
 
-/* Section titles */
-h1.page-title {
-  font-size: 2rem;
-  margin-bottom: 6px;
+.preview-intro {
+    font-size: 1.1rem;
+    max-width: 900px;
 }
 
-.page-subtitle {
-  color: #5d6a7a;
-  margin-bottom: 24px;
+.click-note {
+    color: #0f9d58;
+    font-weight: 700;
 }
 
-/* Two-column sections */
-.section-grid {
-  display: grid;
-  grid-template-columns: 1.2fr 1fr;
-  gap: 32px;
-  margin-bottom: 32px;
-}
-
-@media (max-width: 900px) {
-  .section-grid {
-    grid-template-columns: 1fr;
-  }
-}
-
-/* Cards / boxes */
-.box {
-  background: #ffffff;
-  border-radius: 10px;
-  padding: 18px 22px;
-  box-shadow: 0 10px 25px rgba(15, 35, 52, 0.08);
-}
-
-.box h2 {
-  margin-top: 0;
-}
-
-.box ul {
-  padding-left: 18px;
-}
-
-/* Headings inside boxes */
-h2.subheading {
-  margin-top: 0;
-  font-size: 1.2rem;
-}
-
-/* “How it works” steps */
-ol.steps {
-  padding-left: 20px;
-}
-
-.steps li {
-  margin-bottom: 6px;
-}
-
-/* Fine print */
-.fine-print {
-  margin-top: 16px;
-  font-size: 0.85rem;
-  color: #6b7785;
-}
-
-/* Unified purchase buttons */
-.btn-primary {
-  display: inline-block;
-  margin-top: 18px;
-  padding: 12px 26px;
-  border-radius: 999px;
-  background: #16a34a;  /* green */
-  color: #ffffff;
-  font-weight: 600;
-  font-size: 1rem;
-  text-decoration: none;
-  border: none;
-  cursor: pointer;
-  transition: background 0.15s ease, transform 0.05s ease;
-}
-
-.btn-primary:hover {
-  background: #15803d;
-  transform: translateY(-1px);
-}
-
-.btn-primary:active {
-  transform: translateY(0);
-}
-
-/* Secondary link-style button */
-.btn-ghost {
-  display: inline-block;
-  margin-left: 10px;
-  padding: 10px 12px;
-  border-radius: 999px;
-  background: transparent;
-  color: #0b5cab;
-  font-weight: 500;
-  text-decoration: none;
-  border: 1px solid #c4d2ea;
-  font-size: 0.9rem;
-}
-
-.btn-ghost:hover {
-  background: #e9f0ff;
-}
-
-/* Preview page layout */
 .preview-layout {
-  display: grid;
-  grid-template-columns: 320px 1fr;
-  gap: 24px;
+    display: flex;
+    margin-top: 2rem;
+    gap: 2rem;
 }
 
-@media (max-width: 900px) {
-  .preview-layout {
-    grid-template-columns: 1fr;
-  }
-}
+/* --------------------------------------------------
+   SIDEBAR
+-------------------------------------------------- */
 
 .preview-sidebar {
-  background: #ffffff;
-  border-radius: 10px;
-  box-shadow: 0 8px 22px rgba(15, 35, 52, 0.08);
-  padding: 16px 18px;
+    width: 330px;
+    background: #005bbb;
+    padding: 1.5rem;
+    border-radius: 10px;
+    color: white;
 }
 
-.preview-sidebar h2 {
-  font-size: 1.2rem;
-  margin-top: 4px;
+.tier-label {
+    margin-top: 1.5rem;
+    margin-bottom: .5rem;
+    font-size: 1.15rem;
+    font-weight: 700;
 }
 
-.preview-group-title {
-  margin-top: 16px;
-  margin-bottom: 8px;
-  font-size: 0.9rem;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  color: #6b7785;
+/* --------------------------------------------------
+   WHITE BUTTONS (great contrast!)
+-------------------------------------------------- */
+
+.doc-chip {
+    display: inline-block;
+    background: white;
+    color: #003366;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    padding: 0.5rem 0.9rem;
+    margin: 0.25rem 0.25rem;
+    border-radius: 50px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: 0.2s;
 }
 
-/* Document selection buttons */
-.doc-select-btn {
-  width: 100%;
-  text-align: left;
-  margin-bottom: 8px;
-  padding: 9px 10px;
-  border-radius: 8px;
-  border: 1px solid #d0d7e2;
-  background: #f9fafb;
-  font-size: 0.92rem;
-  cursor: pointer;
+.doc-chip:hover {
+    background: #0f9d58;
+    color: white;
+    transform: translateY(-2px);
 }
 
-.doc-select-btn:hover {
-  background: #eef2ff;
+.doc-chip.active {
+    background: #0f9d58;
+    color: white;
 }
 
-.doc-select-btn.active {
-  border-color: #0b5cab;
-  background: #e0ebff;
+/* --------------------------------------------------
+   PREVIEW WINDOW
+-------------------------------------------------- */
+
+.preview-window {
+    flex: 1;
+    background: white;
+    border-radius: 10px;
+    padding: 1rem;
+    border: 1px solid #ddd;
 }
 
-/* State chooser */
-.state-row {
-  margin-top: 14px;
-  display: flex;
-  gap: 8px;
-  align-items: center;
+#docFrame {
+    width: 100%;
+    height: 85vh;
+    border: none;
+    background: white;
 }
 
-.state-row label {
-  font-size: 0.9rem;
-}
+/* --------------------------------------------------
+   FOOTER
+-------------------------------------------------- */
 
-.state-row select {
-  padding: 6px 8px;
-  border-radius: 6px;
-  border: 1px solid #c4d2ea;
-  font-size: 0.9rem;
-}
-
-/* Preview panel */
-.preview-panel {
-  background: #ffffff;
-  border-radius: 10px;
-  box-shadow: 0 10px 26px rgba(15, 35, 52, 0.08);
-  padding: 20px 24px;
-}
-
-.preview-panel h2 {
-  margin-top: 0;
-}
-
-.preview-meta {
-  font-size: 0.9rem;
-  color: #6b7785;
-  margin-bottom: 12px;
-}
-
-.preview-snippet {
-  background: #f8fafc;
-  border-radius: 8px;
-  padding: 14px 16px;
-  font-family: "SF Mono", ui-monospace, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-  font-size: 0.9rem;
-  white-space: pre-wrap;
-  border: 1px solid #d0d7e2;
-}
-
-.preview-needs ul {
-  padding-left: 18px;
-}
-
-.preview-note {
-  margin-top: 10px;
-  font-size: 0.85rem;
-  color: #6b7785;
-}
-
-/* Footer */
-footer.site-footer {
-  text-align: center;
-  font-size: 0.85rem;
-  color: #6b7785;
-  padding: 18px 16px 26px;
+.footer {
+    text-align: center;
+    font-size: 0.85rem;
+    color: #555;
+    padding: 2rem;
 }
