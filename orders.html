@@ -2,134 +2,103 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>E-LegalBoom – Customer Information Form</title>
+  <title>Customer Input – E-LegalBoom</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <style>
-    :root {
-      --primary:#0056b3;
-      --primary-light:#e6f0ff;
-      --bg:#f7f7f9;
-      --text:#222;
-    }
-    * { box-sizing:border-box; }
-    body {
-      margin:0;
-      font-family: system-ui, sans-serif;
-      background:var(--bg);
-      color:var(--text);
-    }
-    header {
-      background:#ffffff;
-      border-bottom:1px solid #ddd;
-      padding:16px 24px;
-    }
-    .nav-inner {
-      max-width:900px;
-      margin:0 auto;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-    }
-    .brand { font-weight:700; font-size:1.25rem; }
-    .brand span { color:var(--primary); }
-    nav a {
-      margin-left:18px;
-      text-decoration:none;
-      color:var(--primary);
-      font-weight:600;
-      font-size:0.95rem;
-    }
-    nav a:hover { text-decoration:underline; }
-
-    main {
-      max-width:900px;
-      margin:32px auto 40px;
-      padding:24px 16px 40px;
-      background:#fff;
-      border-radius:10px;
-      border:1px solid #e4e4e4;
-      box-shadow:0 4px 10px rgba(0,0,0,0.04);
-    }
-    h1 { margin-top:0; margin-bottom:8px; }
-    p { margin-top:0; line-height:1.5; }
-
-    .instructions {
-      background:var(--primary-light);
-      border-left:4px solid var(--primary);
-      padding:12px 14px;
-      border-radius:6px;
-      font-size:0.95rem;
-      margin-bottom:18px;
-    }
-
-    .placeholder-box {
-      border:2px dashed #bbb;
-      border-radius:8px;
-      padding:20px;
-      text-align:center;
-      font-size:0.95rem;
-      color:#555;
-      margin-top:16px;
-    }
-
-    footer {
-      max-width:900px;
-      margin:0 auto 24px;
-      padding:0 16px;
-      font-size:0.78rem;
-      color:#777;
-    }
-  </style>
+  <link rel="stylesheet" href="style.css" />
 </head>
-<body>
 
-<header>
-  <div class="nav-inner">
-    <div class="brand">E-<span>LegalBoom</span></div>
-    <nav>
+<body>
+  <header class="site-header">
+    <div class="header-logo">E-LegalBoom</div>
+    <nav class="site-nav">
       <a href="index.html">Catalog</a>
       <a href="tier1.html">Tier 1</a>
       <a href="tier2.html">Tier 2</a>
       <a href="tier3.html">Tier 3</a>
       <a href="bundle.html">Starter Bundle</a>
-      <a href="orders.html">Customer Input</a>
+      <a href="preview.html">Document Preview</a>
+      <a href="orders.html" class="active">Customer Input</a>
     </nav>
-  </div>
-</header>
+  </header>
 
-<main>
-  <h1>Customer Information Form</h1>
-  <p>
-    After you’ve purchased your package, please complete this information so we can
-    prepare your documents accurately. You’ll receive confirmation once your
-    documents are ready.
-  </p>
+  <main class="page">
+    <h1 class="page-title">Customer Input – Next Steps</h1>
+    <p class="page-subtitle">
+      After you purchase a Tier or the Entrepreneur Starter Bundle, this is where
+      you’ll securely provide your information so we can prepare your documents.
+    </p>
 
-  <div class="instructions">
-    <strong>What you’ll need:</strong>
-    <ul>
-      <li>Business name and contact details.</li>
-      <li>Names of all owners / members and their percentages.</li>
-      <li>Mailing address and state of formation.</li>
-      <li>Which Tier or Bundle you purchased.</li>
-      <li>Email address where documents should be delivered.</li>
-    </ul>
-  </div>
+    <!-- Section 1: How it works -->
+    <section class="box">
+      <h2 class="subheading">How the Process Works</h2>
+      <ol>
+        <li><strong>Step 1 – Choose a package.</strong> Select Tier 1, 2, 3, or the Starter Bundle from the Catalog and complete payment.</li>
+        <li><strong>Step 2 – Complete your Customer Input form.</strong> Click the button below to open a secure intake form and answer a few guided questions.</li>
+        <li><strong>Step 3 – We prepare your documents.</strong> We apply your information to the appropriate templates for your package.</li>
+        <li><strong>Step 4 – Digital delivery.</strong> Your documents are emailed to you in ready-to-use format within 24–48 business hours.</li>
+        <li><strong>Step 5 – You sign & file.</strong> You review, sign, and file or store the documents according to the included instructions.</li>
+      </ol>
+      <p class="fine-print">
+        You only need to complete this intake form <strong>once per order</strong>. If you purchase additional tiers later, you can reuse most of your information.
+      </p>
+    </section>
 
-  <!-- GOOGLE FORM EMBED GOES HERE -->
-  <div class="placeholder-box">
-    This is the placeholder for your Google Form.<br><br>
-    When your Google Form is created, click <strong>Send → &lt;&gt; Embed</strong>,
-    copy the iframe code, and paste it here to replace this box.
-  </div>
+    <!-- Section 2: Begin Intake -->
+    <section class="box">
+      <h2 class="subheading">Begin Your Customer Input</h2>
+      <p>
+        Click the button below to open the secure intake form. It usually takes
+        <strong>10–15 minutes</strong> to complete if you have your information ready.
+      </p>
 
-</main>
+      <p><strong>Helpful to have nearby:</strong></p>
+      <ul>
+        <li>Business name (and any backup name ideas)</li>
+        <li>Owner / partner names and email addresses</li>
+        <li>Ownership percentages (if more than one owner)</li>
+        <li>Mailing address and primary phone number</li>
+        <li>Basic description of your services or products</li>
+      </ul>
 
-<footer>
-  E-LegalBoom provides ready-to-use legal document templates delivered digitally. 
-  Use does not create an attorney–client relationship. For complex or state-specific
-  legal issues, consult a licensed attorney.
-</footer>
+      <!-- 🔧 TODO: Replace the href with your actual Google Form link -->
+      <p style="margin-top: 16px;">
+        <a
+          class="btn-primary"
+          href="https://forms.gle/your-intake-form-link"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Begin Customer Input Form
+        </a>
+      </p>
 
+      <p class="fine-print">
+        If you accidentally close the form, you can return to this page anytime
+        after purchase and complete your intake.
+      </p>
+    </section>
+
+    <!-- Section 3: Questions -->
+    <section class="box">
+      <h2 class="subheading">Questions or Special Situations?</h2>
+      <p>
+        E-LegalBoom provides <strong>ready-to-use templates</strong> and
+        plain-language guidance. We are not a law firm and do not provide
+        individualized legal advice.
+      </p>
+      <p class="fine-print">
+        For complex situations, disputes, highly regulated industries, or
+        state-specific requirements beyond the scope of our templates, we
+        recommend consulting a licensed attorney in your state.
+      </p>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>
+      © E-LegalBoom. Ready-to-use legal document templates delivered digitally.
+      Not a law firm. No attorney–client relationship is created.
+    </p>
+  </footer>
 </body>
 </html>
