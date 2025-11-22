@@ -1,640 +1,82 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Document Preview – E-LegalBoom</title>
-
-  <!-- If you already include style.css on other pages, this keeps things consistent -->
-  <link rel="stylesheet" href="style.css" />
-
-  <!-- Page-specific styles for the preview layout -->
-  <style>
-    body {
-      margin: 0;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: #f3f6fb;
-      color: #222;
-    }
-
-    .preview-shell {
-      max-width: 1200px;
-      margin: 40px auto;
-      background: #ffffff;
-      border-radius: 16px;
-      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
-      display: grid;
-      grid-template-columns: 320px 1fr;
-      min-height: 600px;
-      overflow: hidden;
-    }
-
-    @media (max-width: 900px) {
-      .preview-shell {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    .preview-sidebar {
-      background: linear-gradient(180deg, #0c5fd7 0%, #063b87 100%);
-      color: #f5f7ff;
-      padding: 24px 20px 24px 24px;
-    }
-
-    .preview-sidebar h1 {
-      font-size: 26px;
-      margin: 0 0 4px;
-    }
-
-    .preview-sidebar p.subtitle {
-      margin: 0 0 20px;
-      font-size: 14px;
-      opacity: 0.9;
-    }
-
-    .tier-group-title {
-      font-weight: 600;
-      margin: 18px 0 8px;
-      font-size: 15px;
-      text-transform: uppercase;
-      letter-spacing: 0.03em;
-      opacity: 0.9;
-    }
-
-    .sample-list {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
-
-    .preview-button {
-      border-radius: 999px;
-      border: none;
-      padding: 6px 12px;
-      font-size: 13px;
-      cursor: pointer;
-      background: rgba(255, 255, 255, 0.12);
-      color: #e5ecff;
-      transition: background 0.15s ease, color 0.15s ease, transform 0.05s ease;
-      white-space: nowrap;
-    }
-
-    .preview-button:hover {
-      background: rgba(255, 255, 255, 0.22);
-      transform: translateY(-1px);
-    }
-
-    .preview-button.active {
-      background: #22a447;
-      color: #ffffff;
-    }
-
-    .preview-main {
-      padding: 24px 28px;
-      display: flex;
-      flex-direction: column;
-      background: radial-gradient(circle at top left, #e7f2ff 0, #f3f6fb 45%, #ffffff 100%);
-    }
-
-    .preview-main-header {
-      margin-bottom: 14px;
-    }
-
-    .preview-main-header h2 {
-      margin: 0 0 4px;
-      font-size: 22px;
-    }
-
-    .preview-main-header p {
-      margin: 0;
-      font-size: 14px;
-      color: #555;
-    }
-
-    /* "Document" look */
-    .doc-frame {
-      flex: 1;
-      display: flex;
-      justify-content: center;
-      align-items: stretch;
-      margin-top: 10px;
-    }
-
-    .doc-page {
-      width: 100%;
-      max-width: 720px;
-      background: #ffffff;
-      border-radius: 10px;
-      box-shadow:
-        0 2px 4px rgba(15, 23, 42, 0.06),
-        0 12px 25px rgba(15, 23, 42, 0.08);
-      padding: 30px 36px;
-      border: 1px solid #e5e7eb;
-      overflow-y: auto;
-      max-height: 520px;
-    }
-
-    .doc-heading {
-      text-align: center;
-      font-size: 16px;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      margin-bottom: 18px;
-    }
-
-    .doc-meta {
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: #6b7280;
-      border-bottom: 1px solid #e5e7eb;
-      padding-bottom: 6px;
-      margin-bottom: 16px;
-    }
-
-    .doc-section-title {
-      font-size: 13px;
-      font-weight: 600;
-      margin-top: 16px;
-      margin-bottom: 6px;
-    }
-
-    .doc-body {
-      font-size: 12px;
-      line-height: 1.55;
-      color: #374151;
-    }
-
-    .doc-body p {
-      margin: 0 0 10px;
-    }
-
-    .doc-body ul {
-      margin: 0 0 10px 18px;
-      padding: 0;
-    }
-
-    .doc-body li {
-      margin-bottom: 4px;
-    }
-
-    .doc-footer-note {
-      margin-top: 16px;
-      font-size: 11px;
-      color: #9ca3af;
-      border-top: 1px dashed #e5e7eb;
-      padding-top: 6px;
-    }
-
-    .preview-footer {
-      font-size: 11px;
-      color: #9ca3af;
-      text-align: right;
-      margin-top: 10px;
-    }
-  </style>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document Preview – E-LegalBoom</title>
+    <link rel="stylesheet" href="style.css" />
 </head>
 
 <body>
-  <div class="preview-shell">
-    <!-- LEFT: sample chooser -->
-    <aside class="preview-sidebar">
-      <h1>Document Preview</h1>
-      <p class="subtitle">
+
+<header class="header">
+    <h1 class="site-title">E-LegalBoom</h1>
+    <nav class="nav">
+        <a href="index.html">Catalog</a>
+        <a href="tier1.html">Tier 1</a>
+        <a href="tier2.html">Tier 2</a>
+        <a href="tier3.html">Tier 3</a>
+        <a href="bundle.html">Starter Bundle</a>
+    </nav>
+</header>
+
+<main class="preview-container">
+
+    <h1>Document Preview</h1>
+
+    <p class="preview-intro">
         See the <strong>style and structure</strong> of the templates you’ll receive.  
-        Sample content only – final documents are customized from your intake.
-      </p>
+        Sample content only — final documents are customized from your intake.  
+        <strong class="click-note">Click any button under a Tier to load a sample on the right.</strong>
+    </p>
 
-      <!-- Tier 1 -->
-      <div class="tier-group" data-tier-group="1">
-        <div class="tier-group-title">Tier 1 – Basic Filing Support</div>
-        <div class="sample-list">
-          <button class="preview-button"
-                  data-sample-id="nda"
-                  data-tier="1">
-            NDA (Mutual)
-          </button>
-          <button class="preview-button"
-                  data-sample-id="note"
-                  data-tier="1">
-            Promissory Note
-          </button>
-          <button class="preview-button"
-                  data-sample-id="sm_llc"
-                  data-tier="1">
-            Single-Member LLC Operating Agreement
-          </button>
-        </div>
-      </div>
+    <div class="preview-layout">
 
-      <!-- Tier 2 -->
-      <div class="tier-group" data-tier-group="2">
-        <div class="tier-group-title">Tier 2 – Standard Legal Foundation</div>
-        <div class="sample-list">
-          <button class="preview-button"
-                  data-sample-id="partnership"
-                  data-tier="2">
-            Partnership Agreement
-          </button>
-          <button class="preview-button"
-                  data-sample-id="tm_llc"
-                  data-tier="2">
-            Two-Member LLC Operating Agreement
-          </button>
-        </div>
-      </div>
+        <!-- LEFT SIDE – BUTTONS -->
+        <aside class="preview-sidebar">
 
-      <!-- Tier 3 -->
-      <div class="tier-group" data-tier-group="3">
-        <div class="tier-group-title">Tier 3 – Premium Business Package</div>
-        <div class="sample-list">
-          <button class="preview-button"
-                  data-sample-id="service"
-                  data-tier="3">
-            Service Agreement (Sample)
-          </button>
-          <button class="preview-button"
-                  data-sample-id="contractor"
-                  data-tier="3">
-            Independent Contractor Agreement (Sample)
-          </button>
-        </div>
-      </div>
+            <h2 class="tier-label">Tier 1 – Basic Filing Support</h2>
+            <button class="doc-chip" data-sample="nda">NDA (Mutual)</button>
+            <button class="doc-chip" data-sample="note">Promissory Note</button>
+            <button class="doc-chip" data-sample="singlellc">Single-Member LLC Operating Agreement</button>
 
-      <!-- Starter Bundle -->
-      <div class="tier-group" data-tier-group="bundle">
-        <div class="tier-group-title">Starter Bundle</div>
-        <div class="sample-list">
-          <button class="preview-button"
-                  data-sample-id="launch_kit"
-                  data-tier="bundle">
-            Launch Kit Overview (Sample)
-          </button>
-        </div>
-      </div>
-    </aside>
+            <h2 class="tier-label">Tier 2 – Standard Legal Foundation</h2>
+            <button class="doc-chip" data-sample="partnership">Partnership Agreement</button>
+            <button class="doc-chip" data-sample="twomember">Two-Member LLC Operating Agreement</button>
 
-    <!-- RIGHT: document view -->
-    <main class="preview-main">
-      <div class="preview-main-header">
-        <h2 id="previewHeading">Select a sample to preview</h2>
-        <p id="previewSubheading">
-          Choose any document on the left to see how your template will be formatted.
-          Your final copy will use your state and business details.
-        </p>
-      </div>
+            <h2 class="tier-label">Tier 3 – Premium Business Package</h2>
+            <button class="doc-chip" data-sample="service">Service Agreement (Sample)</button>
+            <button class="doc-chip" data-sample="contractor">Independent Contractor Agreement (Sample)</button>
 
-      <div class="doc-frame">
-        <div id="previewPane" class="doc-page">
-          <div class="doc-body">
-            <p>
-              Use the buttons on the left to load a sample NDA, promissory note,
-              operating agreement, or launch-kit overview.
-            </p>
-            <p>
-              This space will show a “printed page” style preview so you can
-              see headings, sections, and layout before you buy.
-            </p>
-          </div>
-        </div>
-      </div>
+            <h2 class="tier-label">Starter Bundle</h2>
+            <button class="doc-chip" data-sample="launchkit">Launch Kit Overview (Sample)</button>
 
-      <div class="preview-footer">
-        © E-LegalBoom. Ready-to-use legal templates. Not a law firm.
-      </div>
-    </main>
-  </div>
+        </aside>
 
-  <script>
-    // --- Sample content for each document type ---
-    const samples = {
-      nda: {
-        heading: "Mutual Non-Disclosure Agreement",
-        meta: "Sample extract · Tier 1 – Basic Filing Support",
-        sections: [
-          {
-            title: "1. Parties",
-            body: `
-              This Mutual Non-Disclosure Agreement (“Agreement”) is entered into between
-              <strong>[Party A]</strong> and <strong>[Party B]</strong>, collectively
-              referred to as the “Parties”, as of the Effective Date stated in your
-              finalized document.
-            `
-          },
-          {
-            title: "2. Purpose",
-            body: `
-              The Parties wish to explore a potential business relationship and in
-              connection with this evaluation may share certain confidential or
-              proprietary information (“Confidential Information”).
-            `
-          },
-          {
-            title: "3. Confidential Information",
-            body: `
-              Confidential Information includes non-public information relating to
-              business plans, financial data, customer lists, pricing, technical
-              processes, and any other information marked or reasonably understood
-              to be confidential.
-            `
-          }
-        ]
-      },
+        <!-- RIGHT SIDE – PREVIEW PAGE -->
+        <section class="preview-window">
+            <iframe id="docFrame" src="samples/blank.html"></iframe>
+        </section>
 
-      note: {
-        heading: "Promissory Note",
-        meta: "Sample extract · Tier 1 – Basic Filing Support",
-        sections: [
-          {
-            title: "Principal & Interest",
-            body: `
-              For value received, <strong>[Borrower]</strong> promises to pay
-              <strong>[Lender]</strong> the principal sum of
-              <strong>[Principal Amount]</strong>, together with interest at the
-              annual rate specified in your finalized note.
-            `
-          },
-          {
-            title: "Payment Schedule",
-            body: `
-              Payments are due on the schedule selected in your intake
-              (monthly, quarterly, or lump-sum), with each payment applied first to
-              accrued interest and then to principal.
-            `
-          },
-          {
-            title: "Default",
-            body: `
-              If Borrower fails to make any payment when due and such failure continues
-              beyond the grace period stated in the note, the Lender may declare the
-              entire outstanding balance immediately due and payable.
-            `
-          }
-        ]
-      },
+    </div>
 
-      sm_llc: {
-        heading: "Single-Member LLC Operating Agreement",
-        meta: "Sample extract · Tier 1 – Basic Filing Support",
-        sections: [
-          {
-            title: "Organization",
-            body: `
-              This Operating Agreement governs <strong>[Company Name, LLC]</strong>,
-              a limited liability company organized under the laws of
-              <strong>[State]</strong> as of the Effective Date.
-            `
-          },
-          {
-            title: "Member & Ownership",
-            body: `
-              The sole Member is <strong>[Member Name]</strong>, who owns 100% of the
-              membership interests in the Company.
-            `
-          },
-          {
-            title: "Management",
-            body: `
-              The Company is managed by the Member. The Member has full authority
-              to operate the business, enter into contracts, and make all decisions
-              on behalf of the Company.
-            `
-          }
-        ]
-      },
+</main>
 
-      partnership: {
-        heading: "Partnership Agreement",
-        meta: "Sample extract · Tier 2 – Standard Legal Foundation",
-        sections: [
-          {
-            title: "Formation",
-            body: `
-              This Agreement forms a partnership between the individuals or entities
-              listed in Exhibit A (each, a “Partner”) for the purpose described in
-              your intake.
-            `
-          },
-          {
-            title: "Capital Contributions",
-            body: `
-              Each Partner’s initial contribution of cash, property, or services is
-              recorded in the Capital Schedule. Profit and loss allocations follow
-              the agreed-upon percentages.
-            `
-          },
-          {
-            title: "Decision-Making",
-            body: `
-              Day-to-day operations may be handled by a Managing Partner, while
-              major decisions (such as admitting new partners or dissolving the
-              business) require approval thresholds described in the Agreement.
-            `
-          }
-        ]
-      },
+<script>
+document.querySelectorAll(".doc-chip").forEach(btn => {
+    btn.addEventListener("click", () => {
+        document.querySelectorAll(".doc-chip").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
 
-      tm_llc: {
-        heading: "Two-Member LLC Operating Agreement",
-        meta: "Sample extract · Tier 2 – Standard Legal Foundation",
-        sections: [
-          {
-            title: "Members & Percentages",
-            body: `
-              The Company has two Members, <strong>[Member A]</strong> and
-              <strong>[Member B]</strong>. Their ownership percentages and capital
-              contributions appear in the Ownership Schedule.
-            `
-          },
-          {
-            title: "Profit & Loss Allocation",
-            body: `
-              Unless otherwise stated, profits and losses are allocated to the Members
-              in proportion to their ownership interests, with distributions made at
-              the times and in the manner determined by the Members.
-            `
-          },
-          {
-            title: "Management Structure",
-            body: `
-              The Agreement specifies whether the LLC is Member-managed or
-              Manager-managed, and sets out voting rules for key decisions such as
-              adding new Members, incurring major debt, or selling assets.
-            `
-          }
-        ]
-      },
-
-      service: {
-        heading: "Service Agreement",
-        meta: "Sample extract · Tier 3 – Premium Business Package",
-        sections: [
-          {
-            title: "Scope of Services",
-            body: `
-              Provider agrees to perform the services described in the attached
-              Statement of Work or proposal, including key deliverables, timelines,
-              and milestones.
-            `
-          },
-          {
-            title: "Payment Terms",
-            body: `
-              Fees may be fixed, hourly, or milestone-based, with payment due on the
-              schedule selected in your intake (for example, 50% upfront and 50% on
-              completion).
-            `
-          },
-          {
-            title: "Intellectual Property",
-            body: `
-              The Agreement makes clear whether work product is assigned to the
-              client, licensed for use, or retained by the provider, and how
-              existing IP is protected.
-            `
-          }
-        ]
-      },
-
-      contractor: {
-        heading: "Independent Contractor Agreement",
-        meta: "Sample extract · Tier 3 – Premium Business Package",
-        sections: [
-          {
-            title: "Relationship of the Parties",
-            body: `
-              Contractor is engaged as an independent contractor and not as an
-              employee. Nothing in the Agreement creates an employment, joint
-              venture, or partnership relationship.
-            `
-          },
-          {
-            title: "Responsibilities & Deliverables",
-            body: `
-              The Agreement outlines specific tasks, deliverables, and any required
-              reporting so expectations are clear for both parties.
-            `
-          },
-          {
-            title: "Taxes & Benefits",
-            body: `
-              Contractor is responsible for all taxes, insurance, and benefits
-              related to their compensation. Client does not withhold payroll
-              taxes or provide employee benefits.
-            `
-          }
-        ]
-      },
-
-      launch_kit: {
-        heading: "Entrepreneur Launch Kit Overview",
-        meta: "Sample extract · Starter Bundle",
-        sections: [
-          {
-            title: "What’s Included",
-            body: `
-              Your launch kit bundles together formation templates, operating
-              agreements, starter contracts, and compliance checklists so you have
-              a single, organized package to work from.
-            `
-          },
-          {
-            title: "How to Use the Kit",
-            body: `
-              Use the formation documents to register your entity, the operating
-              agreements to organize ownership, the starter contracts to work with
-              clients, and the checklists to keep your filings on track.
-            `
-          },
-          {
-            title: "Filing & Next Steps",
-            body: `
-              We include state-level filing guidance so you know where to submit
-              your forms, how to sign, and what government fees to expect. You keep
-              control of your own filings and records.
-            `
-          }
-        ]
-      }
-    };
-
-    const previewPane = document.getElementById("previewPane");
-    const previewHeading = document.getElementById("previewHeading");
-    const previewSubheading = document.getElementById("previewSubheading");
-    const buttons = document.querySelectorAll(".preview-button");
-    const tierGroups = document.querySelectorAll(".tier-group");
-
-    function renderSample(sampleId) {
-      const sample = samples[sampleId];
-      if (!sample) return;
-
-      // Clear active state on buttons
-      buttons.forEach(btn => btn.classList.remove("active"));
-
-      // Mark the clicked one as active
-      const activeButton = document.querySelector(`.preview-button[data-sample-id="${sampleId}"]`);
-      if (activeButton) activeButton.classList.add("active");
-
-      previewHeading.textContent = sample.heading;
-      previewSubheading.textContent = sample.meta;
-
-      // Build the “document page”
-      const sectionsHtml = sample.sections.map(sec => `
-        <div class="doc-section">
-          <div class="doc-section-title">${sec.title}</div>
-          <div class="doc-body">
-            <p>${sec.body}</p>
-          </div>
-        </div>
-      `).join("");
-
-      previewPane.innerHTML = `
-        <div class="doc-meta">${sample.meta}</div>
-        <div class="doc-heading">${sample.heading}</div>
-        ${sectionsHtml}
-        <div class="doc-footer-note">
-          Sample text only. Your finalized document includes full clauses,
-          signature blocks, and state-specific details based on your intake.
-        </div>
-      `;
-    }
-
-    // Wire click handlers
-    buttons.forEach(btn => {
-      btn.addEventListener("click", () => {
-        const id = btn.dataset.sampleId;
-        renderSample(id);
-      });
+        const file = btn.getAttribute("data-sample");
+        document.getElementById("docFrame").src = `samples/${file}.html`;
     });
+});
+</script>
 
-    // Handle ?tier=1 | 2 | 3 | bundle
-    (function handleTierFilter() {
-      const params = new URLSearchParams(window.location.search);
-      const tier = params.get("tier"); // "1", "2", "3", or "bundle"
+<footer class="footer">
+    © E-LegalBoom. Ready-to-use legal templates. Not a law firm.
+</footer>
 
-      if (!tier) {
-        // No tier specified – show everything and auto-load first sample
-        const firstBtn = document.querySelector(".preview-button");
-        if (firstBtn) renderSample(firstBtn.dataset.sampleId);
-        return;
-      }
-
-      // Hide groups that don’t match the requested tier
-      tierGroups.forEach(group => {
-        if (group.dataset.tierGroup !== tier && group.dataset.tierGroup !== "bundle") {
-          group.style.display = "none";
-        }
-      });
-
-      // Auto-select first sample in that tier
-      const firstInTier = document.querySelector(
-        `.preview-button[data-tier="${tier}"]`
-      );
-
-      if (firstInTier) {
-        renderSample(firstInTier.dataset.sampleId);
-      }
-    })();
-  </script>
 </body>
 </html>
