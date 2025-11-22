@@ -1,20 +1,23 @@
-/* ===============================
-   E-LegalBoom Global Styles
-   =============================== */
+/* =========================================
+   E-LegalBoom – Unified Styles
+   ========================================= */
 
 :root {
   --blue: #0055cc;
   --blue-light: #edf3ff;
   --green: #1aaf5d;
   --green-dark: #118448;
-  --gray-100: #f5f6fa;
-  --gray-200: #e3e7f0;
+  --gray-50: #f7f8fc;
+  --gray-100: #f1f3fb;
+  --gray-200: #dde3f1;
   --gray-700: #444;
   --text-main: #222;
   --page-max: 1200px;
   --radius-card: 14px;
   --shadow-soft: 0 4px 14px rgba(0, 0, 0, 0.06);
 }
+
+/* Reset / base */
 
 *,
 *::before,
@@ -32,12 +35,12 @@ body {
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
     sans-serif;
   color: var(--text-main);
-  background: var(--gray-100);
+  background: linear-gradient(135deg, var(--gray-50), var(--blue-light));
 }
 
-/* ===============================
+/* =========================================
    Header & Navigation
-   =============================== */
+   ========================================= */
 
 .site-header {
   background: #ffffff;
@@ -48,13 +51,15 @@ body {
   align-items: center;
 }
 
-.header-logo {
+.header-logo,
+.site-logo {
   font-weight: 800;
   font-size: 22px;
   letter-spacing: 0.03em;
 }
 
-.site-nav a {
+.site-nav a,
+.site-nav .nav-link {
   margin-left: 18px;
   text-decoration: none;
   color: var(--blue);
@@ -62,19 +67,23 @@ body {
   font-size: 14px;
 }
 
-.site-nav a:hover {
+.site-nav a:hover,
+.site-nav .nav-link:hover {
   text-decoration: underline;
 }
 
-.site-nav a.active {
+.site-nav a.active,
+.site-nav .nav-link.active {
   text-decoration: underline;
 }
 
-/* ===============================
+/* =========================================
    Generic Page Layout
-   =============================== */
+   ========================================= */
 
-.page-container {
+.page,
+.catalog-page,
+.preview-container {
   max-width: var(--page-max);
   margin: 30px auto 60px;
   padding: 0 40px;
@@ -91,11 +100,31 @@ body {
   max-width: 720px;
 }
 
-/* ===============================
-   Buttons
-   =============================== */
+/* Row header with buttons on the right (tiers & bundle) */
 
-.btn {
+.page-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 24px;
+  margin-bottom: 20px;
+}
+
+.page-header-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+}
+
+/* =========================================
+   Buttons
+   ========================================= */
+
+.btn,
+.btn-primary,
+.btn-outline,
+.btn-ghost {
   display: inline-block;
   padding: 10px 18px;
   border-radius: 999px;
@@ -104,6 +133,7 @@ body {
   text-decoration: none;
   cursor: pointer;
   border: none;
+  line-height: 1.3;
 }
 
 .btn-primary {
@@ -116,18 +146,17 @@ body {
   background: var(--green-dark);
 }
 
-.btn-secondary-outline {
+.btn-outline {
   background: #ffffff;
   color: var(--blue);
   border: 1px solid var(--blue);
 }
 
-.btn-secondary-outline:hover {
+.btn-outline:hover {
   background: var(--blue);
   color: #ffffff;
 }
 
-/* Ghost button if needed */
 .btn-ghost {
   background: transparent;
   border: 1px solid var(--gray-200);
@@ -138,13 +167,16 @@ body {
   background: var(--gray-200);
 }
 
-/* ===============================
-   Catalog Page (index.html)
-   =============================== */
-
-.catalog-page {
-  /* nothing special yet; just uses page-container */
+/* Make sure plain anchors with these classes keep button look */
+a.btn-primary,
+a.btn-outline,
+a.btn-ghost {
+  color: inherit;
 }
+
+/* =========================================
+   Catalog Page (index.html)
+   ========================================= */
 
 .catalog-grid {
   display: grid;
@@ -153,42 +185,50 @@ body {
   margin-top: 16px;
 }
 
+/* Support both .catalog-card (current HTML) and .card (older HTML) */
+.catalog-card,
 .card {
   background: #ffffff;
   border-radius: var(--radius-card);
   padding: 22px 22px 20px;
   box-shadow: var(--shadow-soft);
-  border: 1px solid #dde3f1;
+  border: 1px solid var(--gray-200);
   display: flex;
   flex-direction: column;
   height: 100%;
 }
 
-.card-title {
+.catalog-card h2,
+.card h2 {
   font-size: 20px;
-  margin: 0 0 4px;
+  margin: 0 0 6px;
 }
 
+.price,
 .card-price {
   font-weight: 700;
   color: var(--green-dark);
   margin-bottom: 8px;
 }
 
+.tagline,
 .card-tagline {
   margin: 0 0 14px;
   color: var(--gray-700);
 }
 
-.card-subheading {
+.card-subheading,
+.catalog-card h3,
+.card h3 {
   font-size: 14px;
   text-transform: uppercase;
   letter-spacing: 0.04em;
-  margin: 6px 0 6px;
+  margin: 10px 0 6px;
   color: #6c7690;
 }
 
-.card-list {
+.catalog-card ul,
+.card ul {
   padding-left: 18px;
   margin: 0 0 16px;
   color: var(--gray-700);
@@ -202,23 +242,11 @@ body {
   gap: 10px;
 }
 
-/* ===============================
-   Tier Pages (tier1 / tier2 / tier3 / bundle)
-   =============================== */
+/* =========================================
+   Tier Detail Pages (tier1 / tier2 / tier3 / orders)
+   ========================================= */
 
-.page {
-  max-width: var(--page-max);
-  margin: 30px auto 60px;
-  padding: 0 40px;
-}
-
-.page > .page-title {
-  margin-bottom: 8px;
-}
-
-.page > .page-subtitle {
-  margin-bottom: 20px;
-}
+/* Sections with white boxes (What’s Included / What You’ll Need / How it works) */
 
 .section-grid {
   display: grid;
@@ -227,10 +255,11 @@ body {
   margin-bottom: 24px;
 }
 
+.card-box,
 .box {
   background: #ffffff;
   border-radius: var(--radius-card);
-  border: 1px solid #dde3f1;
+  border: 1px solid var(--gray-200);
   padding: 20px;
   box-shadow: var(--shadow-soft);
 }
@@ -246,15 +275,14 @@ body {
   margin-top: 10px;
 }
 
-/* ===============================
-   Document Preview Page
-   =============================== */
-
-.preview-container {
-  max-width: var(--page-max);
-  margin: 30px auto 60px;
-  padding: 0 40px;
+/* Single wide row (for How It Works only) */
+.section-grid.single-row {
+  grid-template-columns: 1fr;
 }
+
+/* =========================================
+   Document Preview Page (preview.html)
+   ========================================= */
 
 .preview-subtext {
   margin: 6px 0 20px;
@@ -263,26 +291,38 @@ body {
 
 .preview-layout {
   display: flex;
-  gap: 40px;
-  margin-top: 10px;
+  gap: 32px;
+  margin-top: 16px;
+  align-items: stretch;
 }
 
-/* LEFT LIST */
+/* LEFT: Tier / document list */
+
 .preview-list {
-  width: 30%;
-  background: var(--blue-light);
-  padding: 20px;
-  border-radius: 10px;
-  border: 1px solid var(--gray-200);
+  width: 32%;
+  background: var(--blue);
+  color: #ffffff;
+  padding: 22px 20px 20px;
+  border-radius: 16px;
+  box-shadow: var(--shadow-soft);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.preview-list h2,
+.preview-tier-title {
+  margin-top: 0;
+  margin-bottom: 8px;
 }
 
 .preview-tier-title {
   font-weight: 700;
-  margin-top: 16px;
-  margin-bottom: 8px;
+  margin-top: 18px;
 }
 
-/* Buttons for preview list */
+/* Buttons for choosing sample docs
+   – support both .doc-btn and .preview-btn classes */
+
+.doc-btn,
 .preview-btn {
   width: 100%;
   display: block;
@@ -295,23 +335,33 @@ body {
   font-size: 14px;
   cursor: pointer;
   text-align: left;
-  transition: 0.18s;
+  transition: background 0.18s, color 0.18s, border-color 0.18s;
 }
 
+.doc-btn:hover,
 .preview-btn:hover {
-  background: var(--blue);
-  color: #ffffff;
+  background: var(--blue-light);
 }
 
-/* PREVIEW WINDOW */
+/* Keep selected button solid blue */
+.doc-btn.active,
+.preview-btn.active {
+  background-color: #0057ff;
+  color: #ffffff;
+  border-color: #0057ff;
+}
+
+/* RIGHT: Document preview window */
+
 .preview-window {
-  flex-grow: 1;
+  flex: 1;
   background: #ffffff;
   border: 1px solid var(--gray-200);
-  border-radius: 12px;
+  border-radius: 16px;
   padding: 10px;
-  height: 780px;
+  min-height: 780px;
   box-shadow: var(--shadow-soft);
+  overflow: hidden;
 }
 
 .preview-iframe {
@@ -321,9 +371,23 @@ body {
   background: #ffffff;
 }
 
-/* ===============================
+/* Empty-state placeholder text when no doc selected yet */
+
+.preview-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: var(--gray-700);
+  font-size: 15px;
+  padding: 40px;
+}
+
+/* =========================================
    Footer
-   =============================== */
+   ========================================= */
 
 .site-footer {
   border-top: 1px solid var(--gray-200);
@@ -334,9 +398,9 @@ body {
   background: #ffffff;
 }
 
-/* ===============================
+/* =========================================
    Responsive Tweaks
-   =============================== */
+   ========================================= */
 
 @media (max-width: 900px) {
   .site-header {
@@ -348,6 +412,21 @@ body {
     margin-top: 8px;
   }
 
+  .page,
+  .catalog-page,
+  .preview-container {
+    padding: 0 16px;
+  }
+
+  .page-header-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .page-header-actions {
+    align-items: flex-start;
+  }
+
   .preview-layout {
     flex-direction: column;
   }
@@ -355,15 +434,4 @@ body {
   .preview-list {
     width: 100%;
   }
-
-  .page-container,
-  .preview-container,
-  .page {
-    padding: 0 16px;
-  }
-   /* Active (selected) preview document button */
-.doc-btn.active {
-  background-color: #0057ff !important;
-  color: #ffffff !important;
-  border-color: #0057ff !important;
 }
