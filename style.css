@@ -1,151 +1,289 @@
-/* --------------------------------------------------
-   GLOBAL RESET & BASE
--------------------------------------------------- */
-* {
-  margin: 0;
-  padding: 0;
+/* =========
+   Base
+   ========= */
+*,
+*::before,
+*::after {
   box-sizing: border-box;
 }
 
 body {
-  font-family: Arial, Helvetica, sans-serif;
-  background: #f5f7fa;
-  color: #222;
-  line-height: 1.6;
-  padding-bottom: 60px;
+  margin: 0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: #123047;
+  background: #f5f7fb;
 }
 
-main {
-  width: 90%;
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.page {
   max-width: 1100px;
-  margin: 40px auto;
+  margin: 0 auto;
+  padding: 2.5rem 1.5rem 3rem;
 }
 
-/* --------------------------------------------------
-   HEADER & NAVIGATION
--------------------------------------------------- */
-header {
-  background: #ffffff;
-  padding: 20px 0;
-  border-bottom: 2px solid #e0e0e0;
+/* =========
+   Header / Nav
+   ========= */
+.site-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1.5rem;
+  background: #143850;
+  color: #fff;
 }
 
 .logo {
-  font-size: 28px;
-  font-weight: bold;
-  color: #0077cc;
+  font-weight: 700;
+  letter-spacing: 0.03em;
 }
 
-nav {
-  margin-top: 10px;
+.nav a {
+  margin-left: 1rem;
+  font-size: 0.95rem;
+  opacity: 0.8;
 }
 
-nav a {
-  margin-right: 20px;
-  color: #0077cc;
-  text-decoration: none;
-  font-weight: bold;
-}
-
-nav a:hover {
+.nav a:hover,
+.nav a.active {
+  opacity: 1;
   text-decoration: underline;
 }
 
-/* --------------------------------------------------
-   PAGE TITLES / HEADERS
--------------------------------------------------- */
-h1 {
-  font-size: 32px;
-  margin-bottom: 20px;
+/* =========
+   Hero
+   ========= */
+.hero h1 {
+  margin: 0 0 0.5rem;
+  font-size: 2rem;
 }
 
-h2 {
-  margin: 20px 0 10px;
-  font-size: 26px;
+.hero-tagline {
+  margin: 0;
+  max-width: 640px;
+  color: #45607a;
 }
 
-h3 {
-  font-size: 20px;
-  margin-bottom: 10px;
-}
-
-/* --------------------------------------------------
-   SECTIONS (Soft Cards)
--------------------------------------------------- */
-.section-box {
-  background: #ffffff;
-  padding: 25px;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.07);
-  margin-bottom: 40px;
-}
-
-/* --------------------------------------------------
-   TWO-COLUMN GRID
--------------------------------------------------- */
-.columns {
+/* =========
+   Cards
+   ========= */
+.card-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-gap: 30px;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
 }
 
-@media (max-width: 800px) {
-  .columns {
+.card {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 1.5rem 1.5rem 1.25rem;
+  box-shadow: 0 6px 18px rgba(4, 26, 46, 0.08);
+  display: flex;
+  flex-direction: column;
+}
+
+.card h2 {
+  margin-top: 0;
+  margin-bottom: 0.25rem;
+  font-size: 1.25rem;
+}
+
+.price {
+  font-weight: 700;
+  color: #0b8b3b;
+  margin-bottom: 0.25rem;
+}
+
+.tagline {
+  margin: 0 0 0.75rem;
+  color: #4b6680;
+  font-size: 0.95rem;
+}
+
+.bullet-list {
+  margin: 0 0 1rem 1rem;
+  padding: 0;
+  color: #32475a;
+  font-size: 0.92rem;
+}
+
+.bullet-list li {
+  margin-bottom: 0.25rem;
+}
+
+.card-actions {
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  padding: 0.55rem 1.25rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: transform 0.1s ease, box-shadow 0.1s ease, background 0.1s ease,
+    color 0.1s ease, border-color 0.1s ease;
+}
+
+.btn.primary {
+  background: #00a35a;
+  color: #ffffff;
+  box-shadow: 0 4px 10px rgba(0, 140, 70, 0.3);
+}
+
+.btn.primary:hover {
+  background: #008949;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 14px rgba(0, 120, 60, 0.35);
+}
+
+.btn.secondary {
+  background: #ffffff;
+  color: #007143;
+  border-color: #00a35a;
+}
+
+.btn.secondary:hover {
+  background: #e9f8f0;
+}
+
+/* Back link on preview page */
+.back-link {
+  display: inline-block;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+  color: #2064b8;
+}
+
+.back-link:hover {
+  text-decoration: underline;
+}
+
+/* =========
+   Preview Page Layout
+   ========= */
+.preview-page h1 {
+  margin-top: 0;
+  margin-bottom: 0.25rem;
+}
+
+.preview-intro {
+  margin-top: 0;
+  margin-bottom: 1.25rem;
+  max-width: 720px;
+  color: #4b6680;
+}
+
+.preview-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 2.2fr) minmax(0, 1.4fr);
+  gap: 1.5rem;
+  align-items: flex-start;
+  margin-bottom: 2rem;
+}
+
+.preview-main,
+.preview-side {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 1.25rem 1.5rem;
+  box-shadow: 0 6px 18px rgba(4, 26, 46, 0.06);
+}
+
+/* Document sample styling */
+.doc-sample {
+  border-radius: 10px;
+  border: 1px solid #dde5f2;
+  background: #f9fbff;
+  padding: 1rem 1.25rem;
+  font-size: 0.92rem;
+  line-height: 1.5;
+}
+
+.doc-sample h3 {
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+}
+
+.sample-highlight {
+  font-weight: 600;
+  color: #0c70d4;
+}
+
+.sample-fade {
+  margin-top: 0.75rem;
+  font-style: italic;
+  color: #7c8aa0;
+}
+
+/* Preview notes */
+.preview-notes {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 1.25rem 1.5rem;
+  box-shadow: 0 6px 18px rgba(4, 26, 46, 0.06);
+}
+
+.preview-notes ol {
+  margin: 0.25rem 0 0 1rem;
+  padding: 0;
+  color: #32475a;
+}
+
+.preview-notes li {
+  margin-bottom: 0.4rem;
+}
+
+/* =========
+   Fine print & footer
+   ========= */
+.fineprint {
+  margin-top: 2.5rem;
+  font-size: 0.85rem;
+  color: #6a7c93;
+}
+
+.site-footer {
+  padding: 1rem 1.5rem 1.5rem;
+  text-align: center;
+  font-size: 0.85rem;
+  color: #5c6f86;
+}
+
+/* =========
+   Responsive
+   ========= */
+@media (max-width: 768px) {
+  .site-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .nav {
+    margin-top: 0.4rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .nav a {
+    margin-left: 0;
+  }
+
+  .preview-layout {
     grid-template-columns: 1fr;
   }
-}
-
-/* --------------------------------------------------
-   GREEN BUTTONS (Pay Buttons)
--------------------------------------------------- */
-.pay-btn {
-  background: #22a745;
-  color: #fff;
-  padding: 14px 22px;
-  font-size: 18px;
-  border-radius: 8px;
-  text-decoration: none;
-  display: inline-block;
-  font-weight: bold;
-  margin-top: 20px;
-  transition: background 0.2s ease;
-}
-
-.pay-btn:hover {
-  background: #1d8a3c;
-}
-
-/* --------------------------------------------------
-   DOCUMENT PREVIEW AREA (Future Upgrade Zone)
--------------------------------------------------- */
-.preview-box {
-  background: #ffffff;
-  border: 2px dashed #cccccc;
-  border-radius: 12px;
-  padding: 30px;
-  min-height: 320px;
-  margin-top: 25px;
-}
-
-.preview-title {
-  font-size: 22px;
-  font-weight: bold;
-  color: #0077cc;
-  margin-bottom: 15px;
-}
-
-.preview-content {
-  font-size: 16px;
-  color: #333;
-  white-space: pre-line;
-}
-
-/* --------------------------------------------------
-   FOOTER
--------------------------------------------------- */
-footer {
-  text-align: center;
-  margin-top: 40px;
-  color: #777;
-  font-size: 14px;
 }
