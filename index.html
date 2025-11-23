@@ -2,116 +2,343 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Document Catalog | E-LegalBoom</title>
+  <title>ElegalBoom — Legal Confidence for Everyday Entrepreneurs</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="ElegalBoom provides low-cost, accurate, business-ready legal documents for entrepreneurs, small business owners, contractors, and creators." />
   <link rel="stylesheet" href="style.css" />
+
+  <!-- Optional: light, isolated styles in case style.css is minimal -->
+  <style>
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: #1f2933;
+      background-color: #f7f9fb;
+    }
+
+    .elboom-page {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .elboom-header {
+      background: #0b7285;
+      color: #ffffff;
+      padding: 16px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .elboom-logo {
+      font-weight: 700;
+      font-size: 1.3rem;
+      letter-spacing: 0.03em;
+    }
+
+    .elboom-nav a {
+      color: #e3f8ff;
+      text-decoration: none;
+      margin-left: 16px;
+      font-size: 0.95rem;
+    }
+
+    .elboom-nav a:hover {
+      text-decoration: underline;
+    }
+
+    .elboom-hero {
+      padding: 56px 20px 40px;
+      text-align: center;
+      max-width: 960px;
+      margin: 0 auto;
+    }
+
+    .elboom-hero h1 {
+      font-size: 2.2rem;
+      margin-bottom: 12px;
+      color: #102a43;
+    }
+
+    .elboom-hero h2 {
+      font-size: 1.3rem;
+      font-weight: 500;
+      margin-bottom: 16px;
+      color: #334e68;
+    }
+
+    .elboom-tagline {
+      font-size: 1rem;
+      max-width: 640px;
+      margin: 0 auto 28px;
+      color: #52606d;
+    }
+
+    .elboom-actions {
+      margin-top: 12px;
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .elboom-btn-primary,
+    .elboom-btn-secondary {
+      padding: 12px 22px;
+      border-radius: 999px;
+      border: none;
+      cursor: pointer;
+      font-size: 0.98rem;
+      font-weight: 600;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .elboom-btn-primary {
+      background: #0b7285;
+      color: #ffffff;
+    }
+
+    .elboom-btn-primary:hover {
+      background: #095b69;
+    }
+
+    .elboom-btn-secondary {
+      background: #ffffff;
+      color: #0b7285;
+      border: 1px solid #cbd2d9;
+    }
+
+    .elboom-btn-secondary:hover {
+      background: #e3f8ff;
+    }
+
+    .elboom-section {
+      padding: 32px 20px;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .elboom-section h3 {
+      font-size: 1.3rem;
+      margin-bottom: 12px;
+      color: #102a43;
+    }
+
+    .elboom-columns {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 20px;
+      margin-top: 16px;
+    }
+
+    .elboom-card {
+      background: #ffffff;
+      border-radius: 12px;
+      padding: 18px 16px;
+      box-shadow: 0 2px 5px rgba(15, 23, 42, 0.06);
+      border: 1px solid #d8e2ec;
+    }
+
+    .elboom-card h4 {
+      margin-top: 0;
+      margin-bottom: 8px;
+      font-size: 1.05rem;
+      color: #102a43;
+    }
+
+    .elboom-card p {
+      margin: 0;
+      font-size: 0.95rem;
+      color: #52606d;
+    }
+
+    .elboom-steps {
+      counter-reset: step;
+    }
+
+    .elboom-step {
+      position: relative;
+      padding-left: 42px;
+      margin-bottom: 18px;
+    }
+
+    .elboom-step::before {
+      counter-increment: step;
+      content: counter(step);
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: #0b7285;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+
+    .elboom-footer {
+      margin-top: auto;
+      text-align: center;
+      padding: 18px 16px 24px;
+      font-size: 0.85rem;
+      color: #7b8794;
+    }
+  </style>
 </head>
+
 <body>
-  <!-- Header -->
-  <header class="site-header">
-    <div class="header-logo">E-LegalBoom</div>
-    <nav class="site-nav">
-      <a href="index.html" class="nav-link active">Catalog</a>
-      <a href="tier1.html" class="nav-link">Tier 1</a>
-      <a href="tier2.html" class="nav-link">Tier 2</a>
-      <a href="tier3.html" class="nav-link">Tier 3</a>
-      <a href="orders.html" class="nav-link">Starter Bundle</a>
-      <a href="preview.html" class="nav-link">Document Preview</a>
-      <a href="customer.html" class="nav-link">Customer Input</a>
-    </nav>
-  </header>
+  <div class="elboom-page">
+    <!-- HEADER -->
+    <header class="elboom-header">
+      <div class="elboom-logo">ElegalBoom</div>
+      <nav class="elboom-nav">
+        <a href="index.html">Home</a>
+        <a href="bundle.html">Catalog</a>
+        <a href="orders.html">My Orders</a>
+      </nav>
+    </header>
 
-  <main class="page catalog-page">
-   <section id="catalog">
-      <h2 class="page-title">Document Catalog</h2>
-      <p class="page-subtitle">
-        Fast, accurate, digital legal documents delivered in minutes.
-        Choose the package that matches your stage of business.
-      </p>
-      <!-- your four cards stay exactly as they are here -->
-    </section>
-      </div>
-    </section>
-    </p>
-
-    <section class="catalog-grid">
-      <!-- Tier 1 Card -->
-      <article class="card">
-        <h2 class="card-title">Tier 1 – Basic Filing Support</h2>
-        <div class="price card-price">$39</div>
-        <p class="card-tagline">
-          Simple business filings &amp; essential documents for new owners.
+    <!-- HERO / WELCOME -->
+    <main>
+      <section class="elboom-hero">
+        <h1>Legal Confidence for Everyday Entrepreneurs</h1>
+        <h2>Low-cost, accurate, business-ready legal documents.</h2>
+        <p class="elboom-tagline">
+          ElegalBoom exists to help business-minded people protect what they are building,
+          without the confusion and high cost of traditional legal routes. If you’re starting,
+          growing, or securing your next deal, you’re in the right place.
         </p>
 
-        <h3 class="card-subheading">WHAT'S INCLUDED</h3>
-        <ul class="card-list">
-          <li><strong>NDA (Mutual)</strong> – Protects confidential information when both sides are sharing ideas.</li>
-          <li><strong>Promissory Note</strong> – Simple loan / repayment terms for lending or borrowing money.</li>
-          <li><strong>Single-Member LLC Operating Agreement</strong> – Core document that outlines how your one-owner LLC is run.</li>
-        </ul>
-
-        <div class="card-actions">
-          <a href="tier1.html">Preview this package</a>
+        <div class="elboom-actions">
+          <!-- IMPORTANT: this button goes to your existing catalog page -->
+          <a class="elboom-btn-primary" href="bundle.html">
+            View Our Catalog
+          </a>
+          <a class="elboom-btn-secondary" href="#how-it-works">
+            How It Works
+          </a>
         </div>
-      </article>
+      </section>
 
-      <!-- Tier 2 Card -->
-      <article class="card">
-        <h2 class="card-title">Tier 2 – Standard Legal Foundation</h2>
-        <div class="price card-price">$59</div>
-        <p class="card-tagline">
-          Stronger legal foundation for growing businesses with partners.
+      <!-- WHY ELEGALBOOM -->
+      <section class="elboom-section" id="why">
+        <h3>Why ElegalBoom?</h3>
+        <div class="elboom-columns">
+          <div class="elboom-card">
+            <h4>Built for Business-Minded People</h4>
+            <p>
+              We focus on the real world of owners, contractors, freelancers, and creators.
+              Our documents are written to support how you actually work and get paid.
+            </p>
+          </div>
+          <div class="elboom-card">
+            <h4>Low Cost, High Accuracy</h4>
+            <p>
+              Instead of thousand-dollar retainers, you get clear, structured documents at a
+              price that makes sense—without sacrificing quality or protection.
+            </p>
+          </div>
+          <div class="elboom-card">
+            <h4>Clarity Instead of Confusion</h4>
+            <p>
+              No guessing which form you need. No walls of legal jargon. Just straightforward
+              options you can understand and use with confidence.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- HOW IT WORKS -->
+      <section class="elboom-section" id="how-it-works">
+        <h3>How It Works</h3>
+        <div class="elboom-steps">
+          <div class="elboom-step">
+            <h4>1. Welcome In</h4>
+            <p>
+              Start here on the home page and get clear on what ElegalBoom offers and how it
+              serves your business.
+            </p>
+          </div>
+          <div class="elboom-step">
+            <h4>2. View Our Catalog</h4>
+            <p>
+              Click <strong>“View Our Catalog”</strong> to see our tiers and document sets.
+              Choose the level that fits where you are in your business journey.
+            </p>
+          </div>
+          <div class="elboom-step">
+            <h4>3. Review and Preview</h4>
+            <p>
+              Explore what’s included in each tier. Preview sample language and see which
+              contracts, forms, and policies come with your selection.
+            </p>
+          </div>
+          <div class="elboom-step">
+            <h4>4. Decide, Pay, and Get to Work</h4>
+            <p>
+              Once you’ve chosen your tier, complete your purchase and move into the
+              ElegalBoom back office to access, download, and put your documents to work.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- WHO WE SERVE -->
+      <section class="elboom-section">
+        <h3>Who ElegalBoom Serves</h3>
+        <div class="elboom-columns">
+          <div class="elboom-card">
+            <h4>Startup & Small Business Owners</h4>
+            <p>
+              From your first client to your tenth employee, we help you protect your
+              operations, relationships, and agreements.
+            </p>
+          </div>
+          <div class="elboom-card">
+            <h4>Contractors & Freelancers</h4>
+            <p>
+              Lock in expectations, payment terms, and ownership so you can focus on delivering
+              great work, not chasing paperwork.
+            </p>
+          </div>
+          <div class="elboom-card">
+            <h4>Creators & Community Builders</h4>
+            <p>
+              Content creators, coaches, and community leaders use ElegalBoom to safeguard their
+              brands, collaborations, and intellectual property.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- FINAL CALL TO ACTION -->
+      <section class="elboom-section" style="text-align:center;">
+        <h3>Ready to Protect What You’re Building?</h3>
+        <p style="max-width:640px;margin:0 auto 20px;color:#52606d;">
+          Your ideas, your time, and your relationships are too valuable to leave unprotected.
+          Take the next step toward legal confidence and clarity.
         </p>
+        <a class="elboom-btn-primary" href="bundle.html">
+          Enter the Catalog & Choose Your Tier
+        </a>
+      </section>
+    </main>
 
-        <h3 class="card-subheading">WHAT'S INCLUDED</h3>
-        <ul class="card-list">
-          <li><strong>Partnership Agreement</strong> – Defines the relationship, responsibilities, equity split, and profit-sharing.</li>
-          <li><strong>Two-Member LLC Operating Agreement</strong> – Lays out how a two-member LLC is structured and managed.</li>
-          <li><strong>All Tier 1 documents</strong> (NDA, Promissory Note, Single-Member LLC Operating Agreement).</li>
-        </ul>
+    <!-- FOOTER -->
+    <footer class="elboom-footer">
+      © <span id="year"></span> ElegalBoom. All rights reserved.
+    </footer>
+  </div>
 
-        <div class="card-actions">
-          <a href="tier2.html">Preview this package</a>
-        </div>
-      </article>
-
-      <!-- Tier 3 Card -->
-      <article class="card">
-        <h2 class="card-title">Tier 3 – Premium Business Package</h2>
-        <div class="price card-price">$99</div>
-        <p class="card-tagline">
-          A wider range of agreements &amp; templates for established businesses.
-        </p>
-
-        <h3 class="card-subheading">WHAT'S INCLUDED</h3>
-        <ul class="card-list">
-          <li><strong>All Tier 1 documents</strong></li>
-          <li><strong>All Tier 2 documents</strong></li>
-          <li><strong>Additional premium templates</strong> (service agreement, independent contractor agreement, and more).</li>
-        </ul>
-
-        <div class="card-actions">
-          <a href="tier3.html">Preview this package</a>
-        </div>
-      </article>
-
-      <!-- Starter Bundle Card -->
-      <article class="card">
-        <h2 class="card-title">Entrepreneur Starter Bundle</h2>
-        <div class="price card-price">$149</div>
-        <p class="card-tagline">
-          Full launch kit for new entrepreneurs: formation, agreements, and starter contracts.
-        </p>
-
-        <h3 class="card-subheading">WHAT'S INCLUDED</h3>
-        <ul class="card-list">
-          <li><strong>Formation filing support</strong> – Templates for forming your entity.</li>
-          <li><strong>Operating agreements</strong> – Single-member and two-member structures.</li>
-          <li><strong>Starter service / client contracts</strong>.</li>
-          <li><strong>Compliance reference templates</strong>.</li>
-          <li><strong>All Tier 1 &amp; Tier 2 documents</strong> included at no extra cost.</li>
-        </ul>
-
-        <div class="card-actions">
-          <a href="orders.html">Preview this bundle</a>
-        </div>
-     
+  <script>
+    // Simple year updater for the footer
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
