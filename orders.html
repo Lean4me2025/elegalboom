@@ -5,11 +5,12 @@
   <title>Order Form | ElegalBoom</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="stylesheet" href="style.css" />
+
   <style>
-    /* Page-specific layout (on top of style.css) */
+    /* Page-specific layout */
     .order-container {
       padding: 2.5rem 8vw 3rem;
-      max-width: 960px;
+      max-width: 980px;
       margin: 0 auto;
     }
     .order-heading {
@@ -25,7 +26,7 @@
     }
     .order-layout {
       display: grid;
-      grid-template-columns: minmax(0, 2fr) minmax(0, 1.2fr);
+      grid-template-columns: minmax(0, 2fr) minmax(0, 1.15fr);
       gap: 2rem;
       align-items: flex-start;
     }
@@ -38,12 +39,12 @@
       border: 1px solid #e2e8f0;
     }
     .order-card h2 {
-      font-size: 1.15rem;
+      font-size: 1.1rem;
       margin: 0 0 1rem;
       color: #111827;
     }
     .order-field {
-      margin-bottom: 0.85rem;
+      margin-bottom: 0.9rem;
     }
     .order-label {
       display: block;
@@ -88,6 +89,181 @@
       margin-top: 0.75rem;
     }
     .order-submit {
-      margin-top: 1.25rem;
+      margin-top: 1.3rem;
     }
-    .
+    .order-note {
+      font-size: 0.8rem;
+      color: #6b7280;
+      margin-top: 0.5rem;
+    }
+    @media (max-width: 800px) {
+      .order-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Site header (same style as other pages) -->
+  <header class="site-header">
+    <div class="header_logo">ElegalBoom</div>
+    <nav class="site-nav">
+      <a href="index.html">Home</a>
+      <a href="catalog.html">Catalog</a>
+      <a href="tier1.html">Tier 1</a>
+      <a href="tier2.html">Tier 2</a>
+      <a href="tier3.html">Tier 3</a>
+      <a href="bundle.html">Starter Bundle</a>
+      <a href="preview.html">Document Preview</a>
+    </nav>
+  </header>
+
+  <main class="order-container">
+    <h1 class="order-heading">Start Your Order</h1>
+    <p class="order-subtext">
+      Tell us a bit about you and your business. We’ll capture this on the back end and then send you
+      to secure payment for the package you selected.
+    </p>
+
+    <section class="order-layout">
+      <!-- LEFT: FORM -->
+      <form
+        id="order-form"
+        class="order-card"
+        action="YOUR_APPS_SCRIPT_URL_HERE"
+        method="POST"
+      >
+        <h2>Contact & Business Details</h2>
+
+        <!-- Hidden fields for package -->
+        <input type="hidden" name="packageId" id="packageId" />
+        <input type="hidden" name="packageName" id="packageName" />
+        <input type="hidden" name="packagePrice" id="packagePrice" />
+
+        <div class="order-field">
+          <label class="order-label" for="firstName">First Name</label>
+          <input class="order-input" type="text" id="firstName" name="firstName" required />
+        </div>
+
+        <div class="order-field">
+          <label class="order-label" for="lastName">Last Name</label>
+          <input class="order-input" type="text" id="lastName" name="lastName" required />
+        </div>
+
+        <div class="order-field">
+          <label class="order-label" for="email">Email</label>
+          <input class="order-input" type="email" id="email" name="email" required />
+          <div class="order-help">We’ll email your confirmation and next steps here.</div>
+        </div>
+
+        <div class="order-field">
+          <label class="order-label" for="phone">Phone (optional)</label>
+          <input class="order-input" type="tel" id="phone" name="phone" />
+        </div>
+
+        <div class="order-field">
+          <label class="order-label" for="businessName">Business Name</label>
+          <input class="order-input" type="text" id="businessName" name="businessName" />
+        </div>
+
+        <div class="order-field">
+          <label class="order-label" for="state">State (for your business)</label>
+          <input class="order-input" type="text" id="state" name="state" />
+        </div>
+
+        <div class="order-field">
+          <label class="order-label" for="hearAbout">How did you hear about ElegalBoom?</label>
+          <select class="order-select" id="hearAbout" name="hearAbout">
+            <option value="">Select one</option>
+            <option value="Referral">Referral</option>
+            <option value="Social Media">Social media</option>
+            <option value="Search">Search (Google, etc.)</option>
+            <option value="Event or Workshop">Event / workshop</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+
+        <div class="order-field">
+          <label class="order-label" for="notes">Anything specific we should know?</label>
+          <textarea class="order-textarea" id="notes" name="notes"></textarea>
+          <div class="order-help">
+            Optional: brief context about your business or what you’re aiming to protect.
+          </div>
+        </div>
+
+        <div class="order-submit">
+          <button type="submit" class="btn-primary">
+            Submit & Go to Secure Payment
+          </button>
+          <p class="order-note">
+            After you click submit, you’ll be redirected to the correct payment page for your package.
+          </p>
+        </div>
+      </form>
+
+      <!-- RIGHT: SUMMARY -->
+      <aside class="summary-card">
+        <div class="summary-title">Your Package</div>
+        <div class="summary-line" id="summary-package-name">Loading package…</div>
+        <div class="summary-line" id="summary-package-desc"></div>
+        <div class="summary-price" id="summary-package-price"></div>
+
+        <hr style="margin: 1rem 0; border-color: #e5e7eb;" />
+
+        <div class="summary-title">What Happens Next?</div>
+        <p class="summary-line">
+          1. You submit this form so we can capture your contact & business details.
+        </p>
+        <p class="summary-line">
+          2. You’ll be redirected to secure payment for the package you chose.
+        </p>
+        <p class="summary-line">
+          3. After payment, you’ll receive follow-up instructions and links to your documents.
+        </p>
+      </aside>
+    </section>
+  </main>
+
+  <script>
+    // Map package codes → display info
+    const PACKAGES = {
+      tier1: {
+        name: "Tier 1 – Basic Filing Support",
+        price: "$39",
+        desc: "Simple business filings & essential documents for new owners."
+      },
+      tier2: {
+        name: "Tier 2 – Standard Legal Foundation",
+        price: "$59",
+        desc: "Stronger legal foundation for growing businesses with partners."
+      },
+      tier3: {
+        name: "Tier 3 – Premium Business Package",
+        price: "$99",
+        desc: "Wider range of agreements & templates for established businesses."
+      },
+      starter: {
+        name: "Entrepreneur Starter Bundle",
+        price: "$149",
+        desc: "Full launch kit for new entrepreneurs: formation, agreements, and starter contracts."
+      }
+    };
+
+    // Read ?package= from URL and populate summary + hidden fields
+    (function () {
+      const params = new URLSearchParams(window.location.search);
+      const code = params.get("package") || "tier1";
+      const pkg = PACKAGES[code] || PACKAGES["tier1"];
+
+      document.getElementById("summary-package-name").textContent = pkg.name;
+      document.getElementById("summary-package-price").textContent = pkg.price;
+      document.getElementById("summary-package-desc").textContent = pkg.desc;
+
+      document.getElementById("packageId").value = code;
+      document.getElementById("packageName").value = pkg.name;
+      document.getElementById("packagePrice").value = pkg.price;
+    })();
+  </script>
+</body>
+</html>
