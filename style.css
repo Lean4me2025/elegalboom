@@ -1,437 +1,214 @@
-/* =========================================
-   E-LegalBoom – Unified Styles
-   ========================================= */
+Nov 24, 2025 at 11:59 AM
 
-:root {
-  --blue: #0055cc;
-  --blue-light: #edf3ff;
-  --green: #1aaf5d;
-  --green-dark: #118448;
-  --gray-50: #f7f8fc;
-  --gray-100: #f1f3fb;
-  --gray-200: #dde3f1;
-  --gray-700: #444;
-  --text-main: #222;
-  --page-max: 1200px;
-  --radius-card: 14px;
-  --shadow-soft: 0 4px 14px rgba(0, 0, 0, 0.06);
-}
-
-/* Reset / base */
-
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-}
-
-html,
+/* ------------------------------
+   GLOBAL BASE STYLES
+--------------------------------*/
 body {
-  margin: 0;
-  padding: 0;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    margin: 0;
+    background: #f5f7fb;
+    color: #1f2933;
 }
 
-body {
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
-    sans-serif;
-  color: var(--text-main);
-  background: linear-gradient(135deg, var(--gray-50), var(--blue-light));
+h1, h2, h3, h4 {
+    margin: 0;
+    font-weight: 700;
 }
 
-/* =========================================
-   Header & Navigation
-   ========================================= */
-
-.site-header {
-  background: #ffffff;
-  border-bottom: 1px solid var(--gray-200);
-  padding: 12px 40px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+/* ------------------------------
+   HEADER & NAVIGATION
+--------------------------------*/
+header {
+    padding: 1.5rem 8vw;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #ffffff;
+    border-bottom: 1px solid #dde3f0;
 }
 
-.header-logo,
-.site-logo {
-  font-weight: 800;
-  font-size: 22px;
-  letter-spacing: 0.03em;
+header .logo {
+    font-weight: 700;
+    font-size: 1.2rem;
+    letter-spacing: 0.03em;
+    color: #2563eb;
 }
 
-.site-nav a,
-.site-nav .nav-link {
-  margin-left: 18px;
-  text-decoration: none;
-  color: var(--blue);
-  font-weight: 500;
-  font-size: 14px;
+header nav a {
+    margin-left: 1.5rem;
+    text-decoration: none;
+    color: #334155;
+    font-size: 0.95rem;
 }
 
-.site-nav a:hover,
-.site-nav .nav-link:hover {
-  text-decoration: underline;
+header nav a:hover {
+    color: #2563eb;
 }
 
-.site-nav a.active,
-.site-nav .nav-link.active {
-  text-decoration: underline;
+/* ------------------------------
+   PAGE TITLE SECTIONS
+--------------------------------*/
+.page-hero {
+    padding: 3rem 8vw 2rem;
 }
 
-/* =========================================
-   Generic Page Layout
-   ========================================= */
-
-.page,
-.catalog-page,
-.preview-container {
-  max-width: var(--page-max);
-  margin: 30px auto 60px;
-  padding: 0 40px;
+.page-hero h1 {
+    margin-bottom: 0.75rem;
+    font-size: 2.2rem;
+    font-weight: 800;
 }
 
-.page-title {
-  font-size: 30px;
-  margin: 0 0 8px;
+.page-hero p {
+    max-width: 620px;
+    margin: 0;
+    color: #4b5563;
+    font-size: 1rem;
 }
 
-.page-subtitle {
-  margin: 0 0 24px;
-  color: var(--gray-700);
-  max-width: 720px;
+/* ------------------------------
+   CATALOG GRID LAYOUT
+--------------------------------*/
+.catalog-grid {
+    padding: 1.5rem 8vw 4rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.75rem;
 }
 
-/* Row header with buttons on the right (tiers & bundle) */
-
-.page-header-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 24px;
-  margin-bottom: 20px;
+/* ------------------------------
+   PACKAGE CARD BOXES
+--------------------------------*/
+.package-card {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 1.75rem 1.5rem;
+    box-shadow: 0 16px 40px rgba(15, 23, 42, 0.06);
+    border: 1px solid #e2e8f0;
+    display: flex;
+    flex-direction: column;
 }
 
-.page-header-actions {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 8px;
+/* ------------------------------
+   TIER TITLE (UPGRADED)
+--------------------------------*/
+.package-tier-title {
+    font-size: 1.55rem;       /* Larger */
+    font-weight: 800;         /* Bolder */
+    color: #1f2a44;
+    margin-bottom: 12px;
+    letter-spacing: 0.6px;
+    text-transform: uppercase;
+    padding-bottom: 6px;
+    border-bottom: 2px solid #3f77ff28; /* subtle premium underline */
 }
 
-/* =========================================
-   Buttons
-   ========================================= */
-
-.btn,
-.btn-primary,
-.btn-outline,
-.btn-ghost {
-  display: inline-block;
-  padding: 10px 18px;
-  border-radius: 999px;
-  font-size: 14px;
-  font-weight: 600;
-  text-decoration: none;
-  cursor: pointer;
-  border: none;
-  line-height: 1.3;
+/* ------------------------------
+   PRICE
+--------------------------------*/
+.price {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #2563eb;
+    margin-bottom: 0.75rem;
 }
 
+/* ------------------------------
+   PARAGRAPH TEXT
+--------------------------------*/
+.package-card p {
+    font-size: 0.95rem;
+    color: #4b5563;
+    margin-bottom: 1rem;
+}
+
+/* ------------------------------
+   WHAT'S INCLUDED LIST
+--------------------------------*/
+.package-list {
+    padding-left: 1.1rem;
+    margin-bottom: 1.25rem;
+    font-size: 0.9rem;
+    color: #374151;
+}
+
+.package-list li {
+    margin-bottom: 0.35rem;
+}
+
+/* ------------------------------
+   BUTTONS
+--------------------------------*/
 .btn-primary {
-  background: var(--green);
-  color: #ffffff;
-  border: 1px solid var(--green-dark);
+    display: inline-block;
+    padding: 0.65rem 1.1rem;
+    border-radius: 999px;
+    border: none;
+    background: #2563eb;
+    color: #ffffff;
+    font-weight: 600;
+    font-size: 0.95rem;
+    text-decoration: none;
+    text-align: center;
+    cursor: pointer;
 }
 
 .btn-primary:hover {
-  background: var(--green-dark);
+    background: #1d4ed8;
 }
 
 .btn-outline {
-  background: #ffffff;
-  color: var(--blue);
-  border: 1px solid var(--blue);
+    display: inline-block;
+    padding: 0.55rem 1rem;
+    border-radius: 999px;
+    border: 1px solid #cbd5f5;
+    background: transparent;
+    color: #2563eb;
+    font-weight: 500;
+    font-size: 0.9rem;
+    text-decoration: none;
+    text-align: center;
+    cursor: pointer;
 }
 
 .btn-outline:hover {
-  background: var(--blue);
-  color: #ffffff;
+    background: #e0ecff;
 }
 
-.btn-ghost {
-  background: transparent;
-  border: 1px solid var(--gray-200);
-  color: var(--blue);
+/* ------------------------------
+   SUPPORT FOOTER STRIP
+--------------------------------*/
+.support-strip {
+    border-top: 1px solid #e2e8f0;
+    background: #f9fafb;
+    padding: 1rem 8vw 1.5rem;
+    font-size: 0.9rem;
+    color: #4b5563;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0.5rem;
 }
 
-.btn-ghost:hover {
-  background: var(--gray-200);
+.support-strip a {
+    color: #2563eb;
+    text-decoration: none;
+    font-weight: 500;
 }
 
-/* Make sure plain anchors with these classes keep button look */
-a.btn-primary,
-a.btn-outline,
-a.btn-ghost {
-  color: inherit;
-}
+/* ------------------------------
+   MOBILE RESPONSIVENESS
+--------------------------------*/
+@media (max-width: 640px) {
+    .page-hero h1 {
+        font-size: 1.8rem;
+    }
 
-/* =========================================
-   Catalog Page (index.html)
-   ========================================= */
+    .package-tier-title {
+        font-size: 1.35rem;
+    }
 
-.catalog-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 24px;
-  margin-top: 16px;
-}
-
-/* Support both .catalog-card (current HTML) and .card (older HTML) */
-.catalog-card,
-.card {
-  background: #ffffff;
-  border-radius: var(--radius-card);
-  padding: 22px 22px 20px;
-  box-shadow: var(--shadow-soft);
-  border: 1px solid var(--gray-200);
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-}
-
-.catalog-card h2,
-.card h2 {
-  font-size: 20px;
-  margin: 0 0 6px;
-}
-
-.price,
-.card-price {
-  font-weight: 700;
-  color: var(--green-dark);
-  margin-bottom: 8px;
-}
-
-.tagline,
-.card-tagline {
-  margin: 0 0 14px;
-  color: var(--gray-700);
-}
-
-.card-subheading,
-.catalog-card h3,
-.card h3 {
-  font-size: 14px;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  margin: 10px 0 6px;
-  color: #6c7690;
-}
-
-.catalog-card ul,
-.card ul {
-  padding-left: 18px;
-  margin: 0 0 16px;
-  color: var(--gray-700);
-  font-size: 14px;
-}
-
-.card-actions {
-  margin-top: auto;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-}
-
-/* =========================================
-   Tier Detail Pages (tier1 / tier2 / tier3 / orders)
-   ========================================= */
-
-/* Sections with white boxes (What’s Included / What You’ll Need / How it works) */
-
-.section-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 24px;
-  margin-bottom: 24px;
-}
-
-.card-box,
-.box {
-  background: #ffffff;
-  border-radius: var(--radius-card);
-  border: 1px solid var(--gray-200);
-  padding: 20px;
-  box-shadow: var(--shadow-soft);
-}
-
-.subheading {
-  font-size: 18px;
-  margin-top: 0;
-}
-
-.fine-print {
-  font-size: 13px;
-  color: #666;
-  margin-top: 10px;
-}
-
-/* Single wide row (for How It Works only) */
-.section-grid.single-row {
-  grid-template-columns: 1fr;
-}
-
-/* =========================================
-   Document Preview Page (preview.html)
-   ========================================= */
-
-.preview-subtext {
-  margin: 6px 0 20px;
-  color: var(--gray-700);
-}
-
-.preview-layout {
-  display: flex;
-  gap: 32px;
-  margin-top: 16px;
-  align-items: stretch;
-}
-
-/* LEFT: Tier / document list */
-
-.preview-list {
-  width: 32%;
-  background: var(--blue);
-  color: #ffffff;
-  padding: 22px 20px 20px;
-  border-radius: 16px;
-  box-shadow: var(--shadow-soft);
-  border: 1px solid rgba(0, 0, 0, 0.06);
-}
-
-.preview-list h2,
-.preview-tier-title {
-  margin-top: 0;
-  margin-bottom: 8px;
-}
-
-.preview-tier-title {
-  font-weight: 700;
-  margin-top: 18px;
-}
-
-/* Buttons for choosing sample docs
-   – support both .doc-btn and .preview-btn classes */
-
-.doc-btn,
-.preview-btn {
-  width: 100%;
-  display: block;
-  margin-bottom: 8px;
-  padding: 9px 12px;
-  background: #ffffff;
-  color: var(--blue);
-  border: 2px solid var(--blue);
-  border-radius: 999px;
-  font-size: 14px;
-  cursor: pointer;
-  text-align: left;
-  transition: background 0.18s, color 0.18s, border-color 0.18s;
-}
-
-.doc-btn:hover,
-.preview-btn:hover {
-  background: var(--blue-light);
-}
-
-/* Keep selected button solid blue */
-.doc-btn.active,
-.preview-btn.active {
-  background-color: #0057ff;
-  color: #ffffff;
-  border-color: #0057ff;
-}
-
-/* RIGHT: Document preview window */
-
-.preview-window {
-  flex: 1;
-  background: #ffffff;
-  border: 1px solid var(--gray-200);
-  border-radius: 16px;
-  padding: 10px;
-  min-height: 780px;
-  box-shadow: var(--shadow-soft);
-  overflow: hidden;
-}
-
-.preview-iframe {
-  width: 100%;
-  height: 100%;
-  border: none;
-  background: #ffffff;
-}
-
-/* Empty-state placeholder text when no doc selected yet */
-
-.preview-placeholder {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  color: var(--gray-700);
-  font-size: 15px;
-  padding: 40px;
-}
-
-/* =========================================
-   Footer
-   ========================================= */
-
-.site-footer {
-  border-top: 1px solid var(--gray-200);
-  padding: 16px 40px 24px;
-  font-size: 12px;
-  color: #666;
-  text-align: center;
-  background: #ffffff;
-}
-
-/* =========================================
-   Responsive Tweaks
-   ========================================= */
-
-@media (max-width: 900px) {
-  .site-header {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .site-nav {
-    margin-top: 8px;
-  }
-
-  .page,
-  .catalog-page,
-  .preview-container {
-    padding: 0 16px;
-  }
-
-  .page-header-row {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .page-header-actions {
-    align-items: flex-start;
-  }
-
-  .preview-layout {
-    flex-direction: column;
-  }
-
-  .preview-list {
-    width: 100%;
-  }
+    .catalog-grid {
+        padding-left: 5vw;
+        padding-right: 5vw;
+    }
 }
