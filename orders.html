@@ -5,264 +5,192 @@
   <title>Order Form | ElegalBoom</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="stylesheet" href="style.css" />
-
-  <style>
-    /* Page-specific layout */
-    .order-container {
-      padding: 2.5rem 8vw 3rem;
-      max-width: 980px;
-      margin: 0 auto;
-    }
-    .order-heading {
-      margin-bottom: 0.75rem;
-      font-size: 2rem;
-      font-weight: 800;
-      color: #111827;
-    }
-    .order-subtext {
-      margin: 0 0 1.5rem;
-      font-size: 0.95rem;
-      color: #4b5563;
-    }
-    .order-layout {
-      display: grid;
-      grid-template-columns: minmax(0, 2fr) minmax(0, 1.15fr);
-      gap: 2rem;
-      align-items: flex-start;
-    }
-    .order-card,
-    .summary-card {
-      background: #ffffff;
-      border-radius: 16px;
-      padding: 1.75rem 1.5rem;
-      box-shadow: 0 16px 40px rgba(15, 23, 42, 0.06);
-      border: 1px solid #e2e8f0;
-    }
-    .order-card h2 {
-      font-size: 1.1rem;
-      margin: 0 0 1rem;
-      color: #111827;
-    }
-    .order-field {
-      margin-bottom: 0.9rem;
-    }
-    .order-label {
-      display: block;
-      font-size: 0.9rem;
-      font-weight: 600;
-      color: #374151;
-      margin-bottom: 0.25rem;
-    }
-    .order-input,
-    .order-select,
-    .order-textarea {
-      width: 100%;
-      border-radius: 10px;
-      border: 1px solid #cbd5f5;
-      padding: 0.55rem 0.6rem;
-      font-size: 0.95rem;
-      font-family: inherit;
-      box-sizing: border-box;
-    }
-    .order-textarea {
-      min-height: 90px;
-      resize: vertical;
-    }
-    .order-help {
-      font-size: 0.8rem;
-      color: #6b7280;
-    }
-    .summary-title {
-      font-size: 1.05rem;
-      font-weight: 700;
-      margin: 0 0 0.5rem;
-    }
-    .summary-line {
-      font-size: 0.9rem;
-      color: #4b5563;
-      margin-bottom: 0.25rem;
-    }
-    .summary-price {
-      font-size: 1.15rem;
-      font-weight: 700;
-      color: #2563eb;
-      margin-top: 0.75rem;
-    }
-    .order-submit {
-      margin-top: 1.3rem;
-    }
-    .order-note {
-      font-size: 0.8rem;
-      color: #6b7280;
-      margin-top: 0.5rem;
-    }
-    @media (max-width: 800px) {
-      .order-layout {
-        grid-template-columns: 1fr;
-      }
-    }
-  </style>
 </head>
-
 <body>
-  <!-- Site header (same style as other pages) -->
   <header class="site-header">
-    <div class="header_logo">ElegalBoom</div>
-    <nav class="site-nav">
-      <a href="index.html">Home</a>
-      <a href="catalog.html">Catalog</a>
-      <a href="tier1.html">Tier 1</a>
-      <a href="tier2.html">Tier 2</a>
-      <a href="tier3.html">Tier 3</a>
-      <a href="bundle.html">Starter Bundle</a>
-      <a href="preview.html">Document Preview</a>
-    </nav>
+    <div class="site-header-inner">
+      <div class="logo">ElegalBoom</div>
+      <nav class="nav">
+        <a href="index.html">Home</a>
+        <a href="catalog.html">Catalog</a>
+        <a href="tier1.html">Tier 1</a>
+        <a href="tier2.html">Tier 2</a>
+        <a href="tier3.html">Tier 3</a>
+        <a href="bundle.html">Starter Bundle</a>
+        <a href="preview.html">Document Preview</a>
+      </nav>
+    </div>
   </header>
 
   <main class="order-container">
     <h1 class="order-heading">Start Your Order</h1>
     <p class="order-subtext">
-      Tell us a bit about you and your business. We’ll capture this on the back end and then send you
-      to secure payment for the package you selected.
+      Tell us a bit about you and your business. We’ll capture this on the back
+      end and then send you to secure payment for the package you selected.
     </p>
+
     <section class="order-layout">
       <!-- LEFT: FORM -->
-     <form
-  id="order-form"
-  class="order-card"
-  action="https://script.google.com/macros/s/AKfycbxyrKrjaRehJD_qIOUFoc40XbvOD-tWZzjq6Hl4qx77DYcPs5w3EjqRxXa39MINpEKNFp/exec"
-  method="POST"
->
+      <form
+        id="order-form"
+        class="order-card"
+        action="https://script.google.com/macros/s/AKfycbyj-AlyetnW6qrc_vsytKN990qhGy4IXDT_CgaFF9eWPDlsHA3ASOCu9vApL4th03LA/exec"
+        method="POST"
       >
-        <h2>Contact & Business Details</h2>
+        <h2>Contact &amp; Business Details</h2>
 
-        <!-- Hidden fields for package -->
-        <input type="hidden" name="packageId" id="packageId" />
-        <input type="hidden" name="packageName" id="packageName" />
-        <input type="hidden" name="packagePrice" id="packagePrice" />
+        <!-- Hidden fields for package (this page is Tier 1) -->
+        <input type="hidden" name="packageId" id="packageId" value="tier1" />
+        <input
+          type="hidden"
+          name="packageName"
+          id="packageName"
+          value="Tier 1 – Basic Filing Support"
+        />
+        <input
+          type="hidden"
+          name="packagePrice"
+          id="packagePrice"
+          value="39"
+        />
 
         <div class="order-field">
           <label class="order-label" for="firstName">First Name</label>
-          <input class="order-input" type="text" id="firstName" name="firstName" required />
+          <input
+            class="order-input"
+            type="text"
+            id="firstName"
+            name="firstName"
+            required
+          />
         </div>
 
         <div class="order-field">
           <label class="order-label" for="lastName">Last Name</label>
-          <input class="order-input" type="text" id="lastName" name="lastName" required />
+          <input
+            class="order-input"
+            type="text"
+            id="lastName"
+            name="lastName"
+            required
+          />
         </div>
 
         <div class="order-field">
           <label class="order-label" for="email">Email</label>
-          <input class="order-input" type="email" id="email" name="email" required />
-          <div class="order-help">We’ll email your confirmation and next steps here.</div>
+          <input
+            class="order-input"
+            type="email"
+            id="email"
+            name="email"
+            required
+          />
+          <div class="order-help">
+            We’ll email your confirmation and next steps here.
+          </div>
         </div>
 
         <div class="order-field">
           <label class="order-label" for="phone">Phone (optional)</label>
-          <input class="order-input" type="tel" id="phone" name="phone" />
+          <input
+            class="order-input"
+            type="tel"
+            id="phone"
+            name="phone"
+          />
         </div>
 
         <div class="order-field">
           <label class="order-label" for="businessName">Business Name</label>
-          <input class="order-input" type="text" id="businessName" name="businessName" />
+          <input
+            class="order-input"
+            type="text"
+            id="businessName"
+            name="businessName"
+          />
         </div>
 
         <div class="order-field">
           <label class="order-label" for="state">State (for your business)</label>
-          <input class="order-input" type="text" id="state" name="state" />
+          <input
+            class="order-input"
+            type="text"
+            id="state"
+            name="state"
+          />
         </div>
 
         <div class="order-field">
-          <label class="order-label" for="hearAbout">How did you hear about ElegalBoom?</label>
-          <select class="order-select" id="hearAbout" name="hearAbout">
-            <option value="">Select one</option>
+          <label class="order-label" for="hearAbout">
+            How did you hear about ElegalBoom?
+          </label>
+          <select
+            class="order-input"
+            id="hearAbout"
+            name="hearAbout"
+          >
+            <option value="">Select one…</option>
             <option value="Referral">Referral</option>
-            <option value="Social Media">Social media</option>
-            <option value="Search">Search (Google, etc.)</option>
-            <option value="Event or Workshop">Event / workshop</option>
+            <option value="Social media">Social media</option>
+            <option value="Search">Search</option>
+            <option value="Event">Event</option>
             <option value="Other">Other</option>
           </select>
         </div>
 
         <div class="order-field">
-          <label class="order-label" for="notes">Anything specific we should know?</label>
-          <textarea class="order-textarea" id="notes" name="notes"></textarea>
+          <label class="order-label" for="notes">
+            Anything specific we should know?
+          </label>
+          <textarea
+            class="order-input"
+            id="notes"
+            name="notes"
+            rows="4"
+          ></textarea>
           <div class="order-help">
-            Optional: brief context about your business or what you’re aiming to protect.
+            Optional: brief context about your business or what you’re aiming to
+            protect.
           </div>
         </div>
 
-        <div class="order-submit">
-          <button type="submit" class="btn-primary">
-            Submit & Go to Secure Payment
+        <div class="order-actions">
+          <button class="primary-btn" type="submit">
+            Submit &amp; Go to Secure Payment
           </button>
-          <p class="order-note">
-            After you click submit, you’ll be redirected to the correct payment page for your package.
-          </p>
         </div>
       </form>
 
       <!-- RIGHT: SUMMARY -->
-      <aside class="summary-card">
-        <div class="summary-title">Your Package</div>
-        <div class="summary-line" id="summary-package-name">Loading package…</div>
-        <div class="summary-line" id="summary-package-desc"></div>
-        <div class="summary-price" id="summary-package-price"></div>
+      <aside class="order-card order-summary">
+        <h2>Your Package</h2>
+        <p><strong>Tier 1 – Basic Filing Support</strong></p>
+        <p>Simple business filings &amp; essential documents for new owners.</p>
+        <p class="order-price">$39</p>
 
-        <hr style="margin: 1rem 0; border-color: #e5e7eb;" />
-
-        <div class="summary-title">What Happens Next?</div>
-        <p class="summary-line">
-          1. You submit this form so we can capture your contact & business details.
-        </p>
-        <p class="summary-line">
-          2. You’ll be redirected to secure payment for the package you chose.
-        </p>
-        <p class="summary-line">
-          3. After payment, you’ll receive follow-up instructions and links to your documents.
-        </p>
+        <h3>What Happens Next?</h3>
+        <ol>
+          <li>You submit this form so we can capture your contact &amp; business details.</li>
+          <li>You’ll be redirected to secure payment for the package you chose.</li>
+          <li>After payment, you’ll receive follow-up instructions and links to your documents.</li>
+        </ol>
       </aside>
     </section>
   </main>
 
   <script>
-    // Map package codes → display info
-    const PACKAGES = {
-      tier1: {
-        name: "Tier 1 – Basic Filing Support",
-        price: "$39",
-        desc: "Simple business filings & essential documents for new owners."
-      },
-      tier2: {
-        name: "Tier 2 – Standard Legal Foundation",
-        price: "$59",
-        desc: "Stronger legal foundation for growing businesses with partners."
-      },
-      tier3: {
-        name: "Tier 3 – Premium Business Package",
-        price: "$99",
-        desc: "Wider range of agreements & templates for established businesses."
-      },
-      starter: {
-        name: "Entrepreneur Starter Bundle",
-        price: "$149",
-        desc: "Full launch kit for new entrepreneurs: formation, agreements, and starter contracts."
-      }
-    };
-
-    // Read ?package= from URL and populate summary + hidden fields
+    // Small UX touch: disable button after submit so it can't be double-clicked
     (function () {
-      const params = new URLSearchParams(window.location.search);
-      const code = params.get("package") || "tier1";
-      const pkg = PACKAGES[code] || PACKAGES["tier1"];
+      const form = document.getElementById('order-form');
+      if (!form) return;
 
-      document.getElementById("summary-package-name").textContent = pkg.name;
-      document.getElementById("summary-package-price").textContent = pkg.price;
-      document.getElementById("summary-package-desc").textContent = pkg.desc;
-
-      document.getElementById("packageId").value = code;
-      document.getElementById("packageName").value = pkg.name;
-      document.getElementById("packagePrice").value = pkg.price;
+      form.addEventListener('submit', function () {
+        const btn = form.querySelector('button[type="submit"]');
+        if (btn) {
+          btn.disabled = true;
+          btn.textContent = 'Submitting...';
+        }
+      });
     })();
   </script>
 </body>
