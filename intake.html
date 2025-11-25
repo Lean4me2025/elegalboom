@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>ElegalBoom | Document Intake</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    /* Light extra styling on top of your existing CSS */
+
+    .intake-container {
+      max-width: 900px;
+      margin: 2rem auto 3rem;
+      padding: 0 1.25rem;
+    }
+
+    .intake-heading {
+      font-size: 1.8rem;
+      font-weight: 800;
+      margin-bottom: 0.5rem;
+    }
+
+    .intake-subtext {
+      margin-bottom: 1.5rem;
+      color: #4b5563;
+      font-size: 0.95rem;
+    }
+
+    .intake-card {
+      background: #ffffff;
+      padding: 1.75rem 1.5rem;
+      border-radius: 14px;
+      box-shadow: 0 18px 40px rgba(15, 23, 42, 0.09);
+      border: 1px solid #e5e7eb;
+    }
+
+    .intake-field {
+      margin-bottom: 1rem;
+    }
+
+    .intake-label {
+      display: block;
+      font-size: 0.86rem;
+      font-weight: 600;
+      margin-bottom: 0.25rem;
+      color: #374151;
+    }
+
+    .intake-input,
+    .intake-textarea,
+    .intake-select {
+      width: 100%;
+      border-radius: 10px;
+      border: 1px solid #d1d5db;
+      padding: 0.6rem 0.7rem;
+      font-size: 0.9rem;
+      box-sizing: border-box;
+    }
+
+    .intake-textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+
+    .intake-help {
+      font-size: 0.75rem;
+      color: #6b7280;
+      margin-top: 0.25rem;
+    }
+
+    .intake-actions {
+      margin-top: 1.5rem;
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .primary-btn {
+      border: none;
+      border-radius: 999px;
+      background: #2563eb;
+      color: #ffffff;
+      font-weight: 600;
+      font-size: 0.95rem;
+      padding: 0.75rem 1.4rem;
+      cursor: pointer;
+      transition: background 0.1s ease, box-shadow 0.1s ease,
+        transform 0.1s ease;
+    }
+
+    .primary-btn:hover {
+      background: #1d4ed8;
+      box-shadow: 0 10px 25px rgba(37, 99, 235, 0.35);
+      transform: translateY(-1px);
+    }
+
+    .primary-btn:disabled {
+      opacity: 0.6;
+      cursor: default;
+      box-shadow: none;
+      transform: none;
+    }
+
+    .intake-doc-label {
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 0.25rem;
+      color: #374151;
+    }
+
+    .intake-doc-type {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: #111827;
+      margin-bottom: 0.75rem;
+    }
+
+    .intake-error {
+      color: #b91c1c;
+      font-size: 0.85rem;
+      margin-top: 0.5rem;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="site-header-inner">
+      <div class="logo">ElegalBoom</div>
+      <nav class="nav">
+        <a href="index.html">Home</a>
+        <a href="catalog.html">Catalog</a>
+        <a href="tier1.html">Tier 1</a>
+        <a href="tier2.html">Tier 2</a>
+        <a href="tier3.html">Tier 3</a>
+        <a href="bundle.html">Starter Bundle</a>
+        <a href="preview.html">Document Preview</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="intake-container">
+    <h1 class="intake-heading">Document Intake</h1>
+    <p class="intake-subtext" id="intake-subtext">
+      Please complete the fields below so we can prepare your document.
+    </p>
+
+    <section class="intake-card">
+      <div>
+        <div class="intake-doc-label">Document type</div>
+        <div class="intake-doc-type" id="doc-type-label">Loading…</div>
+      </div>
+
+      <form id="intake-form">
+        <!-- Dynamic fields will be injected here -->
+        <div id="intake-fields"></div>
+
+        <div class="intake-error" id="intake-error">
+          Please fill in all required fields.
+        </div>
+
+        <div class="intake-actions">
+          <button type="submit" class="primary-btn" id="submit-btn">
+            Submit Intake
+          </button>
+        </div>
+      </form>
+    </section>
+  </main>
+
+  <script>
+    // =============================================
+    // 1. MASTER FIELD REGISTRY (ID -> field config)
+    // =============================================
+
+    const MASTER_FIELDS = {
+      // Core identity / contact
+      1: {
+        key: 'firstName',
+        label: 'First Name',
+        type: 'text',
+        required: true,
+        help: ''
+      },
+      2: {
+        key: 'lastName',
+        label: 'Last Name',
+        type: 'text',
+        required: true,
+        help: ''
+      },
+      3: {
+        key: 'email',
+        label: 'Email',
+        type: 'email',
+        required: true,
+        help: 'We will send your completed document to this address.'
+      },
+      4: {
+        key: 'phone',
+        label: 'Phone Number',
+        type: 'tel',
+        required: false,
+        help: 'Optional: best number if we need a quick clarification.'
+      },
+
+      // Business basics
+      6: {
+        key: 'businessName',
+        label: 'Business / Entity Name',
+        type: 'text',
+        required: true,
+        help: ''
+      },
+      7: {
+        key: 'businessAddress',
+        label: 'Business Address',
+        type: 'textarea',
+        required: true,
+        help: ''
+      },
+      8: {
+        key: 'state',
+        label: 'State (jurisdiction)',
+        type: 'text',
+        required: true,
+        help: 'Example: CA, TX, NY.'
+      },
+
+      // Parties / roles (for NDA, contracts, etc.)
+      10: {
+        key: 'partyAName',
+        label: 'Party A Name',
+        type: 'text',
+        required: true,
+        help: 'Usually the disclosing or hiring party.'
+      },
+      11: {
+        key: 'partyAAddress',
+        label: 'Party A Address',
+        type: 'textarea',
+        required: true,
+        help: ''
+      },
+      12: {
+        key: 'partyBName',
+        label: 'Party B Name',
+        type: 'text',
+        required: true,
+        help: 'Usually the receiving or contracted party.'
+      },
+      13: {
+        key: 'partyBAddress',
+        label: 'Party B Address',
+        type: 'textarea',
+        required: true,
+        help: ''
+      },
+
+      // NDA-specific
+      20: {
+        key: 'ndaPurpose',
+        label: 'Purpose of Disclosure',
+        type: 'textarea',
+        required: true,
+        help: 'Briefly describe what the confidential information will be used for.'
+      },
+      21: {
+        key: 'effectiveDate',
+        label: 'Effective Date',
+        type: 'date',
+        required: true,
+        help: ''
+      },
+      25: {
+        key: 'confTermYears',
+        label: 'Confidentiality Term (years)',
+        type: 'number',
+        required: true,
+        help: 'How many years the confidentiality obligation should last.'
+      },
+
+      // Promissory note / loan
+      30: {
+        key: 'loanAmount',
+        label: 'Loan Amount',
+        type: 'number',
+        required: true,
+        help: 'Total principal amount of the loan.'
+      },
+      31: {
+        key: 'interestRate',
+        label: 'Interest Rate (%)',
+        type: 'number',
+        required: true,
+        help: 'Example: 5 for 5%.'
+      },
+      32: {
+        key: 'repaymentSchedule',
+        label: 'Repayment Schedule',
+        type: 'textarea',
+        required: true,
+        help: 'Example: Monthly payments over 24 months starting on [date].'
+      },
+
+      // Work-for-Hire
+      40: {
+        key: 'projectDescription',
+        label: 'Project / Work Description',
+        type: 'textarea',
+        required: true,
+        help: ''
+      },
+      41: {
+        key: 'paymentTerms',
+        label: 'Payment Terms',
+        type: 'textarea',
+        required: true,
+        help: 'Example: Flat fee, hourly rate, milestones, etc.'
+      },
+      42: {
+        key: 'deliveryDate',
+        label: 'Delivery Date',
+        type: 'date',
+        required: false,
+        help: ''
+      },
+
+      // LLC / ownership
+      50: {
+        key: 'members',
+        label: 'Members / Owners (names and percentages)',
+        type: 'textarea',
+        required: true,
+        help: 'Example: Alice 60%, Bob 40%.'
+      },
+
+      // General notes
+      90: {
+        key: 'additionalNotes',
+        label: 'Additional Notes or Special Instructions',
+        type: 'textarea',
+        required: false,
+        help: ''
+      }
+    };
+
+    // ===================================================
+    // 2. DOCUMENT -> FIELD IDS MAPPING (your 1,6,7,20,25)
+    // ===================================================
+
+    const DOCUMENT_CONFIGS = {
+      nda: {
+        label: 'Non-Disclosure Agreement (NDA)',
+        fieldIds: [1, 2, 3, 6, 7, 10, 11, 12, 13, 20, 21, 25, 90]
+      },
+      promissory: {
+        label: 'Promissory Note',
+        fieldIds: [1, 2, 3, 10, 11, 12, 13, 30, 31, 32, 90]
+      },
+      workForHire: {
+        label: 'Work-for-Hire Agreement',
+        fieldIds: [1, 2, 3, 6, 7, 10, 12, 40, 41, 42, 90]
+      },
+      llcAgreement: {
+        label: 'LLC Operating Agreement',
+        fieldIds: [1, 2, 3, 6, 7, 8, 50, 90]
+      }
+      // You can add more here later (e.g., partnershipAgreement, etc.)
+    };
+
+    // ====================================
+    // 3. HELPER: GET QUERY PARAMS
+    // ====================================
+    function getQueryParam(name) {
+      const params = new URLSearchParams(window.location.search);
+      return params.get(name);
+    }
+
+    // ====================================
+    // 4. RENDER FIELDS FOR CURRENT DOC
+    // ====================================
+    function renderIntakeForm() {
+      const docType = getQueryParam('doc'); // e.g., ?doc=nda
+      const container = document.getElementById('intake-fields');
+      const docLabelEl = document.getElementById('doc-type-label');
+
+      if (!docType || !DOCUMENT_CONFIGS[docType]) {
+        docLabelEl.textContent = 'Unknown document type';
+        container.innerHTML =
+          '<p>Please return to the catalog and select a document.</p>';
+        return;
+      }
+
+      const docConfig = DOCUMENT_CONFIGS[docType];
+      docLabelEl.textContent = docConfig.label;
+
+      container.innerHTML = '';
+
+      docConfig.fieldIds.forEach((fieldId) => {
+        const field = MASTER_FIELDS[fieldId];
+        if (!field) return;
+
+        const fieldDiv = document.createElement('div');
+        fieldDiv.className = 'intake-field';
+
+        const label = document.createElement('label');
+        label.className = 'intake-label';
+        label.textContent = field.label;
+        label.setAttribute('for', 'field-' + fieldId);
+
+        let inputElement;
+
+        if (field.type === 'textarea') {
+          inputElement = document.createElement('textarea');
+          inputElement.className = 'intake-textarea';
+        } else if (field.type === 'select') {
+          inputElement = document.createElement('select');
+          inputElement.className = 'intake-select';
+          // You can add options here if you define them in MASTER_FIELDS later
+        } else {
+          inputElement = document.createElement('input');
+          inputElement.className = 'intake-input';
+          inputElement.type = field.type;
+        }
+
+        inputElement.id = 'field-' + fieldId;
+        inputElement.name = field.key;
+        if (field.required) {
+          inputElement.required = true;
+        }
+
+        fieldDiv.appendChild(label);
+        fieldDiv.appendChild(inputElement);
+
+        if (field.help) {
+          const help = document.createElement('div');
+          help.className = 'intake-help';
+          help.textContent = field.help;
+          fieldDiv.appendChild(help);
+        }
+
+        container.appendChild(fieldDiv);
+      });
+    }
+
+    // ====================================
+    // 5. HANDLE SUBMIT
+    // ====================================
+    function setupFormSubmit() {
+      const form = document.getElementById('intake-form');
+      const errorEl = document.getElementById('intake-error');
+      const submitBtn = document.getElementById('submit-btn');
+
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        errorEl.style.display = 'none';
+
+        const docType = getQueryParam('doc');
+        if (!docType || !DOCUMENT_CONFIGS[docType]) {
+          errorEl.textContent = 'Unknown document type.';
+          errorEl.style.display = 'block';
+          return;
+        }
+
+        // Build payload with docType and all possible fields
+        const payload = {
+          docType: docType
+        };
+
+        Object.keys(MASTER_FIELDS).forEach((id) => {
+          const field = MASTER_FIELDS[id];
+          const el = document.querySelector('[name="' + field.key + '"]');
+          payload[field.key] = el ? el.value.trim() : '';
+        });
+
+        // Basic front-end required check (belt + suspenders)
+        const missingRequired = DOCUMENT_CONFIGS[docType].fieldIds.some(
+          (id) => {
+            const field = MASTER_FIELDS[id];
+            if (!field || !field.required) return false;
+            const val = payload[field.key] || '';
+            return !val;
+          }
+        );
+
+        if (missingRequired) {
+          errorEl.textContent = 'Please fill in all required fields.';
+          errorEl.style.display = 'block';
+          return;
+        }
+
+        // Disable submit while sending
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Submitting…';
+
+        // === IMPORTANT: Replace this with your Apps Script WebApp URL ===
+        const SCRIPT_URL =
+          'PASTE_YOUR_INTAKE_WEB_APP_URL_HERE';
+
+        fetch(SCRIPT_URL, {
+          method: 'POST',
+          mode: 'no-cors', // Apps Script workaround
+          body: new URLSearchParams(payload)
+        })
+          .then(() => {
+            submitBtn.textContent = 'Submitted!';
+            // Optionally redirect to thank-you page, or show message.
+            alert(
+              'Your information has been submitted. You will receive your document shortly.'
+            );
+          })
+          .catch((err) => {
+            console.error('Submit error', err);
+            errorEl.textContent =
+              'There was a problem submitting your intake. Please try again.';
+            errorEl.style.display = 'block';
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Submit Intake';
+          });
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+      renderIntakeForm();
+      setupFormSubmit();
+    });
+  </script>
+</body>
+</html>
