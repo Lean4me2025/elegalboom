@@ -6,8 +6,6 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-
-  <!-- Site Header + Nav -->
   <header class="site-header">
     <h1 class="site-title">ELegalBoom</h1>
     <nav class="main-nav">
@@ -17,139 +15,52 @@
       <a href="tier2.html">Tier 2</a>
       <a href="tier3.html">Tier 3</a>
       <a href="bundle.html" class="active">Starter Bundle</a>
-      <a href="preview.html">Document Preview</a>
+      <a href="preview.html">Preview</a>
     </nav>
   </header>
 
   <main class="page-content">
-    <!-- Page heading -->
     <section class="hero-section">
       <h2>Entrepreneur Starter Bundle</h2>
       <p>
-        Get your business launch essentials in one place. The Starter Bundle is
-        designed for new entrepreneurs who need core legal documents plus a
-        launch kit overview to get moving quickly and confidently.
+        The Starter Bundle gives new entrepreneurs a focused set of core legal
+        templates to help you launch your business with confidence.
       </p>
-      <p><strong>Bundle Price: $149</strong></p>
+      <p><strong>Investment: $149 (one-time)</strong></p>
     </section>
 
-    <!-- What’s included -->
     <section class="bundle-details">
       <h3>What’s Included</h3>
       <ul>
-        <li>Mutual NDA (Sample / Template)</li>
-        <li>Promissory Note (Sample / Template)</li>
-        <li>Single-Member LLC Operating Agreement (Sample / Template)</li>
-        <li>Launch Kit Overview (checklist + guidance)</li>
+        <li>Mutual NDA (sample/template)</li>
+        <li>Promissory Note (sample/template)</li>
+        <li>Single-Member LLC Operating Agreement (sample/template)</li>
+        <li>Launch Kit Overview / checklist</li>
       </ul>
       <p>
-        You’ll complete a short intake form below so we can customize these
-        documents with your names, state, and basic deal information.
+        You’ll answer a short intake form so we can understand your business and
+        prepare the right documents for your situation.
       </p>
     </section>
 
-    <!-- Order / Intake Form (specific to Starter Bundle) -->
     <section class="order-section">
       <h2>Start Your Starter Bundle Order</h2>
       <p>
-        Tell us a bit about you and your business. We’ll capture this on the
-        back end and then send you secure payment and document delivery
-        instructions.
+        Click below to begin your Starter Bundle order. We’ll collect your
+        contact details and basic business information first, then redirect you
+        to secure payment.
       </p>
 
-      <form
-        id="starter-bundle-order-form"
-        class="order-form"
-        action="YOUR_WEB_APP_URL_HERE"
-        method="POST"
-      >
-        <!-- Hidden fields: identify the package -->
-        <input type="hidden" name="packageId" value="starter_bundle" />
-        <input
-          type="hidden"
-          name="packageName"
-          value="Entrepreneur Starter Bundle"
-        />
-        <input type="hidden" name="packagePrice" value="149" />
+      <a href="orders.html?packageId=bundle"
+         class="primary-button">
+        Start Starter Bundle Order – $149
+      </a>
 
-        <h3>Contact &amp; Business Details</h3>
-
-        <label>
-          First Name<br />
-          <input type="text" name="firstName" required />
-        </label>
-
-        <label>
-          Last Name<br />
-          <input type="text" name="lastName" required />
-        </label>
-
-        <label>
-          Email<br />
-          <input type="email" name="email" required />
-        </label>
-
-        <label>
-          Phone (optional)<br />
-          <input type="tel" name="phone" />
-        </label>
-
-        <label>
-          Business Name<br />
-          <input type="text" name="businessName" />
-        </label>
-
-        <label>
-          State (for your business)<br />
-          <input type="text" name="state" maxlength="2" />
-        </label>
-
-        <label>
-          How did you hear about ELegalBoom?<br />
-          <select name="hearAbout">
-            <option value="">Select one…</option>
-            <option value="Referral">Referral</option>
-            <option value="Social Media">Social Media</option>
-            <option value="Event">Event</option>
-            <option value="Search">Search</option>
-            <option value="Other">Other</option>
-          </select>
-        </label>
-
-        <label>
-          Anything specific we should know?<br />
-          <textarea
-            name="notes"
-            rows="4"
-            placeholder="Optional: brief context about your business or what you’re aiming to protect."
-          ></textarea>
-        </label>
-
-        <button type="submit" class="primary-button">
-          Submit &amp; Go to Secure Payment
-        </button>
-      </form>
-    </section>
-
-    <!-- What happens next section -->
-    <section class="next-steps">
-      <h3>What Happens Next?</h3>
-      <ol>
-        <li>
-          You submit this form so we can capture your contact &amp; business
-          details.
-        </li>
-        <li>
-          You’ll be redirected (or emailed) a secure payment link for the
-          <strong>Entrepreneur Starter Bundle – $149</strong>.
-        </li>
-        <li>
-          After payment, you’ll receive follow-up instructions and links to your
-          documents.
-        </li>
-      </ol>
+      <p class="redirect-note">
+        On the next screen you’ll enter your details. After you submit, you’ll
+        be redirected to secure payment to complete your Starter Bundle purchase.
+      </p>
     </section>
   </main>
-
 </body>
 </html>
