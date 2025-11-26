@@ -2,195 +2,144 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Order Form | ElegalBoom</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>E-LegalBoom – Order Intake</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <header class="site-header">
-    <div class="site-header-inner">
-      <div class="logo">ElegalBoom</div>
-      <nav class="nav">
-        <a href="index.html">Home</a>
-        <a href="catalog.html">Catalog</a>
-        <a href="tier1.html">Tier 1</a>
-        <a href="tier2.html">Tier 2</a>
-        <a href="tier3.html">Tier 3</a>
-        <a href="bundle.html">Starter Bundle</a>
-        <a href="preview.html">Document Preview</a>
-      </nav>
-    </div>
+    <h1 class="site-title">ELegalBoom</h1>
+    <nav class="main-nav">
+      <a href="index.html">Home</a>
+      <a href="catalog.html">Catalog</a>
+      <a href="tier1.html">Tier 1</a>
+      <a href="tier2.html">Tier 2</a>
+      <a href="tier3.html">Tier 3</a>
+      <a href="bundle.html">Starter Bundle</a>
+      <a href="preview.html">Preview</a>
+    </nav>
   </header>
 
-  <main class="order-container">
-    <h1 class="order-heading">Start Your Order</h1>
-    <p class="order-subtext">
-      Tell us a bit about you and your business. We’ll capture this on the back
-      end and then send you to secure payment for the package you selected.
-    </p>
+  <main class="page-content">
+    <section class="hero-section">
+      <h2 id="package-heading">Start Your Order</h2>
+      <p id="package-subtitle">
+        Please provide your contact details and basic information so we can
+        begin processing your E-LegalBoom request.
+      </p>
+    </section>
 
-    <section class="order-layout">
-      <!-- LEFT: FORM -->
+    <section class="order-section">
       <form
-        id="order-form"
-        class="order-card"
-        action="https://script.google.com/macros/s/AKfycby9-kP21DGjMyHIyvlE0Bgy7ZOLiB03bQNYT34YcIVfEjYStRARW5ywjDpwUvv5Tv9G/exec"
+        id="order-intake-form"
+        class="order-form"
+        action="YOUR_WEB_APP_URL_HERE"
         method="POST"
       >
-        <h2>Contact &amp; Business Details</h2>
+        <!-- Hidden fields: set by JavaScript from URL -->
+        <input type="hidden" name="packageId" id="packageIdField" value="" />
+        <input type="hidden" name="packageName" id="packageNameField" value="" />
+        <input type="hidden" name="packagePrice" id="packagePriceField" value="" />
 
-        <!-- Hidden fields for package (this page is Tier 1) -->
-        <input type="hidden" name="packageId" id="packageId" value="tier1" />
-        <input
-          type="hidden"
-          name="packageName"
-          id="packageName"
-          value="Tier 1 – Basic Filing Support"
-        />
-        <input
-          type="hidden"
-          name="packagePrice"
-          id="packagePrice"
-          value="39"
-        />
+        <h3>Contact Information</h3>
 
-        <div class="order-field">
-          <label class="order-label" for="firstName">First Name</label>
-          <input
-            class="order-input"
-            type="text"
-            id="firstName"
-            name="firstName"
-            required
-          />
-        </div>
+        <label>
+          First Name<br />
+          <input type="text" name="firstName" required />
+        </label>
 
-        <div class="order-field">
-          <label class="order-label" for="lastName">Last Name</label>
-          <input
-            class="order-input"
-            type="text"
-            id="lastName"
-            name="lastName"
-            required
-          />
-        </div>
+        <label>
+          Last Name<br />
+          <input type="text" name="lastName" required />
+        </label>
 
-        <div class="order-field">
-          <label class="order-label" for="email">Email</label>
-          <input
-            class="order-input"
-            type="email"
-            id="email"
-            name="email"
-            required
-          />
-          <div class="order-help">
-            We’ll email your confirmation and next steps here.
-          </div>
-        </div>
+        <label>
+          Email<br />
+          <input type="email" name="email" required />
+        </label>
 
-        <div class="order-field">
-          <label class="order-label" for="phone">Phone (optional)</label>
-          <input
-            class="order-input"
-            type="tel"
-            id="phone"
-            name="phone"
-          />
-        </div>
+        <label>
+          Phone (optional)<br />
+          <input type="tel" name="phone" />
+        </label>
 
-        <div class="order-field">
-          <label class="order-label" for="businessName">Business Name</label>
-          <input
-            class="order-input"
-            type="text"
-            id="businessName"
-            name="businessName"
-          />
-        </div>
+        <h3>Business Information</h3>
 
-        <div class="order-field">
-          <label class="order-label" for="state">State (for your business)</label>
-          <input
-            class="order-input"
-            type="text"
-            id="state"
-            name="state"
-          />
-        </div>
+        <label>
+          Business Name (if applicable)<br />
+          <input type="text" name="businessName" />
+        </label>
 
-        <div class="order-field">
-          <label class="order-label" for="hearAbout">
-            How did you hear about ElegalBoom?
-          </label>
-          <select
-            class="order-input"
-            id="hearAbout"
-            name="hearAbout"
-          >
+        <label>
+          State (2-letter code, e.g., CA)<br />
+          <input type="text" name="state" maxlength="2" />
+        </label>
+
+        <label>
+          How did you hear about E-LegalBoom?<br />
+          <select name="hearAbout">
             <option value="">Select one…</option>
             <option value="Referral">Referral</option>
-            <option value="Social media">Social media</option>
-            <option value="Search">Search</option>
+            <option value="Social Media">Social Media</option>
             <option value="Event">Event</option>
+            <option value="Search">Search</option>
             <option value="Other">Other</option>
           </select>
-        </div>
+        </label>
 
-        <div class="order-field">
-          <label class="order-label" for="notes">
-            Anything specific we should know?
-          </label>
+        <label>
+          Briefly describe what you need or the situation we’re helping with:<br />
           <textarea
-            class="order-input"
-            id="notes"
             name="notes"
             rows="4"
+            placeholder="Tell us what you’re trying to accomplish so we can prepare the right documents and support."
           ></textarea>
-          <div class="order-help">
-            Optional: brief context about your business or what you’re aiming to
-            protect.
-          </div>
-        </div>
+        </label>
 
-        <div class="order-actions">
-          <button class="primary-btn" type="submit">
-            Submit &amp; Go to Secure Payment
-          </button>
-        </div>
+        <button type="submit" class="primary-button">
+          Submit &amp; Go to Secure Payment
+        </button>
+
+        <p class="redirect-note">
+          After you submit this form, you will be redirected to secure payment
+          to complete your E-LegalBoom order.
+        </p>
       </form>
-
-      <!-- RIGHT: SUMMARY -->
-      <aside class="order-card order-summary">
-        <h2>Your Package</h2>
-        <p><strong>Tier 1 – Basic Filing Support</strong></p>
-        <p>Simple business filings &amp; essential documents for new owners.</p>
-        <p class="order-price">$39</p>
-
-        <h3>What Happens Next?</h3>
-        <ol>
-          <li>You submit this form so we can capture your contact &amp; business details.</li>
-          <li>You’ll be redirected to secure payment for the package you chose.</li>
-          <li>After payment, you’ll receive follow-up instructions and links to your documents.</li>
-        </ol>
-      </aside>
     </section>
   </main>
 
   <script>
-    // Small UX touch: disable button after submit so it can't be double-clicked
     (function () {
-      const form = document.getElementById('order-form');
-      if (!form) return;
+      const params = new URLSearchParams(window.location.search);
+      const pkg = params.get('packageId') || 'tier1';
 
-      form.addEventListener('submit', function () {
-        const btn = form.querySelector('button[type="submit"]');
-        if (btn) {
-          btn.disabled = true;
-          btn.textContent = 'Submitting...';
-        }
-      });
+      const pkgIdField = document.getElementById('packageIdField');
+      const pkgNameField = document.getElementById('packageNameField');
+      const pkgPriceField = document.getElementById('packagePriceField');
+      const heading = document.getElementById('package-heading');
+      const subtitle = document.getElementById('package-subtitle');
+
+      let name = 'Your E-LegalBoom Package';
+      let price = '';
+
+      if (pkg === 'tier1') {
+        name = 'Tier 1 – Basic Filing Support';
+        price = '39';
+        heading.textContent = 'Start Your Tier 1 Order';
+        subtitle.textContent =
+          'Please complete this form so we can begin your Tier 1 Basic Filing Support and then send you to secure payment.';
+      } else if (pkg === 'bundle') {
+        name = 'Entrepreneur Starter Bundle';
+        price = '149';
+        heading.textContent = 'Start Your Starter Bundle Order';
+        subtitle.textContent =
+          'Please complete this form so we can begin preparing your Starter Bundle and then send you to secure payment.';
+      } else {
+        heading.textContent = 'Start Your E-LegalBoom Order';
+      }
+
+      if (pkgIdField) pkgIdField.value = pkg;
+      if (pkgNameField) pkgNameField.value = name;
+      if (pkgPriceField) pkgPriceField.value = price;
     })();
   </script>
 </body>
