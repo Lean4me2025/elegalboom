@@ -1,174 +1,266 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>E-LegalBoom – Secure Payment</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <title>Payment – Step 2 | E-LegalBoom</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="stylesheet" href="style.css"/>
+
   <style>
     body {
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: #f5f7fb;
       margin: 0;
-      padding: 0;
-      color: #111827;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #f6f8fb;
+      color: #0f172a;
     }
-    .container {
-      max-width: 700px;
-      margin: 32px auto;
-      background: #ffffff;
-      border-radius: 10px;
-      box-shadow: 0 10px 25px rgba(15, 23, 42, 0.08);
-      padding: 22px 24px 30px;
+
+    .page {
+      max-width: 880px;
+      margin: 30px auto 50px;
+      padding: 0 18px;
     }
+
     h1 {
-      margin-top: 0;
-      font-size: 1.6rem;
+      font-size: 1.8rem;
+      margin-bottom: 6px;
+      color: #0b7285;
     }
-    .steps {
-      display: flex;
-      gap: 8px;
-      margin-bottom: 16px;
-      font-size: 0.8rem;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-    }
-    .step {
-      flex: 1;
-      padding: 6px 8px;
-      border-radius: 999px;
-      text-align: center;
-      background: #e5e7eb;
-      color: #6b7280;
-    }
-    .step.active {
-      background: #10b981;
-      color: white;
-      font-weight: 600;
-    }
-    .summary {
-      background: #ecfdf5;
-      border-left: 4px solid #10b981;
-      padding: 10px 12px;
-      border-radius: 6px;
-      margin-bottom: 20px;
+
+    .subtitle {
       font-size: 0.95rem;
+      color: #475569;
+      max-width: 760px;
+      line-height: 1.5;
     }
+
+    .summary {
+      margin-top: 16px;
+      padding: 14px;
+      background: #eff6ff;
+      border-left: 4px solid #2563eb;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      color: #1e293b;
+    }
+
     .summary strong {
-      color: #065f46;
-    }
-    .primary-pay {
-      margin-top: 10px;
-    }
-    .primary-pay button {
-      background: #16a34a;
-      color: white;
-      border: none;
-      border-radius: 999px;
-      padding: 10px 22px;
-      font-size: 1rem;
-      font-weight: 600;
-      cursor: pointer;
-      box-shadow: 0 10px 24px rgba(22, 163, 74, 0.35);
-    }
-    .primary-pay button:hover {
-      background: #15803d;
-    }
-    .help {
-      margin-top: 20px;
-      font-size: 0.85rem;
-      color: #4b5563;
-    }
-    .help a {
       color: #1d4ed8;
+    }
+
+    .paybox {
+      margin-top: 20px;
+      background: #ffffff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      padding: 18px 16px 20px;
+      box-shadow: 0 10px 24px rgba(15,23,42,0.06);
+    }
+
+    .paybox h2 {
+      font-size: 1.1rem;
+      margin-bottom: 8px;
+      color: #0f172a;
+    }
+
+    .paybox p {
+      font-size: 0.88rem;
+      color: #475569;
+      margin-top: 4px;
+    }
+
+    .amount {
+      margin-top: 10px;
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #0b7285;
+    }
+
+    .bundle-note {
+      margin-top: 10px;
+      padding: 10px;
+      background: #fff7ed;
+      border-left: 4px solid #f97316;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      color: #7c2d12;
+    }
+
+    .actions {
+      margin-top: 20px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .btn-primary {
+      background: #0b7285;
+      color: #ffffff !important;
       text-decoration: none;
+      padding: 12px 20px;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 0.95rem;
+      display: inline-block;
+      box-shadow: 0 10px 24px rgba(11,114,133,0.35);
     }
-    .help a:hover {
-      text-decoration: underline;
+
+    .btn-primary:hover { background: #095c6c; }
+
+    .btn-secondary {
+      border: 1px solid #0b7285;
+      color: #0b7285 !important;
+      text-decoration: none;
+      padding: 10px 18px;
+      border-radius: 999px;
+      font-weight: 600;
+      font-size: 0.85rem;
+      display: inline-block;
+      background: #ffffff;
     }
-    @media (max-width: 640px) {
-      .container {
-        margin: 16px;
-        padding: 16px 14px 22px;
-      }
+
+    .btn-secondary:hover { background: #e6f7fb; }
+
+    .footer-note {
+      margin-top: 26px;
+      font-size: 0.85rem;
+      color: #64748b;
     }
   </style>
 </head>
+
 <body>
-  <div class="container">
-    <div class="steps">
-      <div class="step">1. Choose Tier</div>
-      <div class="step">2. Complete Intake</div>
-      <div class="step active">3. Pay &amp; Confirm</div>
-    </div>
 
-    <h1>Secure Payment – E-LegalBoom</h1>
+<section class="page">
 
-    <div class="summary" id="summaryBox">
-      You selected: <strong><span id="summaryTier"></span></strong><br>
-      Intake ID: <strong><span id="summaryIntake"></span></strong>
-    </div>
+  <h1>Payment – Step 2</h1>
+  <p class="subtitle">
+    Review your order and complete payment. After payment, you’ll be sent to Step 3
+    to provide detailed information for your document.
+  </p>
 
-    <div class="primary-pay">
-      <p id="primaryDescription"></p>
-      <button id="primaryButton">Complete Payment</button>
-    </div>
-
-    <div class="help">
-      Not sure which tier fits your situation?<br>
-      <a href="mailto:dremhr2@gmail.com?subject=E-LegalBoom%20Tier%20Question">
-        Email us for a quick recommendation
-      </a>.
+  <div class="summary">
+    <div>Tier selected: <strong><span id="tierLabel">(not set)</span></strong></div>
+    <div>Document: <strong><span id="docLabel">(not set)</span></strong></div>
+    <div>Price: <strong><span id="priceLabel">(not set)</span></strong></div>
+    <div id="bundleLine" style="display:none;margin-top:6px;">
+      Access window: <strong>30 days</strong><br/>
+      You may submit multiple document requests during this period.
     </div>
   </div>
 
-  <script>
-    // Your real GoDaddy pay links
-    const PAY_LINKS = {
-      T1: {
-        name: 'Tier 1 – Starter',
-        description: 'Best for simple, single-document needs and new businesses.',
-        url: 'https://pay.elegalboom.org/e4b79a60-0fd7-431c-8bfc-ae0'
-      },
-      T2: {
-        name: 'Tier 2 – Pro',
-        description: 'Ideal for growing businesses needing stronger legal coverage.',
-        url: 'https://pay.elegalboom.org/aeda586f-65f5-4bf0-98f3-7a2'
-      },
-      T3: {
-        name: 'Tier 3 – Mastery',
-        description: 'For more complex structures or multiple documents.',
-        url: 'https://pay.elegalboom.org/71ca7144-e537-4fbd-823d-c10'
-      },
-      ENT: {
-        name: 'Entrepreneur / Enterprise',
-        description: 'Custom or higher-volume support. May include strategy session.',
-        url: 'https://pay.elegalboom.org/55c7cd3d-1048-4b8c-aadb-843'
-      }
+  <div class="paybox">
+    <h2>Complete Your Order</h2>
+    <p>
+      You are purchasing one document with this payment, unless you selected the
+      Entrepreneur Starter Bundle. Once payment is processed, click continue to move
+      to Step 3 and provide the details for this document.
+    </p>
+
+    <div class="amount" id="amountDue"></div>
+
+    <div id="bundleNote" class="bundle-note" style="display:none;">
+      You selected the Entrepreneur Starter Bundle. This payment grants access to submit
+      multiple document intakes during the next 30 days.
+    </div>
+
+    <div class="actions">
+      <a id="payButton" class="btn-primary" href="#" target="_blank">
+        Proceed to Secure Payment →
+      </a>
+      <a id="continueButton" class="btn-secondary" href="#">
+        I’ve Paid – Continue to Step 3 →
+      </a>
+      <a class="btn-secondary" href="catalog.html">
+        Back to Catalog
+      </a>
+    </div>
+  </div>
+
+  <div class="footer-note">
+    Payment is processed securely by our payment provider.
+  </div>
+
+</section>
+
+<script>
+  function getParam(name) {
+    return new URLSearchParams(window.location.search).get(name) || "";
+  }
+
+  const tier = getParam("tier").toUpperCase();
+  const intakeId = getParam("intakeId");
+  const docType = getParam("docType");
+
+  function tierLabel(code) {
+    if (code === "T1") return "Tier 1 – Startup & Essential Documents";
+    if (code === "T2") return "Tier 2 – Business Foundation Documents";
+    if (code === "T3") return "Tier 3 – Premium Business Agreements";
+    if (code === "ENT") return "Entrepreneur Starter Bundle";
+    return "(not set)";
+  }
+
+  function tierPrice(code) {
+    if (code === "T1") return "$39 per document";
+    if (code === "T2") return "$59 per document";
+    if (code === "T3") return "$99 per document";
+    if (code === "ENT") return "$149 • 30-day bundle";
+    return "(not set)";
+  }
+
+  function payLinkForTier(code) {
+    // 🔧 Replace these with YOUR actual GoDaddy Pay Links
+    if (code === "T1") return "https://pay.elegalboom.org/T1LINK";
+    if (code === "T2") return "https://pay.elegalboom.org/T2LINK";
+    if (code === "T3") return "https://pay.elegalboom.org/T3LINK";
+    if (code === "ENT") return "https://pay.elegalboom.org/ENTLINK";
+    return "#";
+  }
+
+  document.getElementById("tierLabel").textContent = tierLabel(tier);
+  document.getElementById("priceLabel").textContent = tierPrice(tier);
+  document.getElementById("amountDue").textContent = tierPrice(tier);
+
+  function prettyDoc(code) {
+    const map = {
+      NDA: "Mutual NDA",
+      PROMISSORY_NOTE: "Promissory Note",
+      SINGLE_MEMBER_LLC: "Single-Member LLC Agreement",
+      PARTNERSHIP: "Partnership Agreement",
+      TWO_MEMBER_LLC: "Two-Member LLC Agreement",
+      BUY_SELL: "Buy–Sell / Investor Agreement",
+      SERVICE: "Service / Contractor Agreement",
+      CONSULTING: "Consulting Agreement",
+      JV: "Joint Venture Agreement",
+      OTHER: "Custom Document"
     };
+    return map[code] || "(not specified)";
+  }
 
-    function getQueryParam(name) {
-      const params = new URLSearchParams(window.location.search);
-      return params.get(name);
-    }
+  document.getElementById("docLabel").textContent = prettyDoc(docType);
 
-    function initPayPage() {
-      const tierCode = (getQueryParam('tier') || 'T1').toUpperCase();
-      const intakeId = getQueryParam('intakeId') || '';
-      const tier = PAY_LINKS[tierCode] || PAY_LINKS.T1;
+  const payLink = payLinkForTier(tier);
+  const payBtn = document.getElementById("payButton");
+  payBtn.href = payLink;
 
-      document.getElementById('summaryTier').textContent = tier.name;
-      document.getElementById('summaryIntake').textContent = intakeId || '(not available)';
+  // Bundle display logic
+  if (tier === "ENT") {
+    document.getElementById("bundleLine").style.display = "block";
+    document.getElementById("bundleNote").style.display = "block";
+  }
 
-      document.getElementById('primaryDescription').textContent = tier.description;
+  // Continue button → Intake #2 (details page)
+  const params = new URLSearchParams();
+  if (tier) params.set("tier", tier);
+  if (intakeId) params.set("intakeId", intakeId);
+  if (docType) params.set("docType", docType);
 
-      const btn = document.getElementById('primaryButton');
-      btn.addEventListener('click', () => {
-        window.location.href = tier.url;
-      });
-    }
+  let nextUrl = "details.html";
+  if ([...params.keys()].length > 0) {
+    nextUrl += "?" + params.toString();
+  }
 
-    document.addEventListener('DOMContentLoaded', initPayPage);
-  </script>
+  document.getElementById("continueButton").href = nextUrl;
+</script>
+
 </body>
 </html>
