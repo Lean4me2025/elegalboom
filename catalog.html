@@ -3,118 +3,146 @@
 <head>
   <meta charset="UTF-8" />
   <title>Document Catalog | E-LegalBoom</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="style.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="stylesheet" href="style.css"/>
+
+  <style>
+    .tier-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+      margin-top: 30px;
+    }
+
+    @media (max-width: 768px) {
+      .tier-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .tier-card {
+      background: #ffffff;
+      border: 1px solid #ddd;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    }
+
+    .tier-card h3 {
+      margin-top: 0;
+      color: #0b7285;
+    }
+
+    .tier-price {
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    .tier-btn {
+      display: inline-block;
+      margin-top: 14px;
+      padding: 10px 14px;
+      background: #0b7285;
+      color: white !important;
+      text-decoration: none;
+      border-radius: 6px;
+      font-weight: bold;
+    }
+
+    .tier-btn:hover {
+      background: #095c6c;
+    }
+
+    .highlight {
+      border: 2px solid #0b7285;
+    }
+  </style>
 </head>
+
 <body>
-  <!-- Header -->
-  <header class="site-header">
-    <div class="header-logo">E-LegalBoom</div>
-    <nav class="site-nav">
-      <a href="index.html" class="nav-link">Home</a>
-      <a href="catalog.html" class="nav-link active">Catalog</a>
-      <a href="tier1.html" class="nav-link">Tier 1</a>
-      <a href="tier2.html" class="nav-link">Tier 2</a>
-      <a href="tier3.html" class="nav-link">Tier 3</a>
-      <a href="bundle.html" class="nav-link">Starter Bundle</a>
-      <a href="preview.html" class="nav-link">Document Preview</a>
-      <a href="orders.html" class="nav-link">Customer Input</a>
-    </nav>
-  </header>
 
-  <!-- Main -->
-  <main class="page catalog-page">
-    <section id="catalog">
-      <h2 class="page-title">Document Catalog</h2>
-      <p class="page-subtitle">
-        Fast, accurate, digital legal documents delivered in minutes.
-        Choose the package that matches your stage of business.
-      </p>
+<!-- HEADER -->
+<header class="site-header">
+  <div class="header-logo">E-LegalBoom</div>
+  <nav class="site-nav">
+    <a href="index.html" class="nav-link">Home</a>
+    <a href="catalog.html" class="nav-link active">Catalog</a>
+    <a href="tier1.html" class="nav-link">Tier 1</a>
+    <a href="tier2.html" class="nav-link">Tier 2</a>
+    <a href="tier3.html" class="nav-link">Tier 3</a>
+    <a href="bundle.html" class="nav-link">Starter Bundle</a>
+    <a href="preview.html" class="nav-link">Document Preview</a>
+    <a href="orders.html" class="nav-link">Customer Input</a>
+  </nav>
+</header>
 
-      <div class="catalog-grid">
-        <!-- Tier 1 -->
-        <article class="catalog-card tier-1">
-          <h3>Tier 1 – Basic Filing Support</h3>
-          <p class="tier-price">$39</p>
-          <p class="tier-summary">
-            Simple business filings &amp; essential documents for new owners.
-          </p>
+<!-- MAIN -->
+<main class="page catalog-page">
 
-          <h4>What’s Included</h4>
-          <ul class="tier-list">
-            <li><strong>NDA (Mutual)</strong> – Protects confidential information when both sides are sharing ideas.</li>
-            <li><strong>Promissory Note</strong> – Simple loan / repayment terms for lending or borrowing money.</li>
-            <li><strong>Single-Member LLC Operating Agreement</strong> – Core document that outlines how your one-owner LLC is run.</li>
-          </ul>
+  <h2 class="page-title">Document Catalog</h2>
+  <p class="page-subtitle">
+    Fast, accurate, business-ready legal documents delivered in minutes.
+    Choose the package that fits your stage of growth.
+  </p>
 
-          <p class="tier-link">
-            <a href="tier1.html">Preview this package</a>
-          </p>
-        </article>
+  <div class="tier-grid">
 
-        <!-- Tier 2 -->
-        <article class="catalog-card tier-2">
-          <h3>Tier 2 – Standard Legal Foundation</h3>
-          <p class="tier-price">$59</p>
-          <p class="tier-summary">
-            Stronger legal foundation for growing businesses with partners.
-          </p>
+    <!-- TIER 1 -->
+    <div class="tier-card">
+      <h3>Tier 1 — Basic Filing Support</h3>
+      <div class="tier-price">$39</div>
+      <p>Essential filing documents for new entrepreneurs.</p>
+      <ul>
+        <li>NDA (Mutual)</li>
+        <li>Promissory Note</li>
+        <li>Single-Member LLC Operating Agreement</li>
+      </ul>
+      <a class="tier-btn" href="tier1.html">Preview Package</a>
+    </div>
 
-          <h4>What’s Included</h4>
-          <ul class="tier-list">
-            <li><strong>Partnership Agreement</strong> – Defines the relationship, responsibilities, equity split, and profit-sharing.</li>
-            <li><strong>Two-Member LLC Operating Agreement</strong> – Lays out how a two-member LLC is structured and managed.</li>
-            <li>All Tier 1 documents (NDA, Promissory Note, Single-Member LLC Operating Agreement).</li>
-          </ul>
+    <!-- TIER 2 -->
+    <div class="tier-card">
+      <h3>Tier 2 — Standard Legal Foundation</h3>
+      <div class="tier-price">$59</div>
+      <p>Built for partnerships and business expansion.</p>
+      <ul>
+        <li>Partnership Agreement</li>
+        <li>Two-Member LLC Agreement</li>
+        <li>All Tier 1 Documents</li>
+      </ul>
+      <a class="tier-btn" href="tier2.html">Preview Package</a>
+    </div>
 
-          <p class="tier-link">
-            <a href="tier2.html">Preview this package</a>
-          </p>
-        </article>
+    <!-- TIER 3 -->
+    <div class="tier-card">
+      <h3>Tier 3 — Premium Business Package</h3>
+      <div class="tier-price">$99</div>
+      <p>For established companies needing full protection.</p>
+      <ul>
+        <li>All Tier 1 + Tier 2</li>
+        <li>Service Agreements</li>
+        <li>Contract Templates</li>
+      </ul>
+      <a class="tier-btn" href="tier3.html">Preview Package</a>
+    </div>
 
-        <!-- Tier 3 -->
-        <article class="catalog-card tier-3">
-          <h3>Tier 3 – Premium Business Package</h3>
-          <p class="tier-price">$99</p>
-          <p class="tier-summary">
-            A wider range of agreements &amp; templates for established businesses.
-          </p>
+    <!-- BUNDLE -->
+    <div class="tier-card highlight">
+      <h3>Entrepreneur Starter Bundle</h3>
+      <div class="tier-price">$149</div>
+      <p>Everything needed to legally launch your business.</p>
+      <ul>
+        <li>Business Formation Templates</li>
+        <li>Operating Agreements</li>
+        <li>Starter Legal Toolkit</li>
+      </ul>
+      <a class="tier-btn" href="bundle.html">Preview Bundle</a>
+    </div>
 
-          <h4>What’s Included</h4>
-          <ul class="tier-list">
-            <li>All Tier 1 documents</li>
-            <li>All Tier 2 documents</li>
-            <li><strong>Additional premium templates</strong> (service agreement, independent contractor agreement, and more).</li>
-          </ul>
+  </div>
 
-          <p class="tier-link">
-            <a href="tier3.html">Preview this package</a>
-          </p>
-        </article>
+</main>
 
-        <!-- Starter Bundle -->
-        <article class="catalog-card tier-starter">
-          <h3>Entrepreneur Starter Bundle</h3>
-          <p class="tier-price">$149</p>
-          <p class="tier-summary">
-            Full launch kit for new entrepreneurs: formation, agreements, and starter contracts.
-          </p>
-
-          <h4>What’s Included</h4>
-          <ul class="tier-list">
-            <li><strong>Formation filing support</strong> – Templates for forming your entity.</li>
-            <li><strong>Operating agreements</strong> – Single-member and two-member structures.</li>
-            <li><strong>Starter service / client contracts.</strong></li>
-            <li><strong>Compliance reference templates.</strong></li>
-            <li>All Tier 1 &amp; Tier 2 documents included at no extra cost.</li>
-          </ul>
-
-          <p class="tier-link">
-            <a href="bundle.html">Preview this bundle</a>
-          </p>
-        </article>
-      </div>
-    </section>
-  </main>
 </body>
 </html>
