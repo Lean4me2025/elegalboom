@@ -175,7 +175,7 @@
   <p class="subtitle">
     This step opens your E-LegalBoom file and assigns your order to the correct tier.
     You’ll enter basic information here, complete payment next, and then provide detailed document
-    information in Step 2.
+    information in Step 3.
   </p>
 
   <div class="summary">
@@ -221,7 +221,6 @@
       <label for="docType">Which document are you purchasing with this order?<span class="required-mark">*</span></label>
       <select id="docType" name="docType" required>
         <option value="">Select a document…</option>
-        <!-- Options will be filtered/annotated by tier in JS, but we keep them all here -->
         <option value="NDA">Mutual NDA</option>
         <option value="PROMISSORY_NOTE">Promissory Note</option>
         <option value="SINGLE_MEMBER_LLC">Single-Member LLC Operating Agreement</option>
@@ -248,7 +247,7 @@
       <h2>Confirm & Continue</h2>
       <p style="font-size:0.88rem;color:#4b5563;">
         After you submit this form, you’ll be directed to secure payment for the selected tier.
-        Once payment is complete, you will receive a link to Step 2 to provide detailed information
+        Once payment is complete, you will receive a link to Step 3 to provide detailed information
         for this specific document.
       </p>
     </div>
@@ -265,7 +264,7 @@
 </section>
 
 <script>
-  // Use the same Apps Script endpoint as details.html
+  // 💡 Use your existing deployed Apps Script web app URL
   const SCRIPT_URL =
     "https://script.google.com/macros/s/AKfycbxirMiGTQQmUGLUxCcuSX1_qasnfRxBL1ycs08z-LTmF9CxgHeivGrVqGi2D_MuRpt/exec";
 
@@ -317,13 +316,40 @@
     }
   }
 
+  async function tryPrefill(prefillId) {
+    if (!prefillId) return;
+    try {
+      const url = `${SCRIPT_URL}?mode=prefill&intakeId=${encodeURIComponent(prefillId)}`;
+      const resp = await fetch(url);
+      const json = await resp.json();
+      if (!json.success || !json.intake) return;
+
+      const i = json.intake;
+      if (i.fullName) document.getElementById("fullName").value = i.fullName;
+      if (i.email) document.getElementById("email").value = i.email;
+      if (i.phone) document.getElementById("phone").value = i.phone;
+      if (i.state) document.getElementById("state").value = i.state;
+      if (i.businessName) document.getElementById("businessName").value = i.businessName;
+      if (i.businessDescription) document.getElementById("businessDescription").value = i.businessDescription;
+    } catch (err) {
+      console.error("Prefill error:", err);
+    }
+  }
+
   document.addEventListener("DOMContentLoaded", () => {
     const tierCode = getParam("tier") || "";
+    const prefillId = getParam("prefillId") || "";
+
     document.getElementById("tierCode").value = tierCode;
     document.getElementById("tierLabel").textContent = mapTierLabel(tierCode);
     document.getElementById("tierPrice").textContent = mapTierPrice(tierCode);
     document.getElementById("tierNote").textContent = mapTierNote(tierCode);
     adjustDocHintForTier(tierCode);
+
+    // 🔄 Prefill if coming back with prefillId (one-click reorder)
+    if (prefillId) {
+      tryPrefill(prefillId);
+    }
 
     const form = document.getElementById("intakeForm");
     const statusEl = document.getElementById("statusMessage");
@@ -353,7 +379,6 @@
           throw new Error(json.error || "Unknown error");
         }
 
-        // Expecting intakeId from Apps Script, if available
         const tier = tierCode || "";
         const intakeId = json.intakeId || "";
         let nextUrl = "orders.html";
