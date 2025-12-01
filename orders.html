@@ -1,146 +1,174 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>E-LegalBoom – Order Intake</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8">
+  <title>E-LegalBoom – Secure Payment</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #f5f7fb;
+      margin: 0;
+      padding: 0;
+      color: #111827;
+    }
+    .container {
+      max-width: 700px;
+      margin: 32px auto;
+      background: #ffffff;
+      border-radius: 10px;
+      box-shadow: 0 10px 25px rgba(15, 23, 42, 0.08);
+      padding: 22px 24px 30px;
+    }
+    h1 {
+      margin-top: 0;
+      font-size: 1.6rem;
+    }
+    .steps {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 16px;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+    .step {
+      flex: 1;
+      padding: 6px 8px;
+      border-radius: 999px;
+      text-align: center;
+      background: #e5e7eb;
+      color: #6b7280;
+    }
+    .step.active {
+      background: #10b981;
+      color: white;
+      font-weight: 600;
+    }
+    .summary {
+      background: #ecfdf5;
+      border-left: 4px solid #10b981;
+      padding: 10px 12px;
+      border-radius: 6px;
+      margin-bottom: 20px;
+      font-size: 0.95rem;
+    }
+    .summary strong {
+      color: #065f46;
+    }
+    .primary-pay {
+      margin-top: 10px;
+    }
+    .primary-pay button {
+      background: #16a34a;
+      color: white;
+      border: none;
+      border-radius: 999px;
+      padding: 10px 22px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 10px 24px rgba(22, 163, 74, 0.35);
+    }
+    .primary-pay button:hover {
+      background: #15803d;
+    }
+    .help {
+      margin-top: 20px;
+      font-size: 0.85rem;
+      color: #4b5563;
+    }
+    .help a {
+      color: #1d4ed8;
+      text-decoration: none;
+    }
+    .help a:hover {
+      text-decoration: underline;
+    }
+    @media (max-width: 640px) {
+      .container {
+        margin: 16px;
+        padding: 16px 14px 22px;
+      }
+    }
+  </style>
 </head>
 <body>
-  <header class="site-header">
-    <h1 class="site-title">ELegalBoom</h1>
-    <nav class="main-nav">
-      <a href="index.html">Home</a>
-      <a href="catalog.html">Catalog</a>
-      <a href="tier1.html">Tier 1</a>
-      <a href="tier2.html">Tier 2</a>
-      <a href="tier3.html">Tier 3</a>
-      <a href="bundle.html">Starter Bundle</a>
-      <a href="preview.html">Preview</a>
-    </nav>
-  </header>
+  <div class="container">
+    <div class="steps">
+      <div class="step">1. Choose Tier</div>
+      <div class="step">2. Complete Intake</div>
+      <div class="step active">3. Pay &amp; Confirm</div>
+    </div>
 
-  <main class="page-content">
-    <section class="hero-section">
-      <h2 id="package-heading">Start Your Order</h2>
-      <p id="package-subtitle">
-        Please provide your contact details and basic information so we can
-        begin processing your E-LegalBoom request.
-      </p>
-    </section>
+    <h1>Secure Payment – E-LegalBoom</h1>
 
-    <section class="order-section">
-      <form
-        id="order-intake-form"
-        class="order-form"
-        action="AKfycbxirMiGTQ0QmUGLUxCcuSX1_qasnfRxBL1ycs08z-LTmF9CxgHeivGrVqGi2D_MuRpt/exec"
-        method="POST"
-      >
-        <!-- Hidden fields: set by JavaScript from URL -->
-        <input type="hidden" name="packageId" id="packageIdField" value="" />
-        <input type="hidden" name="packageName" id="packageNameField" value="" />
-        <input type="hidden" name="packagePrice" id="packagePriceField" value="" />
+    <div class="summary" id="summaryBox">
+      You selected: <strong><span id="summaryTier"></span></strong><br>
+      Intake ID: <strong><span id="summaryIntake"></span></strong>
+    </div>
 
-        <h3>Contact Information</h3>
+    <div class="primary-pay">
+      <p id="primaryDescription"></p>
+      <button id="primaryButton">Complete Payment</button>
+    </div>
 
-        <label>
-          First Name<br />
-          <input type="text" name="firstName" required />
-        </label>
-
-        <label>
-          Last Name<br />
-          <input type="text" name="lastName" required />
-        </label>
-
-        <label>
-          Email<br />
-          <input type="email" name="email" required />
-        </label>
-
-        <label>
-          Phone (optional)<br />
-          <input type="tel" name="phone" />
-        </label>
-
-        <h3>Business Information</h3>
-
-        <label>
-          Business Name (if applicable)<br />
-          <input type="text" name="businessName" />
-        </label>
-
-        <label>
-          State (2-letter code, e.g., CA)<br />
-          <input type="text" name="state" maxlength="2" />
-        </label>
-
-        <label>
-          How did you hear about E-LegalBoom?<br />
-          <select name="hearAbout">
-            <option value="">Select one…</option>
-            <option value="Referral">Referral</option>
-            <option value="Social Media">Social Media</option>
-            <option value="Event">Event</option>
-            <option value="Search">Search</option>
-            <option value="Other">Other</option>
-          </select>
-        </label>
-
-        <label>
-          Briefly describe what you need or the situation we’re helping with:<br />
-          <textarea
-            name="notes"
-            rows="4"
-            placeholder="Tell us what you’re trying to accomplish so we can prepare the right documents and support."
-          ></textarea>
-        </label>
-
-        <button type="submit" class="primary-button">
-          Submit &amp; Go to Secure Payment
-        </button>
-
-        <p class="redirect-note">
-          After you submit this form, you will be redirected to secure payment
-          to complete your E-LegalBoom order.
-        </p>
-      </form>
-    </section>
-  </main>
+    <div class="help">
+      Not sure which tier fits your situation?<br>
+      <a href="mailto:dremhr2@gmail.com?subject=E-LegalBoom%20Tier%20Question">
+        Email us for a quick recommendation
+      </a>.
+    </div>
+  </div>
 
   <script>
-    (function () {
-      const params = new URLSearchParams(window.location.search);
-      const pkg = params.get('packageId') || 'tier1';
-
-      const pkgIdField = document.getElementById('packageIdField');
-      const pkgNameField = document.getElementById('packageNameField');
-      const pkgPriceField = document.getElementById('packagePriceField');
-      const heading = document.getElementById('package-heading');
-      const subtitle = document.getElementById('package-subtitle');
-
-      let name = 'Your E-LegalBoom Package';
-      let price = '';
-
-      if (pkg === 'tier1') {
-        name = 'Tier 1 – Basic Filing Support';
-        price = '39';
-        heading.textContent = 'Start Your Tier 1 Order';
-        subtitle.textContent =
-          'Please complete this form so we can begin your Tier 1 Basic Filing Support and then send you to secure payment.';
-      } else if (pkg === 'bundle') {
-        name = 'Entrepreneur Starter Bundle';
-        price = '149';
-        heading.textContent = 'Start Your Starter Bundle Order';
-        subtitle.textContent =
-          'Please complete this form so we can begin preparing your Starter Bundle and then send you to secure payment.';
-      } else {
-        heading.textContent = 'Start Your E-LegalBoom Order';
+    // Your real GoDaddy pay links
+    const PAY_LINKS = {
+      T1: {
+        name: 'Tier 1 – Starter',
+        description: 'Best for simple, single-document needs and new businesses.',
+        url: 'https://pay.elegalboom.org/e4b79a60-0fd7-431c-8bfc-ae0'
+      },
+      T2: {
+        name: 'Tier 2 – Pro',
+        description: 'Ideal for growing businesses needing stronger legal coverage.',
+        url: 'https://pay.elegalboom.org/aeda586f-65f5-4bf0-98f3-7a2'
+      },
+      T3: {
+        name: 'Tier 3 – Mastery',
+        description: 'For more complex structures or multiple documents.',
+        url: 'https://pay.elegalboom.org/71ca7144-e537-4fbd-823d-c10'
+      },
+      ENT: {
+        name: 'Entrepreneur / Enterprise',
+        description: 'Custom or higher-volume support. May include strategy session.',
+        url: 'https://pay.elegalboom.org/55c7cd3d-1048-4b8c-aadb-843'
       }
+    };
 
-      if (pkgIdField) pkgIdField.value = pkg;
-      if (pkgNameField) pkgNameField.value = name;
-      if (pkgPriceField) pkgPriceField.value = price;
-    })();
+    function getQueryParam(name) {
+      const params = new URLSearchParams(window.location.search);
+      return params.get(name);
+    }
+
+    function initPayPage() {
+      const tierCode = (getQueryParam('tier') || 'T1').toUpperCase();
+      const intakeId = getQueryParam('intakeId') || '';
+      const tier = PAY_LINKS[tierCode] || PAY_LINKS.T1;
+
+      document.getElementById('summaryTier').textContent = tier.name;
+      document.getElementById('summaryIntake').textContent = intakeId || '(not available)';
+
+      document.getElementById('primaryDescription').textContent = tier.description;
+
+      const btn = document.getElementById('primaryButton');
+      btn.addEventListener('click', () => {
+        window.location.href = tier.url;
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', initPayPage);
   </script>
 </body>
 </html>
