@@ -2,147 +2,292 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Document Catalog | E-LegalBoom</title>
+  <title>Catalog – Choose Your Tier | E-LegalBoom</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <link rel="stylesheet" href="style.css"/>
 
   <style>
-    .tier-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 24px;
-      margin-top: 30px;
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #f6f8fb;
+      color: #0f172a;
     }
 
-    @media (max-width: 768px) {
-      .tier-grid {
-        grid-template-columns: 1fr;
-      }
+    .page {
+      max-width: 1100px;
+      margin: 30px auto 50px;
+      padding: 0 18px;
     }
 
-    .tier-card {
-      background: #ffffff;
-      border: 1px solid #ddd;
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
-    }
-
-    .tier-card h3 {
-      margin-top: 0;
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 8px;
       color: #0b7285;
+      text-align: center;
     }
 
-    .tier-price {
-      font-size: 24px;
-      font-weight: bold;
+    .subtitle {
+      font-size: 1rem;
+      color: #475569;
+      max-width: 820px;
+      line-height: 1.5;
+      margin: 0 auto 22px;
+      text-align: center;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 18px;
+      margin-top: 10px;
+    }
+
+    .card {
+      background: #ffffff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      padding: 16px 16px 18px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      box-shadow: 0 10px 25px rgba(15,23,42,0.05);
+    }
+
+    .card-header {
       margin-bottom: 10px;
     }
 
-    .tier-btn {
-      display: inline-block;
-      margin-top: 14px;
-      padding: 10px 14px;
-      background: #0b7285;
-      color: white !important;
-      text-decoration: none;
-      border-radius: 6px;
-      font-weight: bold;
+    .card h2 {
+      font-size: 1.15rem;
+      margin: 0 0 4px;
+      color: #0f172a;
     }
 
-    .tier-btn:hover {
+    .tier-label {
+      font-size: 0.82rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-weight: 700;
+      color: #0b7285;
+    }
+
+    .price {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #0b7285;
+      margin-top: 6px;
+    }
+
+    .price small {
+      font-weight: 500;
+      color: #64748b;
+    }
+
+    .card p {
+      font-size: 0.9rem;
+      color: #475569;
+      margin: 8px 0;
+    }
+
+    .card ul {
+      padding-left: 18px;
+      margin: 8px 0 6px;
+      font-size: 0.86rem;
+      color: #475569;
+    }
+
+    .card li {
+      margin-bottom: 4px;
+    }
+
+    .per-doc-note {
+      margin-top: 6px;
+      font-size: 0.8rem;
+      color: #6b7280;
+    }
+
+    .actions {
+      margin-top: 14px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .btn-primary {
+      background: #0b7285;
+      color: #ffffff !important;
+      text-decoration: none;
+      padding: 9px 14px;
+      border-radius: 999px;
+      font-weight: 600;
+      font-size: 0.86rem;
+      display: inline-block;
+      box-shadow: 0 8px 20px rgba(11,114,133,0.3);
+    }
+
+    .btn-primary:hover {
       background: #095c6c;
     }
 
-    .highlight {
-      border: 2px solid #0b7285;
+    .btn-secondary {
+      border: 1px solid #0b7285;
+      color: #0b7285 !important;
+      text-decoration: none;
+      padding: 8px 13px;
+      border-radius: 999px;
+      font-weight: 600;
+      font-size: 0.8rem;
+      display: inline-block;
+      background: #ffffff;
     }
+
+    .btn-secondary:hover {
+      background: #e6f7fb;
+    }
+
+    .bundle-card {
+      border-color: #fed7aa;
+    }
+
+    .bundle-badge {
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      background: #f97316;
+      color: #ffffff;
+      margin-bottom: 4px;
+    }
+
+    .footer-note {
+      margin-top: 28px;
+      font-size: 0.85rem;
+      color: #64748b;
+      text-align: center;
+    }
+
   </style>
 </head>
 
 <body>
 
-<!-- HEADER -->
-<header class="site-header">
-  <div class="header-logo">E-LegalBoom</div>
-  <nav class="site-nav">
-    <a href="index.html" class="nav-link">Home</a>
-    <a href="catalog.html" class="nav-link active">Catalog</a>
-    <a href="tier1.html" class="nav-link">Tier 1</a>
-    <a href="tier2.html" class="nav-link">Tier 2</a>
-    <a href="tier3.html" class="nav-link">Tier 3</a>
-    <a href="bundle.html" class="nav-link">Starter Bundle</a>
-    <a href="preview.html" class="nav-link">Document Preview</a>
-    <a href="orders.html" class="nav-link">Customer Input</a>
-  </nav>
-</header>
+<section class="page">
 
-<!-- MAIN -->
-<main class="page catalog-page">
-
-  <h2 class="page-title">Document Catalog</h2>
-  <p class="page-subtitle">
-    Fast, accurate, business-ready legal documents delivered in minutes.
-    Choose the package that fits your stage of growth.
+  <h1>Choose Your E-LegalBoom Tier</h1>
+  <p class="subtitle">
+    Select the level that matches your current stage. Each tier is priced per document, with the
+    Entrepreneur Starter Bundle available if you plan to prepare multiple documents within a focused window.
   </p>
 
-  <div class="tier-grid">
+  <div class="grid">
 
-    <!-- TIER 1 -->
-    <div class="tier-card">
-      <h3>Tier 1 — Basic Filing Support</h3>
-      <div class="tier-price">$39</div>
-      <p>Essential filing documents for new entrepreneurs.</p>
+    <!-- Tier 1 -->
+    <article class="card">
+      <div class="card-header">
+        <div class="tier-label">Tier 1</div>
+        <h2>Startup & Essential Documents</h2>
+        <div class="price">$39 <small>per document</small></div>
+      </div>
+      <p>Ideal for simple but important agreements that protect your ideas and money at the entry level.</p>
       <ul>
-        <li>NDA (Mutual)</li>
+        <li>Mutual NDA</li>
         <li>Promissory Note</li>
-        <li>Single-Member LLC Operating Agreement</li>
+        <li>Single-Member LLC Agreement</li>
+        <li>Simple payment or IOU agreements</li>
       </ul>
-      <a class="tier-btn" href="tier1.html">Preview Package</a>
-    </div>
+      <div class="per-doc-note">
+        One document per purchase. Need more than one? Place a separate order for each.
+      </div>
+      <div class="actions">
+        <a class="btn-primary" href="intake.html?tier=T1">Start Tier 1 Intake →</a>
+        <a class="btn-secondary" href="tier1.html">View Tier 1 Details</a>
+      </div>
+    </article>
 
-    <!-- TIER 2 -->
-    <div class="tier-card">
-      <h3>Tier 2 — Standard Legal Foundation</h3>
-      <div class="tier-price">$59</div>
-      <p>Built for partnerships and business expansion.</p>
+    <!-- Tier 2 -->
+    <article class="card">
+      <div class="card-header">
+        <div class="tier-label">Tier 2</div>
+        <h2>Business Foundation Documents</h2>
+        <div class="price">$59 <small>per document</small></div>
+      </div>
+      <p>For partnerships, multi-owner businesses, and agreements where roles and profit-sharing must be clear.</p>
       <ul>
         <li>Partnership Agreement</li>
         <li>Two-Member LLC Agreement</li>
-        <li>All Tier 1 Documents</li>
+        <li>Buy–Sell / Investor arrangements</li>
+        <li>Other core business agreements</li>
       </ul>
-      <a class="tier-btn" href="tier2.html">Preview Package</a>
-    </div>
+      <div class="per-doc-note">
+        One document per purchase. Multiple documents require multiple orders unless using the Bundle.
+      </div>
+      <div class="actions">
+        <a class="btn-primary" href="intake.html?tier=T2">Start Tier 2 Intake →</a>
+        <a class="btn-secondary" href="tier2.html">View Tier 2 Details</a>
+      </div>
+    </article>
 
-    <!-- TIER 3 -->
-    <div class="tier-card">
-      <h3>Tier 3 — Premium Business Package</h3>
-      <div class="tier-price">$99</div>
-      <p>For established companies needing full protection.</p>
+    <!-- Tier 3 -->
+    <article class="card">
+      <div class="card-header">
+        <div class="tier-label">Tier 3</div>
+        <h2>Premium Business Agreements</h2>
+        <div class="price">$99 <small>per document</small></div>
+      </div>
+      <p>For higher-impact business relationships, ongoing services, and serious operational agreements.</p>
       <ul>
-        <li>All Tier 1 + Tier 2</li>
-        <li>Service Agreements</li>
-        <li>Contract Templates</li>
+        <li>Service / Independent Contractor Agreements</li>
+        <li>Consulting and professional services</li>
+        <li>Joint Venture / Founder arrangements</li>
+        <li>Custom structured agreements</li>
       </ul>
-      <a class="tier-btn" href="tier3.html">Preview Package</a>
-    </div>
+      <div class="per-doc-note">
+        Each Tier 3 checkout covers one document.  
+        If you need more than two, the Entrepreneur Bundle may be a better value.
+      </div>
+      <div class="actions">
+        <a class="btn-primary" href="intake.html?tier=T3">Start Tier 3 Intake →</a>
+        <a class="btn-secondary" href="tier3.html">View Tier 3 Details</a>
+      </div>
+    </article>
 
-    <!-- BUNDLE -->
-    <div class="tier-card highlight">
-      <h3>Entrepreneur Starter Bundle</h3>
-      <div class="tier-price">$149</div>
-      <p>Everything needed to legally launch your business.</p>
+    <!-- Entrepreneur Starter Bundle -->
+    <article class="card bundle-card">
+      <div class="card-header">
+        <span class="bundle-badge">Best for Builders</span>
+        <h2>Entrepreneur Starter Bundle</h2>
+        <div class="price">$149 <small>flat • 30-day access</small></div>
+      </div>
+      <p>
+        For founders who know they’ll need multiple documents in a short window. One payment for a
+        focused 30-day period to prepare the key documents your business needs.
+      </p>
       <ul>
-        <li>Business Formation Templates</li>
-        <li>Operating Agreements</li>
-        <li>Starter Legal Toolkit</li>
+        <li>Access to multiple document types</li>
+        <li>One intake per document during the window</li>
+        <li>Ideal when planning more than two agreements</li>
       </ul>
-      <a class="tier-btn" href="bundle.html">Preview Bundle</a>
-    </div>
+      <div class="per-doc-note">
+        Best choice if you are forming, documenting, and hiring within the same 30 days.
+      </div>
+      <div class="actions">
+        <a class="btn-primary" href="intake.html?tier=ENT">Start Bundle Intake →</a>
+        <a class="btn-secondary" href="bundle.html">View Bundle Details</a>
+      </div>
+    </article>
 
   </div>
 
-</main>
+  <div class="footer-note">
+    E-LegalBoom provides document preparation support and business automation services.
+    We do not offer legal advice or attorney representation.
+  </div>
+
+</section>
 
 </body>
 </html>
