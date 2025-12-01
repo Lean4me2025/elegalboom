@@ -1,339 +1,387 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>E-LegalBoom – Client Intake</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <title>Client Intake – Step 1 | E-LegalBoom</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="stylesheet" href="style.css"/>
+
   <style>
     body {
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: #f5f7fb;
       margin: 0;
-      padding: 0;
-      color: #1f2933;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #f6f8fb;
+      color: #0f172a;
     }
-    .container {
-      max-width: 900px;
-      margin: 32px auto;
-      background: #ffffff;
-      border-radius: 10px;
-      box-shadow: 0 10px 25px rgba(15, 23, 42, 0.08);
-      padding: 22px 24px 28px;
+
+    .page {
+      max-width: 960px;
+      margin: 28px auto 48px;
+      padding: 0 18px;
     }
+
     h1 {
-      margin-top: 0;
-      font-size: 1.6rem;
-      color: #111827;
+      font-size: 1.9rem;
+      margin-bottom: 6px;
+      color: #0b7285;
     }
-    p.lead {
-      margin-top: 4px;
-      color: #4b5563;
-      font-size: 0.95rem;
+
+    .subtitle {
+      font-size: 0.98rem;
+      color: #475569;
+      max-width: 780px;
+      line-height: 1.5;
     }
-    .steps {
-      display: flex;
-      gap: 8px;
-      margin-bottom: 16px;
-      font-size: 0.8rem;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-    }
-    .step {
-      flex: 1;
-      padding: 6px 8px;
-      border-radius: 999px;
-      text-align: center;
-      background: #e5e7eb;
-      color: #6b7280;
-    }
-    .step.active {
-      background: #1d4ed8;
-      color: #ffffff;
-      font-weight: 600;
-    }
-    .selected-tier-banner {
+
+    .summary {
+      margin-top: 14px;
+      padding: 12px 14px;
       background: #eff6ff;
       border-left: 4px solid #2563eb;
-      padding: 10px 12px;
-      border-radius: 6px;
-      margin-bottom: 18px;
-      font-size: 0.95rem;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      color: #1e293b;
     }
-    .selected-tier-banner strong {
+
+    .summary strong {
       color: #1d4ed8;
     }
+
     form {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px 18px;
-      margin-top: 10px;
+      margin-top: 18px;
+      background: #ffffff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      padding: 18px 16px 20px;
+      box-shadow: 0 10px 24px rgba(15,23,42,0.06);
     }
-    .full-width {
-      grid-column: 1 / -1;
+
+    .section {
+      margin-top: 18px;
+      border-top: 1px solid #e5e7eb;
+      padding-top: 12px;
     }
+
+    .section h2 {
+      font-size: 1.05rem;
+      margin: 0 0 8px;
+      color: #0f172a;
+    }
+
     label {
       display: block;
       font-size: 0.85rem;
       font-weight: 600;
       margin-bottom: 4px;
-      color: #374151;
+      color: #111827;
     }
-    input, select, textarea {
+
+    input[type="text"],
+    input[type="email"],
+    input[type="tel"],
+    textarea,
+    select {
       width: 100%;
+      box-sizing: border-box;
       padding: 8px 10px;
       border-radius: 6px;
       border: 1px solid #d1d5db;
       font-size: 0.9rem;
-      box-sizing: border-box;
+      margin-bottom: 8px;
     }
+
     textarea {
-      min-height: 80px;
+      min-height: 70px;
       resize: vertical;
     }
+
     .hint {
-      font-size: 0.75rem;
+      font-size: 0.78rem;
       color: #6b7280;
-      margin-top: 2px;
+      margin-top: -4px;
+      margin-bottom: 6px;
     }
+
+    .required-mark {
+      color: #dc2626;
+      margin-left: 2px;
+    }
+
     .btn-row {
-      grid-column: 1 / -1;
+      margin-top: 18px;
       display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
       justify-content: flex-end;
-      margin-top: 8px;
     }
+
     button[type="submit"] {
-      background: #1d4ed8;
-      color: white;
+      background: #0b7285;
+      color: #ffffff;
       border: none;
       border-radius: 999px;
-      padding: 10px 22px;
+      padding: 10px 20px;
       font-size: 0.95rem;
       font-weight: 600;
       cursor: pointer;
-      box-shadow: 0 8px 20px rgba(37, 99, 235, 0.25);
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
+      box-shadow: 0 10px 24px rgba(11,114,133,0.35);
     }
+
     button[type="submit"]:disabled {
       opacity: 0.6;
       cursor: progress;
       box-shadow: none;
     }
+
+    .secondary-btn {
+      background: transparent;
+      border-radius: 999px;
+      border: 1px solid #0b7285;
+      color: #0b7285;
+      padding: 8px 16px;
+      font-size: 0.85rem;
+      cursor: pointer;
+    }
+
     .status {
-      margin-top: 8px;
+      margin-top: 12px;
       font-size: 0.9rem;
     }
+
     .status.error {
       color: #b91c1c;
     }
+
     .status.success {
       color: #166534;
     }
+
     @media (max-width: 640px) {
-      .container {
-        margin: 16px;
-        padding: 14px 12px 20px;
+      .page {
+        margin: 18px auto 32px;
+        padding: 0 14px;
       }
       form {
-        grid-template-columns: 1fr;
+        padding: 14px 12px 16px;
       }
     }
   </style>
 </head>
+
 <body>
-  <div class="container">
-    <div class="steps">
-      <div class="step">1. Choose Tier</div>
-      <div class="step active">2. Complete Intake</div>
-      <div class="step">3. Pay &amp; Confirm</div>
-    </div>
 
-    <h1>E-LegalBoom – Client Intake</h1>
-    <p class="lead">
-      Tell us what you need so we can prepare your documents correctly before payment.
-    </p>
+<section class="page">
+  <h1>Client Intake – Step 1</h1>
+  <p class="subtitle">
+    This step opens your E-LegalBoom file and assigns your order to the correct tier.
+    You’ll enter basic information here, complete payment next, and then provide detailed document
+    information in Step 2.
+  </p>
 
-    <div class="selected-tier-banner">
-      You selected:
-      <strong><span id="selectedTierText">Not set yet</span></strong>.
-      You can adjust this below if needed.
-    </div>
-
-    <form id="intakeForm">
-      <!-- hidden/system fields -->
-      <input type="hidden" id="tierCode" name="tierCode" value="">
-      <input type="hidden" id="source" name="source" value="E-LegalBoom Website">
-
-      <!-- Tier choice -->
-      <div class="full-width">
-        <label for="tierName">Which tier are you choosing?</label>
-        <select id="tierName" name="tierName" required>
-          <option value="">Select a tier…</option>
-          <option value="Tier 1 – Starter" data-code="T1">Tier 1 – Starter</option>
-          <option value="Tier 2 – Pro" data-code="T2">Tier 2 – Pro</option>
-          <option value="Tier 3 – Mastery" data-code="T3">Tier 3 – Mastery</option>
-          <option value="Entrepreneur / Enterprise" data-code="ENT">Entrepreneur / Enterprise</option>
-        </select>
-        <div class="hint">If you clicked the wrong tier earlier, you can correct it here.</div>
-      </div>
-
-      <!-- Document type -->
-      <div class="full-width">
-        <label for="documentType">What document do you need?</label>
-        <select id="documentType" name="documentType" required>
-          <option value="">Select a document type…</option>
-          <option value="LLC Formation">LLC Formation</option>
-          <option value="Operating Agreement">Operating Agreement</option>
-          <option value="NDA – Non-Disclosure Agreement">NDA – Non-Disclosure Agreement</option>
-          <option value="Independent Contractor Agreement">Independent Contractor Agreement</option>
-          <option value="Partnership Agreement">Partnership Agreement</option>
-          <option value="Employment Agreement">Employment Agreement</option>
-          <option value="Demand Letter">Demand Letter</option>
-          <option value="Other">Other (describe below)</option>
-        </select>
-      </div>
-
-      <div class="full-width">
-        <label for="otherDocument">If “Other”, briefly describe the document.</label>
-        <input type="text" id="otherDocument" name="otherDocument"
-               placeholder="e.g., Joint Venture Agreement, Purchase Option, etc.">
-      </div>
-
-      <!-- Client info -->
-      <div>
-        <label for="firstName">First name</label>
-        <input type="text" id="firstName" name="firstName" required>
-      </div>
-      <div>
-        <label for="lastName">Last name</label>
-        <input type="text" id="lastName" name="lastName" required>
-      </div>
-      <div>
-        <label for="email">Email</label>
-        <input type="email" id="email" name="email" required>
-      </div>
-      <div>
-        <label for="phone">Phone</label>
-        <input type="tel" id="phone" name="phone">
-      </div>
-      <div>
-        <label for="city">City</label>
-        <input type="text" id="city" name="city">
-      </div>
-      <div>
-        <label for="state">State</label>
-        <input type="text" id="state" name="state">
-      </div>
-      <div class="full-width">
-        <label for="businessName">Business / Entity Name (if any)</label>
-        <input type="text" id="businessName" name="businessName">
-      </div>
-
-      <!-- Notes -->
-      <div class="full-width">
-        <label for="notes">Briefly describe your situation or what you want this document to accomplish.</label>
-        <textarea id="notes" name="notes"
-                  placeholder="Example: I am forming a single-member LLC for a consulting business based in California..."></textarea>
-      </div>
-
-      <div class="full-width">
-        <label for="howHeard">How did you hear about E-LegalBoom?</label>
-        <input type="text" id="howHeard" name="howHeard" placeholder="Friend, social media, event, referral, etc.">
-      </div>
-
-      <div class="btn-row">
-        <button type="submit">Submit Intake →</button>
-      </div>
-
-      <div class="status" id="statusMessage"></div>
-    </form>
+  <div class="summary">
+    Tier selected: <strong><span id="tierLabel">(not set)</span></strong><br/>
+    Pricing: <strong><span id="tierPrice">(per document)</span></strong><br/>
+    Note: <span id="tierNote">Each order covers one document. Additional documents require additional orders unless using the Entrepreneur Starter Bundle.</span>
   </div>
 
-  <script>
-    // Your live Apps Script Web App URL (already filled in)
-    const SCRIPT_URL =
-      "https://script.google.com/macros/s/AKfycbxirMiGTQQmUGLUxCcuSX1_qasnfRxBL1ycs08z-LTmF9CxgHeivGrVqGi2D_MuRpt/exec";
+  <form id="intakeForm">
+    <!-- Hidden fields -->
+    <input type="hidden" id="tierCode" name="tierCode" value="">
+    <input type="hidden" id="stage" name="stage" value="intake1">
 
-    const PAY_PAGE_URL = "orders.html"; // adjust if your pay page file name is different
+    <!-- SECTION 1 – Contact & basic info -->
+    <div class="section">
+      <h2>Your Information</h2>
 
-    function getQueryParam(name) {
-      const params = new URLSearchParams(window.location.search);
-      return params.get(name);
+      <label for="fullName">Full name<span class="required-mark">*</span></label>
+      <input type="text" id="fullName" name="fullName" required>
+
+      <label for="email">Email address<span class="required-mark">*</span></label>
+      <input type="email" id="email" name="email" required>
+
+      <label for="phone">Phone number (optional)</label>
+      <input type="tel" id="phone" name="phone">
+
+      <label for="state">State where your business operates or will be formed<span class="required-mark">*</span></label>
+      <input type="text" id="state" name="state" required>
+      <div class="hint">Example: CA, TX, FL, or full state name. This helps us apply the correct rules.</div>
+
+      <label for="businessName">Business / Entity name (if any)</label>
+      <input type="text" id="businessName" name="businessName">
+
+      <label for="businessDescription">What does your business do?</label>
+      <textarea id="businessDescription" name="businessDescription"
+                placeholder="Example: Online coaching and consulting for small businesses."></textarea>
+    </div>
+
+    <!-- SECTION 2 – Document focus (per-document model) -->
+    <div class="section">
+      <h2>Document for This Order</h2>
+
+      <label for="docType">Which document are you purchasing with this order?<span class="required-mark">*</span></label>
+      <select id="docType" name="docType" required>
+        <option value="">Select a document…</option>
+        <!-- Options will be filtered/annotated by tier in JS, but we keep them all here -->
+        <option value="NDA">Mutual NDA</option>
+        <option value="PROMISSORY_NOTE">Promissory Note</option>
+        <option value="SINGLE_MEMBER_LLC">Single-Member LLC Operating Agreement</option>
+        <option value="PARTNERSHIP">Partnership Agreement</option>
+        <option value="TWO_MEMBER_LLC">Two-Member LLC Agreement</option>
+        <option value="BUY_SELL">Buy–Sell / Investor Agreement</option>
+        <option value="SERVICE">Service / Independent Contractor Agreement</option>
+        <option value="CONSULTING">Business Consulting / Services Agreement</option>
+        <option value="JV">Joint Venture / Founder Arrangement</option>
+        <option value="OTHER">Other / Custom Document</option>
+      </select>
+      <div class="hint" id="docHint">
+        You are purchasing one document with this order. If you need more than one document,
+        you can place additional orders or consider the Entrepreneur Starter Bundle.
+      </div>
+
+      <label for="primaryGoal">In 1–3 sentences, what do you want this document to accomplish?<span class="required-mark">*</span></label>
+      <textarea id="primaryGoal" name="primaryGoal" required
+                placeholder="Example: I am loaning $5,000 to a family member and want clear repayment terms in writing."></textarea>
+    </div>
+
+    <!-- SECTION 3 – Confirmation -->
+    <div class="section">
+      <h2>Confirm & Continue</h2>
+      <p style="font-size:0.88rem;color:#4b5563;">
+        After you submit this form, you’ll be directed to secure payment for the selected tier.
+        Once payment is complete, you will receive a link to Step 2 to provide detailed information
+        for this specific document.
+      </p>
+    </div>
+
+    <div class="btn-row">
+      <button type="submit">Submit & Go to Payment →</button>
+      <button type="button" class="secondary-btn" onclick="window.location.href='catalog.html'">
+        Back to Catalog
+      </button>
+    </div>
+
+    <div class="status" id="statusMessage"></div>
+  </form>
+</section>
+
+<script>
+  // Use the same Apps Script endpoint as details.html
+  const SCRIPT_URL =
+    "https://script.google.com/macros/s/AKfycbxirMiGTQQmUGLUxCcuSX1_qasnfRxBL1ycs08z-LTmF9CxgHeivGrVqGi2D_MuRpt/exec";
+
+  function getParam(name) {
+    const params = new URLSearchParams(window.location.search);
+    return params.get(name);
+  }
+
+  function mapTierLabel(code) {
+    const c = (code || "").toUpperCase();
+    if (c === "T1") return "Tier 1 – Startup & Essential Documents";
+    if (c === "T2") return "Tier 2 – Business Foundation Documents";
+    if (c === "T3") return "Tier 3 – Premium Business Agreements";
+    if (c === "ENT") return "Entrepreneur Starter Bundle";
+    return "No tier selected";
+  }
+
+  function mapTierPrice(code) {
+    const c = (code || "").toUpperCase();
+    if (c === "T1") return "$39 per document";
+    if (c === "T2") return "$59 per document";
+    if (c === "T3") return "$99 per document";
+    if (c === "ENT") return "$149 flat • multiple documents within 30-day window";
+    return "(per document)";
+  }
+
+  function mapTierNote(code) {
+    const c = (code || "").toUpperCase();
+    if (c === "ENT") {
+      return "The Entrepreneur Starter Bundle provides access to multiple documents within a 30-day window. " +
+             "You’ll submit one intake per document during that period.";
     }
+    return "Each order covers one document. If you need additional documents, place additional orders or consider the Entrepreneur Starter Bundle.";
+  }
 
-    function syncTierFromSelect() {
-      const tierSelect = document.getElementById("tierName");
-      const selectedOption = tierSelect.options[tierSelect.selectedIndex];
-      const code = selectedOption ? (selectedOption.getAttribute("data-code") || "") : "";
-      document.getElementById("tierCode").value = code;
-      document.getElementById("selectedTierText").textContent =
-        tierSelect.value || "Not set yet";
+  function adjustDocHintForTier(code) {
+    const c = (code || "").toUpperCase();
+    const docHint = document.getElementById("docHint");
+    if (!docHint) return;
+
+    if (c === "ENT") {
+      docHint.textContent =
+        "With the Entrepreneur Starter Bundle, you’ll be able to submit multiple document requests during your 30-day window. " +
+        "This intake applies to one document; you can submit more after this one is processed.";
+    } else {
+      docHint.textContent =
+        "You are purchasing one document with this order. If you need more than one document, " +
+        "you can place additional orders or consider the Entrepreneur Starter Bundle.";
     }
+  }
 
-    document.addEventListener("DOMContentLoaded", () => {
-      const tierParam = (getQueryParam("tier") || "").toUpperCase();
-      const tierSelect = document.getElementById("tierName");
+  document.addEventListener("DOMContentLoaded", () => {
+    const tierCode = getParam("tier") || "";
+    document.getElementById("tierCode").value = tierCode;
+    document.getElementById("tierLabel").textContent = mapTierLabel(tierCode);
+    document.getElementById("tierPrice").textContent = mapTierPrice(tierCode);
+    document.getElementById("tierNote").textContent = mapTierNote(tierCode);
+    adjustDocHintForTier(tierCode);
 
-      // Preselect from ?tier=T1/T2/T3/ENT
-      if (tierParam) {
-        for (let i = 0; i < tierSelect.options.length; i++) {
-          const opt = tierSelect.options[i];
-          if (opt.getAttribute("data-code") === tierParam) {
-            tierSelect.selectedIndex = i;
-            break;
-          }
+    const form = document.getElementById("intakeForm");
+    const statusEl = document.getElementById("statusMessage");
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      statusEl.textContent = "";
+      statusEl.className = "status";
+
+      const submitBtn = form.querySelector('button[type="submit"]');
+      submitBtn.disabled = true;
+      submitBtn.textContent = "Submitting…";
+
+      const formData = new FormData(form);
+      const data = Object.fromEntries(formData.entries());
+
+      try {
+        const resp = await fetch(SCRIPT_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data)
+        });
+
+        const json = await resp.json();
+
+        if (!json.success) {
+          throw new Error(json.error || "Unknown error");
         }
+
+        // Expecting intakeId from Apps Script, if available
+        const tier = tierCode || "";
+        const intakeId = json.intakeId || "";
+        let nextUrl = "orders.html";
+        const params = new URLSearchParams();
+        if (tier) params.set("tier", tier);
+        if (intakeId) params.set("intakeId", intakeId);
+        if (data.docType) params.set("docType", data.docType);
+
+        if ([...params.keys()].length > 0) {
+          nextUrl += "?" + params.toString();
+        }
+
+        statusEl.textContent = "Intake saved. Redirecting to payment…";
+        statusEl.classList.add("success");
+
+        window.location.href = nextUrl;
+
+      } catch (err) {
+        console.error(err);
+        statusEl.textContent =
+          "There was a problem saving your intake. Please try again or contact us if this continues.";
+        statusEl.classList.add("error");
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Submit & Go to Payment →";
       }
-
-      syncTierFromSelect();
-      tierSelect.addEventListener("change", syncTierFromSelect);
-
-      const form = document.getElementById("intakeForm");
-      const statusEl = document.getElementById("statusMessage");
-
-      form.addEventListener("submit", async (e) => {
-        e.preventDefault();
-        statusEl.textContent = "";
-        statusEl.className = "status";
-
-        const submitBtn = form.querySelector('button[type="submit"]');
-        submitBtn.disabled = true;
-        submitBtn.textContent = "Submitting…";
-
-        const formData = new FormData(form);
-        const data = Object.fromEntries(formData.entries());
-
-        try {
-          const resp = await fetch(SCRIPT_URL, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(data)
-          });
-
-          const json = await resp.json();
-          if (!json.success) {
-            throw new Error(json.error || "Unknown error");
-          }
-
-          statusEl.textContent = "Intake received. Redirecting to secure payment…";
-          statusEl.classList.add("success");
-
-          const tierCode = data.tierCode || "T1";
-          const intakeId = encodeURIComponent(json.intakeId || "");
-          const target = `${PAY_PAGE_URL}?tier=${encodeURIComponent(tierCode)}&intakeId=${intakeId}`;
-          window.location.href = target;
-
-        } catch (err) {
-          console.error(err);
-          statusEl.textContent =
-            "There was a problem submitting your intake. Please try again or contact us directly.";
-          statusEl.classList.add("error");
-          submitBtn.disabled = false;
-          submitBtn.textContent = "Submit Intake →";
-        }
-      });
     });
-  </script>
+  });
+</script>
+
 </body>
 </html>
