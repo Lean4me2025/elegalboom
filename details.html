@@ -1,70 +1,84 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>E-LegalBoom – Document Details (Intake 2)</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <title>Document Details – Step 3 | E-LegalBoom</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="stylesheet" href="style.css"/>
+
   <style>
     body {
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       margin: 0;
-      background: #f7f9fb;
-      color: #111827;
-    }
-    .page {
-      max-width: 960px;
-      margin: 24px auto;
-      background: #ffffff;
-      border-radius: 10px;
-      box-shadow: 0 8px 22px rgba(15,23,42,0.08);
-      padding: 20px 22px 26px;
-    }
-    h1 {
-      margin-top: 0;
-      font-size: 1.6rem;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #f6f8fb;
       color: #0f172a;
     }
+
+    .page {
+      max-width: 960px;
+      margin: 28px auto 48px;
+      padding: 0 18px;
+    }
+
+    h1 {
+      font-size: 1.9rem;
+      margin-bottom: 6px;
+      color: #0b7285;
+    }
+
     .subtitle {
-      margin-top: 4px;
       font-size: 0.95rem;
-      color: #4b5563;
+      color: #475569;
+      max-width: 780px;
+      line-height: 1.5;
     }
+
     .summary {
-      margin-top: 12px;
-      background: #eff6ff;
-      border-left: 4px solid #2563eb;
-      padding: 10px 12px;
-      border-radius: 6px;
+      margin-top: 14px;
+      padding: 12px 14px;
+      background: #ecfeff;
+      border-left: 4px solid #0b7285;
+      border-radius: 8px;
       font-size: 0.9rem;
+      color: #1e293b;
     }
+
     .summary strong {
-      color: #1d4ed8;
+      color: #0b7285;
     }
+
     form {
-      margin-top: 16px;
+      margin-top: 18px;
+      background: #ffffff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      padding: 18px 16px 20px;
+      box-shadow: 0 10px 24px rgba(15,23,42,0.06);
     }
+
     .section {
       margin-top: 18px;
       border-top: 1px solid #e5e7eb;
-      padding-top: 14px;
+      padding-top: 12px;
     }
+
     .section h2 {
       font-size: 1.05rem;
-      margin: 0 0 6px;
+      margin: 0 0 8px;
       color: #0f172a;
     }
+
     label {
       display: block;
       font-size: 0.85rem;
       font-weight: 600;
       margin-bottom: 4px;
+      color: #111827;
     }
+
     input[type="text"],
     input[type="email"],
-    input[type="tel"],
-    input[type="number"],
-    textarea,
-    select {
+    textarea {
       width: 100%;
       box-sizing: border-box;
       padding: 8px 10px;
@@ -73,37 +87,30 @@
       font-size: 0.9rem;
       margin-bottom: 8px;
     }
+
     textarea {
-      min-height: 70px;
+      min-height: 80px;
       resize: vertical;
     }
+
     .hint {
       font-size: 0.78rem;
       color: #6b7280;
       margin-top: -4px;
       margin-bottom: 6px;
     }
-    .doc-section {
-      display: none;
-      margin-top: 10px;
-      padding: 10px 12px;
-      background: #f9fafb;
-      border-radius: 8px;
-      border: 1px solid #e5e7eb;
-    }
-    .doc-section.active {
-      display: block;
-    }
+
     .btn-row {
       margin-top: 18px;
       display: flex;
-      justify-content: flex-end;
-      gap: 10px;
       flex-wrap: wrap;
+      gap: 10px;
+      justify-content: flex-end;
     }
+
     button[type="submit"] {
       background: #0b7285;
-      color: white;
+      color: #ffffff;
       border: none;
       border-radius: 999px;
       padding: 10px 20px;
@@ -112,293 +119,191 @@
       cursor: pointer;
       box-shadow: 0 10px 24px rgba(11,114,133,0.35);
     }
+
     button[type="submit"]:disabled {
       opacity: 0.6;
       cursor: progress;
       box-shadow: none;
     }
-    .secondary-btn {
-      background: transparent;
-      border-radius: 999px;
-      border: 1px solid #0b7285;
-      color: #0b7285;
-      padding: 8px 16px;
-      font-size: 0.85rem;
-      cursor: pointer;
-    }
+
     .status {
       margin-top: 12px;
       font-size: 0.9rem;
     }
+
     .status.error {
       color: #b91c1c;
     }
+
     .status.success {
       color: #166534;
     }
-    @media (max-width: 640px) {
-      .page {
-        margin: 12px;
-        padding: 16px 14px 20px;
-      }
+
+    .post-actions {
+      margin-top: 20px;
+      display: none;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .btn-pill {
+      border-radius: 999px;
+      padding: 9px 18px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .btn-primary {
+      background: #0b7285;
+      color: #ffffff;
+      box-shadow: 0 10px 24px rgba(11,114,133,0.35);
+    }
+
+    .btn-secondary {
+      border: 1px solid #0b7285;
+      color: #0b7285;
+      background: #ffffff;
     }
   </style>
 </head>
+
 <body>
-<div class="page">
-  <h1>Document Details – Intake 2</h1>
+
+<section class="page">
+  <h1>Document Details – Step 3</h1>
   <p class="subtitle">
-    Thank you for your purchase. This form collects the detailed information we need
-    to prepare your legal document(s) correctly.
+    This step gathers the information required to prepare your document accurately.
+    Please be as clear and specific as possible. If something does not apply, you may leave it blank.
   </p>
 
   <div class="summary">
-    Order reference: <strong><span id="summaryIntakeId">(not set)</span></strong><br>
-    Package: <strong><span id="summaryTier">(not set)</span></strong>
+    Tier: <strong><span id="tierLabel">(not set)</span></strong><br/>
+    Document: <strong><span id="docLabel">(not set)</span></strong><br/>
+    Intake ID: <span id="intakeDisplay">(not set)</span>
   </div>
 
   <form id="detailsForm">
     <!-- Hidden fields -->
-    <input type="hidden" id="intakeId" name="intakeId" value="">
     <input type="hidden" id="tierCode" name="tierCode" value="">
-    <input type="hidden" id="stage" name="stage" value="details">
+    <input type="hidden" id="intakeId" name="intakeId" value="">
+    <input type="hidden" id="docType" name="docType" value="">
+    <input type="hidden" id="stage" name="stage" value="intake2">
 
-    <!-- SECTION 1 – Basic identification -->
     <div class="section">
-      <h2>Your Information</h2>
+      <h2>Parties Involved</h2>
 
-      <label for="fullName">Full name</label>
-      <input type="text" id="fullName" name="fullName" required>
+      <label for="partyOneName">Your name / entity name</label>
+      <input type="text" id="partyOneName" name="partyOneName">
 
-      <label for="email">Email address</label>
-      <input type="email" id="email" name="email" required>
+      <label for="partyTwoName">Other party name (person or business)</label>
+      <input type="text" id="partyTwoName" name="partyTwoName">
 
-      <label for="phone">Phone number (optional)</label>
-      <input type="tel" id="phone" name="phone">
-
-      <label for="state">State where your business operates or will be formed</label>
-      <input type="text" id="state" name="state" required>
-      <div class="hint">Example: CA, TX, FL, or full state name.</div>
-
-      <label for="businessName">Business / Entity name (if any)</label>
-      <input type="text" id="businessName" name="businessName">
-
-      <label for="businessDescription">What does your business do?</label>
-      <textarea id="businessDescription" name="businessDescription"
-                placeholder="Example: Online coaching and consulting for small businesses."></textarea>
+      <label for="partyRelationship">How are the parties connected?</label>
+      <textarea id="partyRelationship" name="partyRelationship"
+                placeholder="Example: I am hiring this person as a contractor to provide security services at my property."></textarea>
     </div>
 
-    <!-- SECTION 2 – Document type & goal -->
     <div class="section">
-      <h2>Document Focus</h2>
+      <h2>Key Terms</h2>
 
-      <label for="docType">Which document are we focusing on right now?</label>
-      <select id="docType" name="docType" required>
-        <option value="">Select a document…</option>
-        <option value="LLC">LLC Operating Agreement</option>
-        <option value="PARTNERSHIP">Partnership Agreement</option>
-        <option value="PROMISSORY_NOTE">Promissory Note (Loan)</option>
-        <option value="NDA">NDA – Non-Disclosure Agreement (Mutual)</option>
-        <option value="SERVICE">Service / Independent Contractor Agreement</option>
-        <option value="OTHER">Other / Custom</option>
-      </select>
+      <label for="keyAmounts">Key amounts (if any)</label>
+      <textarea id="keyAmounts" name="keyAmounts"
+                placeholder="Example: Loan amount, payment schedule, consulting fee, monthly service amount, etc."></textarea>
 
-      <label for="primaryGoal">In 2–3 sentences, what do you want this document to accomplish?</label>
-      <textarea id="primaryGoal" name="primaryGoal" required
-                placeholder="Example: I am forming an LLC with two owners and need an agreement that shows ownership percentages and how decisions will be made."></textarea>
+      <label for="timing">Timing or term of the agreement</label>
+      <textarea id="timing" name="timing"
+                placeholder="Example: 6-month term, starting March 1, 2026, or month-to-month with 30 days’ notice."></textarea>
+
+      <label for="specialClauses">Any special clauses or conditions to include?</label>
+      <textarea id="specialClauses" name="specialClauses"
+                placeholder="Example: Non-compete, late fees, early termination terms, communication expectations, etc."></textarea>
     </div>
 
-    <!-- SECTION 3 – LLC DETAILS -->
-    <div class="section doc-section" id="section-LLC">
-      <h2>LLC Agreement Details</h2>
-
-      <label for="llcMembers">List all members and their ownership percentages</label>
-      <textarea id="llcMembers" name="llcMembers"
-                placeholder="Example: John Smith – 60%, Maria Lopez – 40%"></textarea>
-
-      <label for="llcManagement">How will the LLC be managed?</label>
-      <select id="llcManagement" name="llcManagement">
-        <option value="">Select…</option>
-        <option value="MEMBER_MANAGED">All members manage (member-managed)</option>
-        <option value="MANAGER_MANAGED">One or more managers manage (manager-managed)</option>
-        <option value="NOT_SURE">Not sure yet</option>
-      </select>
-
-      <label for="llcEffectiveDate">When should this agreement become effective?</label>
-      <input type="text" id="llcEffectiveDate" name="llcEffectiveDate"
-             placeholder="Example: January 1, 2026">
-
-      <label for="llcNotes">Anything else we should know about your LLC structure?</label>
-      <textarea id="llcNotes" name="llcNotes"></textarea>
-    </div>
-
-    <!-- SECTION 4 – PARTNERSHIP DETAILS -->
-    <div class="section doc-section" id="section-PARTNERSHIP">
-      <h2>Partnership Agreement Details</h2>
-
-      <label for="partners">Partner names and roles</label>
-      <textarea id="partners" name="partners"
-                placeholder="Example: John – handles sales; Maria – handles operations."></textarea>
-
-      <label for="profitSplit">How will profits and losses be shared?</label>
-      <textarea id="profitSplit" name="profitSplit"
-                placeholder="Example: 50/50; or John 60%, Maria 40%."></textarea>
-
-      <label for="capitalContributions">What is each partner contributing (money, property, services)?</label>
-      <textarea id="capitalContributions" name="capitalContributions"></textarea>
-
-      <label for="decisionMaking">How will major decisions be made?</label>
-      <textarea id="decisionMaking" name="decisionMaking"
-                placeholder="Example: unanimous consent; majority vote; managing partner decides."></textarea>
-
-      <label for="partnershipNotes">Anything else we should know about how the partnership will operate?</label>
-      <textarea id="partnershipNotes" name="partnershipNotes"></textarea>
-    </div>
-
-    <!-- SECTION 5 – PROMISSORY NOTE DETAILS -->
-    <div class="section doc-section" id="section-PROMISSORY_NOTE">
-      <h2>Promissory Note (Loan) Details</h2>
-
-      <label for="borrower">Borrower (full name or business)</label>
-      <input type="text" id="borrower" name="borrower">
-
-      <label for="lender">Lender (full name or business)</label>
-      <input type="text" id="lender" name="lender">
-
-      <label for="loanAmount">Loan amount</label>
-      <input type="text" id="loanAmount" name="loanAmount" placeholder="Example: $10,000">
-
-      <label for="interestRate">Interest rate (per year), if any</label>
-      <input type="text" id="interestRate" name="interestRate" placeholder="Example: 5% per year">
-
-      <label for="paymentTerms">How will payments be made?</label>
-      <textarea id="paymentTerms" name="paymentTerms"
-                placeholder="Example: $300/month starting March 1, 2026, due on the 1st of each month."></textarea>
-
-      <label for="loanNotes">Anything else you want included (late fees, grace period, etc.)?</label>
-      <textarea id="loanNotes" name="loanNotes"></textarea>
-    </div>
-
-    <!-- SECTION 6 – NDA DETAILS -->
-    <div class="section doc-section" id="section-NDA">
-      <h2>Mutual NDA Details</h2>
-
-      <label for="ndaParty1">Party 1 legal name</label>
-      <input type="text" id="ndaParty1" name="ndaParty1">
-
-      <label for="ndaParty2">Party 2 legal name</label>
-      <input type="text" id="ndaParty2" name="ndaParty2">
-
-      <label for="ndaPurpose">Briefly describe what you’re sharing and why</label>
-      <textarea id="ndaPurpose" name="ndaPurpose"
-                placeholder="Example: exploring a joint venture and sharing financial and marketing plans."></textarea>
-
-      <label for="ndaTerm">How long should the NDA last?</label>
-      <input type="text" id="ndaTerm" name="ndaTerm" placeholder="Example: 2 years from the effective date">
-
-      <label for="ndaNotes">Anything else we should know (exclusions, special terms)?</label>
-      <textarea id="ndaNotes" name="ndaNotes"></textarea>
-    </div>
-
-    <!-- SECTION 7 – SERVICE / CONTRACTOR DETAILS -->
-    <div class="section doc-section" id="section-SERVICE">
-      <h2>Service / Independent Contractor Agreement Details</h2>
-
-      <label for="serviceClient">Client name (person or business)</label>
-      <input type="text" id="serviceClient" name="serviceClient">
-
-      <label for="serviceProvider">Service provider name (person or business)</label>
-      <input type="text" id="serviceProvider" name="serviceProvider">
-
-      <label for="serviceScope">Scope of work – what services will be provided?</label>
-      <textarea id="serviceScope" name="serviceScope"></textarea>
-
-      <label for="serviceComp">How will the provider be paid (rate, schedule)?</label>
-      <textarea id="serviceComp" name="serviceComp"
-                placeholder="Example: $1,500 flat fee, 50% upfront, 50% when project is completed."></textarea>
-
-      <label for="serviceTerm">When does the agreement start and end?</label>
-      <textarea id="serviceTerm" name="serviceTerm"
-                placeholder="Example: Starts March 1, 2026; continues month-to-month until either party cancels with 30 days’ notice."></textarea>
-
-      <label for="serviceNotes">Anything else we should know (non-compete, non-solicit, etc.)?</label>
-      <textarea id="serviceNotes" name="serviceNotes"></textarea>
-    </div>
-
-    <!-- SECTION 8 – OTHER / CUSTOM -->
-    <div class="section doc-section" id="section-OTHER">
-      <h2>Other / Custom Document Details</h2>
-
-      <label for="otherDescription">Describe the type of document you need</label>
-      <textarea id="otherDescription" name="otherDescription"></textarea>
-
-      <label for="otherKeyPoints">List any key terms you know you want included</label>
-      <textarea id="otherKeyPoints" name="otherKeyPoints"></textarea>
-    </div>
-
-    <!-- FINAL NOTES -->
     <div class="section">
-      <h2>Final Notes</h2>
-      <label for="extraNotes">Any other details or questions for us?</label>
-      <textarea id="extraNotes" name="extraNotes"></textarea>
+      <h2>Anything Else We Should Know?</h2>
+      <label for="extraNotes">Additional context or instructions</label>
+      <textarea id="extraNotes" name="extraNotes"
+                placeholder="Anything specific you want reflected in this agreement or that we should be aware of."></textarea>
     </div>
 
     <div class="btn-row">
-      <button type="submit">Submit Document Details →</button>
-      <button type="button" class="secondary-btn" onclick="window.location.href='index.html'">
-        Return to Home
-      </button>
+      <button type="submit">Submit Details</button>
     </div>
 
     <div class="status" id="statusMessage"></div>
   </form>
-</div>
+
+  <div id="postActions" class="post-actions">
+    <a id="anotherSameTier" class="btn-pill btn-primary" href="#">
+      Order another document in this tier →
+    </a>
+    <a class="btn-pill btn-secondary" href="catalog.html">
+      Choose a different tier →
+    </a>
+  </div>
+</section>
 
 <script>
-  // Use the same Apps Script endpoint as your short intake
   const SCRIPT_URL =
     "https://script.google.com/macros/s/AKfycbxirMiGTQQmUGLUxCcuSX1_qasnfRxBL1ycs08z-LTmF9CxgHeivGrVqGi2D_MuRpt/exec";
 
   function getParam(name) {
-    const params = new URLSearchParams(window.location.search);
-    return params.get(name);
+    return new URLSearchParams(window.location.search).get(name) || "";
   }
 
-  function mapTierName(tierCode) {
-    const code = (tierCode || "").toUpperCase();
-    if (code === "T1") return "Tier 1 – Basic Filing Support";
-    if (code === "T2") return "Tier 2 – Standard Legal Foundation";
-    if (code === "T3") return "Tier 3 – Premium Business Package";
+  function tierLabel(code) {
+    if (code === "T1") return "Tier 1 – Startup & Essential Documents";
+    if (code === "T2") return "Tier 2 – Business Foundation Documents";
+    if (code === "T3") return "Tier 3 – Premium Business Agreements";
     if (code === "ENT") return "Entrepreneur Starter Bundle";
-    return "(Not specified)";
+    return "(not set)";
   }
 
-  function onDocTypeChange() {
-    const value = document.getElementById("docType").value;
-    const sections = document.querySelectorAll(".doc-section");
-    sections.forEach(sec => sec.classList.remove("active"));
-
-    if (!value) return;
-    const active = document.getElementById("section-" + value);
-    if (active) {
-      active.classList.add("active");
-    }
+  function prettyDoc(code) {
+    const map = {
+      NDA: "Mutual NDA",
+      PROMISSORY_NOTE: "Promissory Note",
+      SINGLE_MEMBER_LLC: "Single-Member LLC Agreement",
+      PARTNERSHIP: "Partnership Agreement",
+      TWO_MEMBER_LLC: "Two-Member LLC Agreement",
+      BUY_SELL: "Buy–Sell / Investor Agreement",
+      SERVICE: "Service / Contractor Agreement",
+      CONSULTING: "Consulting Agreement",
+      JV: "Joint Venture Agreement",
+      OTHER: "Custom Document"
+    };
+    return map[code] || "(not specified)";
   }
 
   document.addEventListener("DOMContentLoaded", () => {
-    const intakeId = getParam("intakeId") || "";
-    const tier = getParam("tier") || "";
+    const tier = getParam("tier").toUpperCase();
+    const intakeId = getParam("intakeId");
+    const docType = getParam("docType");
 
-    document.getElementById("intakeId").value = intakeId;
     document.getElementById("tierCode").value = tier;
+    document.getElementById("intakeId").value = intakeId;
+    document.getElementById("docType").value = docType;
 
-    document.getElementById("summaryIntakeId").textContent = intakeId || "(not set)";
-    document.getElementById("summaryTier").textContent = mapTierName(tier);
-
-    document.getElementById("docType").addEventListener("change", onDocTypeChange);
+    document.getElementById("tierLabel").textContent = tierLabel(tier);
+    document.getElementById("docLabel").textContent = prettyDoc(docType);
+    document.getElementById("intakeDisplay").textContent = intakeId || "(not set)";
 
     const form = document.getElementById("detailsForm");
     const statusEl = document.getElementById("statusMessage");
+    const postActions = document.getElementById("postActions");
+    const anotherSameTier = document.getElementById("anotherSameTier");
+
+    // Configure reorder link: go back to intake with prefillId = this intakeId
+    if (tier && intakeId) {
+      const url = new URL(window.location.origin + "/intake.html");
+      url.searchParams.set("tier", tier);
+      url.searchParams.set("prefillId", intakeId);
+      // For static hosting on same folder, keep relative form:
+      const relative = `intake.html?tier=${encodeURIComponent(tier)}&prefillId=${encodeURIComponent(intakeId)}`;
+      anotherSameTier.href = relative;
+    }
 
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
@@ -424,21 +329,25 @@
           throw new Error(json.error || "Unknown error");
         }
 
-        statusEl.textContent = "Thank you. We’ve received your document details.";
+        statusEl.textContent = "Details received. Your document will now move into preparation.";
         statusEl.classList.add("success");
-        submitBtn.disabled = false;
-        submitBtn.textContent = "Submit Document Details →";
+        submitBtn.disabled = true;
+        submitBtn.textContent = "Submitted";
+
+        // Show reorder options
+        postActions.style.display = "flex";
 
       } catch (err) {
         console.error(err);
         statusEl.textContent =
-          "There was a problem submitting your details. Please try again or contact us.";
+          "There was a problem saving your details. Please try again or contact us if this continues.";
         statusEl.classList.add("error");
         submitBtn.disabled = false;
-        submitBtn.textContent = "Submit Document Details →";
+        submitBtn.textContent = "Submit Details";
       }
     });
   });
 </script>
+
 </body>
 </html>
