@@ -1,446 +1,249 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Document Samples | E-LegalBoom</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta charset="UTF-8">
+<title>Document Preview | E-LegalBoom</title>
 
-  <!-- Global site styles -->
-  <link rel="stylesheet" href="style.css" />
+<style>
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f4f7fb;
+}
 
-  <!-- Page-specific layout for the left list / right preview -->
-  <style>
-    .samples-hero {
-      max-width: 1100px;
-      margin: 2rem auto 1rem;
-      padding: 0 1.5rem;
-    }
+.container {
+  display: flex;
+  height: 100vh;
+}
 
-    .samples-hero h1 {
-      font-size: 2rem;
-      margin-bottom: 0.5rem;
-    }
+/* LEFT SIDE PANEL */
+.sidebar {
+  width: 280px;
+  background: #0e2a47;
+  color: white;
+  padding: 15px;
+  box-sizing: border-box;
+}
 
-    .samples-hero p {
-      margin: 0.25rem 0;
-      color: #444;
-    }
+.sidebar h3 {
+  margin-top: 0;
+  text-align: center;
+}
 
-    .preview-layout {
-      max-width: 1100px;
-      margin: 0 auto 2.5rem;
-      padding: 0 1.5rem;
-      display: grid;
-      grid-template-columns: minmax(250px, 320px) minmax(0, 1fr);
-      gap: 1.75rem;
-    }
+.doc-button {
+  background: #123a63;
+  border: none;
+  width: 100%;
+  text-align: left;
+  padding: 10px;
+  margin-bottom: 8px;
+  color: white;
+  cursor: pointer;
+  border-radius: 4px;
+}
 
-    /* Left column – document list */
-    .doc-list-panel {
-      background: #f7f7fb;
-      border-radius: 8px;
-      padding: 1rem 1.25rem;
-      border: 1px solid #e0e0ee;
-    }
+.doc-button:hover {
+  background: #1b4f8c;
+}
 
-    .doc-list-panel h2 {
-      font-size: 1rem;
-      margin-bottom: 0.4rem;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      color: #666;
-    }
+.doc-button.active {
+  background: #4ad0ff;
+  color: black;
+}
 
-    .doc-list-panel p {
-      font-size: 0.9rem;
-      color: #666;
-      margin-bottom: 0.75rem;
-    }
+/* RIGHT SIDE */
+.preview-panel {
+  flex: 1;
+  padding: 25px;
+  background: white;
+  overflow-y: auto;
+}
 
-    .doc-list {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-    }
+.preview-header {
+  border-bottom: 2px solid #ddd;
+  padding-bottom: 10px;
+  margin-bottom: 15px;
+}
 
-    .doc-list-item {
-      border-radius: 6px;
-      padding: 0.55rem 0.65rem;
-      margin-bottom: 0.25rem;
-      border: 1px solid transparent;
-      cursor: pointer;
-      background: #fff;
-      font-size: 0.95rem;
-      display: flex;
-      flex-direction: column;
-    }
+.preview-header h2 {
+  margin: 0;
+}
 
-    .doc-list-item:hover {
-      border-color: #2b73d3;
-      background: #f0f6ff;
-    }
+.meta {
+  color: #555;
+  margin: 5px 0;
+}
 
-    .doc-list-item.active {
-      border-color: #2b73d3;
-      background: #e2efff;
-    }
-
-    .doc-list-item-title {
-      font-weight: 600;
-      margin-bottom: 0.1rem;
-    }
-
-    .doc-list-item-meta {
-      font-size: 0.8rem;
-      color: #666;
-    }
-
-    /* Right column – big preview */
-    .preview-panel {
-      border-radius: 8px;
-      border: 1px solid #e0e0ee;
-      background: #ffffff;
-      padding: 1.25rem 1.5rem;
-      min-height: 340px;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .preview-header {
-      margin-bottom: 0.75rem;
-    }
-
-    .preview-title {
-      font-size: 1.2rem;
-      font-weight: 600;
-      margin-bottom: 0.25rem;
-    }
-
-    .preview-meta {
-      font-size: 0.85rem;
-      color: #777;
-    }
-
-    .preview-note {
-      font-size: 0.8rem;
-      color: #888;
-      margin-top: 0.35rem;
-    }
-
-    .preview-body {
-      margin-top: 0.75rem;
-      padding: 0.75rem 0.9rem;
-      background: #fbfbfd;
-      border-radius: 6px;
-      border: 1px dashed #d3d3e5;
-      font-family: "Courier New", Courier, monospace;
-      font-size: 0.85rem;
-      line-height: 1.45;
-      white-space: pre-wrap;
-      color: #333;
-      flex: 1;
-      overflow-y: auto;
-    }
-
-    /* Tier CTA row */
-    .tier-cta-row {
-      max-width: 1100px;
-      margin: 0 auto 3rem;
-      padding: 0 1.5rem;
-      border-top: 1px solid #eee;
-      padding-top: 1rem;
-    }
-
-    .tier-cta-row p {
-      margin-bottom: 0.75rem;
-      color: #444;
-    }
-
-    .tier-buttons {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-    }
-
-    .tier-btn {
-      border-radius: 999px;
-      padding: 0.5rem 1.25rem;
-      border: 1px solid #2b73d3;
-      background: #2b73d3;
-      color: #fff;
-      font-size: 0.9rem;
-      cursor: pointer;
-      text-decoration: none;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      white-space: nowrap;
-    }
-
-    .tier-btn.secondary {
-      background: #fff;
-      color: #2b73d3;
-    }
-
-    .tier-btn:hover {
-      opacity: 0.9;
-    }
-
-    /* Responsive */
-    @media (max-width: 800px) {
-      .preview-layout {
-        grid-template-columns: 1fr;
-      }
-
-      .doc-list-panel {
-        order: 1;
-      }
-
-      .preview-panel {
-        order: 2;
-      }
-    }
-  </style>
+.preview-doc {
+  white-space: pre-wrap;
+  line-height: 1.6;
+  font-family: "Courier New", monospace;
+  background: #fafafa;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+}
+</style>
 </head>
 
 <body>
-  <!-- Optional: reuse your site-wide header / nav if it exists -->
-  <!-- include header here if you have one (e.g. <header class="site-header">...) -->
 
-  <main>
-    <section class="samples-hero">
-      <h1>Document Samples</h1>
-      <p>Browse representative samples of how your documents are structured and written.</p>
-      <p>Each document is customized based on your intake and the state where your business operates.</p>
-    </section>
+<div class="container">
 
-    <section class="preview-layout">
-      <!-- LEFT: document list -->
-      <aside class="doc-list-panel" aria-label="Sample document list">
-        <h2>Choose a sample</h2>
-        <p>Pick a document on the left to see a larger preview.</p>
+<!-- LEFT PANEL -->
+<div class="sidebar">
+  <h3>Documents</h3>
 
-        <ul class="doc-list" id="docList">
-          <!-- Items are wired to JS by data-doc keys -->
-          <li class="doc-list-item active" data-doc="nda">
-            <span class="doc-list-item-title">Mutual NDA (Non-Disclosure Agreement)</span>
-            <span class="doc-list-item-meta">Typical tier: Tier 1 · For confidential discussions</span>
-          </li>
+  <button class="doc-button active" onclick="loadDoc('nda', this)">Mutual NDA</button>
+  <button class="doc-button" onclick="loadDoc('prom', this)">Promissory Note</button>
+  <button class="doc-button" onclick="loadDoc('llc', this)">LLC Operating Agreement</button>
+  <button class="doc-button" onclick="loadDoc('partnership', this)">Partnership Agreement</button>
+  <button class="doc-button" onclick="loadDoc('service', this)">Service Agreement</button>
+  <button class="doc-button" onclick="loadDoc('contractor', this)">Contractor Agreement</button>
 
-          <li class="doc-list-item" data-doc="promissory">
-            <span class="doc-list-item-title">Promissory Note</span>
-            <span class="doc-list-item-meta">Typical tier: Tier 1 · For loans and repayment terms</span>
-          </li>
+  <hr>
+  <button class="doc-button" onclick="location.href='index.html'">← Back to Catalog</button>
+</div>
 
-          <li class="doc-list-item" data-doc="operating">
-            <span class="doc-list-item-title">Single-Member LLC Operating Agreement</span>
-            <span class="doc-list-item-meta">Typical tier: Tier 1 · For single-owner LLC structure</span>
-          </li>
+<!-- RIGHT PANEL -->
+<div class="preview-panel">
 
-          <li class="doc-list-item" data-doc="partnership">
-            <span class="doc-list-item-title">Partnership Agreement</span>
-            <span class="doc-list-item-meta">Typical tier: Tier 2 · For partners, profit split, and exits</span>
-          </li>
+  <div class="preview-header">
+    <h2 id="docTitle">Mutual NDA (Non-Disclosure Agreement)</h2>
 
-          <li class="doc-list-item" data-doc="service">
-            <span class="doc-list-item-title">Service Agreement</span>
-            <span class="doc-list-item-meta">Typical tier: Tier 3 · For client services & scope of work</span>
-          </li>
+    <div class="meta"><strong>Typical Tier:</strong> <span id="docTier">Tier 1</span></div>
+    <div class="meta" id="docPurpose">For confidential business conversations</div>
+    <div class="meta">
+      Names, dates, and clauses are placeholders.  
+      Your document will be customized after purchase.
+    </div>
+  </div>
 
-          <li class="doc-list-item" data-doc="contractor">
-            <span class="doc-list-item-title">Independent Contractor Agreement</span>
-            <span class="doc-list-item-meta">Typical tier: Tier 3 · For non-employee contractors</span>
-          </li>
-        </ul>
-      </aside>
-
-      <!-- RIGHT: big preview -->
-      <section class="preview-panel" aria-live="polite">
-        <header class="preview-header">
-          <div id="previewTitle" class="preview-title">Mutual NDA (Non-Disclosure Agreement)</div>
-          <div id="previewMeta" class="preview-meta">
-            Sample only · Final language is tailored to your intake and state law.
-          </div>
-          <div class="preview-note">
-            Names, dates, and terms here are placeholders. Your completed document will be customized based on your answers.
-          </div>
-        </header>
-
-        <article id="previewBody" class="preview-body">
+  <div class="preview-doc" id="docText">
 MUTUAL NON-DISCLOSURE AGREEMENT (SAMPLE)
 
-This Agreement is entered into between the Parties
-for the purpose of exploring a potential business
-relationship. Each Party agrees not to disclose
-confidential information received from the other
-Party, except as allowed in this Agreement.
+This Agreement is entered into between the Parties for the purpose of evaluating a potential business relationship.
 
-• "Confidential Information" includes non-public
-  business, financial, technical, or strategic data.
-• Information must be protected and used only for
-  evaluating the proposed business relationship.
-• At the end of discussions, each Party agrees to
-  return or destroy confidential materials.
+Each Party agrees not to disclose confidential information received from the other Party except as permitted in this Agreement.
 
-Actual terms (including state-specific provisions,
-remedies, and definitions) are customized when you
-complete your E-LegalBoom intake.
-        </article>
-      </section>
-    </section>
+Confidential Information includes business, financial, technical, or strategic data.
 
-    <!-- Tier selection CTA row -->
-    <section class="tier-cta-row">
-      <p><strong>Ready to move from samples to your own document?</strong></p>
-      <div class="tier-buttons">
-        <a class="tier-btn" href="tier1.html">Start Tier 1 Intake</a>
-        <a class="tier-btn secondary" href="tier2.html">Start Tier 2 Intake</a>
-        <a class="tier-btn secondary" href="tier3.html">Start Tier 3 Intake</a>
-        <a class="tier-btn secondary" href="bundle.html">Entrepreneur Starter Bundle</a>
-      </div>
-    </section>
-  </main>
+Information must be protected and used only for evaluating discussions.
 
-  <!-- Simple script to switch the preview when a document is clicked -->
-  <script>
-    const SAMPLE_DOCS = {
-      nda: {
-        title: "Mutual NDA (Non-Disclosure Agreement)",
-        meta: "Typical tier: Tier 1 · For confidential business discussions.",
-        body: `MUTUAL NON-DISCLOSURE AGREEMENT (SAMPLE)
+Upon termination, each Party agrees to return or destroy confidential materials.
+  </div>
 
-This Agreement is entered into between the Parties
-for the purpose of exploring a potential business
-relationship. Each Party agrees not to disclose
-confidential information received from the other
-Party, except as allowed in this Agreement.
+</div>
 
-• "Confidential Information" includes non-public
-  business, financial, technical, or strategic data.
-• Information must be protected and used only for
-  evaluating the proposed business relationship.
-• At the end of discussions, each Party agrees to
-  return or destroy confidential materials.
+</div>
 
-Your final NDA is customized to your state, parties,
-and business situation based on your E-LegalBoom intake.`
-      },
-      promissory: {
-        title: "Promissory Note",
-        meta: "Typical tier: Tier 1 · For loans between individuals or businesses.",
-        body: `PROMISSORY NOTE (SAMPLE)
+<script>
 
-For value received, Borrower promises to pay Lender
-the principal sum of $______, with interest at
-_____ % annually.
+const docs = {
 
-Payments shall begin on ______ and continue until
-the full balance of principal and interest is paid.
+nda: {
+  title: "Mutual NDA (Non-Disclosure Agreement)",
+  tier: "Tier 1",
+  purpose: "For confidential business conversations",
+  body: `
+MUTUAL NON-DISCLOSURE AGREEMENT (SAMPLE)
 
-This sample shows structure only. Your completed
-Promissory Note will include exact amounts, dates,
-interest rate, and payment schedule from your intake.`
-      },
-      operating: {
-        title: "Single-Member LLC Operating Agreement",
-        meta: "Typical tier: Tier 1 · For one-owner LLCs that need clear structure.",
-        body: `OPERATING AGREEMENT (SAMPLE)
+This Agreement is entered into between the Parties for exploring a potential business relationship.
 
-This Agreement establishes the ownership,
-management authority, and operating procedures
-for the Limited Liability Company.
+Each Party agrees not to disclose confidential information.
 
-Articles commonly address:
-• Formation and purpose of the LLC
-• Capital contributions by the Member
-• Management powers and duties
-• Allocation and distribution of profits and losses
-• Recordkeeping, tax treatment, and dissolution
+Confidential Information includes financial, technical, and strategic data.
 
-Your completed Operating Agreement is drafted to
-match your state, business name, and structure.`
-      },
-      partnership: {
-        title: "Partnership Agreement",
-        meta: "Typical tier: Tier 2 · For partnerships with shared ownership.",
-        body: `PARTNERSHIP AGREEMENT (SAMPLE)
+Information must be protected.
 
-This Agreement defines the rights, duties, and
-obligations of the Partners in operating their
-business together.
+Upon conclusion, materials must be returned or destroyed.
+`
+},
 
-Common sections include:
-• Ownership percentages and capital contributions
-• Profit and loss sharing
-• Decision-making authority and voting
-• Partner withdrawals, buy-outs, and dissolution
+prom: {
+  title: "Promissory Note",
+  tier: "Tier 1",
+  purpose: "Documents money owed and repayment terms",
+  body: `
+PROMISSORY NOTE
 
-Your final agreement reflects the specific partners,
-percentages, and terms you provide in your intake.`
-      },
-      service: {
-        title: "Service Agreement",
-        meta: "Typical tier: Tier 3 · For client services with defined scope.",
-        body: `SERVICE AGREEMENT (SAMPLE)
+Borrower agrees to pay Lender the amount loaned plus interest.
 
-Provider agrees to perform services for Client
-under the terms set forth herein.
+Payment schedule, default terms, and governing law are defined herein.
 
-Key topics typically covered:
-• Scope of services and deliverables
-• Fees, invoicing, and payment timing
-• Timeline and milestones
-• Revisions, approvals, and change requests
-• Intellectual property and confidentiality
-• Term, termination, and dispute resolution
+Both Parties agree to binding repayment terms.
+`
+},
 
-Your final Service Agreement is written around your
-actual services, pricing, and state requirements.`
-      },
-      contractor: {
-        title: "Independent Contractor Agreement",
-        meta: "Typical tier: Tier 3 · For non-employee contractors.",
-        body: `INDEPENDENT CONTRACTOR AGREEMENT (SAMPLE)
+llc: {
+  title: "Single-Member LLC Operating Agreement",
+  tier: "Tier 1",
+  purpose: "Defines ownership and operating rules",
+  body: `
+LLC OPERATING AGREEMENT
 
-This Agreement sets terms for an independent
-contractor who is not an employee of the business.
+This Agreement establishes ownership, management authority,
+and capital structure of the company.
 
-Typical provisions include:
-• Services to be performed and performance standards
-• Payment structure (flat fee, hourly, or per project)
-• Responsibility for taxes and benefits
-• Ownership of work product
-• Confidentiality and non-solicitation
-• Term and termination
+Responsibilities and profit distribution are defined.
+`
+},
 
-Your completed agreement applies your real names,
-rates, and state-specific language based on intake.`
-      }
-    };
+partnership: {
+  title: "Partnership Agreement",
+  tier: "Tier 2",
+  purpose: "Defines ownership and decision-making",
+  body: `
+PARTNERSHIP AGREEMENT
 
-    const docList = document.getElementById("docList");
-    const previewTitle = document.getElementById("previewTitle");
-    const previewMeta = document.getElementById("previewMeta");
-    const previewBody = document.getElementById("previewBody");
+This Agreement forms a business partnership.
 
-    docList.addEventListener("click", (event) => {
-      const item = event.target.closest(".doc-list-item");
-      if (!item) return;
+Profit shares, authority, and exit terms are set forth.
+`
+},
 
-      // Set active styling
-      document
-        .querySelectorAll(".doc-list-item")
-        .forEach((el) => el.classList.remove("active"));
-      item.classList.add("active");
+service: {
+  title: "Service Agreement",
+  tier: "Tier 3",
+  purpose: "Client service terms and deliverables",
+  body: `
+SERVICE AGREEMENT
 
-      const key = item.getAttribute("data-doc");
-      const doc = SAMPLE_DOCS[key];
-      if (!doc) return;
+Provider agrees to perform services for Client.
 
-      previewTitle.textContent = doc.title;
-      previewMeta.textContent = doc.meta;
-      previewBody.textContent = doc.body;
-    });
-  </script>
+Compensation, scope, and termination are defined.
+`
+},
+
+contractor: {
+  title: "Independent Contractor Agreement",
+  tier: "Tier 3",
+  purpose: "Defines contractor job terms",
+  body: `
+INDEPENDENT CONTRACTOR AGREEMENT
+
+This Agreement establishes independent contractor status.
+
+Responsibilities, compensation, and liability are outlined.
+`
+}
+
+};
+
+function loadDoc(key, btn) {
+
+  document.querySelectorAll(".doc-button").forEach(b => b.classList.remove("active"));
+  btn.classList.add("active");
+
+  const doc = docs[key];
+
+  document.getElementById("docTitle").innerText = doc.title;
+  document.getElementById("docTier").innerText = doc.tier;
+  document.getElementById("docPurpose").innerText = doc.purpose;
+  document.getElementById("docText").innerText = doc.body;
+
+}
+</script>
+
 </body>
 </html>
