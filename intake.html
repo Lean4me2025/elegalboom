@@ -6,7 +6,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="style.css" />
   <style>
-    /* Simple default styling in case style.css isn't loaded */
     body {
       margin: 0;
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
@@ -38,9 +37,8 @@
       font-size: 0.9rem;
       color: #1e293b;
     }
-    .summary strong {
-      color: #0f172a;
-    }
+    .summary strong { color: #0f172a; }
+
     form {
       margin-top: 24px;
       padding: 18px 16px 22px;
@@ -93,17 +91,6 @@
       color: #64748b;
       margin-top: 2px;
     }
-    .status {
-      margin-top: 16px;
-      font-size: 0.9rem;
-      min-height: 1.2em;
-    }
-    .status.success {
-      color: #15803d;
-    }
-    .status.error {
-      color: #b91c1c;
-    }
     button[type="submit"] {
       margin-top: 18px;
       padding: 10px 18px;
@@ -144,16 +131,19 @@
       </div>
       <div class="tier-row">
         <strong>Note:</strong>
-        <span id="tierNote">Each order covers one set of documents within a 30-day window.</span>
+        <span id="tierNote">Each order covers one document (or document set) within a 30-day window.</span>
       </div>
     </div>
 
-    <form id="intakeForm">
+    <!-- IMPORTANT: action points directly to your Apps Script Web App /exec URL -->
+    <form
+      id="intakeForm"
+      method="POST"
+      action="PASTE_YOUR_APPS_SCRIPT_WEB_APP_URL_HERE"
+    >
       <!-- Hidden fields -->
-      <input type="hidden" id="tierCode"   name="tier"   value="">
-      <input type="hidden" id="stage"      name="stage"  value="intake">
-      <input type="hidden" id="docType"    name="docType" value="">
-      <input type="hidden" id="intakeId"   name="intakeId" value="">
+      <input type="hidden" id="tierCode"  name="tier"    value="">
+      <input type="hidden" id="docType"   name="docType" value="">
 
       <div class="section-title">Section 1 – Contact & basic information</div>
 
@@ -196,14 +186,11 @@
       <textarea id="primaryGoal" name="primaryGoal"></textarea>
 
       <button type="submit">Submit &amp; Go to Payment →</button>
-
-      <div class="status" id="statusMessage"></div>
     </form>
   </div>
 
   <script>
-    // 🔗 YOUR APPS SCRIPT WEB APP URL
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxirMiGTQ0QmUGLUxCcuSX1_qasnfRxBL1ycs08z-LTmF9CxgHeivGrVqGi2D_MuRpt/exec"; // e.g. https://script.google.com/macros/s/XXXX/exec
+    // No network calls here. Just read the ?tier= from URL and update the summary.
 
     function getParam(name) {
       const params = new URLSearchParams(window.location.search);
@@ -248,70 +235,6 @@
       if (labelEl) labelEl.textContent = mapTierLabel(tierCode);
       if (priceEl) priceEl.textContent = mapTierPrice(tierCode);
       if (noteEl)  noteEl.textContent  = mapTierNote(tierCode);
-    });
-
-    const form = document.getElementById("intakeForm");
-    const statusEl = document.getElementById("statusMessage");
-
-    form.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      statusEl.textContent = "";
-      statusEl.className = "status";
-
-      const submitBtn = form.querySelector('button[type="submit"]');
-      submitBtn.disabled = true;
-      submitBtn.textContent = "Submitting…";
-
-      const formData = new FormData(form);
-      const data = Object.fromEntries(formData.entries());
-
-      if (!data.stage) data.stage = "intake";
-
-      try {
-        const resp = await fetch(SCRIPT_URL, {
-          method: "POST",
-          // SIMPLE content type so the browser does NOT send a preflight OPTIONS
-          headers: { "Content-Type": "text/plain;charset=utf-8" },
-          body: JSON.stringify(data)
-        });
-
-        const rawText = await resp.text();
-        let json;
-        try {
-          json = JSON.parse(rawText);
-        } catch (parseErr) {
-          throw new Error("Invalid JSON from server: " + rawText);
-        }
-
-        if (!resp.ok || !json.success) {
-          throw new Error(json.error || "Unknown error");
-        }
-
-        const tierCode = data.tier || "";
-        const intakeId = json.intakeId || "";
-        let nextUrl = "orders.html";
-
-        const params = new URLSearchParams();
-        if (tierCode) params.set("tier", tierCode);
-        if (intakeId) params.set("intakeId", intakeId);
-        if (data.docType) params.set("docType", data.docType);
-
-        if ([...params.keys()].length > 0) {
-          nextUrl += "?" + params.toString();
-        }
-
-        statusEl.textContent = "Intake saved. Redirecting to payment…";
-        statusEl.classList.add("success");
-
-        window.location.href = nextUrl;
-      } catch (err) {
-        console.error("Submit error:", err);
-        statusEl.textContent =
-          "There was a problem saving your intake. Please try again or contact us.";
-        statusEl.classList.add("error");
-        submitBtn.disabled = false;
-        submitBtn.textContent = "Submit & Go to Payment →";
-      }
     });
   </script>
 </body>
