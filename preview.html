@@ -1,248 +1,207 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Document Preview | E-LegalBoom</title>
+  <meta charset="UTF-8" />
+  <title>Tier 1 Documents | E-LegalBoom</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-<style>
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background: #f4f7fb;
-}
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f4f7fb;
+    }
 
-.container {
-  display: flex;
-  height: 100vh;
-}
+    header {
+      background: #0e2a47;
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
 
-/* LEFT SIDE PANEL */
-.sidebar {
-  width: 280px;
-  background: #0e2a47;
-  color: white;
-  padding: 15px;
-  box-sizing: border-box;
-}
+    header h1 {
+      margin: 5px 0;
+    }
 
-.sidebar h3 {
-  margin-top: 0;
-  text-align: center;
-}
+    header p {
+      margin: 4px 0;
+      opacity: 0.85;
+    }
 
-.doc-button {
-  background: #123a63;
-  border: none;
-  width: 100%;
-  text-align: left;
-  padding: 10px;
-  margin-bottom: 8px;
-  color: white;
-  cursor: pointer;
-  border-radius: 4px;
-}
+    .container {
+      max-width: 1100px;
+      margin: auto;
+      padding: 20px;
+    }
 
-.doc-button:hover {
-  background: #1b4f8c;
-}
+    .doc-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 18px;
+      margin-top: 20px;
+    }
 
-.doc-button.active {
-  background: #4ad0ff;
-  color: black;
-}
+    .doc-card {
+      background: white;
+      border-radius: 8px;
+      padding: 16px;
+      border: 2px solid transparent;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
 
-/* RIGHT SIDE */
-.preview-panel {
-  flex: 1;
-  padding: 25px;
-  background: white;
-  overflow-y: auto;
-}
+    .doc-card:hover {
+      border-color: #2b73d3;
+      background: #eef4ff;
+    }
 
-.preview-header {
-  border-bottom: 2px solid #ddd;
-  padding-bottom: 10px;
-  margin-bottom: 15px;
-}
+    .doc-card.selected {
+      border-color: #4ad0ff;
+      background: #daf2ff;
+    }
 
-.preview-header h2 {
-  margin: 0;
-}
+    .doc-title {
+      font-weight: bold;
+      margin-bottom: 6px;
+    }
 
-.meta {
-  color: #555;
-  margin: 5px 0;
-}
+    .doc-desc {
+      font-size: 0.9rem;
+      color: #555;
+    }
 
-.preview-doc {
-  white-space: pre-wrap;
-  line-height: 1.6;
-  font-family: "Courier New", monospace;
-  background: #fafafa;
-  padding: 20px;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-}
-</style>
+    .footer-actions {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 30px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .btn {
+      padding: 12px 20px;
+      border-radius: 30px;
+      text-decoration: none;
+      text-align: center;
+      font-weight: bold;
+      border: none;
+      cursor: pointer;
+    }
+
+    .btn-preview {
+      border: 2px solid #2b73d3;
+      color: #2b73d3;
+      background: transparent;
+    }
+
+    .btn-preview:hover {
+      background: #eaf1ff;
+    }
+
+    .btn-primary {
+      background: #2b73d3;
+      color: white;
+    }
+
+    .btn-primary:disabled {
+      background: #aaa;
+      cursor: not-allowed;
+    }
+
+    .warning {
+      color: #b00020;
+      margin-top: 10px;
+      font-size: 0.9rem;
+      display: none;
+    }
+  </style>
 </head>
 
 <body>
 
+<header>
+  <h1>Tier 1 Documents</h1>
+  <p>Select the document you want to prepare.</p>
+  <p>Each document is customized after intake.</p>
+</header>
+
 <div class="container">
 
-<!-- LEFT PANEL -->
-<div class="sidebar">
-  <h3>Documents</h3>
+  <div class="doc-grid">
 
-  <button class="doc-button active" onclick="loadDoc('nda', this)">Mutual NDA</button>
-  <button class="doc-button" onclick="loadDoc('prom', this)">Promissory Note</button>
-  <button class="doc-button" onclick="loadDoc('llc', this)">LLC Operating Agreement</button>
-  <button class="doc-button" onclick="loadDoc('partnership', this)">Partnership Agreement</button>
-  <button class="doc-button" onclick="loadDoc('service', this)">Service Agreement</button>
-  <button class="doc-button" onclick="loadDoc('contractor', this)">Contractor Agreement</button>
-
-  <hr>
-  <button class="doc-button" onclick="location.href='index.html'">← Back to Catalog</button>
-</div>
-
-<!-- RIGHT PANEL -->
-<div class="preview-panel">
-
-  <div class="preview-header">
-    <h2 id="docTitle">Mutual NDA (Non-Disclosure Agreement)</h2>
-
-    <div class="meta"><strong>Typical Tier:</strong> <span id="docTier">Tier 1</span></div>
-    <div class="meta" id="docPurpose">For confidential business conversations</div>
-    <div class="meta">
-      Names, dates, and clauses are placeholders.  
-      Your document will be customized after purchase.
+    <div class="doc-card" onclick="selectDoc('NDA', this)">
+      <div class="doc-title">Mutual NDA</div>
+      <div class="doc-desc">Protect confidential business conversations</div>
     </div>
+
+    <div class="doc-card" onclick="selectDoc('PROMISSORY_NOTE', this)">
+      <div class="doc-title">Promissory Note</div>
+      <div class="doc-desc">Formal agreement for repayment of money</div>
+    </div>
+
+    <div class="doc-card" onclick="selectDoc('SINGLE_MEMBER_LLC', this)">
+      <div class="doc-title">Single-Member LLC Operating Agreement</div>
+      <div class="doc-desc">Establish ownership and operating rules</div>
+    </div>
+
+    <div class="doc-card" onclick="selectDoc('IOU', this)">
+      <div class="doc-title">Simple IOU Agreement</div>
+      <div class="doc-desc">Lightweight informal repayment document</div>
+    </div>
+
+    <div class="doc-card" onclick="selectDoc('SERVICE_LETTER', this)">
+      <div class="doc-title">Simple Service Letter</div>
+      <div class="doc-desc">Basic agreement for service work</div>
+    </div>
+
   </div>
 
-  <div class="preview-doc" id="docText">
-MUTUAL NON-DISCLOSURE AGREEMENT (SAMPLE)
-
-This Agreement is entered into between the Parties for the purpose of evaluating a potential business relationship.
-
-Each Party agrees not to disclose confidential information received from the other Party except as permitted in this Agreement.
-
-Confidential Information includes business, financial, technical, or strategic data.
-
-Information must be protected and used only for evaluating discussions.
-
-Upon termination, each Party agrees to return or destroy confidential materials.
+  <div class="warning" id="warn">
+    Please select a document to continue.
   </div>
 
-</div>
+  <div class="footer-actions">
+    <a href="preview.html" class="btn btn-preview">View Document Samples</a>
+
+    <button class="btn btn-primary" onclick="goToIntake()">
+      Continue to Intake →
+    </button>
+  </div>
 
 </div>
 
 <script>
 
-const docs = {
+let selectedDoc = null;
 
-nda: {
-  title: "Mutual NDA (Non-Disclosure Agreement)",
-  tier: "Tier 1",
-  purpose: "For confidential business conversations",
-  body: `
-MUTUAL NON-DISCLOSURE AGREEMENT (SAMPLE)
+function selectDoc(docType, card) {
 
-This Agreement is entered into between the Parties for exploring a potential business relationship.
+  selectedDoc = docType;
 
-Each Party agrees not to disclose confidential information.
+  document.querySelectorAll(".doc-card").forEach(c => c.classList.remove("selected"));
+  card.classList.add("selected");
 
-Confidential Information includes financial, technical, and strategic data.
-
-Information must be protected.
-
-Upon conclusion, materials must be returned or destroyed.
-`
-},
-
-prom: {
-  title: "Promissory Note",
-  tier: "Tier 1",
-  purpose: "Documents money owed and repayment terms",
-  body: `
-PROMISSORY NOTE
-
-Borrower agrees to pay Lender the amount loaned plus interest.
-
-Payment schedule, default terms, and governing law are defined herein.
-
-Both Parties agree to binding repayment terms.
-`
-},
-
-llc: {
-  title: "Single-Member LLC Operating Agreement",
-  tier: "Tier 1",
-  purpose: "Defines ownership and operating rules",
-  body: `
-LLC OPERATING AGREEMENT
-
-This Agreement establishes ownership, management authority,
-and capital structure of the company.
-
-Responsibilities and profit distribution are defined.
-`
-},
-
-partnership: {
-  title: "Partnership Agreement",
-  tier: "Tier 2",
-  purpose: "Defines ownership and decision-making",
-  body: `
-PARTNERSHIP AGREEMENT
-
-This Agreement forms a business partnership.
-
-Profit shares, authority, and exit terms are set forth.
-`
-},
-
-service: {
-  title: "Service Agreement",
-  tier: "Tier 3",
-  purpose: "Client service terms and deliverables",
-  body: `
-SERVICE AGREEMENT
-
-Provider agrees to perform services for Client.
-
-Compensation, scope, and termination are defined.
-`
-},
-
-contractor: {
-  title: "Independent Contractor Agreement",
-  tier: "Tier 3",
-  purpose: "Defines contractor job terms",
-  body: `
-INDEPENDENT CONTRACTOR AGREEMENT
-
-This Agreement establishes independent contractor status.
-
-Responsibilities, compensation, and liability are outlined.
-`
+  document.getElementById("warn").style.display = "none";
 }
 
-};
+function goToIntake() {
 
-function loadDoc(key, btn) {
+  if (!selectedDoc) {
+    document.getElementById("warn").style.display = "block";
+    return;
+  }
 
-  document.querySelectorAll(".doc-button").forEach(b => b.classList.remove("active"));
-  btn.classList.add("active");
+  const tier = "TIER_1";
 
-  const doc = docs[key];
+  // Change this URL to your real intake URL if needed
+  const intakeURL = "intake.html";
 
-  document.getElementById("docTitle").innerText = doc.title;
-  document.getElementById("docTier").innerText = doc.tier;
-  document.getElementById("docPurpose").innerText = doc.purpose;
-  document.getElementById("docText").innerText = doc.body;
+  // Send tier + docType forward
+  const params = `?tier=${encodeURIComponent(tier)}&docType=${encodeURIComponent(selectedDoc)}`;
 
+  window.location.href = intakeURL + params;
 }
+
 </script>
 
 </body>
