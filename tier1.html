@@ -3,251 +3,251 @@
 <head>
   <meta charset="UTF-8" />
   <title>Tier 1 – Startup & Essential Documents | E-LegalBoom</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <link rel="stylesheet" href="style.css"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="style.css" />
 
   <style>
-    body {
-      margin: 0;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: #f6f8fb;
-      color: #0f172a;
-    }
+    body { margin: 0; font-family: Arial, sans-serif; background: #f4f7fb; }
 
-    .page {
-      max-width: 980px;
-      margin: 28px auto 48px;
-      padding: 0 18px;
+    .page-hero {
+      max-width: 960px;
+      margin: 0 auto 2rem;
+      padding: 2rem 1.5rem 1rem;
     }
+    .page-hero h1 { font-size: 1.9rem; margin-bottom: 0.4rem; }
+    .page-hero p.lead { font-size: 1rem; max-width: 44rem; }
 
-    h1 {
-      font-size: 1.85rem;
-      margin-bottom: 6px;
-      color: #0b7285;
+    .page-section .container { max-width: 960px; margin: 0 auto; padding: 0 1.5rem 2rem; }
+    .tier-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1rem;
+      margin: 1rem 0 1.5rem;
     }
-
-    .subtitle {
-      font-size: 1rem;
-      color: #475569;
-      max-width: 760px;
-      line-height: 1.5;
+    .tier-card {
+      background: #fff;
+      border-radius: 8px;
+      padding: 0.75rem 0.9rem;
+      border: 1px solid #dde3ec;
     }
+    .tier-card h4 { margin: 0 0 0.25rem; font-size: 0.98rem; }
+    .tier-card p { margin: 0; font-size: 0.86rem; color: #555; }
 
-    .price-box {
-      margin: 18px 0;
-      padding: 16px;
-      background: #ecfeff;
-      border: 1px solid #67e8f9;
+    .hint { font-size: 0.88rem; color: #444; }
+
+    /* Document chooser */
+    .doc-chooser {
+      max-width: 960px;
+      margin: 0 auto 2rem;
+      padding: 1.5rem;
+      background: #f7f9fb;
       border-radius: 10px;
-      font-size: 1.1rem;
-      font-weight: 600;
-      color: #0b7285;
+      border: 1px solid #dde3ec;
     }
+    .doc-chooser h2 { font-size: 1.25rem; margin-bottom: 0.25rem; }
+    .doc-chooser p.sub { font-size: 0.9rem; color: #555; margin-bottom: 0.75rem; }
 
-    .section {
-      margin-top: 24px;
-      padding-top: 6px;
-    }
-
-    .section h2 {
-      font-size: 1.1rem;
-      margin-bottom: 8px;
-      color: #0f172a;
-    }
-
-    ul {
-      padding-left: 22px;
-      margin-top: 6px;
-      margin-bottom: 6px;
-    }
-
-    li {
-      margin-bottom: 6px;
-    }
-
-    .note {
-      margin-top: 14px;
-      padding: 12px;
-      background: #f8fafc;
-      border-left: 4px solid #0b7285;
-      border-radius: 6px;
-      font-size: 0.92rem;
-      color: #334155;
-    }
-
-    .bundle-callout {
-      margin-top: 16px;
-      padding: 14px;
-      background: #fff7ed;
-      border: 1px solid #fed7aa;
-      border-radius: 10px;
-      font-size: 0.95rem;
-      color: #7c2d12;
-    }
-
-    .bundle-callout strong {
-      color: #9a3412;
-    }
-
-    .actions {
-      margin-top: 28px;
+    .doc-pill-row {
       display: flex;
       flex-wrap: wrap;
-      gap: 12px;
+      gap: 0.5rem;
+      margin-bottom: 0.75rem;
     }
-
-    .btn-primary {
-      background: #0b7285;
-      color: #ffffff !important;
-      text-decoration: none;
-      padding: 12px 18px;
+    .doc-pill {
+      border: 1px solid #c7d2e2;
       border-radius: 999px;
-      font-weight: 600;
+      background: #fff;
+      padding: 0.45rem 0.85rem;
       font-size: 0.9rem;
-      display: inline-block;
-      box-shadow: 0 10px 25px rgba(11,114,133,0.35);
+      cursor: pointer;
+      transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+      white-space: nowrap;
     }
-
-    .btn-primary:hover {
-      background: #095c6c;
+    .doc-pill:hover { border-color: #2c7be5; }
+    .doc-pill.selected {
+      background: #2c7be5;
+      border-color: #2c7be5;
+      color: #fff;
     }
+    .doc-helper { font-size: 0.85rem; color: #666; }
+    .doc-helper strong { color: #2c7be5; }
+    .doc-warning { font-size: 0.85rem; color: #b00020; display: none; margin-top: 0.25rem; }
 
-    .btn-secondary {
-      border: 1px solid #0b7285;
-      color: #0b7285 !important;
-      text-decoration: none;
-      padding: 10px 16px;
+    .tier-actions {
+      max-width: 960px;
+      margin: 0 auto 3rem;
+      padding: 0 1.5rem 1rem;
+    }
+    .tier-actions-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      align-items: center;
+    }
+    .btn-pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.6rem 1.1rem;
       border-radius: 999px;
-      font-weight: 600;
-      font-size: 0.85rem;
-      display: inline-block;
-      background: #ffffff;
-    }
-
-    .btn-secondary:hover {
-      background: #e6f7fb;
-    }
-
-    .footer-note {
-      margin-top: 26px;
-      font-size: 0.85rem;
-      color: #64748b;
-    }
-
-    .doc-list-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 12px;
-      margin-top: 8px;
-    }
-
-    .doc-item {
-      background: #ffffff;
-      border: 1px solid #e2e8f0;
-      border-radius: 8px;
-      padding: 10px 12px;
+      border: none;
       font-size: 0.9rem;
+      cursor: pointer;
+      text-decoration: none;
+      white-space: nowrap;
     }
+    .btn-primary { background: #2c7be5; color: #fff; }
+    .btn-primary[aria-disabled="true"] { background: #c0d1f0; cursor: not-allowed; }
+    .btn-secondary { background: #eef1f6; color: #222; }
+    .btn-link { background: transparent; color: #2c7be5; padding: 0; }
 
-    .doc-item strong {
-      color: #0b7285;
+    @media (max-width: 640px) {
+      .tier-grid { grid-template-columns: 1fr; }
+      .doc-pill-row { flex-direction: column; align-items: flex-start; }
+      .tier-actions-row { flex-direction: column; align-items: stretch; }
+      .btn-pill { width: 100%; justify-content: center; }
     }
   </style>
 </head>
 
 <body>
-
-<section class="page">
-
-  <h1>Tier 1 – Startup & Essential Documents</h1>
-  <p class="subtitle">
-    Ideal for new entrepreneurs and small businesses who need a strong starting document —
-    without overcomplicating the process.
-  </p>
-
-  <div class="price-box">
-    Price: $39 per document
-  </div>
-
-  <div class="section">
-    <h2>What Tier 1 Is For</h2>
-    <p>
-      Tier 1 is designed for simple but important agreements that protect your ideas, clarify money owed,
-      or document your single-owner business structure.
-    </p>
-  </div>
-
-  <div class="section">
-    <h2>Common Tier 1 Documents</h2>
-
-    <div class="doc-list-grid">
-      <div class="doc-item">
-        <strong>Mutual NDA (Non-Disclosure Agreement)</strong><br>
-        For sharing ideas, plans, or information while keeping it confidential.
-      </div>
-      <div class="doc-item">
-        <strong>Promissory Note</strong><br>
-        Documents money loaned between people or businesses, with repayment terms.
-      </div>
-      <div class="doc-item">
-        <strong>Single-Member LLC Operating Agreement</strong><br>
-        Clarifies ownership, purpose, and management for a one-owner LLC.
-      </div>
-      <div class="doc-item">
-        <strong>Simple Payment or IOU Agreement</strong><br>
-        Basic written record of what is owed and when it must be repaid.
-      </div>
-      <div class="doc-item">
-        <strong>Basic Contractor/Service Letter</strong><br>
-        Lightweight agreement confirming who is doing what, for how much.
-      </div>
-      <div class="doc-item">
-        <strong>Other Basic Business Forms</strong><br>
-        Simple, single-purpose documents to support your startup.
-      </div>
+  <header class="site-header">
+    <div class="container">
+      <a href="index.html" class="logo">E-LegalBoom</a>
+      <nav class="nav">
+        <a href="catalog.html">Catalog</a>
+        <a href="preview.html">Document Samples</a>
+      </nav>
     </div>
-  </div>
+  </header>
 
-  <div class="section">
-    <h2>How It Works</h2>
-    <ul>
-      <li>Select Tier 1</li>
-      <li>Choose which document you need</li>
-      <li>Complete a short intake</li>
-      <li>Pay securely</li>
-      <li>Provide details for that specific document</li>
-      <li>Receive your completed document</li>
-    </ul>
-  </div>
+  <main>
+    <section class="page-hero">
+      <h1>Tier 1 – Startup &amp; Essential Documents</h1>
+      <p class="lead">
+        Ideal for new entrepreneurs and small businesses who need a strong starting document
+        without overcomplicating the process.
+      </p>
+      <!-- (Pricing line removed per your request) -->
+    </section>
 
-  <div class="note">
-    <strong>Important:</strong> Each Tier 1 purchase includes one document.
-    If you need more than one document, simply place another order for each additional document.
-  </div>
+    <section class="page-section">
+      <div class="container">
+        <h2>What Tier 1 Is For</h2>
+        <p>
+          Tier 1 is designed for simple but important agreements that protect your ideas,
+          clarify money owed, or document your single-owner business structure.
+        </p>
 
-  <div class="bundle-callout">
-    <strong>Planning to grow quickly?</strong><br>
-    If you know you’ll need multiple agreements and formations soon, the
-    <strong>Entrepreneur Starter Bundle</strong> may be a better long-term option.
-    <div style="margin-top:8px;">
-      <a href="bundle.html" style="color:#9a3412;font-weight:600;text-decoration:underline;">
-        View Entrepreneur Starter Bundle →
-      </a>
-    </div>
-  </div>
+        <h3>Common Tier 1 Documents</h3>
+        <div class="tier-grid">
+          <div class="tier-card">
+            <h4>Mutual NDA (Non-Disclosure Agreement)</h4>
+            <p>Protects confidential business conversations while you explore ideas.</p>
+          </div>
+          <div class="tier-card">
+            <h4>Promissory Note</h4>
+            <p>Documents money loaned between people or businesses, with clear repayment terms.</p>
+          </div>
+          <div class="tier-card">
+            <h4>Single-Member LLC Operating Agreement</h4>
+            <p>Clarifies ownership, purpose, and management for a one-owner LLC.</p>
+          </div>
+          <div class="tier-card">
+            <h4>Simple Payment / IOU Agreement</h4>
+            <p>Creates a written record of what is owed and when it must be repaid.</p>
+          </div>
+          <div class="tier-card">
+            <h4>Basic Contractor / Service Letter</h4>
+            <p>Lightweight agreement confirming who is doing what, and for how much.</p>
+          </div>
+        </div>
 
-  <div class="actions">
-    <a class="btn-primary" href="intake.html?tier=T1">Start Tier 1 Intake →</a>
-    <a class="btn-secondary" href="preview.html">View Document Samples</a>
-    <a class="btn-secondary" href="catalog.html">Back to Catalog</a>
-  </div>
+        <h3>How It Works</h3>
+        <ul>
+          <li>Select Tier 1</li>
+          <li>Choose which document you need</li>
+          <li>Complete a short intake</li>
+          <li>Pay securely</li>
+          <li>Return to complete the detailed document questions</li>
+          <li>Receive your completed document</li>
+        </ul>
 
-  <div class="footer-note">
-    E-LegalBoom provides document preparation support and business automation services.  
-    We do not offer legal advice or attorney representation.
-  </div>
+        <p class="hint">
+          <strong>Important:</strong> Each Tier 1 purchase includes one document. If you need more than one,
+          simply place another order for each additional document.
+        </p>
+      </div>
+    </section>
 
-</section>
+    <!-- Inline document selection -->
+    <section class="doc-chooser">
+      <h2>Choose Your Tier 1 Document</h2>
+      <p class="sub">Select one document below, then continue to the intake form.</p>
 
+      <div class="doc-pill-row">
+        <button type="button" class="doc-pill" data-doc="NDA">Mutual NDA</button>
+        <button type="button" class="doc-pill" data-doc="PROMISSORY_NOTE">Promissory Note</button>
+        <button type="button" class="doc-pill" data-doc="SINGLE_MEMBER_LLC">Single-Member LLC Operating Agreement</button>
+        <button type="button" class="doc-pill" data-doc="IOU">Simple IOU Agreement</button>
+        <button type="button" class="doc-pill" data-doc="SERVICE_LETTER">Basic Contractor / Service Letter</button>
+      </div>
+
+      <p class="doc-helper">
+        Your selection tells us which document to prepare first. You’ll still have a chance
+        to provide personal details after payment.
+      </p>
+      <p id="docWarning" class="doc-warning">Please select a document to continue.</p>
+    </section>
+
+    <section class="tier-actions">
+      <div class="tier-actions-row">
+        <button id="continueBtn" class="btn-pill btn-primary" aria-disabled="true">
+          Continue to Intake →
+        </button>
+
+        <a href="preview.html" class="btn-pill btn-secondary">View Document Samples</a>
+
+        <a href="catalog.html" class="btn-pill btn-link">← Back to Catalog</a>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const INTAKE_URL = "intake.html"; // change if your intake page has a different name
+    const TIER_CODE = "TIER_1";
+
+    let selectedDocType = null;
+
+    const docButtons = document.querySelectorAll(".doc-pill");
+    const continueBtn = document.getElementById("continueBtn");
+    const docWarning = document.getElementById("docWarning");
+
+    docButtons.forEach(btn => {
+      btn.addEventListener("click", () => {
+        selectedDocType = btn.getAttribute("data-doc");
+
+        docButtons.forEach(b => b.classList.remove("selected"));
+        btn.classList.add("selected");
+
+        continueBtn.setAttribute("aria-disabled", "false");
+        docWarning.style.display = "none";
+      });
+    });
+
+    continueBtn.addEventListener("click", () => {
+      if (!selectedDocType || continueBtn.getAttribute("aria-disabled") === "true") {
+        docWarning.style.display = "block";
+        return;
+      }
+
+      const params = new URLSearchParams({
+        tier: TIER_CODE,
+        docType: selectedDocType
+      });
+
+      window.location.href = `${INTAKE_URL}?${params.toString()}`;
+    });
+  </script>
 </body>
 </html>
