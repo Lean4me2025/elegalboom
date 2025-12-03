@@ -2,240 +2,347 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Client Intake – Step 1 | E-LegalBoom</title>
+  <title>E-LegalBoom | Personal Intake</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="style.css" />
   <style>
-    body {
+    * {
+      box-sizing: border-box;
       margin: 0;
+      padding: 0;
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: #f6f8fb;
-      color: #0f172a;
     }
+
+    body {
+      background: #f3f4f8;
+      color: #111827;
+      min-height: 100vh;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    /* Site header */
+    .site-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 24px;
+      background: #ffffff;
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    .site-brand {
+      font-size: 20px;
+      font-weight: 700;
+      color: #111827;
+    }
+
+    .site-nav a {
+      margin-left: 18px;
+      font-size: 14px;
+      color: #374151;
+    }
+
+    .site-nav a:hover {
+      color: #1d4ed8;
+      text-decoration: underline;
+    }
+
+    /* Page */
     .page {
       max-width: 960px;
-      margin: 28px auto 48px;
-      padding: 0 18px;
+      margin: 24px auto 40px;
+      padding: 0 16px;
     }
-    h1 {
-      font-size: 1.9rem;
-      margin-bottom: 6px;
-      color: #0b7285;
-    }
-    .subtitle {
-      font-size: 0.98rem;
-      color: #475569;
-      max-width: 780px;
-      line-height: 1.5;
-    }
-    .summary {
-      margin-top: 14px;
-      padding: 12px 14px;
-      background: #eff6ff;
-      border-left: 4px solid #2563eb;
-      border-radius: 8px;
-      font-size: 0.9rem;
-      color: #1e293b;
-    }
-    .summary strong { color: #0f172a; }
 
-    form {
-      margin-top: 24px;
-      padding: 18px 16px 22px;
-      background: white;
-      border-radius: 10px;
-      box-shadow: 0 8px 20px rgba(15, 23, 42, 0.08);
-    }
-    .section-title {
-      margin-top: 4px;
+    .back-link {
+      font-size: 13px;
+      color: #1d4ed8;
       margin-bottom: 10px;
-      font-size: 1.02rem;
-      font-weight: 600;
-      color: #0f172a;
-    }
-    label {
-      display: block;
-      margin-top: 12px;
-      font-size: 0.9rem;
-      color: #0f172a;
-    }
-    .required-badge {
       display: inline-block;
-      margin-left: 4px;
-      font-size: 0.7rem;
-      padding: 1px 6px;
-      border-radius: 999px;
-      background: #fee2e2;
-      color: #b91c1c;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
     }
+
+    .back-link:hover {
+      text-decoration: underline;
+    }
+
+    .title {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .subtitle {
+      font-size: 14px;
+      color: #4b5563;
+      margin-bottom: 14px;
+    }
+
+    .context-box {
+      background: #e0f2fe;
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-size: 13px;
+      color: #075985;
+      margin-bottom: 18px;
+    }
+
+    .context-box strong {
+      font-weight: 600;
+    }
+
+    .form-card {
+      background: #ffffff;
+      border-radius: 10px;
+      border: 1px solid #e5e7eb;
+      padding: 18px 18px 20px;
+      box-shadow: 0 10px 25px rgba(15, 23, 42, 0.08);
+    }
+
+    .form-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-bottom: 12px;
+    }
+
+    .field {
+      flex: 1 1 220px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    label {
+      font-size: 13px;
+      font-weight: 500;
+      margin-bottom: 4px;
+      color: #111827;
+    }
+
     input[type="text"],
     input[type="email"],
     input[type="tel"],
+    select,
     textarea {
-      width: 100%;
-      margin-top: 4px;
-      padding: 8px 9px;
       border-radius: 6px;
-      border: 1px solid #cbd5e1;
-      font-size: 0.9rem;
-      box-sizing: border-box;
+      border: 1px solid #d1d5db;
+      padding: 8px 9px;
+      font-size: 14px;
+      outline: none;
+      background: #ffffff;
     }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      border-color: #2563eb;
+      box-shadow: 0 0 0 1px rgba(37, 99, 235, 0.25);
+    }
+
     textarea {
-      min-height: 72px;
       resize: vertical;
+      min-height: 80px;
     }
-    .hint {
-      font-size: 0.78rem;
-      color: #64748b;
+
+    .helper {
+      font-size: 11px;
+      color: #6b7280;
       margin-top: 2px;
     }
-    button[type="submit"] {
+
+    .actions {
       margin-top: 18px;
-      padding: 10px 18px;
-      background: #0b7285;
-      color: white;
-      border: none;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .btn-primary,
+    .btn-secondary {
+      display: inline-block;
+      padding: 9px 16px;
       border-radius: 999px;
-      font-size: 0.95rem;
-      font-weight: 600;
+      font-size: 14px;
+      text-decoration: none;
+      text-align: center;
+      min-width: 170px;
       cursor: pointer;
     }
-    button[disabled] {
-      opacity: 0.65;
-      cursor: default;
+
+    .btn-primary {
+      background: #0f766e;
+      color: #ffffff;
+      border: 1px solid #0f766e;
     }
-    .tier-row {
-      font-size: 0.9rem;
-      margin-top: 6px;
+
+    .btn-primary:hover {
+      background: #115e59;
+    }
+
+    .btn-secondary {
+      background: #ffffff;
+      color: #2563eb;
+      border: 1px solid #2563eb;
+    }
+
+    .btn-secondary:hover {
+      background: #e0edff;
+    }
+
+    .notice {
+      font-size: 12px;
+      color: #6b7280;
+      margin-top: 10px;
+    }
+
+    @media (max-width: 640px) {
+      .site-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 6px;
+      }
     }
   </style>
 </head>
 <body>
-  <div class="page">
-    <h1>Client Intake – Step 1</h1>
-    <div class="subtitle">
-      Tell us about your business and document needs. After this step, you’ll be taken to
-      payment to complete your E-LegalBoom order.
+  <header class="site-header">
+    <div class="site-brand">E-LegalBoom</div>
+    <nav class="site-nav">
+      <a href="index.html">Home</a>
+      <a href="catalog.html">Catalog</a>
+      <a href="orders.html">My Orders</a>
+    </nav>
+  </header>
+
+  <main class="page">
+    <a href="catalog.html" id="back-link" class="back-link">&larr; Back to catalog</a>
+
+    <h1 class="title">Personal & Business Intake</h1>
+    <p class="subtitle">
+      This short intake gives us the information we need to prepare your document correctly for the right tier and document type.
+    </p>
+
+    <div class="context-box" id="context-box">
+      <div><strong>Selected Tier:</strong> <span id="tier-label">Tier 1</span></div>
+      <div><strong>Selected Document:</strong> <span id="doc-label">To be selected</span></div>
     </div>
 
-    <div class="summary">
-      <div class="tier-row">
-        <strong>Tier selected:</strong>
-        <span id="tierLabel">(none selected)</span>
-      </div>
-      <div class="tier-row">
-        <strong>Pricing:</strong>
-        <span id="tierPrice">(per document)</span>
-      </div>
-      <div class="tier-row">
-        <strong>Note:</strong>
-        <span id="tierNote">Each order covers one document (or document set) within a 30-day window.</span>
-      </div>
-    </div>
+    <section class="form-card">
+      <!-- IMPORTANT: replace YOUR_WEB_APP_URL_HERE with your actual Apps Script Web App URL -->
+      <form id="intake-form" method="POST" action="https://script.google.com/macros/s/AKfycbxirMiGTQ0QmUGLUxCcuSX1_qasnfRxBL1ycs08z-LTmF9CxgHeivGrVqGi2D_MuRpt/exec" target="_blank">
+        <!-- Hidden fields we send along -->
+        <input type="hidden" id="tier" name="tier" value="" />
+        <input type="hidden" id="doc" name="doc" value="" />
 
-    <!-- IMPORTANT: action points directly to your Apps Script Web App /exec URL -->
-    <form
-      id="intakeForm"
-      method="POST"
-      action="https://script.google.com/macros/s/AKfycbxirMiGTQ0QmUGLUxCcuSX1_qasnfRxBL1ycs08z-LTmF9CxgHeivGrVqGi2D_MuRpt/exec"
-    >
-      <!-- Hidden fields -->
-      <input type="hidden" id="tierCode"  name="tier"    value="">
-      <input type="hidden" id="docType"   name="docType" value="">
+        <div class="form-row">
+          <div class="field">
+            <label for="firstName">First Name *</label>
+            <input type="text" id="firstName" name="firstName" required />
+          </div>
+          <div class="field">
+            <label for="lastName">Last Name *</label>
+            <input type="text" id="lastName" name="lastName" required />
+          </div>
+        </div>
 
-      <div class="section-title">Section 1 – Contact & basic information</div>
+        <div class="form-row">
+          <div class="field">
+            <label for="email">Email *</label>
+            <input type="email" id="email" name="email" required />
+            <div class="helper">We’ll send your completed document to this address.</div>
+          </div>
+          <div class="field">
+            <label for="phone">Phone (optional)</label>
+            <input type="tel" id="phone" name="phone" />
+          </div>
+        </div>
 
-      <label for="fullName">
-        Full name
-        <span class="required-badge">Required</span>
-      </label>
-      <input type="text" id="fullName" name="fullName" required>
+        <div class="form-row">
+          <div class="field">
+            <label for="businessName">Business Name (if any)</label>
+            <input type="text" id="businessName" name="businessName" />
+          </div>
+          <div class="field">
+            <label for="state">Primary State *</label>
+            <input type="text" id="state" name="state" placeholder="CA, TX, NY…" required />
+            <div class="helper">State where this document will primarily be used.</div>
+          </div>
+        </div>
 
-      <label for="email">
-        Email address
-        <span class="required-badge">Required</span>
-      </label>
-      <input type="email" id="email" name="email" required>
+        <div class="form-row">
+          <div class="field" style="flex: 1 1 100%;">
+            <label for="notes">Anything specific we should know?</label>
+            <textarea id="notes" name="notes" placeholder="Example: I'm lending money to my cousin for a truck purchase; we'd like payments monthly."></textarea>
+            <div class="helper">Optional: describe your situation in a sentence or two.</div>
+          </div>
+        </div>
 
-      <label for="phone">Phone number (optional)</label>
-      <input type="tel" id="phone" name="phone">
+        <div class="actions">
+          <button type="submit" class="btn-primary">Submit Intake &amp; Continue</button>
+          <a href="catalog.html" class="btn-secondary">Cancel &amp; return to catalog</a>
+        </div>
 
-      <label for="state">
-        State where your business operates
-        <span class="required-badge">Required</span>
-      </label>
-      <input type="text" id="state" name="state" required>
-
-      <label for="businessName">
-        Business / organization name
-        <span class="required-badge">Required</span>
-      </label>
-      <input type="text" id="businessName" name="businessName" required>
-
-      <label for="businessDescription">
-        Briefly describe what your business does
-      </label>
-      <textarea id="businessDescription" name="businessDescription"></textarea>
-      <div class="hint">A sentence or two is enough. This helps us align the documents to your actual work.</div>
-
-      <label for="primaryGoal">
-        What is your primary goal for this document order?
-      </label>
-      <textarea id="primaryGoal" name="primaryGoal"></textarea>
-
-      <button type="submit">Submit &amp; Go to Payment →</button>
-    </form>
-  </div>
+        <p class="notice">
+          After you submit, a confirmation page will open in a new tab. You can then close it and return here to continue.
+        </p>
+      </form>
+    </section>
+  </main>
 
   <script>
-    // No network calls here. Just read the ?tier= from URL and update the summary.
+    // Map tier codes to human-friendly labels and back-links
+    const params = new URLSearchParams(window.location.search);
+    const tierParam = params.get("tier") || "1";
+    const docParam = params.get("doc") || "";
 
-    function getParam(name) {
-      const params = new URLSearchParams(window.location.search);
-      return params.get(name);
-    }
+    const tierMap = {
+      "1": "Tier 1 – Startup & Essential Documents",
+      "2": "Tier 2 – Business Foundation Documents",
+      "3": "Tier 3 – Premium Business Agreements",
+      "bundle": "Entrepreneur Starter Bundle"
+    };
 
-    function mapTierLabel(code) {
-      const c = (code || "").toUpperCase();
-      if (c === "T1") return "Tier 1 – Startup & Essential Documents";
-      if (c === "T2") return "Tier 2 – Business Foundation Documents";
-      if (c === "T3") return "Tier 3 – Premium Business Agreements";
-      if (c === "ENT") return "Entrepreneur Starter Bundle";
-      return "No tier selected";
-    }
+    const docMap = {
+      "mutual-nda": "Mutual NDA (Non-Disclosure Agreement)",
+      "promissory-note": "Promissory Note",
+      "single-member-llc": "Single-Member LLC Operating Agreement",
+      "payment-iou": "Simple Payment / IOU Agreement",
+      "basic-contractor": "Basic Contractor / Service Letter",
+      "other-basic-business": "Other Basic Business Forms",
+      "partnership-agreement": "Partnership Agreement",
+      "two-member-llc": "Two-Member LLC Agreement",
+      "buy-sell": "Buy–Sell / Investor Arrangement",
+      "other-core-business": "Other Core Business Agreements",
+      "service-independent": "Service / Independent Contractor Agreement",
+      "consulting": "Consulting and Professional Services Agreement",
+      "joint-venture": "Joint Venture / Founder Arrangement",
+      "custom-structured": "Custom Structured Agreement",
+      "tier1-set": "Tier 1 Document Types (Bundle)",
+      "tier2-set": "Tier 2 Document Types (Bundle)",
+      "tier3-set": "Tier 3 Document Types (Bundle)",
+      "one-intake-per-doc": "One Intake per Document (Bundle)"
+    };
 
-    function mapTierPrice(code) {
-      const c = (code || "").toUpperCase();
-      if (c === "T1") return "$399 per document";
-      if (c === "T2") return "$599 per document";
-      if (c === "T3") return "$799 per document";
-      if (c === "ENT") return "$149 flat (multiple documents within 30-day window)";
-      return "(per document)";
-    }
+    // Set hidden inputs
+    document.getElementById("tier").value = tierParam;
+    document.getElementById("doc").value = docParam;
 
-    function mapTierNote(code) {
-      const c = (code || "").toUpperCase();
-      if (c === "ENT") {
-        return "Entrepreneur bundle covers multiple documents started within 30 days of purchase.";
-      }
-      return "Each order covers one document (or document set) within a 30-day window.";
-    }
+    // Update display labels
+    document.getElementById("tier-label").textContent =
+      tierMap[tierParam] || "Tier 1";
 
-    document.addEventListener("DOMContentLoaded", () => {
-      const tierCode = getParam("tier") || "";
-      const tierInput = document.getElementById("tierCode");
-      if (tierInput) tierInput.value = tierCode;
+    document.getElementById("doc-label").textContent =
+      docMap[docParam] || (docParam ? docParam : "Selected from tier page");
 
-      const labelEl = document.getElementById("tierLabel");
-      const priceEl = document.getElementById("tierPrice");
-      const noteEl  = document.getElementById("tierNote");
-
-      if (labelEl) labelEl.textContent = mapTierLabel(tierCode);
-      if (priceEl) priceEl.textContent = mapTierPrice(tierCode);
-      if (noteEl)  noteEl.textContent  = mapTierNote(tierCode);
-    });
+    // Back link behavior based on tier
+    const backLink = document.getElementById("back-link");
+    if (tierParam === "1") backLink.href = "tier1.html";
+    else if (tierParam === "2") backLink.href = "tier2.html";
+    else if (tierParam === "3") backLink.href = "tier3.html";
+    else if (tierParam === "bundle") backLink.href = "bundle.html";
+    else backLink.href = "catalog.html";
   </script>
 </body>
 </html>
