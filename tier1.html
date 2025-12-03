@@ -1,320 +1,286 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
+  <meta charset="UTF-8" />
+  <title>E-LegalBoom | Tier 1 – Startup & Essential Documents</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Tier 1 – Startup & Essential Documents | E-LegalBoom</title>
-
-  <!-- Existing global styles (keep this) -->
-  <link rel="stylesheet" href="style.css" />
-
-  <!-- Page-specific styling so Tier 1 can’t break if globals change -->
   <style>
-    body.tier1-page {
+    * {
+      box-sizing: border-box;
       margin: 0;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
-        sans-serif;
-      background: #f4f6fb;
-      color: #13233a;
+      padding: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     }
 
-    .tier1-header {
-      background: #0e2d63;
-      color: #fff;
-      padding: 16px 24px;
+    body {
+      background: #f3f4f8;
+      color: #111827;
+      min-height: 100vh;
     }
 
-    .tier1-header .tier1-navrow {
-      max-width: 1100px;
-      margin: 0 auto;
+    a {
+      color: inherit;
+    }
+
+    /* Site header */
+    .site-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
+      padding: 14px 24px;
+      background: #ffffff;
+      border-bottom: 1px solid #e5e7eb;
     }
 
-    .tier1-logo {
+    .site-brand {
+      font-size: 20px;
       font-weight: 700;
-      font-size: 1.1rem;
-      color: #fff;
+      color: #111827;
+    }
+
+    .site-nav a {
+      margin-left: 18px;
+      font-size: 14px;
+      color: #374151;
       text-decoration: none;
     }
 
-    .tier1-nav a {
-      color: #eaf2ff;
+    .site-nav a:hover {
+      color: #1d4ed8;
+      text-decoration: underline;
+    }
+
+    /* Page layout */
+    .tier-page {
+      max-width: 1080px;
+      margin: 24px auto 40px;
+      padding: 0 16px;
+    }
+
+    .tier-back {
+      margin-bottom: 10px;
+    }
+
+    .tier-back a {
+      font-size: 13px;
+      color: #1d4ed8;
       text-decoration: none;
-      margin-left: 16px;
-      font-size: 0.9rem;
     }
 
-    .tier1-main {
-      max-width: 1100px;
-      margin: 32px auto 40px auto;
-      padding: 0 16px 40px 16px;
-      background: #fff;
-      border-radius: 12px;
-      box-shadow: 0 12px 30px rgba(9, 30, 66, 0.1);
+    .tier-back a:hover {
+      text-decoration: underline;
     }
 
-    .tier1-hero {
-      padding: 24px 24px 8px 24px;
-      border-bottom: 1px solid #dde3f0;
+    .tier-title {
+      font-size: 26px;
+      font-weight: 700;
+      margin-bottom: 4px;
     }
 
-    .tier1-hero h1 {
-      margin: 0 0 8px 0;
-      font-size: 1.9rem;
-      color: #11284a;
+    .tier-subtitle {
+      font-size: 14px;
+      color: #4b5563;
+      margin-bottom: 14px;
     }
 
-    .tier1-hero p {
-      margin: 0 0 16px 0;
-      color: #4c5970;
-      font-size: 0.98rem;
+    .price-banner {
+      background: #e0f2fe;
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-size: 16px;
+      font-weight: 600;
+      color: #075985;
+      margin-bottom: 20px;
     }
 
-    .tier1-section {
-      padding: 20px 24px;
-      border-bottom: 1px solid #eef1f8;
+    .section-title {
+      font-size: 16px;
+      font-weight: 600;
+      margin-top: 18px;
+      margin-bottom: 6px;
     }
 
-    .tier1-section:last-of-type {
-      border-bottom: none;
+    .section-body {
+      font-size: 14px;
+      color: #374151;
+      margin-bottom: 10px;
     }
 
-    .tier1-section h2 {
-      margin: 0 0 10px 0;
-      font-size: 1.3rem;
-      color: #13233a;
-    }
-
-    .tier1-section p,
-    .tier1-section li {
-      font-size: 0.96rem;
-      color: #4b5870;
-    }
-
-    .tier1-doc-grid {
+    .doc-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-      grid-gap: 16px;
-      margin-top: 10px;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 10px;
+      margin-bottom: 18px;
     }
 
-    .tier1-card {
-      background: #f7f9ff;
-      border-radius: 10px;
-      padding: 14px 14px 12px 14px;
-      border: 1px solid #d5def4;
+    .doc-card {
+      background: #ffffff;
+      border-radius: 8px;
+      border: 1px solid #e5e7eb;
+      padding: 10px 11px;
+      font-size: 13px;
       cursor: pointer;
-      transition: all 0.18s ease;
+      text-decoration: none;
+      display: block;
     }
 
-    .tier1-card h3 {
-      margin: 0 0 4px 0;
-      font-size: 1rem;
-      color: #12264a;
+    .doc-card:hover {
+      border-color: #2563eb;
+      box-shadow: 0 4px 10px rgba(148, 163, 184, 0.4);
     }
 
-    .tier1-card p {
-      margin: 0;
-      font-size: 0.9rem;
-      color: #5b6782;
+    .doc-name {
+      font-weight: 600;
+      margin-bottom: 3px;
+      color: #1f2933;
     }
 
-    .tier1-card:hover {
-      border-color: #276ef1;
-      box-shadow: 0 6px 14px rgba(39, 110, 241, 0.18);
-      transform: translateY(-1px);
+    .doc-desc {
+      font-size: 12px;
+      color: #4b5563;
     }
 
-    .tier1-card.selected {
-      border-color: #276ef1;
-      background: #e8f0ff;
-      box-shadow: 0 0 0 2px rgba(39, 110, 241, 0.35);
+    .how-it-works {
+      font-size: 14px;
+      color: #374151;
     }
 
-    .tier1-actions {
-      padding: 20px 24px 26px 24px;
+    .how-it-works ul {
+      margin-top: 6px;
+      padding-left: 18px;
+    }
+
+    .how-it-works li {
+      margin-bottom: 4px;
+    }
+
+    .tier-actions {
+      margin-top: 18px;
       display: flex;
       flex-wrap: wrap;
       gap: 10px;
-      justify-content: flex-end;
-      align-items: center;
     }
 
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      padding: 10px 18px;
+    .btn-primary,
+    .btn-secondary {
+      display: inline-block;
+      padding: 9px 16px;
       border-radius: 999px;
-      border: 1px solid transparent;
-      font-size: 0.95rem;
-      cursor: pointer;
+      font-size: 14px;
       text-decoration: none;
-      white-space: nowrap;
+      text-align: center;
+      min-width: 170px;
     }
 
     .btn-primary {
-      background: #276ef1;
-      border-color: #276ef1;
-      color: #fff;
+      background: #0f766e;
+      color: #ffffff;
+      border: 1px solid #0f766e;
+    }
+
+    .btn-primary:hover {
+      background: #115e59;
     }
 
     .btn-secondary {
       background: #ffffff;
-      border-color: #d1d7e5;
-      color: #203150;
+      color: #2563eb;
+      border: 1px solid #2563eb;
     }
 
-    .btn-link {
-      background: transparent;
-      border-color: transparent;
-      color: #276ef1;
-    }
-
-    .btn:disabled {
-      opacity: 0.55;
-      cursor: default;
-    }
-
-    @media (max-width: 640px) {
-      .tier1-actions {
-        flex-direction: column;
-        align-items: stretch;
-      }
-      .tier1-actions .btn {
-        width: 100%;
-      }
+    .btn-secondary:hover {
+      background: #e0edff;
     }
   </style>
 </head>
-
-<body class="tier1-page">
-
-  <!-- HEADER -->
-  <header class="tier1-header">
-    <div class="tier1-navrow">
-      <a href="index.html" class="tier1-logo">E-LegalBoom</a>
-      <nav class="tier1-nav">
-        <a href="catalog.html">Catalog</a>
-        <a href="preview.html">Document Samples</a>
-      </nav>
-    </div>
+<body>
+  <header class="site-header">
+    <div class="site-brand">E-LegalBoom</div>
+    <nav class="site-nav">
+      <a href="index.html">Home</a>
+      <a href="catalog.html">Catalog</a>
+      <a href="preview.html?tier=1">Samples</a>
+      <a href="orders.html">My Orders</a>
+    </nav>
   </header>
 
-  <!-- MAIN CONTENT CARD -->
-  <main class="tier1-main">
+  <main class="tier-page">
+    <div class="tier-back">
+      <a href="catalog.html">&larr; Back to all tiers</a>
+    </div>
 
-    <!-- HERO -->
-    <section class="tier1-hero">
-      <h1>Tier 1 – Startup &amp; Essential Documents</h1>
-      <p>
-        Ideal for individuals and small businesses needing a legally sound foundation
-        without unnecessary complexity.
-      </p>
-    </section>
+    <h1 class="tier-title">Tier 1 – Startup &amp; Essential Documents</h1>
+    <p class="tier-subtitle">
+      Ideal for new entrepreneurs and small businesses who need a strong starting document — without overcomplicating the process.
+    </p>
 
-    <!-- WHAT TIER 1 IS FOR -->
-    <section class="tier1-section">
-      <h2>What Tier 1 Is For</h2>
-      <p>
-        Tier 1 documents are foundational legal tools that protect ideas, clarify simple
-        money agreements, and establish early business structure.
-      </p>
-    </section>
+    <div class="price-banner">Price: $39 per document</div>
 
-    <!-- CHOOSE DOCUMENT -->
-    <section class="tier1-section">
-      <h2>Choose Your Document</h2>
+    <h2 class="section-title">What Tier 1 Is For</h2>
+    <p class="section-body">
+      Tier 1 is designed for simple but important agreements that protect your ideas, clarify money owed, or document your single-owner business structure.
+    </p>
 
-      <div class="tier1-doc-grid" id="docList">
-        <div class="tier1-card" data-doc="NDA_MUTUAL">
-          <h3>Mutual NDA (Non-Disclosure Agreement)</h3>
-          <p>Protects confidential business conversations between parties.</p>
+    <h2 class="section-title">Common Tier 1 Documents</h2>
+    <div class="doc-grid">
+      <a href="preview.html?tier=1&doc=mutual-nda" class="doc-card">
+        <div class="doc-name">Mutual NDA (Non-Disclosure Agreement)</div>
+        <div class="doc-desc">
+          For sharing ideas, plans, or information while keeping it confidential.
         </div>
+      </a>
 
-        <div class="tier1-card" data-doc="PROMISSORY_NOTE">
-          <h3>Promissory Note</h3>
-          <p>Defines a loan, interest, and repayment schedule.</p>
+      <a href="preview.html?tier=1&doc=promissory-note" class="doc-card">
+        <div class="doc-name">Promissory Note</div>
+        <div class="doc-desc">
+          Documents money loaned between people or businesses, with repayment terms.
         </div>
+      </a>
 
-        <div class="tier1-card" data-doc="SINGLE_MEMBER_LLC">
-          <h3>Single-Member LLC Operating Agreement</h3>
-          <p>Establishes ownership and operating rules for a one-owner LLC.</p>
+      <a href="preview.html?tier=1&doc=single-member-llc" class="doc-card">
+        <div class="doc-name">Single-Member LLC Operating Agreement</div>
+        <div class="doc-desc">
+          Clarifies ownership, purpose, and management for a one-owner LLC.
         </div>
+      </a>
 
-        <div class="tier1-card" data-doc="SIMPLE_IOU">
-          <h3>Simple IOU Agreement</h3>
-          <p>Lightweight written record of what is owed and when it is repaid.</p>
+      <a href="preview.html?tier=1&doc=payment-iou" class="doc-card">
+        <div class="doc-name">Simple Payment or IOU Agreement</div>
+        <div class="doc-desc">
+          Basic written record of what is owed and when it must be repaid.
         </div>
+      </a>
 
-        <div class="tier1-card" data-doc="SERVICE_LETTER">
-          <h3>Simple Service Letter</h3>
-          <p>Basic service agreement defining who is doing what, and for how much.</p>
+      <a href="preview.html?tier=1&doc=basic-contractor" class="doc-card">
+        <div class="doc-name">Basic Contractor/Service Letter</div>
+        <div class="doc-desc">
+          Lightweight agreement confirming who is doing what, for how much.
         </div>
-      </div>
-    </section>
+      </a>
 
-    <!-- HOW IT WORKS -->
-    <section class="tier1-section">
-      <h2>How It Works</h2>
+      <a href="preview.html?tier=1&doc=other-basic-business" class="doc-card">
+        <div class="doc-name">Other Basic Business Forms</div>
+        <div class="doc-desc">
+          Simple, single-purpose documents to support your startup.
+        </div>
+      </a>
+    </div>
+
+    <h2 class="section-title">How It Works</h2>
+    <div class="how-it-works">
       <ul>
-        <li>Select Tier 1 and choose the document you need</li>
-        <li>Complete a short intake</li>
-        <li>Pay securely online</li>
-        <li>Return to provide final document details</li>
-        <li>Receive your customized document</li>
+        <li>Select Tier 1.</li>
+        <li>Choose which document you need.</li>
+        <li>Complete a short intake.</li>
+        <li>Pay securely.</li>
+        <li>Receive your customized document by email.</li>
       </ul>
-    </section>
+    </div>
 
-    <!-- ACTION BUTTONS -->
-    <section class="tier1-actions">
-      <button id="viewSamples" class="btn btn-secondary">View Document Samples</button>
-      <button id="continueBtn" class="btn btn-primary">Continue to Intake →</button>
-      <a href="catalog.html" class="btn btn-link">Back to Catalog</a>
-    </section>
-
+    <div class="tier-actions">
+      <a href="intake.html?tier=1" class="btn-primary">Start Tier 1 Intake</a>
+      <a href="preview.html?tier=1" class="btn-secondary">View Tier 1 Samples</a>
+    </div>
   </main>
-
-  <!-- BEHAVIOR: selection + navigation -->
-  <script>
-    (function () {
-      const tierCode = "T1";
-      let selectedDoc = null;
-
-      const cards = document.querySelectorAll(".tier1-card");
-      const samplesBtn = document.getElementById("viewSamples");
-      const continueBtn = document.getElementById("continueBtn");
-
-      cards.forEach(card => {
-        card.addEventListener("click", () => {
-          cards.forEach(c => c.classList.remove("selected"));
-          card.classList.add("selected");
-          selectedDoc = card.dataset.doc;
-        });
-      });
-
-      function requireSelection() {
-        if (!selectedDoc) {
-          alert("Please select a document first.");
-          return false;
-        }
-        return true;
-      }
-
-      samplesBtn.addEventListener("click", () => {
-        if (!requireSelection()) return;
-        // Go to preview with tier + doc
-        window.location.href = `preview.html?tier=${encodeURIComponent(tierCode)}&doc=${encodeURIComponent(selectedDoc)}`;
-      });
-
-      continueBtn.addEventListener("click", () => {
-        if (!requireSelection()) return;
-        // Go to intake with tier + doc
-        window.location.href = `intake.html?tier=${encodeURIComponent(tierCode)}&doc=${encodeURIComponent(selectedDoc)}`;
-      });
-    })();
-  </script>
 </body>
 </html>
