@@ -2,234 +2,116 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Tier 3 – Premium Business Legal Documents | E-LegalBoom</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <link rel="stylesheet" href="style.css"/>
-
+  <title>E-LegalBoom | Tier 3 – Premium Business Agreements</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
-    body {
-      margin: 0;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: #f6f8fb;
-      color: #0f172a;
-    }
-
-    .page {
-      max-width: 980px;
-      margin: 28px auto 48px;
-      padding: 0 18px;
-    }
-
-    h1 {
-      font-size: 1.85rem;
-      margin-bottom: 6px;
-      color: #0b7285;
-    }
-
-    .subtitle {
-      font-size: 1rem;
-      color: #475569;
-      max-width: 760px;
-      line-height: 1.5;
-    }
-
-    .price-box {
-      margin: 18px 0;
-      padding: 16px;
-      background: #ecfeff;
-      border: 1px solid #67e8f9;
-      border-radius: 10px;
-      font-size: 1.1rem;
-      font-weight: 600;
-      color: #0b7285;
-    }
-
-    .section {
-      margin-top: 24px;
-      padding-top: 6px;
-    }
-
-    .section h2 {
-      font-size: 1.1rem;
-      margin-bottom: 8px;
-      color: #0f172a;
-    }
-
-    ul {
-      padding-left: 22px;
-      margin-top: 6px;
-      margin-bottom: 6px;
-    }
-
-    li {
-      margin-bottom: 6px;
-    }
-
-    .note {
-      margin-top: 14px;
-      padding: 12px;
-      background: #f8fafc;
-      border-left: 4px solid #0b7285;
-      border-radius: 6px;
-      font-size: 0.92rem;
-      color: #334155;
-    }
-
-    .bundle-callout {
-      margin-top: 16px;
-      padding: 14px;
-      background: #fff7ed;
-      border: 1px solid #fed7aa;
-      border-radius: 10px;
-      font-size: 0.95rem;
-      color: #7c2d12;
-    }
-
-    .bundle-callout strong {
-      color: #9a3412;
-    }
-
-    .actions {
-      margin-top: 28px;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-    }
-
-    .btn-primary {
-      background: #0b7285;
-      color: #ffffff !important;
-      text-decoration: none;
-      padding: 12px 18px;
-      border-radius: 999px;
-      font-weight: 600;
-      font-size: 0.9rem;
-      display: inline-block;
-      box-shadow: 0 10px 25px rgba(11,114,133,0.35);
-    }
-
-    .btn-primary:hover {
-      background: #095c6c;
-    }
-
-    .btn-secondary {
-      border: 1px solid #0b7285;
-      color: #0b7285 !important;
-      text-decoration: none;
-      padding: 10px 16px;
-      border-radius: 999px;
-      font-weight: 600;
-      font-size: 0.85rem;
-      display: inline-block;
-      background: #ffffff;
-    }
-
-    .btn-secondary:hover {
-      background: #e6f7fb;
-    }
-
-    .footer-note {
-      margin-top: 26px;
-      font-size: 0.85rem;
-      color: #64748b;
-    }
-
-    .doc-list-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 12px;
-      margin-top: 8px;
-    }
-
-    .doc-item {
-      background: #ffffff;
-      border: 1px solid #e2e8f0;
-      border-radius: 8px;
-      padding: 10px 12px;
-      font-size: 0.9rem;
-    }
-
-    .doc-item strong {
-      color: #0b7285;
-    }
+    /* same style block as tier1/tier2 */
+    *{box-sizing:border-box;margin:0;padding:0;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;}
+    body{background:#f3f4f8;color:#111827;min-height:100vh;}
+    a{color:inherit;}
+    .site-header{display:flex;justify-content:space-between;align-items:center;padding:14px 24px;background:#fff;border-bottom:1px solid #e5e7eb;}
+    .site-brand{font-size:20px;font-weight:700;color:#111827;}
+    .site-nav a{margin-left:18px;font-size:14px;color:#374151;text-decoration:none;}
+    .site-nav a:hover{color:#1d4ed8;text-decoration:underline;}
+    .tier-page{max-width:1080px;margin:24px auto 40px;padding:0 16px;}
+    .tier-back{margin-bottom:10px;}
+    .tier-back a{font-size:13px;color:#1d4ed8;text-decoration:none;}
+    .tier-back a:hover{text-decoration:underline;}
+    .tier-title{font-size:26px;font-weight:700;margin-bottom:4px;}
+    .tier-subtitle{font-size:14px;color:#4b5563;margin-bottom:14px;}
+    .price-banner{background:#e0f2fe;border-radius:8px;padding:10px 14px;font-size:16px;font-weight:600;color:#075985;margin-bottom:20px;}
+    .section-title{font-size:16px;font-weight:600;margin-top:18px;margin-bottom:6px;}
+    .section-body{font-size:14px;color:#374151;margin-bottom:10px;}
+    .doc-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px;margin-bottom:18px;}
+    .doc-card{background:#fff;border-radius:8px;border:1px solid #e5e7eb;padding:10px 11px;font-size:13px;cursor:pointer;text-decoration:none;display:block;}
+    .doc-card:hover{border-color:#2563eb;box-shadow:0 4px 10px rgba(148,163,184,.4);}
+    .doc-name{font-weight:600;margin-bottom:3px;color:#1f2933;}
+    .doc-desc{font-size:12px;color:#4b5563;}
+    .how-it-works{font-size:14px;color:#374151;}
+    .how-it-works ul{margin-top:6px;padding-left:18px;}
+    .how-it-works li{margin-bottom:4px;}
+    .tier-actions{margin-top:18px;display:flex;flex-wrap:wrap;gap:10px;}
+    .btn-primary,.btn-secondary{display:inline-block;padding:9px 16px;border-radius:999px;font-size:14px;text-decoration:none;text-align:center;min-width:170px;}
+    .btn-primary{background:#0f766e;color:#fff;border:1px solid #0f766e;}
+    .btn-primary:hover{background:#115e59;}
+    .btn-secondary{background:#fff;color:#2563eb;border:1px solid #2563eb;}
+    .btn-secondary:hover{background:#e0edff;}
   </style>
 </head>
-
 <body>
+  <header class="site-header">
+    <div class="site-brand">E-LegalBoom</div>
+    <nav class="site-nav">
+      <a href="index.html">Home</a>
+      <a href="catalog.html">Catalog</a>
+      <a href="preview.html?tier=3">Samples</a>
+      <a href="orders.html">My Orders</a>
+    </nav>
+  </header>
 
-<section class="page">
-
-  <h1>Tier 3 – Premium Business Legal Document</h1>
-  <p class="subtitle">
-    Built for established businesses, joint ventures, complex agreements, and professional operations
-    that require stronger legal structure, clarity, and protection.
-  </p>
-
-  <div class="price-box">
-    Price: $99 per document
-  </div>
-
-  <div class="section">
-    <h2>What Tier 3 Is For</h2>
-    <p>
-      Tier 3 is designed for high-impact agreements where clarity, accountability, and risk protection matter.
-      These are not basic forms — they are business-critical documents used in real operations.
-    </p>
-  </div>
-
-  <div class="section">
-    <h2>Common Tier 3 Documents</h2>
-
-    <div class="doc-list-grid">
-      <div class="doc-item"><strong>Independent Contractor Agreement</strong><br>Contractor work terms, scope, and liability</div>
-      <div class="doc-item"><strong>Service Agreement</strong><br>Client services with payment terms and responsibilities</div>
-      <div class="doc-item"><strong>Business Consulting Agreement</strong><br>Professional services and deliverables</div>
-      <div class="doc-item"><strong>Joint Venture Agreement</strong><br>Formal business collaboration structure</div>
-      <div class="doc-item"><strong>Founder or Partner Arrangement</strong><br>Ownership, authority, and responsibilities</div>
-      <div class="doc-item"><strong>Custom Agreements</strong><br>Special-purpose business or legal documents</div>
+  <main class="tier-page">
+    <div class="tier-back">
+      <a href="catalog.html">&larr; Back to all tiers</a>
     </div>
-  </div>
 
-  <div class="section">
-    <h2>How It Works</h2>
-    <ul>
-      <li>Select Tier 3</li>
-      <li>Choose the document you want</li>
-      <li>Complete a short intake</li>
-      <li>Pay securely</li>
-      <li>Provide document details after payment</li>
-      <li>Receive your professional document</li>
-    </ul>
-  </div>
+    <h1 class="tier-title">Tier 3 – Premium Business Agreements</h1>
+    <p class="tier-subtitle">
+      For higher-impact business relationships, ongoing services, and more complex operational agreements.
+    </p>
 
-  <div class="note">
-    <strong>Important:</strong> Each Tier 3 purchase includes one document.
-    If you need additional documents, simply select another and complete a new order.
-  </div>
+    <div class="price-banner">Price: $99 per document</div>
 
-  <div class="bundle-callout">
-    <strong>Thinking of selecting more than two documents?</strong><br>
-    At that point, the <strong>Entrepreneur Starter Bundle</strong> becomes the better value.
-    It unlocks multiple documents within a 30-day window for one flat price.
-    <div style="margin-top:8px;">
-      <a href="bundle.html" style="color:#9a3412;font-weight:600;text-decoration:underline;">
-        View Entrepreneur Starter Bundle →
+    <h2 class="section-title">What Tier 3 Is For</h2>
+    <p class="section-body">
+      Tier 3 is designed for situations where you are delivering ongoing services, working with larger clients, or entering higher-stakes business relationships.
+    </p>
+
+    <h2 class="section-title">Common Tier 3 Documents</h2>
+    <div class="doc-grid">
+      <a href="preview.html?tier=3&doc=service-independent" class="doc-card">
+        <div class="doc-name">Service / Independent Contractor Agreements</div>
+        <div class="doc-desc">
+          Detailed agreements for client services or independent contractor work.
+        </div>
+      </a>
+
+      <a href="preview.html?tier=3&doc=consulting" class="doc-card">
+        <div class="doc-name">Consulting and Professional Services</div>
+        <div class="doc-desc">
+          Clarifies scope, deliverables, fees, and responsibilities over longer-term projects.
+        </div>
+      </a>
+
+      <a href="preview.html?tier=3&doc=joint-venture" class="doc-card">
+        <div class="doc-name">Joint Venture / Founder Arrangements</div>
+        <div class="doc-desc">
+          Sets terms when two parties collaborate on a shared project or venture.
+        </div>
+      </a>
+
+      <a href="preview.html?tier=3&doc=custom-structured" class="doc-card">
+        <div class="doc-name">Custom Structured Agreements</div>
+        <div class="doc-desc">
+          Tailored contracts for situations that do not fit neatly into a standard template.
+        </div>
       </a>
     </div>
-  </div>
 
-  <div class="actions">
-    <a class="btn-primary" href="intake.html?tier=T3">Start Tier 3 Intake →</a>
-    <a class="btn-secondary" href="preview.html">View Document Samples</a>
-    <a class="btn-secondary" href="catalog.html">Back to Catalog</a>
-  </div>
+    <h2 class="section-title">How It Works</h2>
+    <div class="how-it-works">
+      <ul>
+        <li>Select Tier 3.</li>
+        <li>Choose the agreement type that matches your situation.</li>
+        <li>Complete a more detailed intake so we can cover key risks.</li>
+        <li>Pay securely.</li>
+        <li>Receive your tailored agreement by email.</li>
+      </ul>
+    </div>
 
-  <div class="footer-note">
-    E-LegalBoom provides document preparation support and business automation services.  
-    We do not offer legal advice or attorney representation.
-  </div>
-
-</section>
-
+    <div class="tier-actions">
+      <a href="intake.html?tier=3" class="btn-primary">Start Tier 3 Intake</a>
+      <a href="preview.html?tier=3" class="btn-secondary">View Tier 3 Samples</a>
+    </div>
+  </main>
 </body>
 </html>
