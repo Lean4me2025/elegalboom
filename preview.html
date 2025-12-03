@@ -1,208 +1,368 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Tier 1 Documents | E-LegalBoom</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Document Samples | E-LegalBoom</title>
 
+  <!-- Keep your global styles -->
+  <link rel="stylesheet" href="style.css" />
+
+  <!-- Local styles so this page stays clean even if globals change -->
   <style>
-    body {
+    body.preview-page {
       margin: 0;
-      font-family: Arial, sans-serif;
-      background: #f4f7fb;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        sans-serif;
+      background: #f4f6fb;
+      color: #13233a;
     }
 
-    header {
-      background: #0e2a47;
-      color: white;
-      padding: 20px;
-      text-align: center;
+    .preview-header {
+      background: #0e2d63;
+      color: #fff;
+      padding: 16px 24px;
     }
 
-    header h1 {
-      margin: 5px 0;
-    }
-
-    header p {
-      margin: 4px 0;
-      opacity: 0.85;
-    }
-
-    .container {
+    .preview-header-inner {
       max-width: 1100px;
-      margin: auto;
-      padding: 20px;
-    }
-
-    .doc-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 18px;
-      margin-top: 20px;
-    }
-
-    .doc-card {
-      background: white;
-      border-radius: 8px;
-      padding: 16px;
-      border: 2px solid transparent;
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
-
-    .doc-card:hover {
-      border-color: #2b73d3;
-      background: #eef4ff;
-    }
-
-    .doc-card.selected {
-      border-color: #4ad0ff;
-      background: #daf2ff;
-    }
-
-    .doc-title {
-      font-weight: bold;
-      margin-bottom: 6px;
-    }
-
-    .doc-desc {
-      font-size: 0.9rem;
-      color: #555;
-    }
-
-    .footer-actions {
+      margin: 0 auto;
       display: flex;
       justify-content: space-between;
-      margin-top: 30px;
+      align-items: center;
+    }
+
+    .preview-logo {
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: #fff;
+      text-decoration: none;
+    }
+
+    .preview-nav a {
+      color: #eaf2ff;
+      text-decoration: none;
+      margin-left: 16px;
+      font-size: 0.9rem;
+    }
+
+    .preview-main {
+      max-width: 1100px;
+      margin: 32px auto 40px auto;
+      padding: 0 16px 40px 16px;
+    }
+
+    .preview-card {
+      background: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 12px 30px rgba(9, 30, 66, 0.1);
+      padding: 24px 24px 28px 24px;
+    }
+
+    .preview-meta {
+      margin-bottom: 18px;
+      display: flex;
       flex-wrap: wrap;
-      gap: 12px;
+      justify-content: space-between;
+      gap: 10px;
+      font-size: 0.9rem;
+      color: #4b5873;
+    }
+
+    .preview-title-block h1 {
+      margin: 0;
+      font-size: 1.6rem;
+      color: #11284a;
+    }
+
+    .preview-title-block p {
+      margin: 4px 0 0 0;
+      color: #5c6884;
+    }
+
+    .preview-tagline {
+      text-align: right;
+      font-size: 0.9rem;
+      color: #5c6884;
+    }
+
+    .preview-tagline span {
+      display: block;
+    }
+
+    .preview-sample-box {
+      margin-top: 16px;
+      border-radius: 8px;
+      background: #fbfcff;
+      border: 1px solid #dde3f0;
+      padding: 18px 18px 20px 18px;
+      font-family: "Courier New", monospace;
+      font-size: 0.9rem;
+      line-height: 1.5;
+      color: #2f3a4f;
+      white-space: pre-wrap;
+    }
+
+    .preview-actions {
+      margin-top: 22px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: flex-end;
     }
 
     .btn {
-      padding: 12px 20px;
-      border-radius: 30px;
-      text-decoration: none;
-      text-align: center;
-      font-weight: bold;
-      border: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 9px 16px;
+      border-radius: 999px;
+      border: 1px solid transparent;
+      font-size: 0.9rem;
       cursor: pointer;
-    }
-
-    .btn-preview {
-      border: 2px solid #2b73d3;
-      color: #2b73d3;
-      background: transparent;
-    }
-
-    .btn-preview:hover {
-      background: #eaf1ff;
+      text-decoration: none;
+      white-space: nowrap;
     }
 
     .btn-primary {
-      background: #2b73d3;
-      color: white;
+      background: #276ef1;
+      border-color: #276ef1;
+      color: #fff;
     }
 
-    .btn-primary:disabled {
-      background: #aaa;
-      cursor: not-allowed;
+    .btn-secondary {
+      background: #ffffff;
+      border-color: #d1d7e5;
+      color: #203150;
     }
 
-    .warning {
-      color: #b00020;
-      margin-top: 10px;
-      font-size: 0.9rem;
-      display: none;
+    .btn-link {
+      background: transparent;
+      border-color: transparent;
+      color: #276ef1;
+    }
+
+    @media (max-width: 640px) {
+      .preview-actions {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .preview-actions .btn {
+        width: 100%;
+      }
+      .preview-meta {
+        flex-direction: column;
+      }
+      .preview-tagline {
+        text-align: left;
+      }
     }
   </style>
 </head>
+<body class="preview-page">
 
-<body>
-
-<header>
-  <h1>Tier 1 Documents</h1>
-  <p>Select the document you want to prepare.</p>
-  <p>Each document is customized after intake.</p>
-</header>
-
-<div class="container">
-
-  <div class="doc-grid">
-
-    <div class="doc-card" onclick="selectDoc('NDA', this)">
-      <div class="doc-title">Mutual NDA</div>
-      <div class="doc-desc">Protect confidential business conversations</div>
+  <!-- HEADER -->
+  <header class="preview-header">
+    <div class="preview-header-inner">
+      <a href="index.html" class="preview-logo">E-LegalBoom</a>
+      <nav class="preview-nav">
+        <a href="catalog.html">Catalog</a>
+        <a href="preview.html">Document Samples</a>
+      </nav>
     </div>
+  </header>
 
-    <div class="doc-card" onclick="selectDoc('PROMISSORY_NOTE', this)">
-      <div class="doc-title">Promissory Note</div>
-      <div class="doc-desc">Formal agreement for repayment of money</div>
+  <main class="preview-main">
+    <div class="preview-card">
+      <!-- Top meta block -->
+      <div class="preview-meta">
+        <div class="preview-title-block">
+          <h1 id="docTitle">Document Sample</h1>
+          <p id="docSubtitle"></p>
+        </div>
+        <div class="preview-tagline">
+          <span id="docTierLabel"></span>
+          <span>Names, dates, and terms are placeholders.</span>
+          <span>Your completed document is customized to your intake.</span>
+        </div>
+      </div>
+
+      <!-- Sample text -->
+      <div class="preview-sample-box" id="docBody">
+        Loading sample…
+      </div>
+
+      <!-- Actions -->
+      <div class="preview-actions">
+        <a id="backTierBtn" href="tier1.html" class="btn btn-secondary">
+          ← Back to Tier
+        </a>
+        <a id="changeDocBtn" href="catalog.html" class="btn btn-link">
+          Choose a different document
+        </a>
+        <a id="goIntakeBtn" href="intake.html" class="btn btn-primary">
+          Continue to Intake →
+        </a>
+      </div>
     </div>
+  </main>
 
-    <div class="doc-card" onclick="selectDoc('SINGLE_MEMBER_LLC', this)">
-      <div class="doc-title">Single-Member LLC Operating Agreement</div>
-      <div class="doc-desc">Establish ownership and operating rules</div>
-    </div>
+  <script>
+    // 1) Read tier + doc from query string
+    const params = new URLSearchParams(window.location.search);
+    const tier = params.get("tier") || "T1";
+    const docCode = params.get("doc") || "NDA_MUTUAL";
 
-    <div class="doc-card" onclick="selectDoc('IOU', this)">
-      <div class="doc-title">Simple IOU Agreement</div>
-      <div class="doc-desc">Lightweight informal repayment document</div>
-    </div>
+    // 2) Define sample content for each doc code
+    const TIER_LABELS = {
+      T1: "Typical tier: Tier 1 – Startup & Essential Documents",
+      T2: "Typical tier: Tier 2 – Business Foundation Documents",
+      T3: "Typical tier: Tier 3 – Premium Business Legal Documents",
+      ENT: "Typical tier: Entrepreneur Starter Bundle"
+    };
 
-    <div class="doc-card" onclick="selectDoc('SERVICE_LETTER', this)">
-      <div class="doc-title">Simple Service Letter</div>
-      <div class="doc-desc">Basic agreement for service work</div>
-    </div>
+    const DOC_SAMPLES = {
+      // ---- TIER 1 ----
+      NDA_MUTUAL: {
+        title: "Mutual NDA (Non-Disclosure Agreement)",
+        subtitle: "For confidential business discussions.",
+        body: `
+MUTUAL NON-DISCLOSURE AGREEMENT (SAMPLE)
 
-  </div>
+This Agreement is entered into between the Parties
+for the purpose of exploring a potential business
+relationship. Each Party agrees not to disclose
+confidential information received from the other
+Party, except as allowed in this Agreement.
 
-  <div class="warning" id="warn">
-    Please select a document to continue.
-  </div>
+• "Confidential Information" includes non-public
+  business, financial, technical, or strategic data.
+• Information must be protected and used only for
+  evaluating the proposed business relationship.
+• At the end of discussions, each Party agrees to
+  return or destroy confidential materials.
 
-  <div class="footer-actions">
-    <a href="preview.html" class="btn btn-preview">View Document Samples</a>
+Your final NDA is customized to your state, parties,
+and business situation based on your E-LegalBoom intake.
+        `.trim()
+      },
 
-    <button class="btn btn-primary" onclick="goToIntake()">
-      Continue to Intake →
-    </button>
-  </div>
+      PROMISSORY_NOTE: {
+        title: "Promissory Note",
+        subtitle: "Formal agreement for repayment of money.",
+        body: `
+PROMISSORY NOTE (SAMPLE)
 
-</div>
+For value received, the Borrower promises to pay
+the Lender the principal sum of $________, together
+with interest at the annual rate of ______%,
+payable according to the schedule in this Note.
 
-<script>
+The Note sets out:
+• Total amount owed and interest rate
+• Payment schedule and due dates
+• Late-payment charges, if any
+• Default and acceleration terms
 
-let selectedDoc = null;
+Your final Promissory Note is customized to your
+state law, parties, and payment terms based on your
+E-LegalBoom intake.
+        `.trim()
+      },
 
-function selectDoc(docType, card) {
+      SINGLE_MEMBER_LLC: {
+        title: "Single-Member LLC Operating Agreement",
+        subtitle: "Clarifies ownership and operating rules for a one-owner LLC.",
+        body: `
+SINGLE-MEMBER LLC OPERATING AGREEMENT (SAMPLE)
 
-  selectedDoc = docType;
+This Agreement establishes the internal rules for
+a single-member limited liability company (LLC),
+including ownership, management, and distributions.
 
-  document.querySelectorAll(".doc-card").forEach(c => c.classList.remove("selected"));
-  card.classList.add("selected");
+Typical sections include:
+• Company formation and ownership
+• Management duties and decision-making
+• Capital contributions and distributions
+• Tax treatment and accounting
+• Dissolution and winding up
 
-  document.getElementById("warn").style.display = "none";
-}
+Your final Operating Agreement is customized to
+your state, entity name, and business facts from
+your E-LegalBoom intake.
+        `.trim()
+      },
 
-function goToIntake() {
+      SIMPLE_IOU: {
+        title: "Simple IOU Agreement",
+        subtitle: "Basic written record of what is owed and when it is repaid.",
+        body: `
+SIMPLE IOU AGREEMENT (SAMPLE)
 
-  if (!selectedDoc) {
-    document.getElementById("warn").style.display = "block";
-    return;
-  }
+This short agreement records a debt between two
+parties without extensive legal language.
 
-  const tier = "TIER_1";
+Key items captured:
+• Total amount owed
+• Date borrowed and date due
+• Any interest or fees (if applicable)
+• How and where payment will be made
 
-  // Change this URL to your real intake URL if needed
-  const intakeURL = "intake.html";
+Your final IOU is customized to your parties,
+amounts, and dates based on your E-LegalBoom intake.
+        `.trim()
+      },
 
-  // Send tier + docType forward
-  const params = `?tier=${encodeURIComponent(tier)}&docType=${encodeURIComponent(selectedDoc)}`;
+      SERVICE_LETTER: {
+        title: "Simple Service Letter",
+        subtitle: "Basic service agreement confirming who is doing what, and for how much.",
+        body: `
+SIMPLE SERVICE AGREEMENT LETTER (SAMPLE)
 
-  window.location.href = intakeURL + params;
-}
+This letter confirms the basic terms under which
+a Service Provider will perform work for a Client.
 
-</script>
+It typically covers:
+• Scope of work and deliverables
+• Compensation and payment timing
+• Time period the services will be provided
+• Ownership of work product
+• Cancellation or rescheduling
 
+Your final Service Agreement is customized to your
+services, pricing, and timing based on your
+E-LegalBoom intake.
+        `.trim()
+      }
+    };
+
+    // 3) Pick sample (fallback if unknown code)
+    const sample = DOC_SAMPLES[docCode] || DOC_SAMPLES.NDA_MUTUAL;
+
+    // 4) Populate the page
+    document.getElementById("docTitle").textContent = sample.title;
+    document.getElementById("docSubtitle").textContent = sample.subtitle;
+    document.getElementById("docTierLabel").textContent =
+      TIER_LABELS[tier] || "Document sample";
+
+    document.getElementById("docBody").textContent = sample.body;
+
+    // 5) Wire the buttons so we keep the same tier/doc context
+    const tierPageMap = {
+      T1: "tier1.html",
+      T2: "tier2.html",
+      T3: "tier3.html",
+      ENT: "bundle.html"
+    };
+
+    const backTierBtn = document.getElementById("backTierBtn");
+    const goIntakeBtn = document.getElementById("goIntakeBtn");
+
+    const tierPage = tierPageMap[tier] || "tier1.html";
+
+    backTierBtn.href = `${tierPage}?tier=${encodeURIComponent(tier)}`;
+    goIntakeBtn.href =
+      `intake.html?tier=${encodeURIComponent(tier)}&doc=${encodeURIComponent(docCode)}`;
+  </script>
 </body>
 </html>
