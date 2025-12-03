@@ -2,137 +2,116 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Tier 2 – Partnership & Growth Documents | E-LegalBoom</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link rel="stylesheet" href="style.css" />
+  <title>E-LegalBoom | Tier 2 – Business Foundation Documents</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
-    body { margin: 0; font-family: Arial, sans-serif; background: #f4f7fb; }
-    .page-hero { max-width: 960px; margin: 0 auto 2rem; padding: 2rem 1.5rem 1rem; }
-    .page-hero h1 { font-size: 1.9rem; margin-bottom: 0.4rem; }
-    .page-hero p.lead { font-size: 1rem; max-width: 44rem; }
-    .page-section .container { max-width: 960px; margin: 0 auto; padding: 0 1.5rem 2rem; }
-    .tier-grid {
-      display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 1rem; margin: 1rem 0 1.5rem;
-    }
-    .tier-card {
-      background: #fff; border-radius: 8px; padding: 0.75rem 0.9rem; border: 1px solid #dde3ec;
-    }
-    .tier-card h4 { margin: 0 0 0.25rem; font-size: 0.98rem; }
-    .tier-card p { margin: 0; font-size: 0.86rem; color: #555; }
-    .hint { font-size: 0.88rem; color: #444; }
-    .doc-chooser {
-      max-width: 960px; margin: 0 auto 2rem; padding: 1.5rem;
-      background: #f7f9fb; border-radius: 10px; border: 1px solid #dde3ec;
-    }
-    .doc-chooser h2 { font-size: 1.25rem; margin-bottom: 0.25rem; }
-    .doc-chooser p.sub { font-size: 0.9rem; color: #555; margin-bottom: 0.75rem; }
-    .doc-pill-row {
-      display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.75rem;
-    }
-    .doc-pill {
-      border: 1px solid #c7d2e2; border-radius: 999px; background: #fff;
-      padding: 0.45rem 0.85rem; font-size: 0.9rem; cursor: pointer;
-      transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
-      white-space: nowrap;
-    }
-    .doc-pill:hover { border-color: #2c7be5; }
-    .doc-pill.selected { background: #2c7be5; border-color: #2c7be5; color: #fff; }
-    .doc-helper { font-size: 0.85rem; color: #666; }
-    .doc-helper strong { color: #2c7be5; }
-    .doc-warning { font-size: 0.85rem; color: #b00020; display: none; margin-top: 0.25rem; }
-    .tier-actions { max-width: 960px; margin: 0 auto 3rem; padding: 0 1.5rem 1rem; }
-    .tier-actions-row {
-      display: flex; flex-wrap: wrap; gap: 0.75rem; align-items: center;
-    }
-    .btn-pill {
-      display: inline-flex; align-items: center; justify-content: center;
-      padding: 0.6rem 1.1rem; border-radius: 999px; border: none; font-size: 0.9rem;
-      cursor: pointer; text-decoration: none; white-space: nowrap;
-    }
-    .btn-primary { background: #2c7be5; color: #fff; }
-    .btn-primary[aria-disabled="true"] { background: #c0d1f0; cursor: not-allowed; }
-    .btn-secondary { background: #eef1f6; color: #222; }
-    .btn-link { background: transparent; color: #2c7be5; padding: 0; }
-    @media (max-width: 640px) {
-      .tier-grid { grid-template-columns: 1fr; }
-      .doc-pill-row { flex-direction: column; align-items: flex-start; }
-      .tier-actions-row { flex-direction: column; align-items: stretch; }
-      .btn-pill { width: 100%; justify-content: center; }
-    }
+    /* same styles as tier1 for consistency */
+    * { box-sizing:border-box; margin:0; padding:0; font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
+    body { background:#f3f4f8; color:#111827; min-height:100vh; }
+    a { color:inherit; }
+    .site-header{display:flex;justify-content:space-between;align-items:center;padding:14px 24px;background:#fff;border-bottom:1px solid #e5e7eb;}
+    .site-brand{font-size:20px;font-weight:700;color:#111827;}
+    .site-nav a{margin-left:18px;font-size:14px;color:#374151;text-decoration:none;}
+    .site-nav a:hover{color:#1d4ed8;text-decoration:underline;}
+    .tier-page{max-width:1080px;margin:24px auto 40px;padding:0 16px;}
+    .tier-back{margin-bottom:10px;}
+    .tier-back a{font-size:13px;color:#1d4ed8;text-decoration:none;}
+    .tier-back a:hover{text-decoration:underline;}
+    .tier-title{font-size:26px;font-weight:700;margin-bottom:4px;}
+    .tier-subtitle{font-size:14px;color:#4b5563;margin-bottom:14px;}
+    .price-banner{background:#e0f2fe;border-radius:8px;padding:10px 14px;font-size:16px;font-weight:600;color:#075985;margin-bottom:20px;}
+    .section-title{font-size:16px;font-weight:600;margin-top:18px;margin-bottom:6px;}
+    .section-body{font-size:14px;color:#374151;margin-bottom:10px;}
+    .doc-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px;margin-bottom:18px;}
+    .doc-card{background:#fff;border-radius:8px;border:1px solid #e5e7eb;padding:10px 11px;font-size:13px;cursor:pointer;text-decoration:none;display:block;}
+    .doc-card:hover{border-color:#2563eb;box-shadow:0 4px 10px rgba(148,163,184,.4);}
+    .doc-name{font-weight:600;margin-bottom:3px;color:#1f2933;}
+    .doc-desc{font-size:12px;color:#4b5563;}
+    .how-it-works{font-size:14px;color:#374151;}
+    .how-it-works ul{margin-top:6px;padding-left:18px;}
+    .how-it-works li{margin-bottom:4px;}
+    .tier-actions{margin-top:18px;display:flex;flex-wrap:wrap;gap:10px;}
+    .btn-primary,.btn-secondary{display:inline-block;padding:9px 16px;border-radius:999px;font-size:14px;text-decoration:none;text-align:center;min-width:170px;}
+    .btn-primary{background:#0f766e;color:#fff;border:1px solid #0f766e;}
+    .btn-primary:hover{background:#115e59;}
+    .btn-secondary{background:#fff;color:#2563eb;border:1px solid #2563eb;}
+    .btn-secondary:hover{background:#e0edff;}
   </style>
 </head>
-
 <body>
   <header class="site-header">
-    <div class="container">
-      <a href="index.html" class="logo">E-LegalBoom</a>
-      <nav class="nav">
-        <a href="catalog.html">Catalog</a>
-        <a href="preview.html">Document Samples</a>
-      </nav>
-    </div>
+    <div class="site-brand">E-LegalBoom</div>
+    <nav class="site-nav">
+      <a href="index.html">Home</a>
+      <a href="catalog.html">Catalog</a>
+      <a href="preview.html?tier=2">Samples</a>
+      <a href="orders.html">My Orders</a>
+    </nav>
   </header>
 
-  <main>
-    <section class="page-hero">
-      <h1>Tier 2 – Partnership &amp; Growth Documents</h1>
-      <p class="lead">
-        Designed for businesses with more than one decision-maker, adding structure for ownership, profits,
-        and long-term growth.
-      </p>
-    </section>
+  <main class="tier-page">
+    <div class="tier-back">
+      <a href="catalog.html">&larr; Back to all tiers</a>
+    </div>
 
-    <section class="page-section">
-      <div class="container">
-        <h2>What Tier 2 Is For</h2>
-        <p>
-          Tier 2 covers documents that define how people work together and share what the
-          business earns — and what happens if someone wants to exit.
-        </p>
+    <h1 class="tier-title">Tier 2 – Business Foundation Documents</h1>
+    <p class="tier-subtitle">
+      For partnerships, multi-owner businesses, and agreements where roles and profit-sharing must be clear.
+    </p>
 
-        <h3>Common Tier 2 Documents</h3>
-        <div class="tier-grid">
-          <div class="tier-card">
-            <h4>Partnership Agreement</h4>
-            <p>Defines partners, profit sharing, decision-making, and exit terms.</p>
-          </div>
-          <div class="tier-card">
-            <h4>Multi-Member LLC Operating Agreement</h4>
-            <p>For LLCs with multiple members, roles, and different ownership percentages.</p>
-          </div>
-          <div class="tier-card">
-            <h4>Shareholder Agreement (Basic)</h4>
-            <p>Clarifies expectations and rights for owners in a corporation.</p>
-          </div>
-          <div class="tier-card">
-            <h4>Joint Venture Agreement</h4>
-            <p>For two or more parties teaming up on a specific project or venture.</p>
-          </div>
+    <div class="price-banner">Price: $59 per document</div>
+
+    <h2 class="section-title">What Tier 2 Is For</h2>
+    <p class="section-body">
+      Tier 2 is designed for arrangements where more than one person or entity is involved in ownership, decision-making, or profit sharing.
+    </p>
+
+    <h2 class="section-title">Common Tier 2 Documents</h2>
+    <div class="doc-grid">
+      <a href="preview.html?tier=2&doc=partnership-agreement" class="doc-card">
+        <div class="doc-name">Partnership Agreement</div>
+        <div class="doc-desc">
+          Clarifies roles, contributions, decision-making, and profit splits between partners.
         </div>
+      </a>
 
-        <h3>How It Works</h3>
-        <ul>
-          <li>Select Tier 2</li>
-          <li>Choose which partnership / ownership document you need</li>
-          <li>Complete the intake</li>
-          <li>Pay securely</li>
-          <li>Return to answer detailed questions for that agreement</li>
-        </ul>
+      <a href="preview.html?tier=2&doc=two-member-llc" class="doc-card">
+        <div class="doc-name">Two-Member LLC Agreement</div>
+        <div class="doc-desc">
+          Defines ownership percentages and operating rules for a two-member LLC.
+        </div>
+      </a>
 
-        <p class="hint">
-          <strong>Note:</strong> Each Tier 2 purchase includes one document. If your structure is more complex,
-          we may recommend an upgraded tier or custom package.
-        </p>
-      </div>
-    </section>
+      <a href="preview.html?tier=2&doc=buy-sell" class="doc-card">
+        <div class="doc-name">Buy–Sell / Investor Arrangements</div>
+        <div class="doc-desc">
+          Sets expectations when an investor comes in or an owner wants to exit.
+        </div>
+      </a>
 
-    <section class="doc-chooser">
-      <h2>Choose Your Tier 2 Document</h2>
-      <p class="sub">Select one document below, then continue to the intake form.</p>
+      <a href="preview.html?tier=2&doc=other-core-business" class="doc-card">
+        <div class="doc-name">Other Core Business Agreements</div>
+        <div class="doc-desc">
+          Additional foundation documents you may need as your business grows.
+        </div>
+      </a>
+    </div>
 
-      <div class="doc-pill-row">
-        <button type="button" class="doc-pill" data-doc="PARTNERSHIP_AGREEMENT">Partnership Agreement</button>
-        <button type="button" class="doc-pill" data-doc="MULTI_MEMBER_LLC">Multi-Member LLC Operating Agreement</button>
-        <button type="button" class="doc-pill" data-doc="SHAREHOLDER_AGREEMENT">Basic Shareholder Agreement</button>
-        <button type="button" class="doc-pill" data-doc="JOINT_VENT
+    <h2 class="section-title">How It Works</h2>
+    <div class="how-it-works">
+      <ul>
+        <li>Select Tier 2.</li>
+        <li>Choose which document you need.</li>
+        <li>Complete a guided intake covering partners, roles, and terms.</li>
+        <li>Pay securely.</li>
+        <li>Receive your customized agreement by email.</li>
+      </ul>
+    </div>
+
+    <div class="tier-actions">
+      <a href="intake.html?tier=2" class="btn-primary">Start Tier 2 Intake</a>
+      <a href="preview.html?tier=2" class="btn-secondary">View Tier 2 Samples</a>
+    </div>
+  </main>
+</body>
+</html>
