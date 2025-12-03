@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>E-LegalBoom | Tier Document Samples</title>
+  <title>E-LegalBoom | Document Samples</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
     * {
@@ -17,19 +17,68 @@
       background: #f3f4f8;
       color: #111827;
       min-height: 100vh;
-      padding: 32px 16px;
-      display: flex;
-      justify-content: center;
     }
 
-    .page {
-      width: 100%;
-      max-width: 1120px;
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    /* Header */
+    .site-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 24px;
       background: #ffffff;
-      border-radius: 10px;
-      border: 1px solid #e5e7eb;
-      box-shadow: 0 10px 25px rgba(15, 23, 42, 0.12);
-      padding: 24px 28px 28px;
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    .site-brand {
+      font-size: 20px;
+      font-weight: 700;
+      color: #111827;
+    }
+
+    .site-nav a {
+      margin-left: 18px;
+      font-size: 14px;
+      color: #374151;
+    }
+
+    .site-nav a:hover {
+      color: #1d4ed8;
+      text-decoration: underline;
+    }
+
+    /* Page layout */
+    .page {
+      max-width: 1120px;
+      margin: 24px auto 40px;
+      padding: 0 16px;
+    }
+
+    .top-bar {
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .back-link {
+      font-size: 13px;
+      color: #1d4ed8;
+    }
+
+    .back-link:hover {
+      text-decoration: underline;
+    }
+
+    .tier-label {
+      font-size: 13px;
+      color: #4b5563;
     }
 
     .page h1 {
@@ -40,7 +89,7 @@
     .page p.subhead {
       font-size: 14px;
       color: #4b5563;
-      margin-bottom: 20px;
+      margin-bottom: 16px;
     }
 
     .layout {
@@ -121,18 +170,58 @@
       background: #ffffff;
       padding: 18px 20px;
       min-height: 380px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
     }
 
     .preview-title {
       font-size: 18px;
       font-weight: 700;
-      margin-bottom: 4px;
+      margin-bottom: 2px;
     }
 
     .preview-meta {
       font-size: 12px;
       color: #6b7280;
-      margin-bottom: 12px;
+    }
+
+    .preview-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 4px;
+      margin-bottom: 6px;
+    }
+
+    .btn-primary,
+    .btn-secondary {
+      display: inline-block;
+      padding: 7px 14px;
+      border-radius: 999px;
+      font-size: 13px;
+      text-align: center;
+      min-width: 170px;
+    }
+
+    .btn-primary {
+      background: #0f766e;
+      color: #ffffff;
+      border: 1px solid #0f766e;
+    }
+
+    .btn-primary:hover {
+      background: #115e59;
+    }
+
+    .btn-secondary {
+      background: #ffffff;
+      color: #2563eb;
+      border: 1px solid #2563eb;
+    }
+
+    .btn-secondary:hover {
+      background: #e0edff;
     }
 
     .preview-body {
@@ -144,16 +233,30 @@
       font-size: 13px;
       line-height: 1.6;
       white-space: pre-wrap;
+      flex: 1;
     }
   </style>
 </head>
 <body>
+  <header class="site-header">
+    <div class="site-brand">E-LegalBoom</div>
+    <nav class="site-nav">
+      <a href="index.html">Home</a>
+      <a href="catalog.html">Catalog</a>
+      <a href="orders.html">My Orders</a>
+    </nav>
+  </header>
+
   <main class="page">
+    <div class="top-bar">
+      <a href="catalog.html" id="back-link" class="back-link">&larr; Back to tier</a>
+      <div class="tier-label" id="tier-label"></div>
+    </div>
+
     <h1>Document Samples</h1>
     <p class="subhead">
-      Browse representative samples of how your documents are structured
-      and written for this tier. Your completed document will be customized
-      based on your intake and the state where your business operates.
+      Browse representative samples of how your documents are structured and written for this tier.
+      Your completed document will be customized based on your intake and the state where your business operates.
     </p>
 
     <section class="layout">
@@ -166,24 +269,43 @@
 
       <!-- RIGHT: preview -->
       <section class="preview-panel">
-        <div class="preview-title" id="preview-title"></div>
-        <div class="preview-meta" id="preview-meta"></div>
+        <div>
+          <div class="preview-title" id="preview-title"></div>
+          <div class="preview-meta" id="preview-meta"></div>
+          <div class="preview-actions">
+            <a id="start-intake-btn" class="btn-primary" href="#">
+              Start Intake for this Document
+            </a>
+            <a class="btn-secondary" href="catalog.html">Back to Catalog</a>
+          </div>
+        </div>
         <div class="preview-body" id="preview-body"></div>
       </section>
     </section>
   </main>
 
   <script>
-    /* ------------- DATA FOR THIS TIER -------------
-       Adjust this array for Tier 1 / Tier 2 / Tier 3, etc.
-       Each object = one document in that tier.
-    */
-    const docs = [
-      {
-        id: "mutual-nda",
-        name: "Mutual NDA (Non-Disclosure Agreement)",
-        tierLine: "Typical tier: Tier 1 – For confidential discussions",
-        sampleText: `MUTUAL NON-DISCLOSURE AGREEMENT (SAMPLE)
+    // ---- Read URL parameters ----
+    const params = new URLSearchParams(window.location.search);
+    const tierParam = params.get("tier") || "1";
+    const docParam = params.get("doc") || null;
+
+    // ---- Tier labels for display and routing ----
+    const tierNames = {
+      "1": "Tier 1 – Startup & Essential Documents",
+      "2": "Tier 2 – Business Foundation Documents",
+      "3": "Tier 3 – Premium Business Agreements",
+      "bundle": "Entrepreneur Starter Bundle",
+    };
+
+    // ---- Sample data for each tier ----
+    const docsByTier = {
+      "1": [
+        {
+          id: "mutual-nda",
+          name: "Mutual NDA (Non-Disclosure Agreement)",
+          tierLine: "Typical tier: Tier 1 – For confidential discussions",
+          sampleText: `MUTUAL NON-DISCLOSURE AGREEMENT (SAMPLE)
 
 This Agreement is used when two sides want to explore an
 opportunity and need to share information that should not
@@ -199,12 +321,12 @@ It defines:
 
 Your completed NDA will be customized with the names,
 dates, and specific details from your intake.`
-      },
-      {
-        id: "promissory-note",
-        name: "Promissory Note",
-        tierLine: "Typical tier: Tier 1 – For loans and repayment terms",
-        sampleText: `PROMISSORY NOTE (SAMPLE)
+        },
+        {
+          id: "promissory-note",
+          name: "Promissory Note",
+          tierLine: "Typical tier: Tier 1 – For loans and repayment terms",
+          sampleText: `PROMISSORY NOTE (SAMPLE)
 
 This Note documents a loan between a Borrower and a Lender.
 
@@ -218,16 +340,15 @@ It typically covers:
 
 Your completed Note will be tailored to the dollar amount,
 payment schedule, and terms you provide in your intake.`
-      },
-      {
-        id: "single-member-llc",
-        name: "Single-Member LLC Operating Agreement",
-        tierLine: "Typical tier: Tier 1 – For single-owner LLC structure",
-        sampleText: `SINGLE-MEMBER LLC OPERATING AGREEMENT (SAMPLE)
+        },
+        {
+          id: "single-member-llc",
+          name: "Single-Member LLC Operating Agreement",
+          tierLine: "Typical tier: Tier 1 – For single-owner LLC structure",
+          sampleText: `SINGLE-MEMBER LLC OPERATING AGREEMENT (SAMPLE)
 
 This Agreement establishes the ownership, management
-authority, and operating procedures for a Limited
-Liability Company (LLC) with one owner.
+authority, and operating procedures for an LLC with one owner.
 
 Articles commonly address:
 
@@ -239,16 +360,284 @@ Articles commonly address:
 
 Your completed Operating Agreement will be drafted to
 match your state, business name, and structure.`
-      }
-    ];
+        },
+      ],
+      "2": [
+        {
+          id: "partnership-agreement",
+          name: "Partnership Agreement",
+          tierLine: "Typical tier: Tier 2 – For multi-owner businesses",
+          sampleText: `PARTNERSHIP AGREEMENT (SAMPLE)
 
-    /* ------------- RENDERING LOGIC ------------- */
+This Agreement defines how two or more partners will own
+and operate a business together.
+
+It typically covers:
+
+• Ownership percentages and capital contributions
+• Roles, decision-making, and voting
+• Profit and loss sharing
+• What happens if a partner wants to leave
+• How disputes are resolved
+
+Your completed Agreement will reflect your partners, roles,
+and profit-sharing choices from the intake.`
+        },
+        {
+          id: "two-member-llc",
+          name: "Two-Member LLC Agreement",
+          tierLine: "Typical tier: Tier 2 – For two-owner LLCs",
+          sampleText: `TWO-MEMBER LLC OPERATING AGREEMENT (SAMPLE)
+
+This document sets up an LLC with two owners, explaining
+how decisions are made and how money is shared.
+
+Key topics include:
+
+• Each Member's ownership percentage
+• How profits and losses are allocated
+• Management and voting rules
+• Transfers of ownership interests
+• Dissolution and winding up
+
+Your final document will be customized using your intake
+information and state.`
+        },
+        {
+          id: "buy-sell",
+          name: "Buy–Sell / Investor Arrangements",
+          tierLine: "Typical tier: Tier 2 – For investor or exit planning",
+          sampleText: `BUY–SELL / INVESTOR ARRANGEMENT (SAMPLE)
+
+This Agreement is used when an owner may buy or sell an
+interest in the business, or when an investor is coming in.
+
+It can address:
+
+• When ownership can be bought or sold
+• How the business is valued
+• Payment terms for buyouts
+• Rights and protections for investors
+• Events that trigger a buy–sell (death, disability, exit)
+
+Your customized document will use the key terms you supply
+in your intake.`
+        },
+        {
+          id: "other-core-business",
+          name: "Other Core Business Agreements",
+          tierLine: "Typical tier: Tier 2 – Additional foundation documents",
+          sampleText: `OTHER CORE BUSINESS AGREEMENTS (SAMPLE)
+
+This category covers additional business-to-business or
+owner-relationship agreements that support your structure.
+
+Examples include:
+
+• Simple subscription / recurring revenue terms
+• Basic supplier or vendor agreements
+• Short-form collaboration arrangements
+
+Your completed document will be drafted based on the type
+you select and the details you share in your intake.`
+        },
+      ],
+      "3": [
+        {
+          id: "service-independent",
+          name: "Service / Independent Contractor Agreement",
+          tierLine: "Typical tier: Tier 3 – For ongoing services",
+          sampleText: `SERVICE / INDEPENDENT CONTRACTOR AGREEMENT (SAMPLE)
+
+This Agreement is used when you or your business will
+provide services as an independent contractor.
+
+It often includes:
+
+• Scope of work and deliverables
+• Payment structure and invoicing
+• Timeline and milestones
+• Intellectual property ownership
+• Confidentiality and non-solicitation
+• Termination and remedies
+
+Your customized Agreement will reflect your service model,
+fees, and expectations from the intake.`
+        },
+        {
+          id: "consulting",
+          name: "Consulting and Professional Services Agreement",
+          tierLine: "Typical tier: Tier 3 – For consulting relationships",
+          sampleText: `CONSULTING AND PROFESSIONAL SERVICES AGREEMENT (SAMPLE)
+
+Used when you provide higher-level advisory or professional
+services to a client.
+
+Key topics:
+
+• Description of services and strategy
+• Fee structure (hourly, project, retainer)
+• Reporting, meetings, and communication
+• Limitation of liability and disclaimers
+• Confidentiality and data handling
+
+Your finished document will be tailored to your project and
+client relationship.`
+        },
+        {
+          id: "joint-venture",
+          name: "Joint Venture / Founder Arrangement",
+          tierLine: "Typical tier: Tier 3 – For shared projects or ventures",
+          sampleText: `JOINT VENTURE / FOUNDER ARRANGEMENT (SAMPLE)
+
+This Agreement covers a specific project or venture where
+two or more parties collaborate.
+
+It may address:
+
+• Purpose and scope of the venture
+• Contributions by each party
+• Profit and loss allocation
+• Management and voting
+• Exit and termination
+
+Your final Agreement will be shaped around the venture
+details you provide.`
+        },
+        {
+          id: "custom-structured",
+          name: "Custom Structured Agreement",
+          tierLine: "Typical tier: Tier 3 – For unique arrangements",
+          sampleText: `CUSTOM STRUCTURED AGREEMENT (SAMPLE)
+
+Some situations do not fit a standard template. This option
+is for more customized, structured agreements.
+
+The sample language includes common legal building blocks
+such as:
+
+• Recitals describing the relationship
+• Definitions of key terms
+• Core obligations of each side
+• Payment and performance terms
+• Remedies and dispute resolution
+
+Your finished document will be more tailored and may
+require additional clarification during or after your intake.`
+        },
+      ],
+      "bundle": [
+        {
+          id: "tier1-set",
+          name: "Tier 1 Document Types",
+          tierLine: "Included: Tier 1 – Startup & Essential Documents",
+          sampleText: `TIER 1 DOCUMENT TYPES (BUNDLE OVERVIEW)
+
+With the Bundle, you can prepare multiple Tier 1 documents
+during your access window.
+
+Typical Tier 1 types include:
+
+• Mutual NDA (Non-Disclosure Agreement)
+• Promissory Note
+• Single-Member LLC Operating Agreement
+• Simple Payment or IOU Agreement
+• Basic Contractor / Service Letter
+
+Each document still receives its own intake and is drafted
+based on your answers.`
+        },
+        {
+          id: "tier2-set",
+          name: "Tier 2 Document Types",
+          tierLine: "Included: Tier 2 – Business Foundation Documents",
+          sampleText: `TIER 2 DOCUMENT TYPES (BUNDLE OVERVIEW)
+
+You may also generate certain Tier 2 business foundation
+documents within your bundle window, such as:
+
+• Partnership Agreement
+• Two-Member LLC Agreement
+• Buy–Sell / Investor Arrangements
+
+Each is completed through a focused intake specific to that
+document.`
+        },
+        {
+          id: "tier3-set",
+          name: "Tier 3 Document Types",
+          tierLine: "Included: Tier 3 – Premium Business Agreements",
+          sampleText: `TIER 3 DOCUMENT TYPES (BUNDLE OVERVIEW)
+
+For some bundles, you may also access selected Tier 3
+agreement types:
+
+• Service / Independent Contractor Agreement
+• Consulting / Professional Services Agreement
+• Other premium agreements as specified
+
+Your intake will indicate which specific Tier 3 documents
+are included in your bundle.`
+        },
+        {
+          id: "one-intake-per-doc",
+          name: "One Intake per Document",
+          tierLine: "Bundle rule – One intake per document",
+          sampleText: `ONE INTAKE PER DOCUMENT (BUNDLE RULE)
+
+To keep quality high, each document prepared under the
+bundle still receives its own distinct intake.
+
+This ensures:
+
+• Each agreement reflects its own facts and parties
+• You can prioritize which documents you need first
+• Changes in your situation can be reflected per document
+
+Your bundle intake will set your window; each document
+intake will be completed during that time.`
+        },
+      ],
+    };
+
+    // Choose the tier's docs; default to Tier 1 if unknown
+    const docs = docsByTier[tierParam] || docsByTier["1"];
+
+    // DOM references
     const listEl = document.getElementById("doc-list");
     const previewTitleEl = document.getElementById("preview-title");
     const previewMetaEl = document.getElementById("preview-meta");
     const previewBodyEl = document.getElementById("preview-body");
+    const tierLabelEl = document.getElementById("tier-label");
+    const backLinkEl = document.getElementById("back-link");
+    const intakeBtnEl = document.getElementById("start-intake-btn");
 
+    // Tier label and back link
+    tierLabelEl.textContent = tierNames[tierParam] || tierNames["1"];
+
+    if (tierParam === "1") {
+      backLinkEl.href = "tier1.html";
+      backLinkEl.textContent = "← Back to Tier 1";
+    } else if (tierParam === "2") {
+      backLinkEl.href = "tier2.html";
+      backLinkEl.textContent = "← Back to Tier 2";
+    } else if (tierParam === "3") {
+      backLinkEl.href = "tier3.html";
+      backLinkEl.textContent = "← Back to Tier 3";
+    } else if (tierParam === "bundle") {
+      backLinkEl.href = "bundle.html";
+      backLinkEl.textContent = "← Back to Bundle";
+    } else {
+      backLinkEl.href = "catalog.html";
+      backLinkEl.textContent = "← Back to catalog";
+    }
+
+    // determine initial document index
     let currentIndex = 0;
+    if (docParam) {
+      const idx = docs.findIndex((d) => d.id === docParam);
+      if (idx >= 0) currentIndex = idx;
+    }
 
     function renderList() {
       listEl.innerHTML = "";
@@ -268,11 +657,19 @@ match your state, business name, and structure.`
       });
     }
 
+    function updateIntakeLink() {
+      const doc = docs[currentIndex];
+      const tier = encodeURIComponent(tierParam);
+      const docId = encodeURIComponent(doc.id);
+      intakeBtnEl.href = `intake.html?tier=${tier}&doc=${docId}`;
+    }
+
     function renderPreview() {
       const doc = docs[currentIndex];
       previewTitleEl.textContent = doc.name;
       previewMetaEl.textContent = doc.tierLine;
       previewBodyEl.textContent = doc.sampleText;
+      updateIntakeLink();
     }
 
     // Initial render
