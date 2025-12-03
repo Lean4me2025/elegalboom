@@ -2,278 +2,118 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Entrepreneur Starter Bundle | E-LegalBoom</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <link rel="stylesheet" href="style.css"/>
-
+  <title>E-LegalBoom | Entrepreneur Starter Bundle</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
-    body {
-      margin: 0;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: #f6f8fb;
-      color: #0f172a;
-    }
-
-    .page {
-      max-width: 980px;
-      margin: 28px auto 48px;
-      padding: 0 18px;
-    }
-
-    h1 {
-      font-size: 1.95rem;
-      margin-bottom: 6px;
-      color: #7c2d12; /* slightly warmer for “bundle / leadership” tone */
-    }
-
-    .subtitle {
-      font-size: 1.02rem;
-      color: #475569;
-      max-width: 800px;
-      line-height: 1.55;
-    }
-
-    .price-box {
-      margin: 18px 0;
-      padding: 16px;
-      background: #fff7ed;
-      border: 1px solid #fed7aa;
-      border-radius: 10px;
-      font-size: 1.15rem;
-      font-weight: 700;
-      color: #9a3412;
-    }
-
-    .section {
-      margin-top: 26px;
-      padding-top: 8px;
-    }
-
-    .section h2 {
-      font-size: 1.15rem;
-      margin-bottom: 8px;
-      color: #0f172a;
-    }
-
-    .two-col {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 12px;
-      margin-top: 8px;
-    }
-
-    .card {
-      background: #ffffff;
-      border: 1px solid #e2e8f0;
-      border-radius: 10px;
-      padding: 12px 14px;
-      font-size: 0.92rem;
-    }
-
-    .card strong {
-      color: #7c2d12;
-      display: block;
-      margin-bottom: 4px;
-    }
-
-    .note {
-      margin-top: 14px;
-      padding: 12px;
-      background: #f8fafc;
-      border-left: 4px solid #9a3412;
-      border-radius: 6px;
-      font-size: 0.95rem;
-      color: #334155;
-    }
-
-    ul {
-      padding-left: 22px;
-      margin-top: 8px;
-      margin-bottom: 6px;
-    }
-
-    li { margin-bottom: 6px; }
-
-    .actions {
-      margin-top: 30px;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-    }
-
-    .btn-primary {
-      background: #9a3412;
-      color: #ffffff !important;
-      text-decoration: none;
-      padding: 12px 20px;
-      border-radius: 999px;
-      font-weight: 700;
-      font-size: 0.92rem;
-      display: inline-block;
-      box-shadow: 0 10px 26px rgba(154,52,18,0.35);
-    }
-
-    .btn-primary:hover { background: #7c2d12; }
-
-    .btn-secondary {
-      border: 1px solid #9a3412;
-      color: #9a3412 !important;
-      text-decoration: none;
-      padding: 10px 16px;
-      border-radius: 999px;
-      font-weight: 600;
-      font-size: 0.85rem;
-      display: inline-block;
-      background: #ffffff;
-    }
-    .btn-secondary:hover { background: #fff1e6; }
-
-    .compare {
-      margin-top: 18px;
-      border-radius: 10px;
-      overflow: hidden;
-      border: 1px solid #e2e8f0;
-      background: #ffffff;
-    }
-
-    .compare header {
-      background: #0f172a;
-      color: #ffffff;
-      padding: 10px 12px;
-      font-weight: 700;
-      font-size: 0.9rem;
-    }
-
-    .compare table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 0.9rem;
-    }
-
-    .compare td, .compare th {
-      border-top: 1px solid #e2e8f0;
-      padding: 10px 10px;
-      vertical-align: top;
-    }
-
-    .compare th {
-      text-align: left;
-      background: #f8fafc;
-      font-weight: 700;
-    }
-
-    .footer-note {
-      margin-top: 26px;
-      font-size: 0.85rem;
-      color: #64748b;
-    }
+    /* same shared styles */
+    *{box-sizing:border-box;margin:0;padding:0;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;}
+    body{background:#f3f4f8;color:#111827;min-height:100vh;}
+    a{color:inherit;}
+    .site-header{display:flex;justify-content:space-between;align-items:center;padding:14px 24px;background:#fff;border-bottom:1px solid #e5e7eb;}
+    .site-brand{font-size:20px;font-weight:700;color:#111827;}
+    .site-nav a{margin-left:18px;font-size:14px;color:#374151;text-decoration:none;}
+    .site-nav a:hover{color:#1d4ed8;text-decoration:underline;}
+    .tier-page{max-width:1080px;margin:24px auto 40px;padding:0 16px;}
+    .tier-back{margin-bottom:10px;}
+    .tier-back a{font-size:13px;color:#1d4ed8;text-decoration:none;}
+    .tier-back a:hover{text-decoration:underline;}
+    .tier-title{font-size:26px;font-weight:700;margin-bottom:4px;}
+    .tier-subtitle{font-size:14px;color:#4b5563;margin-bottom:14px;}
+    .price-banner{background:#fef3c7;border-radius:8px;padding:10px 14px;font-size:16px;font-weight:600;color:#92400e;margin-bottom:20px;}
+    .section-title{font-size:16px;font-weight:600;margin-top:18px;margin-bottom:6px;}
+    .section-body{font-size:14px;color:#374151;margin-bottom:10px;}
+    .doc-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px;margin-bottom:18px;}
+    .doc-card{background:#fff;border-radius:8px;border:1px solid #e5e7eb;padding:10px 11px;font-size:13px;cursor:pointer;text-decoration:none;display:block;}
+    .doc-card:hover{border-color:#2563eb;box-shadow:0 4px 10px rgba(148,163,184,.4);}
+    .doc-name{font-weight:600;margin-bottom:3px;color:#1f2933;}
+    .doc-desc{font-size:12px;color:#4b5563;}
+    .how-it-works{font-size:14px;color:#374151;}
+    .how-it-works ul{margin-top:6px;padding-left:18px;}
+    .how-it-works li{margin-bottom:4px;}
+    .tier-actions{margin-top:18px;display:flex;flex-wrap:wrap;gap:10px;}
+    .btn-primary,.btn-secondary{display:inline-block;padding:9px 16px;border-radius:999px;font-size:14px;text-decoration:none;text-align:center;min-width:190px;}
+    .btn-primary{background:#d97706;color:#fff;border:1px solid #d97706;}
+    .btn-primary:hover{background:#b45309;}
+    .btn-secondary{background:#fff;color:#2563eb;border:1px solid #2563eb;}
+    .btn-secondary:hover{background:#e0edff;}
   </style>
 </head>
-
 <body>
+  <header class="site-header">
+    <div class="site-brand">E-LegalBoom</div>
+    <nav class="site-nav">
+      <a href="index.html">Home</a>
+      <a href="catalog.html">Catalog</a>
+      <a href="preview.html?tier=bundle">Samples</a>
+      <a href="orders.html">My Orders</a>
+    </nav>
+  </header>
 
-<section class="page">
-
-  <h1>Entrepreneur Starter Bundle</h1>
-  <p class="subtitle">
-    Built for founders who want momentum — not piecemeal paperwork.
-    This bundle gives you access to multiple documents within a 30-day window,
-    so you can launch, structure, and operate without stopping for a new checkout every time.
-  </p>
-
-  <div class="price-box">
-    Flat Price: $149 • 30-Day Access Window • Multiple Documents
-  </div>
-
-  <div class="section">
-    <h2>Who This Is For</h2>
-    <div class="two-col">
-      <div class="card">
-        <strong>New Founders</strong>
-        Launching an LLC, setting roles, and protecting ideas at the same time.
-      </div>
-      <div class="card">
-        <strong>Growing Businesses</strong>
-        Adding partners, contractors, and vendors quickly.
-      </div>
-      <div class="card">
-        <strong>Deal Makers</strong>
-        Handling NDAs, loans, and operating agreements under one umbrella.
-      </div>
-      <div class="card">
-        <strong>Time-Limited Projects</strong>
-        Wanting all documents prepared within a dedicated 30-day window.
-      </div>
+  <main class="tier-page">
+    <div class="tier-back">
+      <a href="catalog.html">&larr; Back to all tiers</a>
     </div>
-  </div>
 
-  <div class="section">
-    <h2>What You Can Prepare (Examples)</h2>
-    <div class="two-col">
-      <div class="card"><strong>LLC / Operating Agreements</strong> Single-member, two-member, governance</div>
-      <div class="card"><strong>Partnership & JV Agreements</strong> Ownership, exits, authority</div>
-      <div class="card"><strong>NDA (Mutual)</strong> Confidential discussions</div>
-      <div class="card"><strong>Promissory Notes</strong> Loans and repayment terms</div>
-      <div class="card"><strong>Service / Contractor Agreements</strong> Scope and compensation</div>
-      <div class="card"><strong>Custom Business Docs</strong> Special-purpose agreements</div>
+    <h1 class="tier-title">Entrepreneur Starter Bundle</h1>
+    <p class="tier-subtitle">
+      For founders who know they’ll need multiple documents in a short window and want the best overall value.
+    </p>
+
+    <div class="price-banner">
+      Bundle Price: $149 flat + 30-day access
     </div>
-  </div>
 
-  <div class="section">
-    <h2>How It Works</h2>
-    <ul>
-      <li>Start the Bundle intake</li>
-      <li>Pay once for 30-day access</li>
-      <li>Submit one intake per document you want prepared</li>
-      <li>Repeat freely during your access window</li>
-      <li>Receive each document as it’s completed</li>
-    </ul>
-  </div>
+    <h2 class="section-title">What the Bundle Is For</h2>
+    <p class="section-body">
+      The Entrepreneur Starter Bundle is ideal when you’re forming, documenting, and hiring within the same 30-day window. One payment gives you access to prepare multiple key documents during that period.
+    </p>
 
-  <div class="note">
-    <strong>Important:</strong> The bundle provides access to multiple documents during the active window.
-    It replaces per-document checkout for that period and is ideal when you plan to prepare more than two documents.
-  </div>
+    <h2 class="section-title">What’s Included</h2>
+    <div class="doc-grid">
+      <a href="preview.html?tier=bundle&doc=tier1-set" class="doc-card">
+        <div class="doc-name">Tier 1 Document Types</div>
+        <div class="doc-desc">
+          Access to Tier 1 document types such as NDA, Promissory Note, and Single-Member LLC Agreement.
+        </div>
+      </a>
 
-  <div class="section">
-    <h2>Cost Comparison</h2>
-    <div class="compare">
-      <header>When the Bundle makes sense</header>
-      <table>
-        <tr>
-          <th>Scenario</th>
-          <th>Pay-Per-Doc (example)</th>
-          <th>Bundle</th>
-        </tr>
-        <tr>
-          <td>2 Tier 3 documents</td>
-          <td>$198</td>
-          <td rowspan="3" style="font-weight:700;color:#9a3412;">$149 flat</td>
-        </tr>
-        <tr>
-          <td>3 Tier 1 documents</td>
-          <td>$117</td>
-        </tr>
-        <tr>
-          <td>Mixed documents</td>
-          <td>Varies</td>
-        </tr>
-      </table>
+      <a href="preview.html?tier=bundle&doc=tier2-set" class="doc-card">
+        <div class="doc-name">Tier 2 Document Types</div>
+        <div class="doc-desc">
+          Partnership, multi-owner LLC, and other foundation agreements as your business structure expands.
+        </div>
+      </a>
+
+      <a href="preview.html?tier=bundle&doc=tier3-set" class="doc-card">
+        <div class="doc-name">Tier 3 Document Types</div>
+        <div class="doc-desc">
+          Premium services, consulting, and joint venture style agreements for higher-impact relationships.
+        </div>
+      </a>
+
+      <a href="preview.html?tier=bundle&doc=one-intake-per-doc" class="doc-card">
+        <div class="doc-name">One Intake per Document</div>
+        <div class="doc-desc">
+          Each document still receives its own focused intake, so the quality stays high even in bundle mode.
+        </div>
+      </a>
     </div>
-  </div>
 
-  <div class="actions">
-    <a class="btn-primary" href="intake.html?tier=ENT">Start Bundle Intake →</a>
-    <a class="btn-secondary" href="preview.html">View Document Samples</a>
-    <a class="btn-secondary" href="catalog.html">Back to Catalog</a>
-  </div>
+    <h2 class="section-title">How It Works</h2>
+    <div class="how-it-works">
+      <ul>
+        <li>Select the Entrepreneur Starter Bundle.</li>
+        <li>Complete a short bundle intake to set your 30-day window.</li>
+        <li>Choose which document you want to generate first.</li>
+        <li>Complete one intake per document during your access window.</li>
+        <li>Receive each customized document by email.</li>
+      </ul>
+    </div>
 
-  <div class="footer-note">
-    E-LegalBoom provides document preparation support and business automation services.
-    We do not offer legal advice or attorney representation.
-  </div>
-
-</section>
-
+    <div class="tier-actions">
+      <a href="intake.html?tier=bundle" class="btn-primary">Start Bundle Intake</a>
+      <a href="preview.html?tier=bundle" class="btn-secondary">View Bundle Samples</a>
+    </div>
+  </main>
 </body>
 </html>
