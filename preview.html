@@ -2,20 +2,9 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>E-LegalBoom | Document Preview</title>
+  <title>E-LegalBoom | Tier Document Samples</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
-    :root {
-      --bg: #050814;
-      --panel: #0b1020;
-      --panel-alt: #11172a;
-      --accent: #ff9f43;
-      --accent-soft: rgba(255, 159, 67, 0.16);
-      --border-soft: rgba(255, 255, 255, 0.12);
-      --text: #f5f7ff;
-      --muted: #a3acc4;
-    }
-
     * {
       box-sizing: border-box;
       margin: 0;
@@ -25,633 +14,270 @@
     }
 
     body {
-      background: radial-gradient(circle at top left, #182135, #050814 55%);
-      color: var(--text);
+      background: #f3f4f8;
+      color: #111827;
       min-height: 100vh;
+      padding: 32px 16px;
       display: flex;
-      align-items: stretch;
       justify-content: center;
-      padding: 24px;
     }
 
-    .app {
-      max-width: 1120px;
+    .page {
       width: 100%;
-      max-height: 820px;
-      background: linear-gradient(145deg, #0b1020, #050814);
-      border-radius: 20px;
-      border: 1px solid rgba(255, 255, 255, 0.06);
-      box-shadow: 0 20px 45px rgba(0, 0, 0, 0.55);
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
+      max-width: 1120px;
+      background: #ffffff;
+      border-radius: 10px;
+      border: 1px solid #e5e7eb;
+      box-shadow: 0 10px 25px rgba(15, 23, 42, 0.12);
+      padding: 24px 28px 28px;
     }
 
-    /* Header */
-    .header {
-      padding: 14px 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background: var(--panel-alt);
-      border-bottom: 1px solid var(--border-soft);
-    }
-
-    .brand-main {
-      font-size: 18px;
-      font-weight: 700;
-      letter-spacing: 0.04em;
-    }
-
-    .brand-sub {
-      font-size: 11px;
-      color: var(--muted);
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-    }
-
-    .status {
-      font-size: 11px;
-      color: #9feeca;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 6px 10px;
-      border-radius: 999px;
-      border: 1px solid rgba(16, 172, 132, 0.5);
-      background: rgba(16, 172, 132, 0.12);
-    }
-
-    .status-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 999px;
-      background: #1dd1a1;
-      box-shadow: 0 0 8px rgba(29, 209, 161, 0.9);
-    }
-
-    /* Tier bar */
-    .tier-bar {
-      padding: 8px 20px 10px;
-      background: #151a2b;
-      border-bottom: 1px solid var(--border-soft);
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
-
-    .tier-btn {
-      border-radius: 999px;
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      background: transparent;
-      font-size: 12px;
-      padding: 6px 14px;
-      color: var(--muted);
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .tier-btn span.badge {
-      font-size: 10px;
-      padding: 2px 6px;
-      border-radius: 999px;
-      background: rgba(255, 255, 255, 0.08);
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-    }
-
-    .tier-btn.active {
-      background: var(--accent-soft);
-      border-color: var(--accent);
-      color: var(--accent);
-    }
-
-    /* Layout */
-    .body {
-      flex: 1;
-      display: grid;
-      grid-template-columns: 260px minmax(0, 1fr);
-      min-height: 0;
-    }
-
-    /* Sidebar */
-    .sidebar {
-      background: #050814;
-      border-right: 1px solid var(--border-soft);
-      padding: 12px;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .sidebar-title {
-      font-size: 12px;
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-      color: var(--muted);
+    .page h1 {
+      font-size: 24px;
       margin-bottom: 4px;
     }
 
-    .doc-count {
-      font-size: 11px;
-      color: var(--muted);
-      margin-bottom: 8px;
+    .page p.subhead {
+      font-size: 14px;
+      color: #4b5563;
+      margin-bottom: 20px;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 320px minmax(0, 1fr);
+      gap: 20px;
+    }
+
+    @media (max-width: 900px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Left column – list */
+    .list-panel {
+      border-radius: 8px;
+      border: 1px solid #e5e7eb;
+      background: #f9fafb;
+      padding: 14px 14px 10px;
+    }
+
+    .list-panel h2 {
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: #6b7280;
+      margin-bottom: 4px;
+    }
+
+    .list-panel p.helper {
+      font-size: 12px;
+      color: #6b7280;
+      margin-bottom: 10px;
     }
 
     .doc-list {
       list-style: none;
-      padding: 0;
-      margin: 0;
+      max-height: 430px;
       overflow-y: auto;
-      max-height: 440px;
     }
 
     .doc-item {
-      padding: 8px 9px;
-      border-radius: 9px;
+      border-radius: 6px;
       border: 1px solid transparent;
-      background: rgba(255, 255, 255, 0.02);
+      padding: 8px 9px;
       margin-bottom: 6px;
       cursor: pointer;
-      font-size: 13px;
+      background: #ffffff;
       transition: background 0.12s ease, border-color 0.12s ease;
     }
 
-    .doc-item.active {
-      border-color: var(--accent);
-      background: var(--accent-soft);
-    }
-
     .doc-item:hover {
-      border-color: rgba(255, 255, 255, 0.25);
+      border-color: #d1d5db;
+      background: #f3f4ff;
     }
 
-    .doc-type {
+    .doc-item.active {
+      border-color: #2563eb;
+      background: #e0edff;
+    }
+
+    .doc-name {
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .doc-tier {
       font-size: 11px;
-      color: var(--muted);
+      color: #6b7280;
       margin-top: 2px;
     }
 
-    /* Preview panel */
-    .preview {
-      padding: 14px 16px 18px;
-      background: var(--bg);
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
+    /* Right column – preview */
+    .preview-panel {
+      border-radius: 8px;
+      border: 1px solid #e5e7eb;
+      background: #ffffff;
+      padding: 18px 20px;
+      min-height: 380px;
     }
 
-    .preview-name {
+    .preview-title {
       font-size: 18px;
       font-weight: 700;
-    }
-
-    .preview-tier {
-      font-size: 12px;
-      color: var(--muted);
-      margin-bottom: 6px;
-    }
-
-    .tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      margin-bottom: 10px;
-    }
-
-    .tag {
-      font-size: 11px;
-      padding: 3px 8px;
-      border-radius: 999px;
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      color: var(--muted);
-    }
-
-    .section-title {
-      font-size: 12px;
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-      color: var(--muted);
-      margin-top: 8px;
       margin-bottom: 4px;
     }
 
-    .description {
-      font-size: 13px;
-      line-height: 1.5;
-      margin-bottom: 6px;
-    }
-
-    .includes {
+    .preview-meta {
       font-size: 12px;
-      padding-left: 18px;
-      margin-top: 4px;
+      color: #6b7280;
+      margin-bottom: 12px;
     }
 
-    .includes li {
-      margin-bottom: 3px;
-    }
-
-    .clause {
-      font-size: 12px;
-      line-height: 1.5;
-      background: #050814;
-      border-radius: 8px;
-      padding: 8px 10px;
-      margin-top: 6px;
-      border: 1px dashed rgba(255, 255, 255, 0.16);
-      white-space: pre-line;
-    }
-
-    .price-row {
-      margin-top: 12px;
-      display: flex;
-      gap: 10px;
-      align-items: baseline;
-      flex-wrap: wrap;
-    }
-
-    .price {
-      font-size: 20px;
-      font-weight: 700;
-    }
-
-    .price-note {
-      font-size: 11px;
-      color: var(--muted);
-      max-width: 260px;
-    }
-
-    .actions {
-      margin-top: 10px;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
-
-    .btn-primary {
-      border-radius: 999px;
-      border: none;
-      padding: 9px 16px;
+    .preview-body {
+      border-radius: 6px;
+      border: 1px solid #e5e7eb;
+      background: #f9fafb;
+      padding: 12px 14px;
+      font-family: "Courier New", monospace;
       font-size: 13px;
-      font-weight: 600;
-      cursor: pointer;
-      background: linear-gradient(135deg, var(--accent), #ff6b6b);
-      color: #050814;
-      text-decoration: none;
-      display: inline-block;
-    }
-
-    .note {
-      font-size: 11px;
-      color: var(--muted);
-      margin-top: 8px;
-      max-width: 380px;
-    }
-
-    @media (max-width: 860px) {
-      .body {
-        grid-template-columns: 1fr;
-      }
-      .sidebar {
-        border-right: none;
-        border-bottom: 1px solid var(--border-soft);
-      }
-    }
-
-    @media (max-width: 600px) {
-      body {
-        padding: 10px;
-      }
-      .app {
-        border-radius: 16px;
-      }
-      .header {
-        padding: 10px 14px;
-      }
-      .tier-bar {
-        padding: 8px 12px;
-      }
-      .preview {
-        padding: 12px 12px 16px;
-      }
+      line-height: 1.6;
+      white-space: pre-wrap;
     }
   </style>
 </head>
 <body>
-  <div class="app">
-    <div class="header">
-      <div>
-        <div class="brand-main">E-LegalBoom</div>
-        <div class="brand-sub">Tiered Legal Document Preview</div>
-      </div>
-      <div class="status">
-        <span class="status-dot"></span>
-        Preview Mode • Example Text Only
-      </div>
-    </div>
+  <main class="page">
+    <h1>Document Samples</h1>
+    <p class="subhead">
+      Browse representative samples of how your documents are structured
+      and written for this tier. Your completed document will be customized
+      based on your intake and the state where your business operates.
+    </p>
 
-    <div class="tier-bar">
-      <button class="tier-btn active" data-tier="tier1">
-        Tier 1 <span class="badge">Starter</span>
-      </button>
-      <button class="tier-btn" data-tier="tier2">
-        Tier 2 <span class="badge">Builder</span>
-      </button>
-      <button class="tier-btn" data-tier="tier3">
-        Tier 3 <span class="badge">Pro Suite</span>
-      </button>
-      <button class="tier-btn" data-tier="entrepreneur">
-        Entrepreneur <span class="badge">All-In Bundle</span>
-      </button>
-    </div>
-
-    <div class="body">
-      <!-- Left: document list -->
-      <aside class="sidebar">
-        <div class="sidebar-title">Documents in this tier</div>
-        <div class="doc-count" id="doc-count"></div>
+    <section class="layout">
+      <!-- LEFT: choose a sample -->
+      <aside class="list-panel">
+        <h2>Choose a Sample</h2>
+        <p class="helper">Pick a document on the left to see a larger preview.</p>
         <ul class="doc-list" id="doc-list"></ul>
       </aside>
 
-      <!-- Right: preview -->
-      <main class="preview">
-        <div class="preview-name" id="preview-name"></div>
-        <div class="preview-tier" id="preview-tier"></div>
-        <div class="tags" id="preview-tags"></div>
-
-        <div class="section-title">Overview</div>
-        <p class="description" id="preview-description"></p>
-
-        <div class="section-title">What this document includes</div>
-        <ul class="includes" id="preview-includes"></ul>
-
-        <div class="section-title">Sample language</div>
-        <div class="clause" id="preview-clause"></div>
-
-        <div class="price-row">
-          <div class="price" id="preview-price"></div>
-          <div class="price-note" id="preview-price-note"></div>
-        </div>
-
-        <div class="actions">
-          <a id="preview-pay-link" href="#" target="_blank" rel="noopener" class="btn-primary">
-            Go to Secure Checkout
-          </a>
-        </div>
-
-        <div class="note">
-          This is a preview of structure, tone, and coverage. Your final document
-          will be customized from your E-LegalBoom intake answers and delivered
-          in clean, editable format.
-        </div>
-      </main>
-    </div>
-  </div>
+      <!-- RIGHT: preview -->
+      <section class="preview-panel">
+        <div class="preview-title" id="preview-title"></div>
+        <div class="preview-meta" id="preview-meta"></div>
+        <div class="preview-body" id="preview-body"></div>
+      </section>
+    </section>
+  </main>
 
   <script>
-    // Data for each tier and document
-    const tierData = {
-      tier1: {
-        label: "Tier 1 – Starter Legal Essentials",
-        price: "$149",
-        priceNote: "Perfect for brand-new entrepreneurs who need core protection on day one.",
-        payLink: "#", // TODO: replace with your real Tier 1 checkout URL
-        docs: [
-          {
-            id: "independent-contractor",
-            name: "Independent Contractor Agreement",
-            type: "Service / Work-for-Hire",
-            tags: ["Service Agreement", "Client Work", "IP Ownership"],
-            description:
-              "A clear, plain-language agreement to define the working relationship between you and a contractor or client, including scope, payment, timelines, and who owns the work.",
-            includes: [
-              "Scope of work and deliverables",
-              "Payment terms and timing",
-              "Ownership of work product (IP)",
-              "Basic confidentiality language",
-              "Termination and dispute language"
-            ],
-            sampleClause:
-              "Sample: Ownership of Work\n\nContractor agrees that all deliverables created under this Agreement are considered 'work made for hire' for Client. To the extent any deliverable is not treated as work made for hire, Contractor assigns to Client all rights, title, and interest in and to such deliverable once payment is made."
-          },
-          {
-            id: "mutual-nda",
-            name: "Mutual Non-Disclosure Agreement (NDA)",
-            type: "Confidentiality",
-            tags: ["NDA", "Confidential Info", "Partnerships"],
-            description:
-              "A mutual NDA so both sides can safely explore an opportunity, share information, and discuss ideas without worrying about sensitive details being misused.",
-            includes: [
-              "Definition of confidential information",
-              "Permitted uses and limited access",
-              "Reasonable protection expectations",
-              "Time limits and survival clauses",
-              "Simple remedies for misuse or disclosure"
-            ],
-            sampleClause:
-              "Sample: Confidential Information\n\n'Confidential Information' includes all non-public information disclosed by either party, whether spoken, written, or shared digitally, that a reasonable person would understand to be confidential given the nature of the information and the context of disclosure."
-          }
-        ]
+    /* ------------- DATA FOR THIS TIER -------------
+       Adjust this array for Tier 1 / Tier 2 / Tier 3, etc.
+       Each object = one document in that tier.
+    */
+    const docs = [
+      {
+        id: "mutual-nda",
+        name: "Mutual NDA (Non-Disclosure Agreement)",
+        tierLine: "Typical tier: Tier 1 – For confidential discussions",
+        sampleText: `MUTUAL NON-DISCLOSURE AGREEMENT (SAMPLE)
+
+This Agreement is used when two sides want to explore an
+opportunity and need to share information that should not
+become public.
+
+It defines:
+
+• What counts as "Confidential Information"
+• How each side is allowed to use it
+• Reasonable steps to protect it
+• How long the duties last
+• What happens if there is a breach
+
+Your completed NDA will be customized with the names,
+dates, and specific details from your intake.`
       },
-      tier2: {
-        label: "Tier 2 – Growth & Team Protection",
-        price: "$399",
-        priceNote: "For growing businesses who are hiring help and sharing more responsibility.",
-        payLink: "#", // TODO: replace with Tier 2 checkout
-        docs: [
-          {
-            id: "independent-contractor-plus",
-            name: "Independent Contractor Plus",
-            type: "Enhanced Service Agreement",
-            tags: ["Contractor", "Non-Solicit", "IP"],
-            description:
-              "An upgraded contractor agreement that adds stronger IP protections, clearer performance expectations, and non-solicitation language as your team and reputation grow.",
-            includes: [
-              "Detailed performance standards",
-              "Expanded IP and licensing language",
-              "Non-solicitation of clients and staff",
-              "Clear dispute and governing-law terms",
-              "Flexible payment and bonus structures"
-            ],
-            sampleClause:
-              "Sample: Non-Solicitation\n\nDuring the term of this Agreement and for twelve (12) months after it ends, Contractor agrees not to directly solicit or hire Client's employees, contractors, or clients for competing services without Client's written consent."
-          },
-          {
-            id: "team-confidentiality",
-            name: "Team Confidentiality Agreement",
-            type: "Staff / Volunteer / Contractor",
-            tags: ["Confidentiality", "Team", "Conduct"],
-            description:
-              "A simple agreement to set expectations with part-time, contract, or volunteer team members about confidentiality, conduct, and handling client or business information.",
-            includes: [
-              "Responsibilities for handling client data",
-              "Basic conduct and social-media language",
-              "Return of materials and access on exit",
-              "Non-disparagement basics",
-              "Acknowledgement of policies and training"
-            ],
-            sampleClause:
-              "Sample: Return of Materials\n\nWhen Team Member's work with the Organization ends, they will return or permanently delete all documents, files, and access credentials containing the Organization's Confidential Information, unless the Organization gives written permission to retain specific items."
-          }
-        ]
+      {
+        id: "promissory-note",
+        name: "Promissory Note",
+        tierLine: "Typical tier: Tier 1 – For loans and repayment terms",
+        sampleText: `PROMISSORY NOTE (SAMPLE)
+
+This Note documents a loan between a Borrower and a Lender.
+
+It typically covers:
+
+• Principal amount and interest (if any)
+• How and when payments are made
+• Late fees and default provisions
+• Whether early payoff is allowed
+• What law applies if there is a dispute
+
+Your completed Note will be tailored to the dollar amount,
+payment schedule, and terms you provide in your intake.`
       },
-      tier3: {
-        label: "Tier 3 – Pro Suite Legal Stack",
-        price: "$749",
-        priceNote: "For serious operators who want a reusable, professional-grade legal stack.",
-        payLink: "#", // TODO: replace with Tier 3 checkout
-        docs: [
-          {
-            id: "msa",
-            name: "Master Services Agreement (MSA)",
-            type: "B2B Services",
-            tags: ["MSA", "Corporate Clients", "Ongoing Work"],
-            description:
-              "A master framework for working with repeat or corporate clients, using project-specific Statements of Work (SOWs) attached underneath the main agreement.",
-            includes: [
-              "Core terms and conditions for all projects",
-              "Support for multiple projects via SOWs",
-              "Limitation-of-liability language",
-              "Detailed IP and licensing provisions",
-              "Dispute resolution and venue options"
-            ],
-            sampleClause:
-              "Sample: Statements of Work\n\nSpecific services, pricing, and timelines will be described in one or more written Statements of Work ('SOWs') under this Agreement. Each SOW will incorporate and be governed by the terms of this Master Services Agreement unless the SOW clearly states otherwise."
-          },
-          {
-            id: "data-privacy-addendum",
-            name: "Simple Data Privacy Addendum",
-            type: "Data / Online",
-            tags: ["Privacy", "Customer Data", "Online"],
-            description:
-              "A short add-on you can attach to client or vendor agreements to address basic responsibilities around customer data and privacy in plain language.",
-            includes: [
-              "Responsibilities for protecting customer data",
-              "Use of third-party tools and processors",
-              "Basic incident and notification language",
-              "Data retention and deletion options",
-              "Cooperation if there is a review or audit"
-            ],
-            sampleClause:
-              "Sample: Incident Notice\n\nIf either party becomes aware of unauthorized access to Customer Data stored or processed under this Agreement, that party will notify the other without unreasonable delay and will share available details so both sides can respond appropriately."
-          }
-        ]
-      },
-      entrepreneur: {
-        label: "Entrepreneur – All-In Legal Library",
-        price: "$1,499",
-        priceNote: "For owners who want the full library and future add-ons at the best overall value.",
-        payLink: "#", // TODO: replace with Entrepreneur checkout
-        docs: [
-          {
-            id: "all-access-bundle",
-            name: "All-Access Legal Library Bundle",
-            type: "Bundle",
-            tags: ["All Tiers", "Best Value"],
-            description:
-              "Unlocks all documents in Tiers 1–3 plus future E-LegalBoom templates released into your Entrepreneur window, so you build once and reuse across your business.",
-            includes: [
-              "All Tier 1, Tier 2, and Tier 3 documents",
-              "Entrepreneur-only bonus templates as released",
-              "Centralized intake for your core details",
-              "Update notices when key language changes",
-              "Best overall per-document investment"
-            ],
-            sampleClause:
-              "Note:\n\nThis preview is for illustration only. Your actual Entrepreneur bundle contents and terms will be listed clearly on the checkout page, including any time-limited bonuses or updates."
-          }
-        ]
+      {
+        id: "single-member-llc",
+        name: "Single-Member LLC Operating Agreement",
+        tierLine: "Typical tier: Tier 1 – For single-owner LLC structure",
+        sampleText: `SINGLE-MEMBER LLC OPERATING AGREEMENT (SAMPLE)
+
+This Agreement establishes the ownership, management
+authority, and operating procedures for a Limited
+Liability Company (LLC) with one owner.
+
+Articles commonly address:
+
+• Formation and purpose of the LLC
+• Capital contributions by the Member
+• Management powers and duties
+• Allocation and distribution of profits and losses
+• Basic tax and record-keeping provisions
+
+Your completed Operating Agreement will be drafted to
+match your state, business name, and structure.`
       }
-    };
+    ];
 
-    let currentTierKey = "tier1";
-    let currentDocIndex = 0;
+    /* ------------- RENDERING LOGIC ------------- */
+    const listEl = document.getElementById("doc-list");
+    const previewTitleEl = document.getElementById("preview-title");
+    const previewMetaEl = document.getElementById("preview-meta");
+    const previewBodyEl = document.getElementById("preview-body");
 
-    function renderTierButtons() {
-      const buttons = document.querySelectorAll(".tier-btn");
-      buttons.forEach((btn) => {
-        const tierKey = btn.getAttribute("data-tier");
-        btn.classList.toggle("active", tierKey === currentTierKey);
-        btn.addEventListener("click", () => {
-          if (tierKey !== currentTierKey) {
-            currentTierKey = tierKey;
-            currentDocIndex = 0;
-            updateDocList();
-            updatePreview();
-            buttons.forEach(b =>
-              b.classList.toggle("active", b.getAttribute("data-tier") === currentTierKey)
-            );
-          }
-        });
-      });
-    }
+    let currentIndex = 0;
 
-    function updateDocList() {
-      const tier = tierData[currentTierKey];
-      const listEl = document.getElementById("doc-list");
-      const countEl = document.getElementById("doc-count");
-
+    function renderList() {
       listEl.innerHTML = "";
-      countEl.textContent = `${tier.docs.length} document${tier.docs.length !== 1 ? "s" : ""} in this tier`;
-
-      tier.docs.forEach((doc, index) => {
+      docs.forEach((doc, index) => {
         const li = document.createElement("li");
-        li.className = "doc-item" + (index === currentDocIndex ? " active" : "");
+        li.className = "doc-item" + (index === currentIndex ? " active" : "");
         li.innerHTML = `
-          <div>${doc.name}</div>
-          <div class="doc-type">${doc.type}</div>
+          <div class="doc-name">${doc.name}</div>
+          <div class="doc-tier">${doc.tierLine}</div>
         `;
         li.addEventListener("click", () => {
-          currentDocIndex = index;
-          updateDocList();
-          updatePreview();
+          currentIndex = index;
+          renderList();
+          renderPreview();
         });
         listEl.appendChild(li);
       });
     }
 
-    function updatePreview() {
-      const tier = tierData[currentTierKey];
-      const doc = tier.docs[currentDocIndex];
-
-      document.getElementById("preview-name").textContent = doc.name;
-      document.getElementById("preview-tier").textContent = tier.label;
-
-      // Tags
-      const tagsEl = document.getElementById("preview-tags");
-      tagsEl.innerHTML = "";
-      doc.tags.forEach((tag) => {
-        const span = document.createElement("span");
-        span.className = "tag";
-        span.textContent = tag;
-        tagsEl.appendChild(span);
-      });
-
-      document.getElementById("preview-description").textContent = doc.description;
-
-      const includesEl = document.getElementById("preview-includes");
-      includesEl.innerHTML = "";
-      doc.includes.forEach((item) => {
-        const li = document.createElement("li");
-        li.textContent = item;
-        includesEl.appendChild(li);
-      });
-
-      document.getElementById("preview-clause").textContent = doc.sampleClause;
-      document.getElementById("preview-price").textContent = tier.price;
-      document.getElementById("preview-price-note").textContent = tier.priceNote;
-
-      const payLinkEl = document.getElementById("preview-pay-link");
-      payLinkEl.href = tier.payLink || "#";
+    function renderPreview() {
+      const doc = docs[currentIndex];
+      previewTitleEl.textContent = doc.name;
+      previewMetaEl.textContent = doc.tierLine;
+      previewBodyEl.textContent = doc.sampleText;
     }
 
-    document.addEventListener("DOMContentLoaded", () => {
-      renderTierButtons();
-      updateDocList();
-      updatePreview();
-    });
+    // Initial render
+    renderList();
+    renderPreview();
   </script>
 </body>
 </html>
