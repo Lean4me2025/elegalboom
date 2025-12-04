@@ -2,285 +2,360 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>E-LegalBoom | Tier 1 – Startup & Essential Documents</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>E-LegalBoom – Tier 1 Documents</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="styles.css" />
   <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    }
+    /* Layout helpers – your main CSS can still override these */
 
     body {
-      background: #f3f4f8;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f5f7fb;
       color: #111827;
-      min-height: 100vh;
     }
 
-    a {
-      color: inherit;
+    .page {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 24px 16px 48px;
     }
 
-    /* Site header */
-    .site-header {
-      display: flex;
-      justify-content: space-between;
+    header h1 {
+      font-size: 1.8rem;
+      margin: 0 0 0.25rem;
+    }
+
+    header p.subtitle {
+      margin: 0 0 1.5rem;
+      color: #4b5563;
+      font-size: 0.95rem;
+    }
+
+    .pill {
+      display: inline-flex;
       align-items: center;
-      padding: 14px 24px;
-      background: #ffffff;
-      border-bottom: 1px solid #e5e7eb;
+      gap: 6px;
+      border-radius: 999px;
+      padding: 4px 10px;
+      font-size: 0.8rem;
+      background: #eef2ff;
+      color: #1f2937;
+      border: 1px solid #c7d2fe;
+      margin-bottom: 0.75rem;
     }
 
-    .site-brand {
-      font-size: 20px;
-      font-weight: 700;
+    .pill span {
+      font-weight: 600;
+      color: #0d6efd;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1.05fr 1.05fr;
+      gap: 24px;
+      align-items: flex-start;
+    }
+
+    @media (max-width: 800px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Left side: document list */
+
+    .doc-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .doc-option {
+      text-align: left;
+      padding: 12px 14px;
+      border-radius: 10px;
+      border: 1px solid #d1d5db;
+      background: #ffffff;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      transition:
+        border-color 0.15s ease,
+        box-shadow 0.15s ease,
+        background 0.15s ease,
+        transform 0.05s ease;
+      font-size: 0.95rem;
+    }
+
+    .doc-option:hover {
+      border-color: #0d6efd;
+      box-shadow: 0 0 0 2px rgba(13, 110, 253, 0.16);
+      transform: translateY(-1px);
+    }
+
+    .doc-option.selected {
+      border-color: #0d6efd;
+      background: #e9f2ff;
+      box-shadow: 0 0 0 2px rgba(13, 110, 253, 0.25);
+    }
+
+    .doc-title {
+      font-weight: 600;
+      font-size: 0.98rem;
       color: #111827;
     }
 
-    .site-nav a {
-      margin-left: 18px;
-      font-size: 14px;
-      color: #374151;
-      text-decoration: none;
+    .doc-tagline {
+      font-size: 0.84rem;
+      color: #6b7280;
     }
 
-    .site-nav a:hover {
-      color: #1d4ed8;
-      text-decoration: underline;
-    }
+    /* Right side: document preview */
 
-    /* Page layout */
-    .tier-page {
-      max-width: 1080px;
-      margin: 24px auto 40px;
-      padding: 0 16px;
-    }
-
-    .tier-back {
-      margin-bottom: 10px;
-    }
-
-    .tier-back a {
-      font-size: 13px;
-      color: #1d4ed8;
-      text-decoration: none;
-    }
-
-    .tier-back a:hover {
-      text-decoration: underline;
-    }
-
-    .tier-title {
-      font-size: 26px;
-      font-weight: 700;
-      margin-bottom: 4px;
-    }
-
-    .tier-subtitle {
-      font-size: 14px;
-      color: #4b5563;
-      margin-bottom: 14px;
-    }
-
-    .price-banner {
-      background: #e0f2fe;
-      border-radius: 8px;
-      padding: 10px 14px;
-      font-size: 16px;
-      font-weight: 600;
-      color: #075985;
-      margin-bottom: 20px;
-    }
-
-    .section-title {
-      font-size: 16px;
-      font-weight: 600;
-      margin-top: 18px;
-      margin-bottom: 6px;
-    }
-
-    .section-body {
-      font-size: 14px;
-      color: #374151;
-      margin-bottom: 10px;
-    }
-
-    .doc-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 10px;
-      margin-bottom: 18px;
-    }
-
-    .doc-card {
+    .doc-preview {
       background: #ffffff;
-      border-radius: 8px;
-      border: 1px solid #e5e7eb;
-      padding: 10px 11px;
-      font-size: 13px;
-      cursor: pointer;
-      text-decoration: none;
+      border-radius: 12px;
+      padding: 16px 18px 18px;
+      border: 1px solid #d1d5db;
+      box-shadow: 0 12px 28px rgba(15, 23, 42, 0.06);
+    }
+
+    .doc-preview h2 {
+      margin: 0 0 0.3rem;
+      font-size: 1.2rem;
+    }
+
+    .doc-preview small {
       display: block;
+      font-size: 0.8rem;
+      color: #6b7280;
+      margin-bottom: 0.8rem;
     }
 
-    .doc-card:hover {
-      border-color: #2563eb;
-      box-shadow: 0 4px 10px rgba(148, 163, 184, 0.4);
-    }
-
-    .doc-name {
-      font-weight: 600;
-      margin-bottom: 3px;
-      color: #1f2933;
-    }
-
-    .doc-desc {
-      font-size: 12px;
-      color: #4b5563;
-    }
-
-    .how-it-works {
-      font-size: 14px;
+    .doc-preview p {
+      font-size: 0.9rem;
+      margin: 0 0 0.75rem;
       color: #374151;
     }
 
-    .how-it-works ul {
-      margin-top: 6px;
-      padding-left: 18px;
+    .doc-preview ul {
+      margin: 0 0 1rem 1.1rem;
+      padding: 0;
+      font-size: 0.88rem;
+      color: #374151;
     }
 
-    .how-it-works li {
-      margin-bottom: 4px;
+    .doc-preview li {
+      margin-bottom: 0.35rem;
     }
 
-    .tier-actions {
-      margin-top: 18px;
+    .preview-footer {
       display: flex;
-      flex-wrap: wrap;
       gap: 10px;
+      justify-content: flex-end;
+      align-items: center;
+      margin-top: 0.75rem;
     }
 
-    .btn-primary,
-    .btn-secondary {
-      display: inline-block;
-      padding: 9px 16px;
-      border-radius: 999px;
-      font-size: 14px;
-      text-decoration: none;
-      text-align: center;
-      min-width: 170px;
-    }
-
-    .btn-primary {
-      background: #0f766e;
+    button.primary {
+      background: #0d6efd;
       color: #ffffff;
-      border: 1px solid #0f766e;
+      border: none;
+      padding: 9px 18px;
+      border-radius: 999px;
+      font-size: 0.95rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition:
+        background 0.15s ease,
+        transform 0.05s ease;
     }
 
-    .btn-primary:hover {
-      background: #115e59;
+    button.primary:disabled {
+      background: #a5b4fc;
+      cursor: not-allowed;
+      transform: none;
     }
 
-    .btn-secondary {
-      background: #ffffff;
-      color: #2563eb;
-      border: 1px solid #2563eb;
+    button.primary:not(:disabled):hover {
+      background: #0b5ed7;
+      transform: translateY(-1px);
     }
 
-    .btn-secondary:hover {
-      background: #e0edff;
+    button.secondary {
+      border-radius: 999px;
+      border: 1px solid #cbd5f5;
+      background: #f9fafb;
+      padding: 8px 14px;
+      font-size: 0.85rem;
+      cursor: pointer;
+      color: #4b5563;
     }
   </style>
 </head>
 <body>
-  <header class="site-header">
-    <div class="site-brand">E-LegalBoom</div>
-    <nav class="site-nav">
-      <a href="index.html">Home</a>
-      <a href="catalog.html">Catalog</a>
-      <a href="preview.html?tier=1">Samples</a>
-      <a href="orders.html">My Orders</a>
-    </nav>
-  </header>
+  <main class="page">
+    <header>
+      <h1>Tier 1 – Starter Legal Documents</h1>
+      <p class="subtitle">
+        Step 1 • Choose the document you want to purchase. You can preview what it covers before continuing to your Personal Intake.
+      </p>
+    </header>
 
-  <main class="tier-page">
-    <div class="tier-back">
-      <a href="catalog.html">&larr; Back to all tiers</a>
-    </div>
-
-    <h1 class="tier-title">Tier 1 – Startup &amp; Essential Documents</h1>
-    <p class="tier-subtitle">
-      Ideal for new entrepreneurs and small businesses who need a strong starting document — without overcomplicating the process.
-    </p>
-
-    <div class="price-banner">Price: $39 per document</div>
-
-    <h2 class="section-title">What Tier 1 Is For</h2>
-    <p class="section-body">
-      Tier 1 is designed for simple but important agreements that protect your ideas, clarify money owed, or document your single-owner business structure.
-    </p>
-
-    <h2 class="section-title">Common Tier 1 Documents</h2>
-    <div class="doc-grid">
-      <a href="preview.html?tier=1&doc=mutual-nda" class="doc-card">
-        <div class="doc-name">Mutual NDA (Non-Disclosure Agreement)</div>
-        <div class="doc-desc">
-          For sharing ideas, plans, or information while keeping it confidential.
+    <section class="grid">
+      <!-- LEFT: Document options -->
+      <section>
+        <div class="pill">
+          Tier: <span>1</span>
         </div>
-      </a>
 
-      <a href="preview.html?tier=1&doc=promissory-note" class="doc-card">
-        <div class="doc-name">Promissory Note</div>
-        <div class="doc-desc">
-          Documents money loaned between people or businesses, with repayment terms.
+        <div class="doc-list">
+          <!-- ✏️ Adjust these documents to match Tier 1’s lineup -->
+          <button type="button" class="doc-option" data-doc-id="single-member-llc">
+            <div class="doc-title">Single-Member LLC Operating Agreement</div>
+            <div class="doc-tagline">For one-owner LLCs needing clear, bank-ready documentation.</div>
+          </button>
+
+          <button type="button" class="doc-option" data-doc-id="nda-mutual">
+            <div class="doc-title">Mutual Non-Disclosure Agreement (NDA)</div>
+            <div class="doc-tagline">Protect shared ideas, plans, and confidential information.</div>
+          </button>
+
+          <button type="button" class="doc-option" data-doc-id="promissory-note">
+            <div class="doc-title">Promissory Note</div>
+            <div class="doc-tagline">Document a loan between people or businesses so terms are clear.</div>
+          </button>
+
+          <button type="button" class="doc-option" data-doc-id="independent-contractor">
+            <div class="doc-title">Independent Contractor Agreement</div>
+            <div class="doc-tagline">Define scope, payment, and protections when hiring a contractor.</div>
+          </button>
         </div>
-      </a>
+      </section>
 
-      <a href="preview.html?tier=1&doc=single-member-llc" class="doc-card">
-        <div class="doc-name">Single-Member LLC Operating Agreement</div>
-        <div class="doc-desc">
-          Clarifies ownership, purpose, and management for a one-owner LLC.
+      <!-- RIGHT: Live document preview -->
+      <aside class="doc-preview">
+        <h2 id="previewTitle">Document Preview</h2>
+        <small id="previewHint">Select a document on the left to see what it includes.</small>
+        <p id="previewSummary">
+          As you consider which document to buy, you’ll see a plain-language overview here so you know exactly what you’re getting.
+        </p>
+        <ul id="previewBullets"></ul>
+
+        <div class="preview-footer">
+          <button type="button" class="secondary" onclick="window.history.back();">
+            ‹ Back
+          </button>
+          <button type="button" class="primary" id="continueBtn" disabled>
+            Continue to Personal Intake →
+          </button>
         </div>
-      </a>
-
-      <a href="preview.html?tier=1&doc=payment-iou" class="doc-card">
-        <div class="doc-name">Simple Payment or IOU Agreement</div>
-        <div class="doc-desc">
-          Basic written record of what is owed and when it must be repaid.
-        </div>
-      </a>
-
-      <a href="preview.html?tier=1&doc=basic-contractor" class="doc-card">
-        <div class="doc-name">Basic Contractor/Service Letter</div>
-        <div class="doc-desc">
-          Lightweight agreement confirming who is doing what, for how much.
-        </div>
-      </a>
-
-      <a href="preview.html?tier=1&doc=other-basic-business" class="doc-card">
-        <div class="doc-name">Other Basic Business Forms</div>
-        <div class="doc-desc">
-          Simple, single-purpose documents to support your startup.
-        </div>
-      </a>
-    </div>
-
-    <h2 class="section-title">How It Works</h2>
-    <div class="how-it-works">
-      <ul>
-        <li>Select Tier 1.</li>
-        <li>Choose which document you need.</li>
-        <li>Complete a short intake.</li>
-        <li>Pay securely.</li>
-        <li>Receive your customized document by email.</li>
-      </ul>
-    </div>
-
-    <div class="tier-actions">
-      <a href="intake.html?tier=1" class="btn-primary">Start Tier 1 Intake</a>
-      <a href="preview.html?tier=1" class="btn-secondary">View Tier 1 Samples</a>
-    </div>
+      </aside>
+    </section>
   </main>
+
+  <script>
+    // 1) Set this to your actual Personal Intake page filename
+    // If your file is named "intake.html" instead, change this value.
+    const PERSONAL_INTAKE_PAGE = 'personal-intake.html';
+
+    // 2) Define the document preview content for Tier 1
+    const docDefinitions = {
+      'single-member-llc': {
+        title: 'Single-Member LLC Operating Agreement',
+        summary: 'Protects your personal liability and clarifies how your single-member LLC operates.',
+        bullets: [
+          'Documents you as the sole owner of the LLC',
+          'Supports your liability shield with banks and courts',
+          'Clarifies management, banking, and how profits are handled'
+        ]
+      },
+      'nda-mutual': {
+        title: 'Mutual Non-Disclosure Agreement (NDA)',
+        summary: 'A simple, plain-English NDA to protect shared ideas, plans, and confidential information.',
+        bullets: [
+          'Protects information shared by both sides',
+          'Clarifies what is confidential and for how long',
+          'Helps build trust when exploring new opportunities'
+        ]
+      },
+      'promissory-note': {
+        title: 'Promissory Note',
+        summary: 'Sets out the terms of a loan so everyone is clear on amount, repayment, and consequences.',
+        bullets: [
+          'Specifies principal, interest (if any), and payment schedule',
+          'Documents what happens if a payment is late or missed',
+          'Helps preserve relationships by putting the terms in writing'
+        ]
+      },
+      'independent-contractor': {
+        title: 'Independent Contractor Agreement',
+        summary: 'Defines the relationship, expectations, and protections when you hire or act as a contractor.',
+        bullets: [
+          'Clarifies scope of work and deliverables',
+          'Spells out payment terms and timing',
+          'Allocates ownership of work product and intellectual property'
+        ]
+      }
+    };
+
+    // 3) Grab DOM elements
+    const docButtons = document.querySelectorAll('.doc-option');
+    const previewTitle = document.getElementById('previewTitle');
+    const previewHint = document.getElementById('previewHint');
+    const previewSummary = document.getElementById('previewSummary');
+    const previewBullets = document.getElementById('previewBullets');
+    const continueBtn = document.getElementById('continueBtn');
+
+    let selectedDocId = null;
+
+    // 4) When a document is clicked, update the preview and remember the selection
+    docButtons.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const docId = btn.getAttribute('data-doc-id');
+        selectedDocId = docId;
+
+        // Highlight selected button
+        docButtons.forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+
+        const def = docDefinitions[docId];
+        if (def) {
+          previewTitle.textContent = def.title;
+          previewHint.textContent = 'Preview of what this document covers (not legal advice).';
+          previewSummary.textContent = def.summary;
+
+          previewBullets.innerHTML = '';
+          def.bullets.forEach(item => {
+            const li = document.createElement('li');
+            li.textContent = item;
+            previewBullets.appendChild(li);
+          });
+        } else {
+          previewTitle.textContent = 'Document Preview';
+          previewHint.textContent = 'Preview not available for this document.';
+          previewSummary.textContent = '';
+          previewBullets.innerHTML = '';
+        }
+
+        // Enable the continue button now that a doc is selected
+        continueBtn.disabled = false;
+      });
+    });
+
+    // 5) When they click Continue, send them to Personal Intake with the document id
+    continueBtn.addEventListener('click', () => {
+      if (!selectedDocId) return;
+
+      // You can attach tier=1 here if you want it in the query string
+      const nextUrl = `${PERSONAL_INTAKE_PAGE}?tier=1&doc=${encodeURIComponent(selectedDocId)}`;
+      window.location.href = nextUrl;
+    });
+  </script>
 </body>
 </html>
