@@ -2,14 +2,15 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>E-LegalBoom | Personal & Business Intake</title>
+  <title>E-LegalBoom | Personal Intake</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        sans-serif;
     }
 
     body {
@@ -23,7 +24,6 @@
       text-decoration: none;
     }
 
-    /* Site header */
     .site-header {
       display: flex;
       justify-content: space-between;
@@ -36,7 +36,6 @@
     .site-brand {
       font-size: 20px;
       font-weight: 700;
-      color: #111827;
     }
 
     .site-nav a {
@@ -50,7 +49,6 @@
       text-decoration: underline;
     }
 
-    /* Page */
     .page {
       max-width: 960px;
       margin: 24px auto 40px;
@@ -93,6 +91,17 @@
       font-weight: 600;
     }
 
+    .status-box {
+      display: none;
+      margin-bottom: 16px;
+      padding: 10px 14px;
+      border-radius: 8px;
+      font-size: 13px;
+      background: #ecfdf5;
+      color: #166534;
+      border: 1px solid #bbf7d0;
+    }
+
     .form-card {
       background: #ffffff;
       border-radius: 10px;
@@ -124,6 +133,7 @@
     input[type="text"],
     input[type="email"],
     input[type="tel"],
+    select,
     textarea {
       border-radius: 6px;
       border: 1px solid #d1d5db;
@@ -134,6 +144,7 @@
     }
 
     input:focus,
+    select:focus,
     textarea:focus {
       border-color: #2563eb;
       box-shadow: 0 0 0 1px rgba(37, 99, 235, 0.25);
@@ -167,12 +178,14 @@
       text-align: center;
       min-width: 190px;
       cursor: pointer;
+      border: 1px solid transparent;
     }
 
     .btn-primary {
       background: #0f766e;
       color: #ffffff;
-      border: 1px solid #0f766e;
+      border-color: #0f766e;
+      font-weight: 600;
     }
 
     .btn-primary:hover {
@@ -182,7 +195,8 @@
     .btn-secondary {
       background: #ffffff;
       color: #2563eb;
-      border: 1px solid #2563eb;
+      border-color: #2563eb;
+      font-weight: 500;
     }
 
     .btn-secondary:hover {
@@ -195,21 +209,8 @@
       margin-top: 10px;
     }
 
-    .status {
-      margin-top: 12px;
-      font-size: 13px;
-      padding: 8px 10px;
-      border-radius: 6px;
-      border: 1px solid #bbf7d0;
-      background: #dcfce7;
-      color: #065f46;
-      display: none;
-    }
-
-    .status.error {
-      border-color: #fecaca;
-      background: #fee2e2;
-      color: #991b1b;
+    .pay-cta {
+      margin-top: 10px;
     }
 
     @media (max-width: 640px) {
@@ -227,6 +228,7 @@
     <nav class="site-nav">
       <a href="index.html">Home</a>
       <a href="catalog.html">Catalog</a>
+      <a href="how-it-works.html">How It Works</a>
       <a href="orders.html">My Orders</a>
     </nav>
   </header>
@@ -236,18 +238,28 @@
 
     <h1 class="title">Personal &amp; Business Intake</h1>
     <p class="subtitle">
-      This short intake gives us the information we need to prepare your document correctly for the right tier and document type.
+      This short intake gives us the information we need to prepare your document
+      correctly for the right tier and document type. After you submit, you’ll be
+      taken to <strong>secure payment</strong> for this order.
     </p>
 
     <div class="context-box" id="context-box">
       <div><strong>Selected Tier:</strong> <span id="tier-label">Tier 1</span></div>
-      <div><strong>Selected Document:</strong> <span id="doc-label">To be selected</span></div>
+      <div><strong>Selected Document:</strong> <span id="doc-label">Selected from tier page</span></div>
+    </div>
+
+    <div id="status-box" class="status-box">
+      <div id="status-message">
+        Intake saved locally. You can now continue to secure payment for this document.
+      </div>
+      <div class="pay-cta">
+        <a id="pay-btn" class="btn-primary" href="payment.html">Continue to Secure Payment</a>
+      </div>
     </div>
 
     <section class="form-card">
-      <!-- NO external action: this form is handled by JavaScript -->
-      <form id="intake-form">
-        <!-- Hidden fields we carry along -->
+      <form id="intake-form" novalidate>
+        <!-- Hidden fields -->
         <input type="hidden" id="tier" name="tier" value="" />
         <input type="hidden" id="doc" name="doc" value="" />
 
@@ -289,29 +301,31 @@
         <div class="form-row">
           <div class="field" style="flex: 1 1 100%;">
             <label for="notes">Anything specific we should know?</label>
-            <textarea id="notes" name="notes" placeholder="Optional: describe your situation in a sentence or two."></textarea>
+            <textarea id="notes" name="notes" placeholder="Example: I’m lending money to my cousin for a truck purchase; we’d like payments monthly."></textarea>
+            <div class="helper">Optional: describe your situation in a sentence or two.</div>
           </div>
         </div>
 
         <div class="actions">
           <button type="submit" class="btn-primary">
-            Continue &amp; Pay
+            Submit Details &amp; Continue to Payment
           </button>
           <a href="catalog.html" class="btn-secondary">Cancel &amp; return to catalog</a>
         </div>
 
         <p class="notice">
-          After you submit, we’ll save your intake and immediately send you to the secure payment page for this tier.
+          After you submit, a confirmation message will appear on this page and
+          you’ll be able to continue directly to secure payment.
         </p>
-
-        <div id="status" class="status"></div>
       </form>
     </section>
   </main>
 
   <script>
-    // ---------- Helpers & config ----------
-    const LOCAL_ORDERS_KEY = "elegalboom_orders_v1";
+    // Read tier/doc from URL (?tier=1&doc=mutual-nda)
+    const params = new URLSearchParams(window.location.search);
+    const tierParam = params.get("tier") || "1";
+    const docParam = params.get("doc") || "";
 
     const tierMap = {
       "1": "Tier 1 – Startup & Essential Documents",
@@ -341,106 +355,89 @@
       "one-intake-per-doc": "One Intake per Document (Bundle)"
     };
 
-    function getPaymentUrl(tier) {
-      switch (tier) {
-        case "1":
-          return "pay-tier1.html";
-        case "2":
-          return "pay-tier2.html";
-        case "3":
-          return "pay-tier3.html";
-        case "bundle":
-          return "pay-bundle.html";
-        default:
-          return "pay-tier1.html";
+    // Set hidden fields
+    document.getElementById("tier").value = tierParam;
+    document.getElementById("doc").value = docParam;
+
+    // Display labels
+    document.getElementById("tier-label").textContent =
+      tierMap[tierParam] || "Tier " + tierParam;
+    document.getElementById("doc-label").textContent =
+      docMap[docParam] || (docParam ? docParam : "Selected from tier page");
+
+    // Back-link based on tier
+    const backLink = document.getElementById("back-link");
+    if (tierParam === "1") backLink.href = "tier1.html";
+    else if (tierParam === "2") backLink.href = "tier2.html";
+    else if (tierParam === "3") backLink.href = "tier3.html";
+    else if (tierParam === "bundle") backLink.href = "bundle.html";
+    else backLink.href = "catalog.html";
+
+    // Local storage key
+    const ORDERS_KEY = "elegalboom_orders_v1";
+
+    function loadOrders() {
+      try {
+        const raw = localStorage.getItem(ORDERS_KEY);
+        if (!raw) return [];
+        const parsed = JSON.parse(raw);
+        return Array.isArray(parsed) ? parsed : [];
+      } catch (e) {
+        return [];
       }
     }
 
-    function saveOrder(order) {
-      const existingRaw = localStorage.getItem(LOCAL_ORDERS_KEY);
-      let list = [];
-      if (existingRaw) {
-        try {
-          list = JSON.parse(existingRaw);
-          if (!Array.isArray(list)) list = [];
-        } catch (e) {
-          list = [];
-        }
-      }
-      list.push(order);
-      localStorage.setItem(LOCAL_ORDERS_KEY, JSON.stringify(list));
-      // Also mark "last order" for quick admin access
-      localStorage.setItem("elegalboom_last_order", JSON.stringify(order));
+    function saveOrders(orders) {
+      localStorage.setItem(ORDERS_KEY, JSON.stringify(orders));
     }
 
-    function showStatus(message, isError) {
-      const box = document.getElementById("status");
-      box.textContent = message;
-      box.classList.toggle("error", !!isError);
-      box.style.display = "block";
-    }
+    // Handle submit: save locally AND show payment button
+    const form = document.getElementById("intake-form");
+    const statusBox = document.getElementById("status-box");
+    const statusMessage = document.getElementById("status-message");
+    const payBtn = document.getElementById("pay-btn");
 
-    // ---------- Initial URL parsing ----------
-    (function initFromUrl() {
-      const params = new URLSearchParams(window.location.search);
-      const tierParam = params.get("tier") || "1";
-      const docParam = params.get("doc") || "";
-
-      document.getElementById("tier").value = tierParam;
-      document.getElementById("doc").value = docParam;
-
-      document.getElementById("tier-label").textContent =
-        tierMap[tierParam] || "Tier 1";
-
-      document.getElementById("doc-label").textContent =
-        docMap[docParam] || (docParam ? docParam : "Selected from tier page");
-
-      const backLink = document.getElementById("back-link");
-      if (tierParam === "1") backLink.href = "tier1.html";
-      else if (tierParam === "2") backLink.href = "tier2.html";
-      else if (tierParam === "3") backLink.href = "tier3.html";
-      else if (tierParam === "bundle") backLink.href = "bundle.html";
-      else backLink.href = "catalog.html";
-    })();
-
-    // ---------- Form submit: save locally + redirect to pay ----------
-    document.getElementById("intake-form").addEventListener("submit", function (e) {
+    form.addEventListener("submit", function (e) {
       e.preventDefault();
 
-      const tier = document.getElementById("tier").value || "1";
-      const doc = document.getElementById("doc").value || "";
-
-      const order = {
-        id: Date.now().toString(),
-        createdAt: new Date().toISOString(),
-        tier,
-        documentCode: doc,
-        firstName: document.getElementById("firstName").value.trim(),
-        lastName: document.getElementById("lastName").value.trim(),
-        email: document.getElementById("email").value.trim(),
-        phone: document.getElementById("phone").value.trim(),
-        businessName: document.getElementById("businessName").value.trim(),
-        state: document.getElementById("state").value.trim(),
-        notes: document.getElementById("notes").value.trim()
-      };
-
-      try {
-        saveOrder(order);
-      } catch (err) {
-        console.error("Local save error", err);
-        showStatus("We had trouble saving locally. You can still continue to payment.", true);
+      // Basic required check (browser handles details)
+      if (!form.reportValidity()) {
+        return;
       }
 
-      const payUrl = getPaymentUrl(tier);
-      showStatus("Intake saved. Redirecting you to secure payment…", false);
+      const formData = new FormData(form);
+      const record = {};
+      formData.forEach((value, key) => {
+        record[key] = value;
+      });
 
+      record.timestamp = new Date().toISOString();
+      record.tier = tierParam;
+      record.doc = docParam || "selected-from-tier";
+
+      const orders = loadOrders();
+      orders.push(record);
+      saveOrders(orders);
+
+      // Show confirmation + payment button
+      statusMessage.textContent =
+        "Intake saved for " +
+        (record.firstName || "this order") +
+        ". Click the button below to complete secure payment.";
+      statusBox.style.display = "block";
+
+      // Set payment link with tier/doc in query
+      const payUrl =
+        "payment.html?tier=" +
+        encodeURIComponent(tierParam) +
+        "&doc=" +
+        encodeURIComponent(docParam || "");
+      payBtn.href = payUrl;
+
+      // Optional auto-redirect after a short delay (keep but gentle)
       setTimeout(function () {
-        const url = new URL(payUrl, window.location.origin);
-        url.searchParams.set("orderId", order.id);
-        url.searchParams.set("tier", tier);
-        if (doc) url.searchParams.set("doc", doc);
-        window.location.href = url.toString();
-      }, 700);
+        window.location.href = payUrl;
+      }, 4000);
     });
   </script>
 </body>
