@@ -15,11 +15,6 @@
       color: #111827;
     }
 
-    a {
-      color: inherit;
-      text-decoration: none;
-    }
-
     .site-header {
       display: flex;
       justify-content: space-between;
@@ -38,6 +33,7 @@
       margin-left: 16px;
       font-size: 0.9rem;
       color: #4b5563;
+      text-decoration: none;
     }
 
     .site-nav a:hover {
@@ -45,21 +41,22 @@
     }
 
     main.page {
-      max-width: 960px;
-      margin: 28px auto 48px;
+      max-width: 860px;
+      margin: 24px auto 48px;
       padding: 0 18px;
     }
 
-    #back-link {
+    .back-link {
       display: inline-block;
-      margin-bottom: 16px;
+      margin-bottom: 12px;
       font-size: 0.85rem;
       color: #4b5563;
+      text-decoration: none;
     }
 
     h1 {
-      font-size: 1.9rem;
-      margin-bottom: 6px;
+      font-size: 1.8rem;
+      margin-bottom: 4px;
       color: #0b7285;
     }
 
@@ -69,72 +66,37 @@
       margin-bottom: 16px;
     }
 
-    .summary {
+    .context-box {
       background: #e0f2fe;
       border-radius: 10px;
-      padding: 12px 14px;
-      margin-bottom: 20px;
+      padding: 10px 14px;
+      margin-bottom: 18px;
       font-size: 0.9rem;
-    }
-
-    .summary strong {
-      color: #0f172a;
     }
 
     .form-card {
       background: #ffffff;
       border-radius: 14px;
       box-shadow: 0 10px 25px rgba(15, 23, 42, 0.06);
-      padding: 22px 20px 24px;
+      padding: 20px;
     }
 
-    .section {
-      margin-bottom: 20px;
-      border-top: 1px solid #e5e7eb;
-      padding-top: 18px;
-    }
-
-    .section:first-of-type {
-      border-top: none;
-      padding-top: 0;
-    }
-
-    .section h2 {
+    h3 {
+      margin-top: 16px;
+      margin-bottom: 6px;
       font-size: 1.05rem;
-      margin-bottom: 10px;
       color: #111827;
-    }
-
-    .section p.helper {
-      font-size: 0.85rem;
-      color: #6b7280;
-      margin-bottom: 8px;
-    }
-
-    .form-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      margin-bottom: 12px;
-    }
-
-    .field {
-      flex: 1 1 220px;
-      min-width: 0;
     }
 
     label {
       display: block;
       font-size: 0.85rem;
-      font-weight: 500;
+      margin-top: 10px;
       margin-bottom: 4px;
       color: #374151;
     }
 
-    input[type="text"],
-    input[type="date"],
-    input[type="number"],
-    select,
+    input,
     textarea {
       width: 100%;
       border-radius: 8px;
@@ -150,264 +112,111 @@
     }
 
     .actions {
-      margin-top: 18px;
+      margin-top: 20px;
       display: flex;
       justify-content: flex-end;
       gap: 10px;
     }
 
-    .btn-secondary {
-      border-radius: 999px;
-      padding: 8px 16px;
-      font-size: 0.9rem;
-      border: 1px solid #9ca3af;
-      background: #ffffff;
-      color: #374151;
-      cursor: pointer;
-    }
-
-    .btn-secondary:hover {
-      background: #f3f4f6;
-    }
-
     .btn-primary {
       border-radius: 999px;
-      padding: 9px 18px;
-      font-size: 0.9rem;
-      border: none;
+      padding: 10px 18px;
       background: #1d4ed8;
+      border: none;
       color: #ffffff;
-      font-weight: 600;
+      font-size: 0.9rem;
       cursor: pointer;
+      font-weight: 600;
     }
 
     .btn-primary:hover {
       background: #1e40af;
     }
-
-    @media (max-width: 640px) {
-      .form-row {
-        flex-direction: column;
-      }
-    }
   </style>
 </head>
 
 <body>
-  <header class="site-header">
-    <div class="site-brand">E-LegalBoom</div>
-    <nav class="site-nav">
-      <a href="index.html">Home</a>
-      <a href="catalog.html">Catalog</a>
-      <a href="how-it-works.html">How It Works</a>
-      <a href="orders.html">My Orders</a>
-    </nav>
-  </header>
 
-  <main class="page">
-    <a href="intake.html" id="back-link">&larr; Back to intake</a>
+<header class="site-header">
+  <div class="site-brand">E-LegalBoom</div>
+  <nav class="site-nav">
+    <a href="index.html">Home</a>
+    <a href="catalog.html">Catalog</a>
+    <a href="orders.html">My Orders</a>
+  </nav>
+</header>
 
-    <section class="page">
-      <h1>Document Details – Step 3</h1>
-      <p class="subtitle">Step 3 of 5 – Enter the details for your document.</p>
+<main class="page">
 
-      <div class="summary">
-        <div>
-          <strong>Tier:</strong>
-          <span id="tierLabel">(not set)</span>
-        </div>
-        <div>
-          <strong>Document:</strong>
-          <span id="docLabel">(not set)</span>
-        </div>
-        <div>
-          <strong>Intake ID:</strong>
-          <span id="intakeDisplay">(not set)</span>
-        </div>
+  <a href="intake.html" class="back-link">← Back to Intake</a>
+
+  <h1>Document Details</h1>
+  <p class="subtitle">Step 3 of 5 — Provide details for your document.</p>
+
+  <div class="context-box">
+    <div><strong>Tier:</strong> <span id="tierLabel">—</span></div>
+    <div><strong>Document:</strong> <span id="docLabel">—</span></div>
+  </div>
+
+  <div class="form-card">
+
+    <form id="detailsForm">
+
+      <h3>Parties</h3>
+      <label for="partyOne">Primary Party</label>
+      <input type="text" id="partyOne" name="partyOne" required>
+
+      <label for="partyTwo">Other Party</label>
+      <input type="text" id="partyTwo" name="partyTwo">
+
+      <h3>Agreement Info</h3>
+      <label for="effectiveDate">Effective Date</label>
+      <input type="date" id="effectiveDate" name="effectiveDate">
+
+      <label for="state">Governing State / Jurisdiction</label>
+      <input type="text" id="state" name="state">
+
+      <label for="terms">Key Terms (if any)</label>
+      <textarea id="terms" name="terms"></textarea>
+
+      <h3>Notes</h3>
+      <label for="notes">Special Instructions (optional)</label>
+      <textarea id="notes" name="notes"></textarea>
+
+      <div class="actions">
+        <button type="submit" class="btn-primary">Continue to Preview</button>
       </div>
 
-      <div class="form-card">
-        <form id="detailsForm">
-          <!-- Hidden fields used later for saving / Supabase -->
-          <input type="hidden" id="tierCode" name="tier" value="" />
-          <input type="hidden" id="docType" name="doc" value="" />
-          <input type="hidden" id="intakeId" name="intake" value="" />
-          <input type="hidden" id="stage" name="stage" value="details" />
+    </form>
 
-          <!-- Parties section -->
-          <div class="section">
-            <h2>Parties Involved</h2>
-            <p class="helper">
-              List the main parties who will sign or be bound by this agreement.
-            </p>
+  </div>
 
-            <div class="form-row">
-              <div class="field">
-                <label for="partyOneName">Party One – name / entity *</label>
-                <input type="text" id="partyOneName" name="partyOneName" required />
-              </div>
-              <div class="field">
-                <label for="partyOneRole">Party One – role (e.g., Client, Company, Lender)</label>
-                <input type="text" id="partyOneRole" name="partyOneRole" />
-              </div>
-            </div>
+</main>
 
-            <div class="form-row">
-              <div class="field">
-                <label for="partyTwoName">Party Two – name / entity *</label>
-                <input type="text" id="partyTwoName" name="partyTwoName" required />
-              </div>
-              <div class="field">
-                <label for="partyTwoRole">Party Two – role (e.g., Contractor, Member, Borrower)</label>
-                <input type="text" id="partyTwoRole" name="partyTwoRole" />
-              </div>
-            </div>
-          </div>
+<script>
+  // Extract tier and document from URL or localStorage
+  const urlParams = new URLSearchParams(window.location.search);
 
-          <!-- Key terms section -->
-          <div class="section">
-            <h2>Key Terms</h2>
-            <p class="helper">
-              Provide the main terms you want reflected in this document.
-            </p>
+  const tier = urlParams.get("tier") || localStorage.getItem("tier") || "Not set";
+  const doc  = urlParams.get("doc") || localStorage.getItem("doc") || "Not set";
 
-            <div class="form-row">
-              <div class="field">
-                <label for="effectiveDate">Effective date</label>
-                <input type="date" id="effectiveDate" name="effectiveDate" />
-              </div>
-              <div class="field">
-                <label for="governingState">State / jurisdiction</label>
-                <input type="text" id="governingState" name="governingState" placeholder="e.g., California" />
-              </div>
-            </div>
+  document.getElementById("tierLabel").textContent = tier;
+  document.getElementById("docLabel").textContent = doc;
 
-            <div class="form-row">
-              <div class="field">
-                <label for="paymentTerms">Payment terms (if applicable)</label>
-                <textarea id="paymentTerms" name="paymentTerms"
-                  placeholder="Amount, due dates, and how payment will be made."></textarea>
-              </div>
-            </div>
+  localStorage.setItem("tier", tier);
+  localStorage.setItem("doc", doc);
 
-            <div class="form-row">
-              <div class="field">
-                <label for="scope">Scope / description of work or agreement</label>
-                <textarea id="scope" name="scope"
-                  placeholder="Briefly describe the purpose, services, or arrangement."></textarea>
-              </div>
-            </div>
-          </div>
+  document.getElementById("detailsForm").addEventListener("submit", function(e) {
+    e.preventDefault();
 
-          <!-- Additional notes section -->
-          <div class="section">
-            <h2>Additional Notes or Special Instructions</h2>
-            <p class="helper">
-              Optional: add any special terms, deadlines, or points you want highlighted.
-            </p>
-            <div class="form-row">
-              <div class="field">
-                <textarea id="specialTerms" name="specialTerms"></textarea>
-              </div>
-            </div>
-          </div>
+    const data = Object.fromEntries(new FormData(e.target).entries());
 
-          <div class="actions">
-            <button type="button" class="btn-secondary" onclick="window.location.href='intake.html'">
-              Back
-            </button>
-            <button type="submit" class="btn-primary">
-              Continue to Preview
-            </button>
-          </div>
-        </form>
-      </div>
-    </section>
-  </main>
+    localStorage.setItem("elegalboom_details", JSON.stringify(data));
 
-  <script>
-    function getParam(name) {
-      return new URLSearchParams(window.location.search).get(name) || '';
-    }
+    window.location.href = "preview.html?tier=" + encodeURIComponent(tier) +
+                           "&doc=" + encodeURIComponent(doc);
+  });
+</script>
 
-    function tierLabel(code) {
-      if (code === '1' || code === 'T1') return 'Tier 1 – Startup & Essential Documents';
-      if (code === '2' || code === 'T2') return 'Tier 2 – Business Foundation Documents';
-      if (code === '3' || code === 'T3') return 'Tier 3 – Premium Business Agreements';
-      if (code === '4' || code === 'T4' || code === 'bundle' || code === 'ENT')
-        return 'Tier 4 – Entrepreneur Starter Bundle';
-      return '(not set)';
-    }
-
-    function prettyDoc(code) {
-      const map = {
-        'mutual-nda': 'Mutual NDA (Non-Disclosure Agreement)',
-        'promissory-note': 'Promissory Note',
-        'single-member-llc': 'Single-Member LLC Operating Agreement',
-        'payment-iou': 'Simple Payment / IOU Agreement',
-        'basic-contractor': 'Basic Contractor / Service Letter',
-        'other-basic-business': 'Other Basic Business Documents',
-
-        'partnership-agreement': 'Partnership Agreement',
-        'two-member-llc': 'Two-Member LLC Agreement',
-        'buy-sell': 'Buy–Sell / Investor Agreement',
-        'other-core-business': 'Other Core Business Agreements',
-
-        'service-independent': 'Service / Independent Contractor Agreement',
-        'consulting': 'Consulting & Professional Services Agreement',
-        'joint-venture': 'Joint Venture / Founder Arrangements',
-        'custom-structured': 'Custom Structured Agreement',
-
-        'tier1-set': 'Tier 1 Document Types (Bundle)',
-        'tier2-set': 'Tier 2 Document Types (Bundle)',
-        'tier3-set': 'Tier 3 Document Types (Bundle)',
-        'one-intake-per-doc': 'One Intake per Document (Bundle)'
-      };
-      return map[code] || '(not specified)';
-    }
-
-    function initPage() {
-      const tierParam = getParam('tier');
-      const docParam = getParam('doc');
-      const intakeParam = getParam('intake');
-
-      document.getElementById('tierLabel').textContent = tierLabel(tierParam);
-      document.getElementById('docLabel').textContent = prettyDoc(docParam);
-      document.getElementById('intakeDisplay').textContent =
-        intakeParam || '(not set)';
-
-      document.getElementById('tierCode').value = tierParam;
-      document.getElementById('docType').value = docParam;
-      document.getElementById('intakeId').value = intakeParam;
-    }
-
-    function handleSubmit(event) {
-      event.preventDefault();
-
-      const form = document.getElementById('detailsForm');
-      const data = new FormData(form);
-      const payload = Object.fromEntries(data.entries());
-
-      // Store locally for the preview page to use later
-      try {
-        localStorage.setItem('elegalboom_details', JSON.stringify(payload));
-      } catch (e) {
-        console.log('LocalStorage not available, continuing without it.');
-      }
-
-      // Move to preview step, preserving tier/doc/intake in the URL
-      const params = new URLSearchParams(window.location.search);
-      const nextUrl = 'preview.html?' + params.toString();
-      window.location.href = nextUrl;
-    }
-
-    document.addEventListener('DOMContentLoaded', () => {
-      initPage();
-      const form = document.getElementById('detailsForm');
-      if (form) {
-        form.addEventListener('submit', handleSubmit);
-      }
-    });
-  </script>
 </body>
 </html>
