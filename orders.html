@@ -261,6 +261,54 @@
 
   document.getElementById("continueButton").href = nextUrl;
 </script>
+<!-- ADMIN ACCESS BLOCK -->
+<div id="admin-access" style="display:none; margin-top:20px; text-align:center;">
+  <button id="admin-btn"
+    style="
+      background:#111827;
+      color:white;
+      border:none;
+      padding:10px 16px;
+      border-radius:999px;
+      font-size:14px;
+      cursor:pointer;
+    ">
+    Admin Panel
+  </button>
+</div>
+
+<script>
+  // === Config ===
+  const ADMIN_CODE = "2468";   // Change this to any number you like
+  const ADMIN_KEY = "elegalboom_admin_unlock";
+
+  // If already unlocked, show button
+  if (localStorage.getItem(ADMIN_KEY) === "true") {
+    showAdminButton();
+  }
+
+  // Press Alt + A to unlock Admin
+  document.addEventListener("keydown", function(e) {
+    if (e.altKey && e.key === "a") {
+      const code = prompt("Enter Admin Code:");
+      if (code === ADMIN_CODE) {
+        localStorage.setItem(ADMIN_KEY, "true");
+        showAdminButton();
+        alert("Admin mode unlocked.");
+      } else {
+        alert("Incorrect code.");
+      }
+    }
+  });
+
+  function showAdminButton(){
+    const box = document.getElementById("admin-access");
+    box.style.display = "block";
+    document.getElementById("admin-btn").onclick = function(){
+      window.location.href = "admin.html";
+    };
+  }
+</script>
 
 </body>
 </html>
