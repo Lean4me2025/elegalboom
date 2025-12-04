@@ -436,7 +436,7 @@
 
       // Optional auto-redirect after a short delay (keep but gentle)
       setTimeout(function () {
-        window.location.href = payUrl;
+        window.location.href = payment.html;
       }, 4000);
     });
   </script>
@@ -484,7 +484,7 @@
 
         // 4) On success: go to your existing next step (payment / thank-you)
         // TODO: adjust this path to match your real next page
-        window.location.href = '/payment-step2.html';
+        window.location.href = '/payment.html';
       } catch (err) {
         console.error('Unexpected error:', err);
         alert("Something went wrong. Please try again.");
