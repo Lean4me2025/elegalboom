@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>E-LegalBoom | Personal Intake</title>
+  <title>E-LegalBoom | Personal & Business Intake</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
     * {
@@ -165,7 +165,7 @@
       font-size: 14px;
       text-decoration: none;
       text-align: center;
-      min-width: 170px;
+      min-width: 190px;
       cursor: pointer;
     }
 
@@ -195,17 +195,21 @@
       margin-top: 10px;
     }
 
-    .status-message {
+    .status {
       margin-top: 12px;
       font-size: 13px;
+      padding: 8px 10px;
+      border-radius: 6px;
+      border: 1px solid #bbf7d0;
+      background: #dcfce7;
+      color: #065f46;
+      display: none;
     }
 
-    .status-success {
-      color: #047857;
-    }
-
-    .status-error {
-      color: #b91c1c;
+    .status.error {
+      border-color: #fecaca;
+      background: #fee2e2;
+      color: #991b1b;
     }
 
     @media (max-width: 640px) {
@@ -224,7 +228,6 @@
       <a href="index.html">Home</a>
       <a href="catalog.html">Catalog</a>
       <a href="orders.html">My Orders</a>
-      <a href="admin.html">Admin</a>
     </nav>
   </header>
 
@@ -242,9 +245,9 @@
     </div>
 
     <section class="form-card">
-      <!-- All handling is done in JavaScript / localStorage -->
+      <!-- NO external action: this form is handled by JavaScript -->
       <form id="intake-form">
-        <!-- Hidden fields we store with each intake -->
+        <!-- Hidden fields we carry along -->
         <input type="hidden" id="tier" name="tier" value="" />
         <input type="hidden" id="doc" name="doc" value="" />
 
@@ -286,30 +289,29 @@
         <div class="form-row">
           <div class="field" style="flex: 1 1 100%;">
             <label for="notes">Anything specific we should know?</label>
-            <textarea id="notes" name="notes" placeholder="Example: I'm lending money to my cousin for a truck purchase; we'd like payments monthly."></textarea>
-            <div class="helper">Optional: describe your situation in a sentence or two.</div>
+            <textarea id="notes" name="notes" placeholder="Optional: describe your situation in a sentence or two."></textarea>
           </div>
         </div>
 
         <div class="actions">
-          <button type="submit" class="btn-primary">Submit Intake</button>
+          <button type="submit" class="btn-primary">
+            Continue &amp; Pay
+          </button>
           <a href="catalog.html" class="btn-secondary">Cancel &amp; return to catalog</a>
         </div>
 
         <p class="notice">
-          Your intake is stored locally in this browser and can be exported by the admin for document preparation.
+          After you submit, we’ll save your intake and immediately send you to the secure payment page for this tier.
         </p>
-        <p id="status" class="status-message"></p>
+
+        <div id="status" class="status"></div>
       </form>
     </section>
   </main>
 
   <script>
-    const STORAGE_KEY = "elegalboom_orders_v1";
-
-    const params = new URLSearchParams(window.location.search);
-    const tierParam = params.get("tier") || "1";
-    const docParam = params.get("doc") || "";
+    // ---------- Helpers & config ----------
+    const LOCAL_ORDERS_KEY = "elegalboom_orders_v1";
 
     const tierMap = {
       "1": "Tier 1 – Startup & Essential Documents",
@@ -339,81 +341,106 @@
       "one-intake-per-doc": "One Intake per Document (Bundle)"
     };
 
-    // Set labels and hidden fields
-    document.getElementById("tier").value = tierParam;
-    document.getElementById("doc").value = docParam;
-
-    document.getElementById("tier-label").textContent =
-      tierMap[tierParam] || "Tier 1";
-
-    document.getElementById("doc-label").textContent =
-      docMap[docParam] || (docParam ? docParam : "Selected from tier page");
-
-    const backLink = document.getElementById("back-link");
-    if (tierParam === "1") backLink.href = "tier1.html";
-    else if (tierParam === "2") backLink.href = "tier2.html";
-    else if (tierParam === "3") backLink.href = "tier3.html";
-    else if (tierParam === "bundle") backLink.href = "bundle.html";
-    else backLink.href = "catalog.html";
-
-    function loadOrders() {
-      const raw = localStorage.getItem(STORAGE_KEY);
-      if (!raw) return [];
-      try {
-        const parsed = JSON.parse(raw);
-        return Array.isArray(parsed) ? parsed : [];
-      } catch (e) {
-        console.warn("Could not parse local orders:", e);
-        return [];
+    function getPaymentUrl(tier) {
+      switch (tier) {
+        case "1":
+          return "pay-tier1.html";
+        case "2":
+          return "pay-tier2.html";
+        case "3":
+          return "pay-tier3.html";
+        case "bundle":
+          return "pay-bundle.html";
+        default:
+          return "pay-tier1.html";
       }
     }
 
-    function saveOrders(orders) {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(orders));
+    function saveOrder(order) {
+      const existingRaw = localStorage.getItem(LOCAL_ORDERS_KEY);
+      let list = [];
+      if (existingRaw) {
+        try {
+          list = JSON.parse(existingRaw);
+          if (!Array.isArray(list)) list = [];
+        } catch (e) {
+          list = [];
+        }
+      }
+      list.push(order);
+      localStorage.setItem(LOCAL_ORDERS_KEY, JSON.stringify(list));
+      // Also mark "last order" for quick admin access
+      localStorage.setItem("elegalboom_last_order", JSON.stringify(order));
     }
 
+    function showStatus(message, isError) {
+      const box = document.getElementById("status");
+      box.textContent = message;
+      box.classList.toggle("error", !!isError);
+      box.style.display = "block";
+    }
+
+    // ---------- Initial URL parsing ----------
+    (function initFromUrl() {
+      const params = new URLSearchParams(window.location.search);
+      const tierParam = params.get("tier") || "1";
+      const docParam = params.get("doc") || "";
+
+      document.getElementById("tier").value = tierParam;
+      document.getElementById("doc").value = docParam;
+
+      document.getElementById("tier-label").textContent =
+        tierMap[tierParam] || "Tier 1";
+
+      document.getElementById("doc-label").textContent =
+        docMap[docParam] || (docParam ? docParam : "Selected from tier page");
+
+      const backLink = document.getElementById("back-link");
+      if (tierParam === "1") backLink.href = "tier1.html";
+      else if (tierParam === "2") backLink.href = "tier2.html";
+      else if (tierParam === "3") backLink.href = "tier3.html";
+      else if (tierParam === "bundle") backLink.href = "bundle.html";
+      else backLink.href = "catalog.html";
+    })();
+
+    // ---------- Form submit: save locally + redirect to pay ----------
     document.getElementById("intake-form").addEventListener("submit", function (e) {
       e.preventDefault();
-      const statusEl = document.getElementById("status");
-      statusEl.textContent = "";
-      statusEl.className = "status-message";
 
-      const form = e.target;
-
-      const firstName = form.firstName.value.trim();
-      const lastName = form.lastName.value.trim();
-      const email = form.email.value.trim();
-      const state = form.state.value.trim();
-
-      if (!firstName || !lastName || !email || !state) {
-        statusEl.textContent = "Please fill in all required fields (First, Last, Email, State).";
-        statusEl.classList.add("status-error");
-        return;
-      }
+      const tier = document.getElementById("tier").value || "1";
+      const doc = document.getElementById("doc").value || "";
 
       const order = {
-        id: Date.now(),
+        id: Date.now().toString(),
         createdAt: new Date().toISOString(),
-        tier: tierParam,
-        tierLabel: document.getElementById("tier-label").textContent,
-        documentCode: docParam,
-        documentLabel: document.getElementById("doc-label").textContent,
-        firstName,
-        lastName,
-        email,
-        phone: form.phone.value.trim(),
-        businessName: form.businessName.value.trim(),
-        state,
-        notes: form.notes.value.trim()
+        tier,
+        documentCode: doc,
+        firstName: document.getElementById("firstName").value.trim(),
+        lastName: document.getElementById("lastName").value.trim(),
+        email: document.getElementById("email").value.trim(),
+        phone: document.getElementById("phone").value.trim(),
+        businessName: document.getElementById("businessName").value.trim(),
+        state: document.getElementById("state").value.trim(),
+        notes: document.getElementById("notes").value.trim()
       };
 
-      const orders = loadOrders();
-      orders.push(order);
-      saveOrders(orders);
+      try {
+        saveOrder(order);
+      } catch (err) {
+        console.error("Local save error", err);
+        showStatus("We had trouble saving locally. You can still continue to payment.", true);
+      }
 
-      form.reset();
-      statusEl.textContent = "✅ Intake saved locally. Admin can now export this order for processing.";
-      statusEl.classList.add("status-success");
+      const payUrl = getPaymentUrl(tier);
+      showStatus("Intake saved. Redirecting you to secure payment…", false);
+
+      setTimeout(function () {
+        const url = new URL(payUrl, window.location.origin);
+        url.searchParams.set("orderId", order.id);
+        url.searchParams.set("tier", tier);
+        if (doc) url.searchParams.set("doc", doc);
+        window.location.href = url.toString();
+      }, 700);
     });
   </script>
 </body>
