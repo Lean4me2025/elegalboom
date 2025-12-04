@@ -2,36 +2,174 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>E-LegalBoom | Welcome</title>
+  <title>E-LegalBoom | Business-Ready Legal Documents</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0;
-        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
-    body { background: #f3f4f8; color: #111827; min-height: 100vh; }
-    .site-header {
-      display: flex; justify-content: space-between; align-items: center;
-      padding: 14px 24px; background: #ffffff; border-bottom: 1px solid #e5e7eb;
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        sans-serif;
     }
-    .site-brand { font-size: 20px; font-weight: 700; color: #111827; }
-    .site-nav a { margin-left: 18px; font-size: 14px; color: #374151; text-decoration: none; }
-    .site-nav a:hover { color: #1d4ed8; text-decoration: underline; }
 
-    .hero {
-      max-width: 960px; margin: 48px auto; padding: 32px 28px;
-      background: #ffffff; border-radius: 12px; border: 1px solid #e5e7eb;
-      box-shadow: 0 10px 25px rgba(15, 23, 42, 0.12);
+    body {
+      background: #f3f4f8;
+      color: #111827;
+      min-height: 100vh;
     }
-    .hero-title { font-size: 28px; margin-bottom: 8px; }
-    .hero-sub { font-size: 16px; color: #4b5563; margin-bottom: 18px; max-width: 640px; }
-    .hero-list { margin-left: 18px; margin-bottom: 20px; color: #4b5563; }
-    .hero-list li { margin-bottom: 4px; }
-    .button-primary {
-      display: inline-block; padding: 10px 18px; border-radius: 999px;
-      border: none; background: #2563eb; color: #ffffff;
-      font-size: 15px; font-weight: 600; text-decoration: none;
+
+    a {
+      color: inherit;
+      text-decoration: none;
     }
-    .button-primary:hover { background: #1d4ed8; }
-    .hero-note { font-size: 13px; color: #6b7280; margin-top: 10px; }
+
+    /* Header */
+    .site-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 24px;
+      background: #ffffff;
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    .site-brand {
+      font-size: 20px;
+      font-weight: 700;
+    }
+
+    .site-nav a {
+      margin-left: 18px;
+      font-size: 14px;
+      color: #374151;
+    }
+
+    .site-nav a:hover {
+      color: #1d4ed8;
+      text-decoration: underline;
+    }
+
+    /* Main hero */
+    .page {
+      max-width: 960px;
+      margin: 32px auto 40px;
+      padding: 0 16px;
+    }
+
+    .hero-card {
+      background: #ffffff;
+      border-radius: 14px;
+      padding: 28px 26px 26px;
+      box-shadow: 0 20px 45px rgba(15, 23, 42, 0.12);
+      border: 1px solid #e5e7eb;
+    }
+
+    .hero-title {
+      font-size: 28px;
+      font-weight: 800;
+      margin-bottom: 10px;
+    }
+
+    .hero-subtitle {
+      font-size: 15px;
+      color: #4b5563;
+      margin-bottom: 18px;
+    }
+
+    .hero-highlight {
+      display: inline-block;
+      margin-bottom: 10px;
+      padding: 4px 10px;
+      font-size: 12px;
+      font-weight: 600;
+      color: #065f46;
+      background: #d1fae5;
+      border-radius: 999px;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+
+    .steps-title {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 6px;
+      color: #111827;
+    }
+
+    .steps-list {
+      font-size: 14px;
+      color: #374151;
+      margin-left: 18px;
+      margin-bottom: 16px;
+    }
+
+    .steps-list li {
+      margin-bottom: 4px;
+    }
+
+    .steps-list span {
+      font-weight: 600;
+      color: #0f766e;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 8px;
+      align-items: center;
+    }
+
+    .btn-primary,
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 18px;
+      border-radius: 999px;
+      font-size: 14px;
+      border: 1px solid transparent;
+      cursor: pointer;
+      text-decoration: none;
+      min-width: 190px;
+    }
+
+    .btn-primary {
+      background: #0f766e;
+      border-color: #0f766e;
+      color: #ffffff;
+      font-weight: 600;
+    }
+
+    .btn-primary:hover {
+      background: #115e59;
+    }
+
+    .btn-secondary {
+      background: #ffffff;
+      border-color: #1d4ed8;
+      color: #1d4ed8;
+      font-weight: 500;
+    }
+
+    .btn-secondary:hover {
+      background: #e0edff;
+    }
+
+    .helper-text {
+      font-size: 12px;
+      color: #6b7280;
+      margin-top: 8px;
+    }
+
+    @media (max-width: 640px) {
+      .site-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+      }
+    }
   </style>
 </head>
 <body>
@@ -40,29 +178,41 @@
     <nav class="site-nav">
       <a href="index.html">Home</a>
       <a href="catalog.html">Catalog</a>
-      <a href="details.html">How It Works</a>
+      <a href="how-it-works.html">How It Works</a>
       <a href="orders.html">My Orders</a>
     </nav>
   </header>
 
-  <main class="hero">
-    <h1 class="hero-title">Legal confidence for everyday entrepreneurs.</h1>
-    <p class="hero-sub">
-      E-LegalBoom gives you structured, business-ready documents without the
-      confusion or cost of a traditional law firm. Pick your tier, answer a
-      guided intake, and receive clear documents you can actually use.
-    </p>
-    <ul class="hero-list">
-      <li>Pick a tier that matches your current stage.</li>
-      <li>Choose the document type you need.</li>
-      <li>Complete a short, plain-language intake.</li>
-      <li>We prepare your customized document and send it to you.</li>
-    </ul>
-    <a href="catalog.html" class="button-primary">Choose Your Tier</a>
-    <p class="hero-note">
-      You can always adjust or add documents later. Start with the tier that
-      fits you best right now.
-    </p>
+  <main class="page">
+    <section class="hero-card">
+      <div class="hero-highlight">Better documents. Clearer steps. Fair pricing.</div>
+      <h1 class="hero-title">Legal confidence for everyday entrepreneurs.</h1>
+      <p class="hero-subtitle">
+        E-LegalBoom gives you structured, business-ready documents without the
+        cost or confusion of a traditional law firm. Choose a tier, tell us what
+        you need, <strong>pay securely</strong>, and receive clear documents you
+        can actually use.
+      </p>
+
+      <p class="steps-title">Here’s how it works in 5 simple clicks:</p>
+      <ol class="steps-list">
+        <li><span>1.</span> Choose your tier based on where your business is right now.</li>
+        <li><span>2.</span> Pick the document type that fits your situation.</li>
+        <li><span>3.</span> Answer a short, plain-language intake so we get the facts right.</li>
+        <li><span>4.</span> <strong>Complete secure payment for your document.</strong></li>
+        <li><span>5.</span> Receive your tailored document by email, ready to use.</li>
+      </ol>
+
+      <div class="actions">
+        <a href="catalog.html" class="btn-primary">Get Started – Choose Your Tier</a>
+        <a href="how-it-works.html" class="btn-secondary">See Full Example Flow</a>
+      </div>
+
+      <p class="helper-text">
+        You can always add more documents later. Start with the tier and
+        document that fits your next legal decision.
+      </p>
+    </section>
   </main>
 </body>
 </html>
