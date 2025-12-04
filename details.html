@@ -3,21 +3,58 @@
 <head>
   <meta charset="UTF-8" />
   <title>Document Details – Step 3 | E-LegalBoom</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <link rel="stylesheet" href="style.css"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="style.css" />
 
   <style>
     body {
       margin: 0;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: #f6f8fb;
-      color: #0f172a;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        sans-serif;
+      background: #f6f7fb;
+      color: #111827;
     }
 
-    .page {
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .site-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 24px;
+      background: #ffffff;
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    .site-brand {
+      font-weight: 700;
+      letter-spacing: 0.05em;
+    }
+
+    .site-nav a {
+      margin-left: 16px;
+      font-size: 0.9rem;
+      color: #4b5563;
+    }
+
+    .site-nav a:hover {
+      color: #1d4ed8;
+    }
+
+    main.page {
       max-width: 960px;
       margin: 28px auto 48px;
       padding: 0 18px;
+    }
+
+    #back-link {
+      display: inline-block;
+      margin-bottom: 16px;
+      font-size: 0.85rem;
+      color: #4b5563;
     }
 
     h1 {
@@ -28,64 +65,83 @@
 
     .subtitle {
       font-size: 0.95rem;
-      color: #475569;
-      max-width: 780px;
-      line-height: 1.5;
+      color: #4b5563;
+      margin-bottom: 16px;
     }
 
     .summary {
-      margin-top: 14px;
+      background: #e0f2fe;
+      border-radius: 10px;
       padding: 12px 14px;
-      background: #ecfeff;
-      border-left: 4px solid #0b7285;
-      border-radius: 8px;
+      margin-bottom: 20px;
       font-size: 0.9rem;
-      color: #1e293b;
     }
 
     .summary strong {
-      color: #0b7285;
+      color: #0f172a;
     }
 
-    form {
-      margin-top: 18px;
+    .form-card {
       background: #ffffff;
-      border-radius: 12px;
-      border: 1px solid #e2e8f0;
-      padding: 18px 16px 20px;
-      box-shadow: 0 10px 24px rgba(15,23,42,0.06);
+      border-radius: 14px;
+      box-shadow: 0 10px 25px rgba(15, 23, 42, 0.06);
+      padding: 22px 20px 24px;
     }
 
     .section {
-      margin-top: 18px;
+      margin-bottom: 20px;
       border-top: 1px solid #e5e7eb;
-      padding-top: 12px;
+      padding-top: 18px;
+    }
+
+    .section:first-of-type {
+      border-top: none;
+      padding-top: 0;
     }
 
     .section h2 {
       font-size: 1.05rem;
-      margin: 0 0 8px;
-      color: #0f172a;
+      margin-bottom: 10px;
+      color: #111827;
+    }
+
+    .section p.helper {
+      font-size: 0.85rem;
+      color: #6b7280;
+      margin-bottom: 8px;
+    }
+
+    .form-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .field {
+      flex: 1 1 220px;
+      min-width: 0;
     }
 
     label {
       display: block;
       font-size: 0.85rem;
-      font-weight: 600;
+      font-weight: 500;
       margin-bottom: 4px;
-      color: #111827;
+      color: #374151;
     }
 
     input[type="text"],
-    input[type="email"],
+    input[type="date"],
+    input[type="number"],
+    select,
     textarea {
       width: 100%;
-      box-sizing: border-box;
-      padding: 8px 10px;
-      border-radius: 6px;
+      border-radius: 8px;
       border: 1px solid #d1d5db;
+      padding: 8px 10px;
       font-size: 0.9rem;
-      margin-bottom: 8px;
+      font-family: inherit;
     }
 
     textarea {
@@ -93,261 +149,265 @@
       resize: vertical;
     }
 
-    .hint {
-      font-size: 0.78rem;
-      color: #6b7280;
-      margin-top: -4px;
-      margin-bottom: 6px;
-    }
-
-    .btn-row {
+    .actions {
       margin-top: 18px;
       display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
       justify-content: flex-end;
-    }
-
-    button[type="submit"] {
-      background: #0b7285;
-      color: #ffffff;
-      border: none;
-      border-radius: 999px;
-      padding: 10px 20px;
-      font-size: 0.95rem;
-      font-weight: 600;
-      cursor: pointer;
-      box-shadow: 0 10px 24px rgba(11,114,133,0.35);
-    }
-
-    button[type="submit"]:disabled {
-      opacity: 0.6;
-      cursor: progress;
-      box-shadow: none;
-    }
-
-    .status {
-      margin-top: 12px;
-      font-size: 0.9rem;
-    }
-
-    .status.error {
-      color: #b91c1c;
-    }
-
-    .status.success {
-      color: #166534;
-    }
-
-    .post-actions {
-      margin-top: 20px;
-      display: none;
-      flex-wrap: wrap;
       gap: 10px;
-    }
-
-    .btn-pill {
-      border-radius: 999px;
-      padding: 9px 18px;
-      font-size: 0.85rem;
-      font-weight: 600;
-      text-decoration: none;
-      display: inline-block;
-    }
-
-    .btn-primary {
-      background: #0b7285;
-      color: #ffffff;
-      box-shadow: 0 10px 24px rgba(11,114,133,0.35);
     }
 
     .btn-secondary {
-      border: 1px solid #0b7285;
-      color: #0b7285;
+      border-radius: 999px;
+      padding: 8px 16px;
+      font-size: 0.9rem;
+      border: 1px solid #9ca3af;
       background: #ffffff;
+      color: #374151;
+      cursor: pointer;
+    }
+
+    .btn-secondary:hover {
+      background: #f3f4f6;
+    }
+
+    .btn-primary {
+      border-radius: 999px;
+      padding: 9px 18px;
+      font-size: 0.9rem;
+      border: none;
+      background: #1d4ed8;
+      color: #ffffff;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .btn-primary:hover {
+      background: #1e40af;
+    }
+
+    @media (max-width: 640px) {
+      .form-row {
+        flex-direction: column;
+      }
     }
   </style>
 </head>
 
 <body>
+  <header class="site-header">
+    <div class="site-brand">E-LegalBoom</div>
+    <nav class="site-nav">
+      <a href="index.html">Home</a>
+      <a href="catalog.html">Catalog</a>
+      <a href="how-it-works.html">How It Works</a>
+      <a href="orders.html">My Orders</a>
+    </nav>
+  </header>
 
-<section class="page">
-  <h1>Document Details – Step 3</h1>
-  <p class="subtitle">
-    This step gathers the information required to prepare your document accurately.
-    Please be as clear and specific as possible. If something does not apply, you may leave it blank.
-  </p>
+  <main class="page">
+    <a href="intake.html" id="back-link">&larr; Back to intake</a>
 
-  <div class="summary">
-    Tier: <strong><span id="tierLabel">(not set)</span></strong><br/>
-    Document: <strong><span id="docLabel">(not set)</span></strong><br/>
-    Intake ID: <span id="intakeDisplay">(not set)</span>
-  </div>
+    <section class="page">
+      <h1>Document Details – Step 3</h1>
+      <p class="subtitle">Step 3 of 5 – Enter the details for your document.</p>
 
-  <form id="detailsForm">
-    <!-- Hidden fields -->
-    <input type="hidden" id="tierCode" name="tierCode" value="">
-    <input type="hidden" id="intakeId" name="intakeId" value="">
-    <input type="hidden" id="docType" name="docType" value="">
-    <input type="hidden" id="stage" name="stage" value="intake2">
+      <div class="summary">
+        <div>
+          <strong>Tier:</strong>
+          <span id="tierLabel">(not set)</span>
+        </div>
+        <div>
+          <strong>Document:</strong>
+          <span id="docLabel">(not set)</span>
+        </div>
+        <div>
+          <strong>Intake ID:</strong>
+          <span id="intakeDisplay">(not set)</span>
+        </div>
+      </div>
 
-    <div class="section">
-      <h2>Parties Involved</h2>
+      <div class="form-card">
+        <form id="detailsForm">
+          <!-- Hidden fields used later for saving / Supabase -->
+          <input type="hidden" id="tierCode" name="tier" value="" />
+          <input type="hidden" id="docType" name="doc" value="" />
+          <input type="hidden" id="intakeId" name="intake" value="" />
+          <input type="hidden" id="stage" name="stage" value="details" />
 
-      <label for="partyOneName">Your name / entity name</label>
-      <input type="text" id="partyOneName" name="partyOneName">
+          <!-- Parties section -->
+          <div class="section">
+            <h2>Parties Involved</h2>
+            <p class="helper">
+              List the main parties who will sign or be bound by this agreement.
+            </p>
 
-      <label for="partyTwoName">Other party name (person or business)</label>
-      <input type="text" id="partyTwoName" name="partyTwoName">
+            <div class="form-row">
+              <div class="field">
+                <label for="partyOneName">Party One – name / entity *</label>
+                <input type="text" id="partyOneName" name="partyOneName" required />
+              </div>
+              <div class="field">
+                <label for="partyOneRole">Party One – role (e.g., Client, Company, Lender)</label>
+                <input type="text" id="partyOneRole" name="partyOneRole" />
+              </div>
+            </div>
 
-      <label for="partyRelationship">How are the parties connected?</label>
-      <textarea id="partyRelationship" name="partyRelationship"
-                placeholder="Example: I am hiring this person as a contractor to provide security services at my property."></textarea>
-    </div>
+            <div class="form-row">
+              <div class="field">
+                <label for="partyTwoName">Party Two – name / entity *</label>
+                <input type="text" id="partyTwoName" name="partyTwoName" required />
+              </div>
+              <div class="field">
+                <label for="partyTwoRole">Party Two – role (e.g., Contractor, Member, Borrower)</label>
+                <input type="text" id="partyTwoRole" name="partyTwoRole" />
+              </div>
+            </div>
+          </div>
 
-    <div class="section">
-      <h2>Key Terms</h2>
+          <!-- Key terms section -->
+          <div class="section">
+            <h2>Key Terms</h2>
+            <p class="helper">
+              Provide the main terms you want reflected in this document.
+            </p>
 
-      <label for="keyAmounts">Key amounts (if any)</label>
-      <textarea id="keyAmounts" name="keyAmounts"
-                placeholder="Example: Loan amount, payment schedule, consulting fee, monthly service amount, etc."></textarea>
+            <div class="form-row">
+              <div class="field">
+                <label for="effectiveDate">Effective date</label>
+                <input type="date" id="effectiveDate" name="effectiveDate" />
+              </div>
+              <div class="field">
+                <label for="governingState">State / jurisdiction</label>
+                <input type="text" id="governingState" name="governingState" placeholder="e.g., California" />
+              </div>
+            </div>
 
-      <label for="timing">Timing or term of the agreement</label>
-      <textarea id="timing" name="timing"
-                placeholder="Example: 6-month term, starting March 1, 2026, or month-to-month with 30 days’ notice."></textarea>
+            <div class="form-row">
+              <div class="field">
+                <label for="paymentTerms">Payment terms (if applicable)</label>
+                <textarea id="paymentTerms" name="paymentTerms"
+                  placeholder="Amount, due dates, and how payment will be made."></textarea>
+              </div>
+            </div>
 
-      <label for="specialClauses">Any special clauses or conditions to include?</label>
-      <textarea id="specialClauses" name="specialClauses"
-                placeholder="Example: Non-compete, late fees, early termination terms, communication expectations, etc."></textarea>
-    </div>
+            <div class="form-row">
+              <div class="field">
+                <label for="scope">Scope / description of work or agreement</label>
+                <textarea id="scope" name="scope"
+                  placeholder="Briefly describe the purpose, services, or arrangement."></textarea>
+              </div>
+            </div>
+          </div>
 
-    <div class="section">
-      <h2>Anything Else We Should Know?</h2>
-      <label for="extraNotes">Additional context or instructions</label>
-      <textarea id="extraNotes" name="extraNotes"
-                placeholder="Anything specific you want reflected in this agreement or that we should be aware of."></textarea>
-    </div>
+          <!-- Additional notes section -->
+          <div class="section">
+            <h2>Additional Notes or Special Instructions</h2>
+            <p class="helper">
+              Optional: add any special terms, deadlines, or points you want highlighted.
+            </p>
+            <div class="form-row">
+              <div class="field">
+                <textarea id="specialTerms" name="specialTerms"></textarea>
+              </div>
+            </div>
+          </div>
 
-    <div class="btn-row">
-      <button type="submit">Submit Details</button>
-    </div>
+          <div class="actions">
+            <button type="button" class="btn-secondary" onclick="window.location.href='intake.html'">
+              Back
+            </button>
+            <button type="submit" class="btn-primary">
+              Continue to Preview
+            </button>
+          </div>
+        </form>
+      </div>
+    </section>
+  </main>
 
-    <div class="status" id="statusMessage"></div>
-  </form>
-
-  <div id="postActions" class="post-actions">
-    <a id="anotherSameTier" class="btn-pill btn-primary" href="#">
-      Order another document in this tier →
-    </a>
-    <a class="btn-pill btn-secondary" href="catalog.html">
-      Choose a different tier →
-    </a>
-  </div>
-</section>
-
-<script>
-  const SCRIPT_URL =
-    "https://script.google.com/macros/s/AKfycbxirMiGTQ0QmUGLUxCcuSX1_qasnfRxBL1ycs08z-LTmF9CxgHeivGrVqGi2D_MuRpt/exec";
-
-  function getParam(name) {
-    return new URLSearchParams(window.location.search).get(name) || "";
-  }
-
-  function tierLabel(code) {
-    if (code === "T1") return "Tier 1 – Startup & Essential Documents";
-    if (code === "T2") return "Tier 2 – Business Foundation Documents";
-    if (code === "T3") return "Tier 3 – Premium Business Agreements";
-    if (code === "ENT") return "Entrepreneur Starter Bundle";
-    return "(not set)";
-  }
-
-  function prettyDoc(code) {
-    const map = {
-      NDA: "Mutual NDA",
-      PROMISSORY_NOTE: "Promissory Note",
-      SINGLE_MEMBER_LLC: "Single-Member LLC Agreement",
-      PARTNERSHIP: "Partnership Agreement",
-      TWO_MEMBER_LLC: "Two-Member LLC Agreement",
-      BUY_SELL: "Buy–Sell / Investor Agreement",
-      SERVICE: "Service / Contractor Agreement",
-      CONSULTING: "Consulting Agreement",
-      JV: "Joint Venture Agreement",
-      OTHER: "Custom Document"
-    };
-    return map[code] || "(not specified)";
-  }
-
-  document.addEventListener("DOMContentLoaded", () => {
-    const tier = getParam("tier").toUpperCase();
-    const intakeId = getParam("intakeId");
-    const docType = getParam("docType");
-
-    document.getElementById("tierCode").value = tier;
-    document.getElementById("intakeId").value = intakeId;
-    document.getElementById("docType").value = docType;
-
-    document.getElementById("tierLabel").textContent = tierLabel(tier);
-    document.getElementById("docLabel").textContent = prettyDoc(docType);
-    document.getElementById("intakeDisplay").textContent = intakeId || "(not set)";
-
-    const form = document.getElementById("detailsForm");
-    const statusEl = document.getElementById("statusMessage");
-    const postActions = document.getElementById("postActions");
-    const anotherSameTier = document.getElementById("anotherSameTier");
-
-    // Configure reorder link: go back to intake with prefillId = this intakeId
-    if (tier && intakeId) {
-      const url = new URL(window.location.origin + "/intake.html");
-      url.searchParams.set("tier", tier);
-      url.searchParams.set("prefillId", intakeId);
-      // For static hosting on same folder, keep relative form:
-      const relative = `intake.html?tier=${encodeURIComponent(tier)}&prefillId=${encodeURIComponent(intakeId)}`;
-      anotherSameTier.href = relative;
+  <script>
+    function getParam(name) {
+      return new URLSearchParams(window.location.search).get(name) || '';
     }
 
-    form.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      statusEl.textContent = "";
-      statusEl.className = "status";
+    function tierLabel(code) {
+      if (code === '1' || code === 'T1') return 'Tier 1 – Startup & Essential Documents';
+      if (code === '2' || code === 'T2') return 'Tier 2 – Business Foundation Documents';
+      if (code === '3' || code === 'T3') return 'Tier 3 – Premium Business Agreements';
+      if (code === '4' || code === 'T4' || code === 'bundle' || code === 'ENT')
+        return 'Tier 4 – Entrepreneur Starter Bundle';
+      return '(not set)';
+    }
 
-      const submitBtn = form.querySelector('button[type="submit"]');
-      submitBtn.disabled = true;
-      submitBtn.textContent = "Submitting…";
+    function prettyDoc(code) {
+      const map = {
+        'mutual-nda': 'Mutual NDA (Non-Disclosure Agreement)',
+        'promissory-note': 'Promissory Note',
+        'single-member-llc': 'Single-Member LLC Operating Agreement',
+        'payment-iou': 'Simple Payment / IOU Agreement',
+        'basic-contractor': 'Basic Contractor / Service Letter',
+        'other-basic-business': 'Other Basic Business Documents',
 
-      const formData = new FormData(form);
-      const data = Object.fromEntries(formData.entries());
+        'partnership-agreement': 'Partnership Agreement',
+        'two-member-llc': 'Two-Member LLC Agreement',
+        'buy-sell': 'Buy–Sell / Investor Agreement',
+        'other-core-business': 'Other Core Business Agreements',
 
+        'service-independent': 'Service / Independent Contractor Agreement',
+        'consulting': 'Consulting & Professional Services Agreement',
+        'joint-venture': 'Joint Venture / Founder Arrangements',
+        'custom-structured': 'Custom Structured Agreement',
+
+        'tier1-set': 'Tier 1 Document Types (Bundle)',
+        'tier2-set': 'Tier 2 Document Types (Bundle)',
+        'tier3-set': 'Tier 3 Document Types (Bundle)',
+        'one-intake-per-doc': 'One Intake per Document (Bundle)'
+      };
+      return map[code] || '(not specified)';
+    }
+
+    function initPage() {
+      const tierParam = getParam('tier');
+      const docParam = getParam('doc');
+      const intakeParam = getParam('intake');
+
+      document.getElementById('tierLabel').textContent = tierLabel(tierParam);
+      document.getElementById('docLabel').textContent = prettyDoc(docParam);
+      document.getElementById('intakeDisplay').textContent =
+        intakeParam || '(not set)';
+
+      document.getElementById('tierCode').value = tierParam;
+      document.getElementById('docType').value = docParam;
+      document.getElementById('intakeId').value = intakeParam;
+    }
+
+    function handleSubmit(event) {
+      event.preventDefault();
+
+      const form = document.getElementById('detailsForm');
+      const data = new FormData(form);
+      const payload = Object.fromEntries(data.entries());
+
+      // Store locally for the preview page to use later
       try {
-        const resp = await fetch(SCRIPT_URL, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(data)
-        });
+        localStorage.setItem('elegalboom_details', JSON.stringify(payload));
+      } catch (e) {
+        console.log('LocalStorage not available, continuing without it.');
+      }
 
-        const json = await resp.json();
-        if (!json.success) {
-          throw new Error(json.error || "Unknown error");
-        }
+      // Move to preview step, preserving tier/doc/intake in the URL
+      const params = new URLSearchParams(window.location.search);
+      const nextUrl = 'preview.html?' + params.toString();
+      window.location.href = nextUrl;
+    }
 
-        statusEl.textContent = "Details received. Your document will now move into preparation.";
-        statusEl.classList.add("success");
-        submitBtn.disabled = true;
-        submitBtn.textContent = "Submitted";
-
-        // Show reorder options
-        postActions.style.display = "flex";
-
-      } catch (err) {
-        console.error(err);
-        statusEl.textContent =
-          "There was a problem saving your details. Please try again or contact us if this continues.";
-        statusEl.classList.add("error");
-        submitBtn.disabled = false;
-        submitBtn.textContent = "Submit Details";
+    document.addEventListener('DOMContentLoaded', () => {
+      initPage();
+      const form = document.getElementById('detailsForm');
+      if (form) {
+        form.addEventListener('submit', handleSubmit);
       }
     });
-  });
-</script>
-
+  </script>
 </body>
 </html>
