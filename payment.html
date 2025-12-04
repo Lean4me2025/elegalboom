@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Secure Payment – Step 5 | E-LegalBoom</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="style.css" />
+
+  <style>
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        sans-serif;
+      background: #f6f7fb;
+      color: #111827;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .site-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 24px;
+      background: #ffffff;
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    .site-brand {
+      font-weight: 700;
+      letter-spacing: 0.05em;
+    }
+
+    .site-nav a {
+      margin-left: 16px;
+      font-size: 0.9rem;
+      color: #4b5563;
+    }
+
+    .site-nav a:hover {
+      color: #1d4ed8;
+    }
+
+    main.page {
+      max-width: 960px;
+      margin: 28px auto 48px;
+      padding: 0 18px;
+    }
+
+    #back-link {
+      display: inline-block;
+      margin-bottom: 16px;
+      font-size: 0.85rem;
+      color: #4b5563;
+    }
+
+    h1 {
+      font-size: 1.9rem;
+      margin-bottom: 6px;
+      color: #0b7285;
+    }
+
+    .subtitle {
+      font-size: 0.95rem;
+      color: #4b5563;
+      margin-bottom: 16px;
+    }
+
+    .summary {
+      background: #e0f2fe;
+      border-radius: 10px;
+      padding: 12px 14px;
+      margin-bottom: 20px;
+      font-size: 0.9rem;
+    }
+
+    .summary strong {
+      color: #0f172a;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 3fr 2fr;
+      gap: 18px;
+    }
+
+    @media (max-width: 800px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .card {
+      background: #ffffff;
+      border-radius: 14px;
+      box-shadow: 0 10px 25px rgba(15, 23, 42, 0.06);
+      padding: 18px 16px 16px;
+      font-size: 0.9rem;
+    }
+
+    .card h2 {
+      font-size: 1rem;
+      margin-bottom: 10px;
+      color: #111827;
+    }
+
+    label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 500;
+      margin-bottom: 4px;
+      color: #374151;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="tel"],
+    input[type="number"] {
+      width: 100%;
+      border-radius: 8px;
+      border: 1px solid #d1d5db;
+      padding: 8px 10px;
+      font-size: 0.9rem;
+      font-family: inherit;
+      margin-bottom: 10px;
+    }
+
+    .row {
+      display: flex;
+      gap: 10px;
+    }
+
+    .row > div {
+      flex: 1;
+    }
+
+    .actions {
+      margin-top: 18px;
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+    }
+
+    .btn-secondary {
+      border-radius: 999px;
+      padding: 8px 16px;
+      font-size: 0.9rem;
+      border: 1px solid #9ca3af;
+      background: #ffffff;
+      color: #374151;
+      cursor: pointer;
+    }
+
+    .btn-secondary:hover {
+      background: #f3f4f6;
+    }
+
+    .btn-primary {
+      border-radius: 999px;
+      padding: 9px 18px;
+      font-size: 0.9rem;
+      border: none;
+      background: #1d4ed8;
+      color: #ffffff;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .btn-primary:hover {
+      background: #1e40af;
+    }
+
+    .disclaimer {
+      font-size: 0.8rem;
+      color: #6b7280;
+      margin-top: 8px;
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="site-brand">E-LegalBoom</div>
+    <nav class="site-nav">
+      <a href="index.html">Home</a>
+      <a href="catalog.html">Catalog</a>
+      <a href="how-it-works.html">How It Works</a>
+      <a href="orders.html">My Orders</a>
+    </nav>
+  </header>
+
+  <main class="page">
+    <a href="preview.html" id="back-link">&larr; Back to review</a>
+
+    <h1>Secure Payment – Step 5</h1>
+    <p class="subtitle">
+      Step 5 of 5 – Complete secure payment to submit your order for preparation.
+    </p>
+
+    <div class="summary">
+      <div><strong>Tier:</strong> <span id="tierLabel">(not set)</span></div>
+      <div><strong>Document:</strong> <span id="docLabel">(not set)</span></div>
+      <div><strong>Intake ID:</strong> <span id="intakeDisplay">(not set)</span></div>
+    </div>
+
+    <div class="layout">
+      <div class="card">
+        <h2>Payment Details</h2>
+        <form id="paymentForm">
+          <label for="cardName">Name on card</label>
+          <input type="text" id="cardName" name="cardName" autocomplete="cc-name" />
+
+          <label for="cardNumber">Card number</label>
+          <input type="text" id="cardNumber" name="cardNumber" autocomplete="cc-number" />
+
+          <div class="row">
+            <div>
+              <label for="exp">Expiry (MM/YY)</label>
+              <input type="text" id="exp" name="exp" autocomplete="cc-exp" />
+            </div>
+            <div>
+              <label for="cvc">CVC</label>
+              <input type="text" id="cvc" name="cvc" autocomplete="cc-csc" />
+            </div>
+          </div>
+
+          <div class="row">
+            <div>
+              <label for="billingZip">Billing ZIP / Postal Code</label>
+              <input type="text" id="billingZip" name="billingZip" />
+            </div>
+          </div>
+
+          <div class="disclaimer">
+            This is a placeholder payment screen. Your actual payment processor
+            (e.g., Stripe) will be connected here. E-LegalBoom is not a law firm and
+            does not provide legal advice.
+          </div>
+
+          <div class="actions">
+            <button type="button" class="btn-secondary" onclick="goBack()">
+              Back
+            </button>
+            <button type="submit" class="btn-primary">
+              Complete Order
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <div class="card">
+        <h2>Order Summary</h2>
+        <p><strong>Selected Document:</strong></p>
+        <p id="orderDoc">(not set)</p>
+
+        <p style="margin-top:10px;"><strong>Tier &amp; Pricing:</strong></p>
+        <p id="orderTierPrice">(to be set from pricing)</p>
+
+        <p style="margin-top:10px;"><strong>Next Steps:</strong></p>
+        <ul style="padding-left:18px; margin:6px 0;">
+          <li>Your payment is processed securely.</li>
+          <li>Your order is logged with your Intake ID.</li>
+          <li>Your document is prepared and returned by email.</li>
+        </ul>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    function getParam(name) {
+      return new URLSearchParams(window.location.search).get(name) || '';
+    }
+
+    function tierLabel(code) {
+      if (code === '1' || code === 'T1') return 'Tier 1 – Startup & Essential Documents';
+      if (code === '2' || code === 'T2') return 'Tier 2 – Business Foundation Documents';
+      if (code === '3' || code === 'T3') return 'Tier 3 – Premium Business Agreements';
+      if (code === '4' || code === 'T4' || code === 'bundle' || code === 'ENT')
+        return 'Tier 4 – Entrepreneur Starter Bundle';
+      return '(not set)';
+    }
+
+    function tierPriceText(code) {
+      // You can adjust these to match your pricing.
+      if (code === '1' || code === 'T1') return 'Tier 1 – $XXX per document';
+      if (code === '2' || code === 'T2') return 'Tier 2 – $XXX per document';
+      if (code === '3' || code === 'T3') return 'Tier 3 – $XXX per document';
+      if (code === '4' || code === 'T4' || code === 'bundle' || code === 'ENT')
+        return 'Tier 4 – Entrepreneur Bundle – $XXX';
+      return '(pricing to be confirmed)';
+    }
+
+    function prettyDoc(code) {
+      const map = {
+        'mutual-nda': 'Mutual NDA (Non-Disclosure Agreement)',
+        'promissory-note': 'Promissory Note',
+        'single-member-llc': 'Single-Member LLC Operating Agreement',
+        'payment-iou': 'Simple Payment / IOU Agreement',
+        'basic-contractor': 'Basic Contractor / Service Letter',
+        'other-basic-business': 'Other Basic Business Documents',
+
+        'partnership-agreement': 'Partnership Agreement',
+        'two-member-llc': 'Two-Member LLC Agreement',
+        'buy-sell': 'Buy–Sell / Investor Agreement',
+        'other-core-business': 'Other Core Business Agreements',
+
+        'service-independent': 'Service / Independent Contractor Agreement',
+        'consulting': 'Consulting & Professional Services Agreement',
+        'joint-venture': 'Joint Venture / Founder Arrangements',
+        'custom-structured': 'Custom Structured Agreement',
+
+        'tier1-set': 'Tier 1 Document Types (Bundle)',
+        'tier2-set': 'Tier 2 Document Types (Bundle)',
+        'tier3-set': 'Tier 3 Document Types (Bundle)',
+        'one-intake-per-doc': 'One Intake per Document (Bundle)'
+      };
+      return map[code] || '(not specified)';
+    }
+
+    function initPage() {
+      const tierParam = getParam('tier');
+      const docParam = getParam('doc');
+      const intakeParam = getParam('intake');
+
+      document.getElementById('tierLabel').textContent = tierLabel(tierParam);
+      document.getElementById('docLabel').textContent = prettyDoc(docParam);
+      document.getElementById('intakeDisplay').textContent =
+        intakeParam || '(not set)';
+
+      document.getElementById('orderDoc').textContent = prettyDoc(docParam);
+      document.getElementById('orderTierPrice').textContent = tierPriceText(
+        tierParam
+      );
+    }
+
+    function goBack() {
+      const params = new URLSearchParams(window.location.search);
+      const backUrl = 'preview.html?' + params.toString();
+      window.location.href = backUrl;
+    }
+
+    function handlePaymentSubmit(event) {
+      event.preventDefault();
+
+      const form = document.getElementById('paymentForm');
+      const data = new FormData(form);
+      const payload = Object.fromEntries(data.entries());
+
+      try {
+        localStorage.setItem('elegalboom_payment', JSON.stringify(payload));
+      } catch (e) {
+        console.log('LocalStorage not available for payment info.', e);
+      }
+
+      const params = new URLSearchParams(window.location.search);
+      const nextUrl = 'thankyou.html?' + params.toString();
+      window.location.href = nextUrl;
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      initPage();
+      const form = document.getElementById('paymentForm');
+      if (form) {
+        form.addEventListener('submit', handlePaymentSubmit);
+      }
+    });
+  </script>
+</body>
+</html>
