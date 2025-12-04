@@ -440,5 +440,57 @@
       }, 4000);
     });
   </script>
+<script type="module">
+  import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+
+  // 1) Your Supabase credentials
+  const SUPABASE_URL = 'https://vvjbjfltqsivvxxifnvi.supabase.co';   // <-- your project URL
+  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ2amJqZmx0cXNpdnZ4eGlmbnZpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc5NzYzNTAsImV4cCI6MjA3MzU1MjM1MH0.F4zzcpCHl9v-Rnj0wgKJ5zBf1HteVyXelMLQDDEN28Q';             // <-- long token
+
+  const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  // 2) Grab the form
+  const form = document.getElementById('intakeForm');
+
+  if (form) {
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault(); // stop browser default so we can save first
+
+      const formData = new FormData(form);
+
+      // 3) Build the row we will insert
+      const row = {
+        tier: formData.get('tier') || null,
+        doc_type: formData.get('docType') || null,
+        full_name: formData.get('fullName') || null,
+        email: formData.get('email') || null,
+        phone: formData.get('phone') || null,
+        state: formData.get('state') || null,
+        business_name: formData.get('businessName') || null,
+        notes: formData.get('primaryGoal') || formData.get('notes') || null,
+        status: 'new',
+      };
+
+      try {
+        const { error } = await supabase
+          .from('intakes')
+          .insert(row);
+
+        if (error) {
+          console.error('Supabase insert error:', error);
+          alert("Sorry, we couldn't save your request. Please try again or contact us.");
+          return;
+        }
+
+        // 4) On success: go to your existing next step (payment / thank-you)
+        // TODO: adjust this path to match your real next page
+        window.location.href = '/payment-step2.html';
+      } catch (err) {
+        console.error('Unexpected error:', err);
+        alert("Something went wrong. Please try again.");
+      }
+    });
+  }
+</script>
 </body>
 </html>
