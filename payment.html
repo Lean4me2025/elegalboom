@@ -2,370 +2,373 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Secure Payment – Step 3 | E-LegalBoom</title>
+  <title>E-LegalBoom • Secure Payment</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="style.css" />
 
   <style>
+    :root {
+      --primary: #e67e22;
+      --primary-dark: #c76b1c;
+      --accent: #2c3e50;
+      --bg: #f7f7f7;
+      --text: #333;
+      --border-radius: 6px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       margin: 0;
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
-        sans-serif;
-      background: #f6f7fb;
-      color: #111827;
+        Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
     }
 
-    a {
-      color: inherit;
-      text-decoration: none;
+    header {
+      background: var(--accent);
+      color: #fff;
+      padding: 1rem 0;
     }
 
-    .site-header {
+    header .container {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 0 1rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 14px 24px;
-      background: #ffffff;
-      border-bottom: 1px solid #e5e7eb;
     }
 
-    .site-brand {
-      font-weight: 700;
-      letter-spacing: 0.05em;
+    header h1 {
+      font-size: 1.3rem;
+      margin: 0;
     }
 
-    .site-nav a {
-      margin-left: 16px;
+    header span {
       font-size: 0.9rem;
-      color: #4b5563;
+      opacity: 0.85;
     }
 
-    .site-nav a:hover {
-      color: #1d4ed8;
-    }
-
-    main.page {
+    main {
       max-width: 960px;
-      margin: 28px auto 48px;
-      padding: 0 18px;
+      margin: 2rem auto;
+      padding: 0 1rem 3rem;
     }
 
-    #back-link {
-      display: inline-block;
-      margin-bottom: 16px;
-      font-size: 0.85rem;
-      color: #4b5563;
-    }
-
-    h1 {
-      font-size: 1.9rem;
-      margin-bottom: 6px;
-      color: #0b7285;
-    }
-
-    .subtitle {
-      font-size: 0.95rem;
-      color: #4b5563;
-      margin-bottom: 16px;
-    }
-
-    .summary {
-      background: #e0f2fe;
-      border-radius: 10px;
-      padding: 12px 14px;
-      margin-bottom: 20px;
-      font-size: 0.9rem;
-    }
-
-    .summary strong {
-      color: #0f172a;
-    }
-
-    .layout {
-      display: grid;
-      grid-template-columns: 3fr 2fr;
-      gap: 18px;
-    }
-
-    @media (max-width: 800px) {
-      .layout {
-        grid-template-columns: 1fr;
-      }
+    h2 {
+      margin-top: 0;
+      color: var(--accent);
     }
 
     .card {
-      background: #ffffff;
-      border-radius: 14px;
-      box-shadow: 0 10px 25px rgba(15, 23, 42, 0.06);
-      padding: 18px 16px 16px;
-      font-size: 0.9rem;
+      background: #fff;
+      border-radius: var(--border-radius);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
     }
 
-    .card h2 {
-      font-size: 1rem;
-      margin-bottom: 10px;
-      color: #111827;
-    }
-
-    label {
-      display: block;
-      font-size: 0.85rem;
-      font-weight: 500;
-      margin-bottom: 4px;
-      color: #374151;
-    }
-
-    input[type="text"],
-    input[type="email"],
-    input[type="tel"],
-    input[type="number"] {
-      width: 100%;
-      border-radius: 8px;
-      border: 1px solid #d1d5db;
-      padding: 8px 10px;
-      font-size: 0.9rem;
-      font-family: inherit;
-      margin-bottom: 10px;
-    }
-
-    .row {
-      display: flex;
-      gap: 10px;
-    }
-
-    .row > div {
-      flex: 1;
-    }
-
-    .actions {
-      margin-top: 18px;
-      display: flex;
-      justify-content: flex-end;
-      gap: 10px;
-    }
-
-    .btn-secondary {
+    .step-badge {
+      display: inline-block;
+      background: var(--primary);
+      color: #fff;
       border-radius: 999px;
-      padding: 8px 16px;
-      font-size: 0.9rem;
-      border: 1px solid #9ca3af;
-      background: #ffffff;
-      color: #374151;
-      cursor: pointer;
+      padding: 0.25rem 0.75rem;
+      font-size: 0.8rem;
+      margin-bottom: 0.5rem;
     }
 
-    .btn-secondary:hover {
-      background: #f3f4f6;
+    .lead {
+      margin-top: 0.25rem;
+      color: #555;
+    }
+
+    .plan-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .plan {
+      border: 1px solid #e0e0e0;
+      border-radius: var(--border-radius);
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .plan h3 {
+      margin: 0 0 0.35rem;
+      color: var(--accent);
+    }
+
+    .plan .price {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+
+    .plan small {
+      display: block;
+      font-size: 0.8rem;
+      color: #777;
+      margin-bottom: 0.75rem;
+    }
+
+    .btn {
+      display: inline-block;
+      text-align: center;
+      padding: 0.6rem 1rem;
+      border-radius: var(--border-radius);
+      border: none;
+      cursor: pointer;
+      font-size: 0.95rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: background 0.15s ease, transform 0.05s ease;
     }
 
     .btn-primary {
-      border-radius: 999px;
-      padding: 9px 18px;
-      font-size: 0.9rem;
-      border: none;
-      background: #1d4ed8;
-      color: #ffffff;
-      font-weight: 600;
-      cursor: pointer;
+      background: var(--primary);
+      color: #fff;
     }
 
     .btn-primary:hover {
-      background: #1e40af;
+      background: var(--primary-dark);
+      transform: translateY(-1px);
+    }
+
+    .btn-secondary {
+      background: #ecf0f1;
+      color: var(--accent);
+    }
+
+    .btn-secondary:hover {
+      background: #dde4e6;
+      transform: translateY(-1px);
     }
 
     .disclaimer {
       font-size: 0.8rem;
-      color: #6b7280;
-      margin-top: 8px;
+      color: #777;
+      margin-top: 1rem;
+      line-height: 1.4;
+    }
+
+    .after-payment {
+      margin-top: 1.5rem;
+      padding-top: 1rem;
+      border-top: 1px dashed #ddd;
+      font-size: 0.9rem;
+    }
+
+    .after-payment strong {
+      color: var(--accent);
+    }
+
+    @media (max-width: 600px) {
+      header .container {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.35rem;
+      }
     }
   </style>
 </head>
 <body>
-  <header class="site-header">
-    <div class="site-brand">E-LegalBoom</div>
-    <nav class="site-nav">
-      <a href="index.html">Home</a>
-      <a href="catalog.html">Catalog</a>
-      <a href="how-it-works.html">How It Works</a>
-      <a href="orders.html">My Orders</a>
-    </nav>
+  <header>
+    <div class="container">
+      <h1>E-LegalBoom</h1>
+      <span>Step 2 &mdash; Secure Payment</span>
+    </div>
   </header>
 
-  <main class="page">
-    <a href="preview.html" id="back-link">&larr; Back to review</a>
+  <main>
+    <section class="card">
+      <div class="step-badge">Step 2 of 3</div>
+      <h2>Complete Your Secure Payment</h2>
+      <p class="lead">
+        You’ve started your order. Now choose the option that matches what you
+        need and complete payment on our secure PayLink checkout page.
+      </p>
 
-    <h1>Secure Payment – Step 5</h1>
-    <p class="subtitle">
-      Step 3 of 5 – Complete secure payment to submit your order for preparation.
-    </p>
+      <div id="selected-plan" class="card" style="display:none; margin-top:1rem;"></div>
 
-    <div class="summary">
-      <div><strong>Tier:</strong> <span id="tierLabel">(not set)</span></div>
-      <div><strong>Document:</strong> <span id="docLabel">(not set)</span></div>
-      <div><strong>Intake ID:</strong> <span id="intakeDisplay">(not set)</span></div>
-    </div>
-
-    <div class="layout">
-      <div class="card">
-        <h2>Payment Details</h2>
-        <form id="paymentForm">
-          <label for="cardName">Name on card</label>
-          <input type="text" id="cardName" name="cardName" autocomplete="cc-name" />
-
-          <label for="cardNumber">Card number</label>
-          <input type="text" id="cardNumber" name="cardNumber" autocomplete="cc-number" />
-
-          <div class="row">
-            <div>
-              <label for="exp">Expiry (MM/YY)</label>
-              <input type="text" id="exp" name="exp" autocomplete="cc-exp" />
-            </div>
-            <div>
-              <label for="cvc">CVC</label>
-              <input type="text" id="cvc" name="cvc" autocomplete="cc-csc" />
-            </div>
+      <div id="all-plans" class="plan-grid">
+        <!-- Tier One -->
+        <article class="plan">
+          <div>
+            <h3>Tier One Documents</h3>
+            <div class="price">$39.00</div>
+            <small>Perfect for a single, straightforward document.</small>
           </div>
+          <a
+            class="btn btn-primary"
+            href="REPLACE_WITH_TIER_ONE_PAYLINK_URL"
+            target="_blank"
+            rel="noopener"
+          >
+            Pay $39 with PayLink
+          </a>
+        </article>
 
-          <div class="row">
-            <div>
-              <label for="billingZip">Billing ZIP / Postal Code</label>
-              <input type="text" id="billingZip" name="billingZip" />
-            </div>
+        <!-- Tier Two -->
+        <article class="plan">
+          <div>
+            <h3>Tier Two Documents</h3>
+            <div class="price">$59.00</div>
+            <small>Great when you need two documents prepared.</small>
           </div>
+          <a
+            class="btn btn-primary"
+            href="REPLACE_WITH_TIER_TWO_PAYLINK_URL"
+            target="_blank"
+            rel="noopener"
+          >
+            Pay $59 with PayLink
+          </a>
+        </article>
 
-          <div class="disclaimer">
-            This is a placeholder payment screen. Your actual payment processor
-            (e.g., Stripe) will be connected here. E-LegalBoom is not a law firm and
-            does not provide legal advice.
+        <!-- Tier Three -->
+        <article class="plan">
+          <div>
+            <h3>Tier Three Documents</h3>
+            <div class="price">$99.00</div>
+            <small>Up to three documents bundled together.</small>
           </div>
+          <a
+            class="btn btn-primary"
+            href="REPLACE_WITH_TIER_THREE_PAYLINK_URL"
+            target="_blank"
+            rel="noopener"
+          >
+            Pay $99 with PayLink
+          </a>
+        </article>
 
-          <div class="actions">
-            <button type="button" class="btn-secondary" onclick="goBack()">
-              Back
-            </button>
-            <button type="submit" class="btn-primary">
-              Complete Order
-            </button>
+        <!-- Entrepreneur Starter Bundle -->
+        <article class="plan">
+          <div>
+            <h3>Entrepreneur Starter Bundle</h3>
+            <div class="price">$149.00</div>
+            <small>Starter bundle for new businesses and entrepreneurs.</small>
           </div>
-        </form>
+          <a
+            class="btn btn-secondary"
+            href="REPLACE_WITH_ENTREPRENEUR_BUNDLE_PAYLINK_URL"
+            target="_blank"
+            rel="noopener"
+          >
+            Pay $149 with PayLink
+          </a>
+        </article>
+
+        <!-- 30 Days Unlimited -->
+        <article class="plan">
+          <div>
+            <h3>30 Days Unlimited Legal Documents</h3>
+            <div class="price">$199.00</div>
+            <small>Unlimited document preparation for 30 days.</small>
+          </div>
+          <a
+            class="btn btn-secondary"
+            href="REPLACE_WITH_30_DAYS_UNLIMITED_PAYLINK_URL"
+            target="_blank"
+            rel="noopener"
+          >
+            Pay $199 with PayLink
+          </a>
+        </article>
       </div>
 
-      <div class="card">
-        <h2>Order Summary</h2>
-        <p><strong>Selected Document:</strong></p>
-        <p id="orderDoc">(not set)</p>
-
-        <p style="margin-top:10px;"><strong>Tier &amp; Pricing:</strong></p>
-        <p id="orderTierPrice">(to be set from pricing)</p>
-
-        <p style="margin-top:10px;"><strong>Next Steps:</strong></p>
-        <ul style="padding-left:18px; margin:6px 0;">
-          <li>Your payment is processed securely.</li>
-          <li>Your order is logged with your Intake ID.</li>
-          <li>Your document is prepared and returned by email.</li>
-        </ul>
+      <div class="after-payment">
+        <p>
+          <strong>After payment:</strong> you’ll be taken back to E-LegalBoom
+          to complete your detailed document information so we can prepare
+          everything correctly.
+        </p>
+        <p>
+          If you are not automatically redirected, use this link to continue:
+        </p>
+        <a href="details.html" class="btn btn-secondary">
+          Continue to Document Details Form
+        </a>
       </div>
-    </div>
+
+      <div class="disclaimer">
+        Payments are processed securely by our payment partner via PayLink.
+        E-LegalBoom is not a law firm and does not provide legal advice. Your
+        purchase covers document preparation and related services as described
+        in your chosen option.
+      </div>
+    </section>
   </main>
 
   <script>
-    function getParam(name) {
-      return new URLSearchParams(window.location.search).get(name) || '';
-    }
+    /*
+      Optional: If your intro page sends a ?tier= code in the URL,
+      this JS will highlight just that one option at the top.
 
-    function tierLabel(code) {
-      if (code === '1' || code === 'T1') return 'Tier 1 – Startup & Essential Documents';
-      if (code === '2' || code === 'T2') return 'Tier 2 – Business Foundation Documents';
-      if (code === '3' || code === 'T3') return 'Tier 3 – Premium Business Agreements';
-      if (code === '4' || code === 'T4' || code === 'bundle' || code === 'ENT')
-        return 'Tier 4 – Entrepreneur Starter Bundle';
-      return '(not set)';
-    }
+      Example: payment.html?tier=T1
+    */
 
-    function tierPriceText(code) {
-      // You can adjust these to match your pricing.
-      if (code === '1' || code === 'T1') return 'Tier 1 – $XXX per document';
-      if (code === '2' || code === 'T2') return 'Tier 2 – $XXX per document';
-      if (code === '3' || code === 'T3') return 'Tier 3 – $XXX per document';
-      if (code === '4' || code === 'T4' || code === 'bundle' || code === 'ENT')
-        return 'Tier 4 – Entrepreneur Bundle – $XXX';
-      return '(pricing to be confirmed)';
-    }
-
-    function prettyDoc(code) {
-      const map = {
-        'mutual-nda': 'Mutual NDA (Non-Disclosure Agreement)',
-        'promissory-note': 'Promissory Note',
-        'single-member-llc': 'Single-Member LLC Operating Agreement',
-        'payment-iou': 'Simple Payment / IOU Agreement',
-        'basic-contractor': 'Basic Contractor / Service Letter',
-        'other-basic-business': 'Other Basic Business Documents',
-
-        'partnership-agreement': 'Partnership Agreement',
-        'two-member-llc': 'Two-Member LLC Agreement',
-        'buy-sell': 'Buy–Sell / Investor Agreement',
-        'other-core-business': 'Other Core Business Agreements',
-
-        'service-independent': 'Service / Independent Contractor Agreement',
-        'consulting': 'Consulting & Professional Services Agreement',
-        'joint-venture': 'Joint Venture / Founder Arrangements',
-        'custom-structured': 'Custom Structured Agreement',
-
-        'tier1-set': 'Tier 1 Document Types (Bundle)',
-        'tier2-set': 'Tier 2 Document Types (Bundle)',
-        'tier3-set': 'Tier 3 Document Types (Bundle)',
-        'one-intake-per-doc': 'One Intake per Document (Bundle)'
-      };
-      return map[code] || '(not specified)';
-    }
-
-    function initPage() {
-      const tierParam = getParam('tier');
-      const docParam = getParam('doc');
-      const intakeParam = getParam('intake');
-
-      document.getElementById('tierLabel').textContent = tierLabel(tierParam);
-      document.getElementById('docLabel').textContent = prettyDoc(docParam);
-      document.getElementById('intakeDisplay').textContent =
-        intakeParam || '(not set)';
-
-      document.getElementById('orderDoc').textContent = prettyDoc(docParam);
-      document.getElementById('orderTierPrice').textContent = tierPriceText(
-        tierParam
-      );
-    }
-
-    function goBack() {
-      const params = new URLSearchParams(window.location.search);
-      const backUrl = 'preview.html?' + params.toString();
-      window.location.href = backUrl;
-    }
-
-    function handlePaymentSubmit(event) {
-      event.preventDefault();
-
-      const form = document.getElementById('paymentForm');
-      const data = new FormData(form);
-      const payload = Object.fromEntries(data.entries());
-
-      try {
-        localStorage.setItem('elegalboom_payment', JSON.stringify(payload));
-      } catch (e) {
-        console.log('LocalStorage not available for payment info.', e);
+    const products = {
+      T1: {
+        name: "Tier One Documents",
+        price: "$39.00",
+        url: "REPLACE_WITH_TIER_ONE_PAYLINK_URL"
+      },
+      T2: {
+        name: "Tier Two Documents",
+        price: "$59.00",
+        url: "REPLACE_WITH_TIER_TWO_PAYLINK_URL"
+      },
+      T3: {
+        name: "Tier Three Documents",
+        price: "$99.00",
+        url: "REPLACE_WITH_TIER_THREE_PAYLINK_URL"
+      },
+      BUNDLE: {
+        name: "Entrepreneur Starter Bundle",
+        price: "$149.00",
+        url: "REPLACE_WITH_ENTREPRENEUR_BUNDLE_PAYLINK_URL"
+      },
+      MONTHLY: {
+        name: "30 Days Unlimited Legal Documents",
+        price: "$199.00",
+        url: "REPLACE_WITH_30_DAYS_UNLIMITED_PAYLINK_URL"
       }
+    };
 
+    function getQueryParam(key) {
       const params = new URLSearchParams(window.location.search);
-      const nextUrl = 'docdefine.html?' + params.toString();
-      window.location.href = nextUrl;
+      return params.get(key);
     }
 
-    document.addEventListener('DOMContentLoaded', () => {
-      initPage();
-      const form = document.getElementById('paymentForm');
-      if (form) {
-        form.addEventListener('submit', handlePaymentSubmit);
-      }
-    });
+    const tierParam = getQueryParam("tier");
+    if (tierParam && products[tierParam]) {
+      const p = products[tierParam];
+      const selected = document.getElementById("selected-plan");
+      const allPlans = document.getElementById("all-plans");
+
+      selected.innerHTML = `
+        <h3>Selected Option</h3>
+        <p><strong>${p.name}</strong></p>
+        <p>Amount: <strong>${p.price}</strong></p>
+        <a class="btn btn-primary" href="${p.url}" target="_blank" rel="noopener">
+          Pay ${p.price} with PayLink
+        </a>
+        <p style="margin-top:0.75rem;font-size:0.85rem;color:#666;">
+          If you meant to choose a different option, scroll down to see all plans.
+        </p>
+      `;
+      selected.style.display = "block";
+    }
   </script>
 </body>
 </html>
