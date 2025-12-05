@@ -2,495 +2,329 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>E-LegalBoom | Personal Intake</title>
+  <title>E-LegalBoom • Personal & Business Intake</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
-        sans-serif;
+    :root {
+      --primary: #0f9d58;
+      --primary-dark: #0b7c45;
+      --accent: #2c3e50;
+      --bg: #f7f7f7;
+      --text: #333;
+      --radius: 8px;
     }
-
+    * { box-sizing: border-box; }
     body {
-      background: #f3f4f8;
-      color: #111827;
-      min-height: 100vh;
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
     }
-
     a {
-      color: inherit;
+      color: #0077cc;
       text-decoration: none;
     }
-
-    .site-header {
+    a:hover {
+      text-decoration: underline;
+    }
+    header {
+      background: var(--accent);
+      color: #fff;
+      padding: 1rem 0;
+    }
+    header .container {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 0 1rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 14px 24px;
-      background: #ffffff;
-      border-bottom: 1px solid #e5e7eb;
     }
-
-    .site-brand {
-      font-size: 20px;
-      font-weight: 700;
+    header h1 {
+      margin: 0;
+      font-size: 1.3rem;
     }
-
-    .site-nav a {
-      margin-left: 18px;
-      font-size: 14px;
-      color: #374151;
+    header span {
+      font-size: 0.9rem;
+      opacity: 0.9;
     }
-
-    .site-nav a:hover {
-      color: #1d4ed8;
-      text-decoration: underline;
-    }
-
-    .page {
+    main {
       max-width: 960px;
-      margin: 24px auto 40px;
-      padding: 0 16px;
+      margin: 2rem auto 3rem;
+      padding: 0 1rem;
     }
-
     .back-link {
-      font-size: 13px;
-      color: #1d4ed8;
-      margin-bottom: 10px;
-      display: inline-block;
+      font-size: 0.9rem;
+      margin-bottom: 0.75rem;
     }
-
-    .back-link:hover {
-      text-decoration: underline;
+    .card {
+      background: #fff;
+      border-radius: var(--radius);
+      padding: 1.75rem 1.5rem 2rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
     }
-
-    .title {
-      font-size: 24px;
-      font-weight: 700;
-      margin-bottom: 4px;
+    h2 {
+      margin-top: 0;
+      color: var(--accent);
     }
-
-    .subtitle {
-      font-size: 14px;
-      color: #4b5563;
-      margin-bottom: 14px;
+    .step-label {
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: #888;
+      margin-bottom: 0.25rem;
     }
-
-    .context-box {
-      background: #e0f2fe;
-      border-radius: 8px;
-      padding: 10px 14px;
-      font-size: 13px;
-      color: #075985;
-      margin-bottom: 18px;
+    .intro {
+      font-size: 0.95rem;
+      line-height: 1.6;
+      margin-bottom: 1rem;
     }
-
-    .context-box strong {
+    .intro strong {
       font-weight: 600;
     }
-
-    .status-box {
-      display: none;
-      margin-bottom: 16px;
-      padding: 10px 14px;
-      border-radius: 8px;
-      font-size: 13px;
-      background: #ecfdf5;
-      color: #166534;
-      border: 1px solid #bbf7d0;
+    .selected-info {
+      font-size: 0.9rem;
+      margin-bottom: 1.5rem;
+      color: #555;
     }
-
-    .form-card {
-      background: #ffffff;
-      border-radius: 10px;
-      border: 1px solid #e5e7eb;
-      padding: 18px 18px 20px;
-      box-shadow: 0 10px 25px rgba(15, 23, 42, 0.08);
+    .selected-info span {
+      display: block;
     }
-
-    .form-row {
+    .selected-info strong {
+      color: var(--accent);
+    }
+    form {
+      margin-top: 0.5rem;
+    }
+    .field-row {
       display: flex;
-      flex-wrap: wrap;
-      gap: 14px;
-      margin-bottom: 12px;
+      gap: 1rem;
+      margin-bottom: 1rem;
     }
-
     .field {
-      flex: 1 1 220px;
-      display: flex;
-      flex-direction: column;
+      flex: 1;
+      min-width: 0;
     }
-
     label {
-      font-size: 13px;
-      font-weight: 500;
-      margin-bottom: 4px;
-      color: #111827;
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 0.25rem;
     }
-
+    label span.required {
+      color: #cc0000;
+      margin-left: 0.1rem;
+    }
     input[type="text"],
     input[type="email"],
-    input[type="tel"],
-    select,
     textarea {
+      width: 100%;
+      padding: 0.6rem 0.7rem;
       border-radius: 6px;
-      border: 1px solid #d1d5db;
-      padding: 8px 9px;
-      font-size: 14px;
-      outline: none;
-      background: #ffffff;
+      border: 1px solid #d0d0d0;
+      font-size: 0.95rem;
+      font-family: inherit;
     }
-
-    input:focus,
-    select:focus,
-    textarea:focus {
-      border-color: #2563eb;
-      box-shadow: 0 0 0 1px rgba(37, 99, 235, 0.25);
-    }
-
     textarea {
       resize: vertical;
       min-height: 80px;
     }
-
-    .helper {
-      font-size: 11px;
-      color: #6b7280;
-      margin-top: 2px;
+    .help {
+      font-size: 0.8rem;
+      color: #777;
+      margin-top: 0.2rem;
     }
-
     .actions {
-      margin-top: 18px;
       display: flex;
       flex-wrap: wrap;
-      gap: 10px;
+      gap: 0.75rem;
+      margin-top: 1.5rem;
+      align-items: center;
     }
-
-    .btn-primary,
-    .btn-secondary {
+    .btn {
       display: inline-block;
-      padding: 9px 16px;
-      border-radius: 999px;
-      font-size: 14px;
+      padding: 0.8rem 1.6rem;
+      border-radius: var(--radius);
+      border: none;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
       text-decoration: none;
       text-align: center;
-      min-width: 190px;
-      cursor: pointer;
-      border: 1px solid transparent;
     }
-
     .btn-primary {
-      background: #0f766e;
-      color: #ffffff;
-      border-color: #0f766e;
-      font-weight: 600;
+      background: var(--primary);
+      color: #fff;
     }
-
     .btn-primary:hover {
-      background: #115e59;
+      background: var(--primary-dark);
     }
-
     .btn-secondary {
-      background: #ffffff;
-      color: #2563eb;
-      border-color: #2563eb;
-      font-weight: 500;
+      background: #fff;
+      color: #555;
+      border: 1px solid #ccc;
     }
-
     .btn-secondary:hover {
-      background: #e0edff;
+      background: #f1f1f1;
     }
-
-    .notice {
-      font-size: 12px;
-      color: #6b7280;
-      margin-top: 10px;
+    .after-note {
+      font-size: 0.85rem;
+      color: #666;
+      margin-top: 0.5rem;
     }
-
-    .pay-cta {
-      margin-top: 10px;
-    }
-
-    @media (max-width: 640px) {
-      .site-header {
+    @media (max-width: 720px) {
+      .field-row {
+        flex-direction: column;
+      }
+      header .container {
         flex-direction: column;
         align-items: flex-start;
-        gap: 6px;
+        gap: 0.3rem;
       }
     }
   </style>
 </head>
 <body>
-  <header class="site-header">
-    <div class="site-brand">E-LegalBoom</div>
-    <nav class="site-nav">
-      <a href="index.html">Home</a>
-      <a href="catalog.html">Catalog</a>
-      <a href="how-it-works.html">How It Works</a>
-      <a href="orders.html">My Orders</a>
-    </nav>
+  <header>
+    <div class="container">
+      <h1>E-LegalBoom</h1>
+      <span>Step 2 of 5 &mdash; Personal &amp; Business Intake</span>
+    </div>
   </header>
 
-  <main class="page">
-    <a href="catalog.html" id="back-link" class="back-link">&larr; Back to catalog</a>
-
-    <h1 class="title">Personal &amp; Business Intake</h1>
-    <p class="subtitle">Step 2 of 5 - Enter your information for you document.</p>
-      This short intake gives us the information we need to prepare your document
-      correctly for the right tier and document type. After you submit, you’ll be
-      taken to <strong>secure payment</strong> for this order.
-    </p>
-
-    <div class="context-box" id="context-box">
-      <div><strong>Selected Tier:</strong> <span id="tier-label">Tier 1</span></div>
-      <div><strong>Selected Document:</strong> <span id="doc-label">Selected from tier page</span></div>
+  <main>
+    <div class="back-link">
+      <a href="catalog.html">&larr; Back to catalog</a>
     </div>
 
-    <div id="status-box" class="status-box">
-      <div id="status-message">
-        Intake saved locally. You can now continue to secure payment for this document.
-      </div>
-      <div class="pay-cta">
-        <a id="pay-btn" class="btn-primary" href="payment.html">Continue to Secure Payment</a>
-      </div>
-    </div>
+    <section class="card">
+      <div class="step-label">Step 2 of 5</div>
+      <h2>Personal &amp; Business Intake</h2>
 
-    <section class="form-card">
-      <form id="intake-form" novalidate>
-        <!-- Hidden fields -->
-        <input type="hidden" id="tier" name="tier" value="" />
-        <input type="hidden" id="doc" name="doc" value="" />
+      <p class="intro">
+        This short intake gives us the information we need to prepare your document
+        correctly for the right tier and document type.
+        After you submit, you’ll be taken to the
+        <strong>Document Details</strong> step for this order.
+      </p>
 
-        <div class="form-row">
+      <div class="selected-info">
+        <span>Selected Tier:
+          <strong id="selectedTier">From catalog</strong>
+        </span>
+        <span>Selected Document:
+          <strong>Chosen on tier page</strong>
+        </span>
+      </div>
+
+      <!-- When this form is submitted, we go to the Document Details step -->
+      <form id="intakeForm" action="details.html" method="GET" novalidate>
+        <div class="field-row">
           <div class="field">
-            <label for="firstName">First Name *</label>
+            <label for="firstName">First Name <span class="required">*</span></label>
             <input type="text" id="firstName" name="firstName" required />
           </div>
           <div class="field">
-            <label for="lastName">Last Name *</label>
+            <label for="lastName">Last Name <span class="required">*</span></label>
             <input type="text" id="lastName" name="lastName" required />
           </div>
         </div>
 
-        <div class="form-row">
+        <div class="field-row">
           <div class="field">
-            <label for="email">Email *</label>
+            <label for="email">Email <span class="required">*</span></label>
             <input type="email" id="email" name="email" required />
-            <div class="helper">We’ll send your completed document to this address.</div>
+            <div class="help">
+              We’ll send your completed document to this address.
+            </div>
           </div>
           <div class="field">
             <label for="phone">Phone (optional)</label>
-            <input type="tel" id="phone" name="phone" />
+            <input type="text" id="phone" name="phone" />
+            <div class="help">
+              Helpful if we need a quick clarification.
+            </div>
           </div>
         </div>
 
-        <div class="form-row">
+        <div class="field-row">
           <div class="field">
             <label for="businessName">Business Name (if any)</label>
             <input type="text" id="businessName" name="businessName" />
           </div>
           <div class="field">
-            <label for="state">Primary State *</label>
-            <input type="text" id="state" name="state" placeholder="CA, TX, NY…" required />
-            <div class="helper">State where this document will primarily be used.</div>
+            <label for="primaryState">Primary State <span class="required">*</span></label>
+            <input
+              type="text"
+              id="primaryState"
+              name="primaryState"
+              placeholder="CA, TX, NY..."
+              required
+            />
+            <div class="help">
+              State where this document will primarily be used.
+            </div>
           </div>
         </div>
 
-        <div class="form-row">
-          <div class="field" style="flex: 1 1 100%;">
-            <label for="notes">Anything specific we should know?</label>
-            <textarea id="notes" name="notes" placeholder="Example: I’m lending money to my cousin for a truck purchase; we’d like payments monthly."></textarea>
-            <div class="helper">Optional: describe your situation in a sentence or two.</div>
+        <div class="field">
+          <label for="notes">Anything specific we should know?</label>
+          <textarea
+            id="notes"
+            name="notes"
+            placeholder="Example: I’m lending money to my cousin for a truck purchase; we’d like payments monthly."
+          ></textarea>
+          <div class="help">
+            Optional: describe your situation in a sentence or two.
           </div>
         </div>
 
         <div class="actions">
-          <button type="submit" class="btn-primary">
-            Submit Details &amp; Continue to Payment
+          <button type="submit" class="btn btn-primary">
+            Submit &amp; Continue to Document Details
           </button>
-          <a href="catalog.html" class="btn-secondary">Cancel &amp; return to catalog</a>
+
+          <a href="catalog.html" class="btn btn-secondary">
+            Cancel &amp; return to catalog
+          </a>
         </div>
 
-        <p class="notice">
+        <div class="after-note">
           After you submit, a confirmation message will appear on this page and
-          you’ll be able to continue directly to secure payment.
-        </p>
+          you’ll be able to continue directly to the
+          <strong>Document Details</strong> step. Payment is collected later,
+          after you’ve reviewed a summary of your request.
+        </div>
       </form>
     </section>
   </main>
 
   <script>
-    // Read tier/doc from URL (?tier=1&doc=mutual-nda)
-    const params = new URLSearchParams(window.location.search);
-    const tierParam = params.get("tier") || "1";
-    const docParam = params.get("doc") || "";
+    // Read ?tier= from the URL so we can display which tier they started from
+    (function () {
+      const params = new URLSearchParams(window.location.search);
+      const tier = params.get('tier');
+      if (tier) {
+        // Display a friendly version, e.g., T1 → Tier One, BUNDLE → Entrepreneur Bundle
+        const map = {
+          'T1': 'Tier One – Single Document',
+          'T2': 'Tier Two – Two Documents',
+          'T3': 'Tier Three – Three Documents',
+          'BUNDLE': 'Entrepreneur Starter Bundle'
+        };
+        const display = map[tier] || tier;
+        document.getElementById('selectedTier').textContent = display;
 
-    const tierMap = {
-      "1": "Tier 1 – Startup & Essential Documents",
-      "2": "Tier 2 – Business Foundation Documents",
-      "3": "Tier 3 – Premium Business Agreements",
-      "bundle": "Entrepreneur Starter Bundle"
-    };
-
-    const docMap = {
-      "mutual-nda": "Mutual NDA (Non-Disclosure Agreement)",
-      "promissory-note": "Promissory Note",
-      "single-member-llc": "Single-Member LLC Operating Agreement",
-      "payment-iou": "Simple Payment / IOU Agreement",
-      "basic-contractor": "Basic Contractor / Service Letter",
-      "other-basic-business": "Other Basic Business Forms",
-      "partnership-agreement": "Partnership Agreement",
-      "two-member-llc": "Two-Member LLC Agreement",
-      "buy-sell": "Buy–Sell / Investor Arrangement",
-      "other-core-business": "Other Core Business Agreements",
-      "service-independent": "Service / Independent Contractor Agreement",
-      "consulting": "Consulting and Professional Services Agreement",
-      "joint-venture": "Joint Venture / Founder Arrangement",
-      "custom-structured": "Custom Structured Agreement",
-      "tier1-set": "Tier 1 Document Types (Bundle)",
-      "tier2-set": "Tier 2 Document Types (Bundle)",
-      "tier3-set": "Tier 3 Document Types (Bundle)",
-      "one-intake-per-doc": "One Intake per Document (Bundle)"
-    };
-
-    // Set hidden fields
-    document.getElementById("tier").value = tierParam;
-    document.getElementById("doc").value = docParam;
-
-    // Display labels
-    document.getElementById("tier-label").textContent =
-      tierMap[tierParam] || "Tier " + tierParam;
-    document.getElementById("doc-label").textContent =
-      docMap[docParam] || (docParam ? docParam : "Selected from tier page");
-
-    // Back-link based on tier
-    const backLink = document.getElementById("back-link");
-    if (tierParam === "1") backLink.href = "tier1.html";
-    else if (tierParam === "2") backLink.href = "tier2.html";
-    else if (tierParam === "3") backLink.href = "tier3.html";
-    else if (tierParam === "bundle") backLink.href = "bundle.html";
-    else backLink.href = "catalog.html";
-
-    // Local storage key
-    const ORDERS_KEY = "elegalboom_orders_v1";
-
-    function loadOrders() {
-      try {
-        const raw = localStorage.getItem(ORDERS_KEY);
-        if (!raw) return [];
-        const parsed = JSON.parse(raw);
-        return Array.isArray(parsed) ? parsed : [];
-      } catch (e) {
-        return [];
+        // Also pass it forward to details.html
+        // by appending it as a hidden input so it stays in the query string.
+        const hidden = document.createElement('input');
+        hidden.type = 'hidden';
+        hidden.name = 'tier';
+        hidden.value = tier;
+        document.getElementById('intakeForm').appendChild(hidden);
       }
-    }
-
-    function saveOrders(orders) {
-      localStorage.setItem(ORDERS_KEY, JSON.stringify(orders));
-    }
-
-    // Handle submit: save locally AND show payment button
-    const form = document.getElementById("intake-form");
-    const statusBox = document.getElementById("status-box");
-    const statusMessage = document.getElementById("status-message");
-    const payBtn = document.getElementById("pay-btn");
-
-    form.addEventListener("submit", function (e) {
-      e.preventDefault();
-
-      // Basic required check (browser handles details)
-      if (!form.reportValidity()) {
-        return;
-      }
-
-      const formData = new FormData(form);
-      const record = {};
-      formData.forEach((value, key) => {
-        record[key] = value;
-      });
-
-      record.timestamp = new Date().toISOString();
-      record.tier = tierParam;
-      record.doc = docParam || "selected-from-tier";
-
-      const orders = loadOrders();
-      orders.push(record);
-      saveOrders(orders);
-
-      // Show confirmation + payment button
-      statusMessage.textContent =
-        "Intake saved for " +
-        (record.firstName || "this order") +
-        ". Click the button below to complete secure payment.";
-      statusBox.style.display = "block";
-
-      // Set payment link with tier/doc in query
-      const payUrl =
-        "payment.html?tier=" +
-        encodeURIComponent(tierParam) +
-        "&doc=" +
-        encodeURIComponent(docParam || "");
-      payBtn.href = payUrl;
-
-      // Optional auto-redirect after a short delay (keep but gentle)
-      setTimeout(function () {
-        window.location.href = payment.html;
-      }, 4000);
-    });
+    })();
   </script>
-<script type="module">
-  import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
-
-  // 1) Your Supabase credentials
-  const SUPABASE_URL = 'https://vvjbjfltqsivvxxifnvi.supabase.co';   // <-- your project URL
-  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ2amJqZmx0cXNpdnZ4eGlmbnZpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc5NzYzNTAsImV4cCI6MjA3MzU1MjM1MH0.F4zzcpCHl9v-Rnj0wgKJ5zBf1HteVyXelMLQDDEN28Q';             // <-- long token
-
-  const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-  // 2) Grab the form
-  const form = document.getElementById('intakeForm');
-
-  if (form) {
-    form.addEventListener('submit', async (event) => {
-      event.preventDefault(); // stop browser default so we can save first
-
-      const formData = new FormData(form);
-
-      // 3) Build the row we will insert
-      const row = {
-        tier: formData.get('tier') || null,
-        doc_type: formData.get('docType') || null,
-        full_name: formData.get('fullName') || null,
-        email: formData.get('email') || null,
-        phone: formData.get('phone') || null,
-        state: formData.get('state') || null,
-        business_name: formData.get('businessName') || null,
-        notes: formData.get('primaryGoal') || formData.get('notes') || null,
-        status: 'new',
-      };
-
-      try {
-        const { error } = await supabase
-          .from('intakes')
-          .insert(row);
-
-        if (error) {
-          console.error('Supabase insert error:', error);
-          alert("Sorry, we couldn't save your request. Please try again or contact us.");
-          return;
-        }
-
-        // 4) On success: go to your existing next step (payment / thank-you)
-        // TODO: adjust this path to match your real next page
-        window.location.href = '/payment.html';
-      } catch (err) {
-        console.error('Unexpected error:', err);
-        alert("Something went wrong. Please try again.");
-      }
-    });
-  }
-</script>
 </body>
 </html>
