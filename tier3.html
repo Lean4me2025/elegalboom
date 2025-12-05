@@ -2,116 +2,209 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>E-LegalBoom | Tier 3 – Premium Business Agreements</title>
+  <title>E-LegalBoom • Tier Three – Three Documents</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
-    /* same style block as tier1/tier2 */
-    *{box-sizing:border-box;margin:0;padding:0;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;}
-    body{background:#f3f4f8;color:#111827;min-height:100vh;}
-    a{color:inherit;}
-    .site-header{display:flex;justify-content:space-between;align-items:center;padding:14px 24px;background:#fff;border-bottom:1px solid #e5e7eb;}
-    .site-brand{font-size:20px;font-weight:700;color:#111827;}
-    .site-nav a{margin-left:18px;font-size:14px;color:#374151;text-decoration:none;}
-    .site-nav a:hover{color:#1d4ed8;text-decoration:underline;}
-    .tier-page{max-width:1080px;margin:24px auto 40px;padding:0 16px;}
-    .tier-back{margin-bottom:10px;}
-    .tier-back a{font-size:13px;color:#1d4ed8;text-decoration:none;}
-    .tier-back a:hover{text-decoration:underline;}
-    .tier-title{font-size:26px;font-weight:700;margin-bottom:4px;}
-    .tier-subtitle{font-size:14px;color:#4b5563;margin-bottom:14px;}
-    .price-banner{background:#e0f2fe;border-radius:8px;padding:10px 14px;font-size:16px;font-weight:600;color:#075985;margin-bottom:20px;}
-    .section-title{font-size:16px;font-weight:600;margin-top:18px;margin-bottom:6px;}
-    .section-body{font-size:14px;color:#374151;margin-bottom:10px;}
-    .doc-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px;margin-bottom:18px;}
-    .doc-card{background:#fff;border-radius:8px;border:1px solid #e5e7eb;padding:10px 11px;font-size:13px;cursor:pointer;text-decoration:none;display:block;}
-    .doc-card:hover{border-color:#2563eb;box-shadow:0 4px 10px rgba(148,163,184,.4);}
-    .doc-name{font-weight:600;margin-bottom:3px;color:#1f2933;}
-    .doc-desc{font-size:12px;color:#4b5563;}
-    .how-it-works{font-size:14px;color:#374151;}
-    .how-it-works ul{margin-top:6px;padding-left:18px;}
-    .how-it-works li{margin-bottom:4px;}
-    .tier-actions{margin-top:18px;display:flex;flex-wrap:wrap;gap:10px;}
-    .btn-primary,.btn-secondary{display:inline-block;padding:9px 16px;border-radius:999px;font-size:14px;text-decoration:none;text-align:center;min-width:170px;}
-    .btn-primary{background:#0f766e;color:#fff;border:1px solid #0f766e;}
-    .btn-primary:hover{background:#115e59;}
-    .btn-secondary{background:#fff;color:#2563eb;border:1px solid #2563eb;}
-    .btn-secondary:hover{background:#e0edff;}
+    :root {
+      --primary: #e67e22;
+      --primary-dark: #c76b1c;
+      --accent: #2c3e50;
+      --bg: #f7f7f7;
+      --text: #333;
+      --radius: 8px;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+    header {
+      background: var(--accent);
+      color: #fff;
+      padding: 1rem 0;
+    }
+    header .container {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 0 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    header h1 {
+      margin: 0;
+      font-size: 1.3rem;
+    }
+    header span {
+      font-size: 0.9rem;
+      opacity: 0.9;
+    }
+    main {
+      max-width: 960px;
+      margin: 2rem auto 3rem;
+      padding: 0 1rem;
+    }
+    h2, h3 {
+      color: var(--accent);
+      margin-top: 0;
+    }
+    .card {
+      background: #fff;
+      border-radius: var(--radius);
+      padding: 1.5rem 1.5rem 2rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      margin-bottom: 1.5rem;
+    }
+    .badge {
+      display: inline-block;
+      background: var(--primary);
+      color: #fff;
+      border-radius: 999px;
+      padding: 0.2rem 0.7rem;
+      font-size: 0.8rem;
+      margin-bottom: 0.75rem;
+    }
+    .price {
+      font-size: 1.4rem;
+      font-weight: 600;
+      margin: 0.25rem 0 0.75rem;
+      color: var(--primary-dark);
+    }
+    p {
+      line-height: 1.6;
+      margin: 0.4rem 0 0.8rem;
+    }
+    ul {
+      padding-left: 1.2rem;
+      margin: 0.3rem 0 1rem;
+    }
+    li {
+      margin-bottom: 0.3rem;
+    }
+    .doc-preview {
+      background: #f7f0ff;
+      border-radius: var(--radius);
+      border-left: 4px solid #8e44ad;
+      padding: 1rem 1.2rem;
+      margin: 0.75rem 0 1.25rem;
+      font-size: 0.95rem;
+    }
+    .doc-preview p {
+      margin: 0.2rem 0 0.6rem;
+    }
+    .doc-preview a {
+      color: #8e44ad;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .doc-preview a:hover {
+      text-decoration: underline;
+    }
+    .cta {
+      text-align: center;
+      margin-top: 1.5rem;
+    }
+    .btn {
+      display: inline-block;
+      padding: 0.8rem 1.6rem;
+      border-radius: var(--radius);
+      border: none;
+      background: var(--primary);
+      color: #fff;
+      font-weight: 600;
+      font-size: 0.95rem;
+      text-decoration: none;
+      cursor: pointer;
+      transition: background 0.15s ease, transform 0.05s ease;
+    }
+    .btn:hover {
+      background: var(--primary-dark);
+      transform: translateY(-1px);
+    }
+    .note {
+      font-size: 0.85rem;
+      color: #666;
+      margin-top: 0.75rem;
+    }
+    @media (max-width: 600px) {
+      header .container {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.3rem;
+      }
+    }
   </style>
 </head>
 <body>
-  <header class="site-header">
-    <div class="site-brand">E-LegalBoom</div>
-    <nav class="site-nav">
-      <a href="index.html">Home</a>
-      <a href="catalog.html">Catalog</a>
-      <a href="intake.html?tier=3">Samples</a>
-      <a href="orders.html">My Orders</a>
-    </nav>
+  <header>
+    <div class="container">
+      <h1>E-LegalBoom</h1>
+      <span>Tier Three • Three Documents</span>
+    </div>
   </header>
 
-  <main class="tier-page">
-    <div class="tier-back">
-      <a href="catalog.html">&larr; Back to all tiers</a>
-    </div>
+  <main>
+    <section class="card">
+      <div class="badge">Tier Three</div>
+      <h2>Three Coordinated Legal Documents</h2>
+      <p class="price">$99.00 &mdash; Three Documents</p>
 
-    <h1 class="tier-title">Tier 3 – Premium Business Agreements</h1>
-    <p class="tier-subtitle">
-      For higher-impact business relationships, ongoing services, and more complex operational agreements.
-    </p>
+      <p>
+        Tier Three is ideal when you need a complete set of documents for
+        a situation or project. For example: an agreement, a companion
+        policy, and a notice; or multiple letters and forms used together.
+      </p>
 
-    <div class="price-banner">Price: $99 per document</div>
-
-    <h2 class="section-title">What Tier 3 Is For</h2>
-    <p class="section-body">
-      Tier 3 is designed for situations where you are delivering ongoing services, working with larger clients, or entering higher-stakes business relationships.
-    </p>
-
-    <h2 class="section-title">Common Tier 3 Documents</h2>
-    <div class="doc-grid">
-      <a href="intake.html?tier=3&doc=service-independent" class="doc-card">
-        <div class="doc-name">Service / Independent Contractor Agreements</div>
-        <div class="doc-desc">
-          Detailed agreements for client services or independent contractor work.
-        </div>
-      </a>
-
-      <a href="intake.html?tier=3&doc=consulting" class="doc-card">
-        <div class="doc-name">Consulting and Professional Services</div>
-        <div class="doc-desc">
-          Clarifies scope, deliverables, fees, and responsibilities over longer-term projects.
-        </div>
-      </a>
-
-      <a href="intake.html?tier=3&doc=joint-venture" class="doc-card">
-        <div class="doc-name">Joint Venture / Founder Arrangements</div>
-        <div class="doc-desc">
-          Sets terms when two parties collaborate on a shared project or venture.
-        </div>
-      </a>
-
-      <a href="intake.html?tier=3&doc=custom-structured" class="doc-card">
-        <div class="doc-name">Custom Structured Agreements</div>
-        <div class="doc-desc">
-          Tailored contracts for situations that do not fit neatly into a standard template.
-        </div>
-      </a>
-    </div>
-
-    <h2 class="section-title">How It Works</h2>
-    <div class="how-it-works">
+      <h3>What You Get</h3>
       <ul>
-        <li>Select Tier 3.</li>
-        <li>Choose the agreement type that matches your situation.</li>
-        <li>Complete a more detailed intake so we can cover key risks.</li>
-        <li>Pay securely.</li>
-        <li>Receive your tailored agreement by email.</li>
+        <li>Three related legal documents prepared from your answers</li>
+        <li>Email delivery in PDF format</li>
+        <li>Turnaround within the stated time frame</li>
+        <li>Documents structured to support each other as a package</li>
       </ul>
-    </div>
 
-    <div class="tier-actions">
-      <a href="intake.html?tier=3" class="btn-primary">Start Tier 3 Intake</a>
-      <a href="intake.html?tier=3" class="btn-secondary">View Tier 3 Samples</a>
-    </div>
+      <h3>Preview an Example</h3>
+      <p>
+        Below is a sample description of a three-document set. Your actual
+        documents will be tailored to your specific needs and situation.
+      </p>
+
+      <div class="doc-preview">
+        <p>
+          <strong>SAMPLE 3-DOCUMENT PACKAGE</strong><br />
+          1. <em>Master Service Agreement</em> covering scope, payment terms,
+          and responsibilities.<br />
+          2. <em>Statement of Work</em> spelling out deliverables, timelines,
+          and milestones.<br />
+          3. <em>Change Order Form</em> to adjust the work when needed
+          without rewriting the entire agreement&hellip;
+        </p>
+        <a href="sample-tier3.pdf" target="_blank">
+          View a sample Tier Three package (PDF)
+        </a>
+      </div>
+
+      <h3>How It Works</h3>
+      <ul>
+        <li>Step 1 &mdash; Start your Tier Three request using the button below.</li>
+        <li>Step 2 &mdash; Complete the Personal &amp; Business Intake form.</li>
+        <li>Step 3 &mdash; Provide details for each document and review a summary.</li>
+        <li>Step 4 &mdash; Complete secure payment and receive your package by email.</li>
+      </ul>
+
+      <div class="cta">
+        <a href="intake.html?tier=T3" class="btn">
+          Start My Tier Three Request
+        </a>
+        <div class="note">
+          You will not be charged on this page. We’ll guide you through
+          information first, then payment at the end.
+        </div>
+      </div>
+    </section>
   </main>
 </body>
 </html>
