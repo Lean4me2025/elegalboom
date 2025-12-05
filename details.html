@@ -1,222 +1,332 @@
-<!DOCTYPE html>
+!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Document Details – Step 3 | E-LegalBoom</title>
+  <title>E-LegalBoom • Document Details</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="style.css" />
-
   <style>
+    :root {
+      --primary: #e67e22;
+      --primary-dark: #c76b1c;
+      --accent: #2c3e50;
+      --bg: #f7f7f7;
+      --text: #333;
+      --radius: 8px;
+    }
+    * { box-sizing: border-box; }
     body {
       margin: 0;
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
-        sans-serif;
-      background: #f6f7fb;
-      color: #111827;
+        Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
     }
-
-    .site-header {
+    header {
+      background: var(--accent);
+      color: #fff;
+      padding: 1rem 0;
+    }
+    header .container {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 0 1rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 14px 24px;
-      background: #ffffff;
-      border-bottom: 1px solid #e5e7eb;
     }
-
-    .site-brand {
-      font-weight: 700;
-      letter-spacing: 0.05em;
+    header h1 {
+      margin: 0;
+      font-size: 1.3rem;
     }
-
-    .site-nav a {
-      margin-left: 16px;
+    header span {
       font-size: 0.9rem;
-      color: #4b5563;
+      opacity: 0.9;
+    }
+
+    main {
+      max-width: 960px;
+      margin: 2rem auto 3rem;
+      padding: 0 1rem;
+    }
+    a.back-link {
+      font-size: 0.9rem;
+      color: var(--accent);
       text-decoration: none;
     }
-
-    .site-nav a:hover {
-      color: #1d4ed8;
+    a.back-link:hover {
+      text-decoration: underline;
     }
 
-    main.page {
-      max-width: 860px;
-      margin: 24px auto 48px;
-      padding: 0 18px;
+    .card {
+      margin-top: 0.75rem;
+      background: #fff;
+      border-radius: var(--radius);
+      padding: 1.5rem 1.5rem 2rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
     }
-
-    .back-link {
-      display: inline-block;
-      margin-bottom: 12px;
-      font-size: 0.85rem;
-      color: #4b5563;
-      text-decoration: none;
+    h2 {
+      margin-top: 0;
+      color: var(--accent);
     }
-
-    h1 {
-      font-size: 1.8rem;
-      margin-bottom: 4px;
-      color: #0b7285;
-    }
-
-    .subtitle {
-      font-size: 0.95rem;
-      color: #4b5563;
-      margin-bottom: 16px;
-    }
-
-    .context-box {
-      background: #e0f2fe;
-      border-radius: 10px;
-      padding: 10px 14px;
-      margin-bottom: 18px;
+    .step-label {
       font-size: 0.9rem;
+      color: #666;
+      margin-bottom: 0.75rem;
+    }
+    .summary-bar {
+      background: #f0f4ff;
+      border-radius: 6px;
+      padding: 0.6rem 0.8rem;
+      font-size: 0.9rem;
+      margin-bottom: 1.2rem;
+    }
+    .summary-bar strong {
+      color: var(--accent);
     }
 
-    .form-card {
-      background: #ffffff;
-      border-radius: 14px;
-      box-shadow: 0 10px 25px rgba(15, 23, 42, 0.06);
-      padding: 20px;
+    .field-group {
+      margin-bottom: 1rem;
     }
-
-    h3 {
-      margin-top: 16px;
-      margin-bottom: 6px;
-      font-size: 1.05rem;
-      color: #111827;
-    }
-
-    label {
+    .field-group label {
       display: block;
-      font-size: 0.85rem;
-      margin-top: 10px;
-      margin-bottom: 4px;
-      color: #374151;
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin-bottom: 0.25rem;
     }
-
-    input,
+    .field-group small {
+      display: block;
+      font-size: 0.8rem;
+      color: #777;
+      margin-bottom: 0.25rem;
+    }
+    input[type="text"],
+    input[type="date"],
     textarea {
       width: 100%;
-      border-radius: 8px;
-      border: 1px solid #d1d5db;
-      padding: 8px 10px;
-      font-size: 0.9rem;
+      padding: 0.55rem 0.6rem;
+      border-radius: 6px;
+      border: 1px solid #ccd3e0;
+      font-size: 0.95rem;
       font-family: inherit;
     }
-
     textarea {
       min-height: 80px;
       resize: vertical;
     }
 
+    .section-title {
+      margin-top: 1.4rem;
+      margin-bottom: 0.4rem;
+      font-size: 1rem;
+      color: var(--accent);
+      font-weight: 700;
+    }
+
     .actions {
-      margin-top: 20px;
+      margin-top: 1.5rem;
       display: flex;
-      justify-content: flex-end;
-      gap: 10px;
+      gap: 0.75rem;
+      flex-wrap: wrap;
     }
-
-    .btn-primary {
-      border-radius: 999px;
-      padding: 10px 18px;
-      background: #1d4ed8;
+    .btn-primary,
+    .btn-secondary {
+      border-radius: var(--radius);
       border: none;
-      color: #ffffff;
-      font-size: 0.9rem;
-      cursor: pointer;
+      padding: 0.75rem 1.5rem;
+      font-size: 0.95rem;
       font-weight: 600;
+      cursor: pointer;
+    }
+    .btn-primary {
+      background: var(--primary);
+      color: #fff;
+    }
+    .btn-primary:hover {
+      background: var(--primary-dark);
+    }
+    .btn-secondary {
+      background: #e0e4ec;
+      color: #333;
+    }
+    .btn-secondary:hover {
+      background: #d2d7e2;
+    }
+    .note {
+      font-size: 0.85rem;
+      color: #666;
+      margin-top: 0.6rem;
     }
 
-    .btn-primary:hover {
-      background: #1e40af;
+    @media (max-width: 720px) {
+      header .container {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.3rem;
+      }
     }
   </style>
 </head>
-
 <body>
+  <header>
+    <div class="container">
+      <h1>E-LegalBoom</h1>
+      <span>Step 3 of 5 • Document Details</span>
+    </div>
+  </header>
 
-<header class="site-header">
-  <div class="site-brand">E-LegalBoom</div>
-  <nav class="site-nav">
-    <a href="index.html">Home</a>
-    <a href="catalog.html">Catalog</a>
-    <a href="orders.html">My Orders</a>
-  </nav>
-</header>
+  <main>
+    <a href="intake.html" class="back-link">&larr; Back to Intake</a>
 
-<main class="page">
+    <section class="card">
+      <h2>Document Details</h2>
+      <p class="step-label">
+        Step 3 of 5 &mdash; Provide details for your document.
+      </p>
 
-  <a href="intake.html" class="back-link">← Back to Intake</a>
-
-  <h1>Document Details</h1>
-  <p class="subtitle">Step 3 of 5 — Provide details for your document.</p>
-
-  <div class="context-box">
-    <div><strong>Tier:</strong> <span id="tierLabel">—</span></div>
-    <div><strong>Document:</strong> <span id="docLabel">—</span></div>
-  </div>
-
-  <div class="form-card">
-
-    <form id="detailsForm">
-
-      <h3>Parties</h3>
-      <label for="partyOne">Primary Party</label>
-      <input type="text" id="partyOne" name="partyOne" required>
-
-      <label for="partyTwo">Other Party</label>
-      <input type="text" id="partyTwo" name="partyTwo">
-
-      <h3>Agreement Info</h3>
-      <label for="effectiveDate">Effective Date</label>
-      <input type="date" id="effectiveDate" name="effectiveDate">
-
-      <label for="state">Governing State / Jurisdiction</label>
-      <input type="text" id="state" name="state">
-
-      <label for="terms">Key Terms (if any)</label>
-      <textarea id="terms" name="terms"></textarea>
-
-      <h3>Notes</h3>
-      <label for="notes">Special Instructions (optional)</label>
-      <textarea id="notes" name="notes"></textarea>
-
-      <div class="actions">
-        <button type="submit" class="btn-primary">Continue to Preview</button>
+      <div class="summary-bar">
+        <span>
+          <strong>Tier:</strong>
+          <span id="selectedTier">Not set</span>
+        </span>
+        &nbsp;&nbsp;|&nbsp;&nbsp;
+        <span>
+          <strong>Document:</strong>
+          <span id="selectedDocument">Not set</span>
+        </span>
       </div>
 
-    </form>
+      <form id="detailsForm">
+        <div class="section-title">Parties</div>
+        <div class="field-group">
+          <label for="primaryParty">Primary Party</label>
+          <small>Person or business this document is primarily for.</small>
+          <input type="text" id="primaryParty" name="primaryParty" />
+        </div>
 
-  </div>
+        <div class="field-group">
+          <label for="otherParty">Other Party</label>
+          <small>Second party, if applicable.</small>
+          <input type="text" id="otherParty" name="otherParty" />
+        </div>
 
-</main>
+        <div class="section-title">Agreement Info</div>
 
-<script>
-  // Extract tier and document from URL or localStorage
-  const urlParams = new URLSearchParams(window.location.search);
+        <div class="field-group">
+          <label for="effectiveDate">Effective Date</label>
+          <input type="date" id="effectiveDate" name="effectiveDate" />
+        </div>
 
-  const tier = urlParams.get("tier") || localStorage.getItem("tier") || "Not set";
-  const doc  = urlParams.get("doc") || localStorage.getItem("doc") || "Not set";
+        <div class="field-group">
+          <label for="governingState">Governing State / Jurisdiction</label>
+          <input type="text" id="governingState" name="governingState" placeholder="CA, TX, NY..." />
+        </div>
 
-  document.getElementById("tierLabel").textContent = tier;
-  document.getElementById("docLabel").textContent = doc;
+        <div class="field-group">
+          <label for="keyTerms">Key Terms (if any)</label>
+          <small>Optional: short summary of important terms or special conditions.</small>
+          <textarea id="keyTerms" name="keyTerms"></textarea>
+        </div>
 
-  localStorage.setItem("tier", tier);
-  localStorage.setItem("doc", doc);
+        <div class="section-title">Additional Notes</div>
+        <div class="field-group">
+          <label for="additionalNotes">Anything else we should know?</label>
+          <small>
+            Optional: context, special instructions, or situations you want reflected in the document wording.
+          </small>
+          <textarea id="additionalNotes" name="additionalNotes"></textarea>
+        </div>
 
-  document.getElementById("detailsForm").addEventListener("submit", function(e) {
-    e.preventDefault();
+        <div class="actions">
+          <button type="submit" class="btn-primary">
+            Continue to Review &amp; Confirm
+          </button>
+          <button type="button" class="btn-secondary" onclick="window.location.href='intake.html'">
+            Back to Intake
+          </button>
+        </div>
+        <p class="note">
+          On the next screen, you'll review your selections and details before
+          moving on to secure payment.
+        </p>
+      </form>
+    </section>
+  </main>
 
-    const data = Object.fromEntries(new FormData(e.target).entries());
+  <script>
+    // ----- 1) Load Tier + Document from localStorage / URL -----
+    (function () {
+      const params = new URLSearchParams(window.location.search);
+      const tierFromUrl = params.get('tier'); // T1 / T2 / T3 / BUNDLE
 
-    localStorage.setItem("elegalboom_details", JSON.stringify(data));
+      let tierLabel = localStorage.getItem('selectedTier') || tierFromUrl || 'Not set';
 
-    window.location.href = "preview.html?tier=" + encodeURIComponent(tier) +
-                           "&doc=" + encodeURIComponent(doc);
-  });
-</script>
+      // Make short codes look nicer if storedTier isn't present
+      if (!localStorage.getItem('selectedTier') && tierFromUrl) {
+        switch (tierFromUrl) {
+          case 'T1':
+            tierLabel = 'Tier One – Single Document';
+            break;
+          case 'T2':
+            tierLabel = 'Tier Two – Two Documents';
+            break;
+          case 'T3':
+            tierLabel = 'Tier Three – Three Documents';
+            break;
+          case 'BUNDLE':
+            tierLabel = 'Entrepreneur Bundle';
+            break;
+        }
+      }
 
+      const selectedDocument =
+        localStorage.getItem('selectedDocument') || 'Not set';
+
+      const tierEl = document.getElementById('selectedTier');
+      const docEl = document.getElementById('selectedDocument');
+
+      if (tierEl) tierEl.textContent = tierLabel;
+      if (docEl) docEl.textContent = selectedDocument;
+    })();
+
+    // ----- 2) Save details and move to review -----
+    (function () {
+      const form = document.getElementById('detailsForm');
+      if (!form) return;
+
+      // If we already have saved details, prefill (nice UX)
+      try {
+        const saved = localStorage.getItem('documentDetails');
+        if (saved) {
+          const data = JSON.parse(saved);
+          if (data.primaryParty)   document.getElementById('primaryParty').value   = data.primaryParty;
+          if (data.otherParty)     document.getElementById('otherParty').value     = data.otherParty;
+          if (data.effectiveDate)  document.getElementById('effectiveDate').value  = data.effectiveDate;
+          if (data.governingState) document.getElementById('governingState').value = data.governingState;
+          if (data.keyTerms)       document.getElementById('keyTerms').value       = data.keyTerms;
+          if (data.additionalNotes)document.getElementById('additionalNotes').value= data.additionalNotes;
+        }
+      } catch (e) {
+        console.warn('Could not parse saved documentDetails', e);
+      }
+
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        const details = {
+          primaryParty:   document.getElementById('primaryParty').value.trim(),
+          otherParty:     document.getElementById('otherParty').value.trim(),
+          effectiveDate:  document.getElementById('effectiveDate').value,
+          governingState: document.getElementById('governingState').value.trim(),
+          keyTerms:       document.getElementById('keyTerms').value.trim(),
+          additionalNotes:document.getElementById('additionalNotes').value.trim()
+        };
+
+        localStorage.setItem('documentDetails', JSON.stringify(details));
+
+        // Move to review page
+        window.location.href = 'review.html';
+      });
+    })();
+  </script>
 </body>
 </html>
