@@ -2,360 +2,208 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>E-LegalBoom – Tier 1 Documents</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link rel="stylesheet" href="styles.css" />
+  <title>E-LegalBoom • Tier One – Single Document</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
-    /* Layout helpers – your main CSS can still override these */
-
+    :root {
+      --primary: #e67e22;
+      --primary-dark: #c76b1c;
+      --accent: #2c3e50;
+      --bg: #f7f7f7;
+      --text: #333;
+      --radius: 8px;
+    }
+    * { box-sizing: border-box; }
     body {
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       margin: 0;
-      padding: 0;
-      background: #f5f7fb;
-      color: #111827;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
     }
-
-    .page {
-      max-width: 1100px;
+    header {
+      background: var(--accent);
+      color: #fff;
+      padding: 1rem 0;
+    }
+    header .container {
+      max-width: 960px;
       margin: 0 auto;
-      padding: 24px 16px 48px;
-    }
-
-    header h1 {
-      font-size: 1.8rem;
-      margin: 0 0 0.25rem;
-    }
-
-    header p.subtitle {
-      margin: 0 0 1.5rem;
-      color: #4b5563;
-      font-size: 0.95rem;
-    }
-
-    .pill {
-      display: inline-flex;
+      padding: 0 1rem;
+      display: flex;
+      justify-content: space-between;
       align-items: center;
-      gap: 6px;
+    }
+    header h1 {
+      margin: 0;
+      font-size: 1.3rem;
+    }
+    header span {
+      font-size: 0.9rem;
+      opacity: 0.9;
+    }
+    main {
+      max-width: 960px;
+      margin: 2rem auto 3rem;
+      padding: 0 1rem;
+    }
+    h2, h3 {
+      color: var(--accent);
+      margin-top: 0;
+    }
+    .card {
+      background: #fff;
+      border-radius: var(--radius);
+      padding: 1.5rem 1.5rem 2rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      margin-bottom: 1.5rem;
+    }
+    .badge {
+      display: inline-block;
+      background: var(--primary);
+      color: #fff;
       border-radius: 999px;
-      padding: 4px 10px;
+      padding: 0.2rem 0.7rem;
       font-size: 0.8rem;
-      background: #eef2ff;
-      color: #1f2937;
-      border: 1px solid #c7d2fe;
       margin-bottom: 0.75rem;
     }
-
-    .pill span {
+    .price {
+      font-size: 1.4rem;
       font-weight: 600;
-      color: #0d6efd;
+      margin: 0.25rem 0 0.75rem;
+      color: var(--primary-dark);
     }
-
-    .grid {
-      display: grid;
-      grid-template-columns: 1.05fr 1.05fr;
-      gap: 24px;
-      align-items: flex-start;
+    p {
+      line-height: 1.6;
+      margin: 0.4rem 0 0.8rem;
     }
-
-    @media (max-width: 800px) {
-      .grid {
-        grid-template-columns: 1fr;
-      }
+    ul {
+      padding-left: 1.2rem;
+      margin: 0.3rem 0 1rem;
     }
-
-    /* Left side: document list */
-
-    .doc-list {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
+    li {
+      margin-bottom: 0.3rem;
     }
-
-    .doc-option {
-      text-align: left;
-      padding: 12px 14px;
-      border-radius: 10px;
-      border: 1px solid #d1d5db;
-      background: #ffffff;
-      cursor: pointer;
-      display: flex;
-      flex-direction: column;
-      gap: 3px;
-      transition:
-        border-color 0.15s ease,
-        box-shadow 0.15s ease,
-        background 0.15s ease,
-        transform 0.05s ease;
+    .doc-preview {
+      background: #fff8f0;
+      border-radius: var(--radius);
+      border-left: 4px solid var(--primary);
+      padding: 1rem 1.2rem;
+      margin: 0.75rem 0 1.25rem;
       font-size: 0.95rem;
     }
-
-    .doc-option:hover {
-      border-color: #0d6efd;
-      box-shadow: 0 0 0 2px rgba(13, 110, 253, 0.16);
+    .doc-preview p {
+      margin: 0.2rem 0 0.6rem;
+    }
+    .doc-preview a {
+      color: var(--accent);
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .doc-preview a:hover {
+      text-decoration: underline;
+    }
+    .cta {
+      text-align: center;
+      margin-top: 1.5rem;
+    }
+    .btn {
+      display: inline-block;
+      padding: 0.8rem 1.6rem;
+      border-radius: var(--radius);
+      border: none;
+      background: var(--primary);
+      color: #fff;
+      font-weight: 600;
+      font-size: 0.95rem;
+      text-decoration: none;
+      cursor: pointer;
+      transition: background 0.15s ease, transform 0.05s ease;
+    }
+    .btn:hover {
+      background: var(--primary-dark);
       transform: translateY(-1px);
     }
-
-    .doc-option.selected {
-      border-color: #0d6efd;
-      background: #e9f2ff;
-      box-shadow: 0 0 0 2px rgba(13, 110, 253, 0.25);
-    }
-
-    .doc-title {
-      font-weight: 600;
-      font-size: 0.98rem;
-      color: #111827;
-    }
-
-    .doc-tagline {
-      font-size: 0.84rem;
-      color: #6b7280;
-    }
-
-    /* Right side: document preview */
-
-    .doc-preview {
-      background: #ffffff;
-      border-radius: 12px;
-      padding: 16px 18px 18px;
-      border: 1px solid #d1d5db;
-      box-shadow: 0 12px 28px rgba(15, 23, 42, 0.06);
-    }
-
-    .doc-preview h2 {
-      margin: 0 0 0.3rem;
-      font-size: 1.2rem;
-    }
-
-    .doc-preview small {
-      display: block;
-      font-size: 0.8rem;
-      color: #6b7280;
-      margin-bottom: 0.8rem;
-    }
-
-    .doc-preview p {
-      font-size: 0.9rem;
-      margin: 0 0 0.75rem;
-      color: #374151;
-    }
-
-    .doc-preview ul {
-      margin: 0 0 1rem 1.1rem;
-      padding: 0;
-      font-size: 0.88rem;
-      color: #374151;
-    }
-
-    .doc-preview li {
-      margin-bottom: 0.35rem;
-    }
-
-    .preview-footer {
-      display: flex;
-      gap: 10px;
-      justify-content: flex-end;
-      align-items: center;
+    .note {
+      font-size: 0.85rem;
+      color: #666;
       margin-top: 0.75rem;
     }
-
-    button.primary {
-      background: #0d6efd;
-      color: #ffffff;
-      border: none;
-      padding: 9px 18px;
-      border-radius: 999px;
-      font-size: 0.95rem;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      transition:
-        background 0.15s ease,
-        transform 0.05s ease;
-    }
-
-    button.primary:disabled {
-      background: #a5b4fc;
-      cursor: not-allowed;
-      transform: none;
-    }
-
-    button.primary:not(:disabled):hover {
-      background: #0b5ed7;
-      transform: translateY(-1px);
-    }
-
-    button.secondary {
-      border-radius: 999px;
-      border: 1px solid #cbd5f5;
-      background: #f9fafb;
-      padding: 8px 14px;
-      font-size: 0.85rem;
-      cursor: pointer;
-      color: #4b5563;
+    @media (max-width: 600px) {
+      header .container {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.3rem;
+      }
     }
   </style>
 </head>
 <body>
-  <main class="page">
-    <header>
-      <h1>Tier 1 – Starter Legal Documents</h1>
-      <p class="subtitle">
-        Step 1 • Choose the document you want to purchase. You can preview what it covers before continuing to your Personal Intake.
+  <header>
+    <div class="container">
+      <h1>E-LegalBoom</h1>
+      <span>Tier One • Single Document</span>
+    </div>
+  </header>
+
+  <main>
+    <section class="card">
+      <div class="badge">Tier One</div>
+      <h2>Single Legal Document</h2>
+      <p class="price">$39.00 &mdash; One Document</p>
+
+      <p>
+        Tier One is ideal when you need a single, straightforward document
+        prepared based on your information. Common examples include simple
+        agreements, letters, notices, or basic business forms.
       </p>
-    </header>
 
-    <section class="grid">
-      <!-- LEFT: Document options -->
-      <section>
-        <div class="pill">
-          Tier: <span>1</span>
-        </div>
+      <h3>What You Get</h3>
+      <ul>
+        <li>One legal document prepared from your answers</li>
+        <li>Email delivery in PDF format</li>
+        <li>Turnaround within the stated time frame</li>
+        <li>Clear, plain-language structure and formatting</li>
+      </ul>
 
-        <div class="doc-list">
-          <!-- ✏️ Adjust these documents to match Tier 1’s lineup -->
-          <button type="button" class="doc-option" data-doc-id="single-member-llc">
-            <div class="doc-title">Single-Member LLC Operating Agreement</div>
-            <div class="doc-tagline">For one-owner LLCs needing clear, bank-ready documentation.</div>
-          </button>
+      <h3>Preview an Example</h3>
+      <p>
+        Below is a sample of the type of document you can expect. Your actual
+        document will be customized with your names, dates, and details.
+      </p>
 
-          <button type="button" class="doc-option" data-doc-id="nda-mutual">
-            <div class="doc-title">Mutual Non-Disclosure Agreement (NDA)</div>
-            <div class="doc-tagline">Protect shared ideas, plans, and confidential information.</div>
-          </button>
-
-          <button type="button" class="doc-option" data-doc-id="promissory-note">
-            <div class="doc-title">Promissory Note</div>
-            <div class="doc-tagline">Document a loan between people or businesses so terms are clear.</div>
-          </button>
-
-          <button type="button" class="doc-option" data-doc-id="independent-contractor">
-            <div class="doc-title">Independent Contractor Agreement</div>
-            <div class="doc-tagline">Define scope, payment, and protections when hiring a contractor.</div>
-          </button>
-        </div>
-      </section>
-
-      <!-- RIGHT: Live document preview -->
-      <aside class="doc-preview">
-        <h2 id="previewTitle">Document Preview</h2>
-        <small id="previewHint">Select a document on the left to see what it includes.</small>
-        <p id="previewSummary">
-          As you consider which document to buy, you’ll see a plain-language overview here so you know exactly what you’re getting.
+      <div class="doc-preview">
+        <p>
+          <strong>SAMPLE AGREEMENT</strong><br />
+          This Sample Agreement is made between <strong>[Your Name]</strong>
+          and <strong>[Other Party]</strong>, effective as of
+          <strong>[Date]</strong>. The purpose of this agreement is to
+          outline the basic understanding between the parties, including
+          responsibilities, timing, and any key conditions&hellip;
         </p>
-        <ul id="previewBullets"></ul>
+        <a href="sample-tier1.pdf" target="_blank">
+          View a full sample Tier One document (PDF)
+        </a>
+      </div>
 
-        <div class="preview-footer">
-          <button type="button" class="secondary" onclick="window.history.back();">
-            ‹ Back
-          </button>
-          <button type="button" class="primary" id="continueBtn" disabled>
-            Continue to Personal Intake →
-          </button>
+      <h3>How It Works</h3>
+      <ul>
+        <li>Step 1 &mdash; Click the button below to start your request.</li>
+        <li>Step 2 &mdash; Complete the Personal &amp; Business Intake form.</li>
+        <li>Step 3 &mdash; Provide your document details and review a summary.</li>
+        <li>Step 4 &mdash; Complete secure payment and receive your document by email.</li>
+      </ul>
+
+      <div class="cta">
+        <a href="intake.html?tier=T1" class="btn">
+          Start My Tier One Request
+        </a>
+        <div class="note">
+          You will not be charged on this page. We’ll collect payment only
+          after you’ve provided your information and reviewed a summary.
         </div>
-      </aside>
+      </div>
     </section>
   </main>
-
-  <script>
-    // 1) Set this to your actual Personal Intake page filename
-    // If your file is named "intake.html" instead, change this value.
-    const PERSONAL_INTAKE_PAGE = 'intake.html';
-
-    // 2) Define the document preview content for Tier 1
-    const docDefinitions = {
-      'single-member-llc': {
-        title: 'Single-Member LLC Operating Agreement',
-        summary: 'Protects your personal liability and clarifies how your single-member LLC operates.',
-        bullets: [
-          'Documents you as the sole owner of the LLC',
-          'Supports your liability shield with banks and courts',
-          'Clarifies management, banking, and how profits are handled'
-        ]
-      },
-      'nda-mutual': {
-        title: 'Mutual Non-Disclosure Agreement (NDA)',
-        summary: 'A simple, plain-English NDA to protect shared ideas, plans, and confidential information.',
-        bullets: [
-          'Protects information shared by both sides',
-          'Clarifies what is confidential and for how long',
-          'Helps build trust when exploring new opportunities'
-        ]
-      },
-      'promissory-note': {
-        title: 'Promissory Note',
-        summary: 'Sets out the terms of a loan so everyone is clear on amount, repayment, and consequences.',
-        bullets: [
-          'Specifies principal, interest (if any), and payment schedule',
-          'Documents what happens if a payment is late or missed',
-          'Helps preserve relationships by putting the terms in writing'
-        ]
-      },
-      'independent-contractor': {
-        title: 'Independent Contractor Agreement',
-        summary: 'Defines the relationship, expectations, and protections when you hire or act as a contractor.',
-        bullets: [
-          'Clarifies scope of work and deliverables',
-          'Spells out payment terms and timing',
-          'Allocates ownership of work product and intellectual property'
-        ]
-      }
-    };
-
-    // 3) Grab DOM elements
-    const docButtons = document.querySelectorAll('.doc-option');
-    const previewTitle = document.getElementById('previewTitle');
-    const previewHint = document.getElementById('previewHint');
-    const previewSummary = document.getElementById('previewSummary');
-    const previewBullets = document.getElementById('previewBullets');
-    const continueBtn = document.getElementById('continueBtn');
-
-    let selectedDocId = null;
-
-    // 4) When a document is clicked, update the preview and remember the selection
-    docButtons.forEach((btn) => {
-      btn.addEventListener('click', () => {
-        const docId = btn.getAttribute('data-doc-id');
-        selectedDocId = docId;
-
-        // Highlight selected button
-        docButtons.forEach(b => b.classList.remove('selected'));
-        btn.classList.add('selected');
-
-        const def = docDefinitions[docId];
-        if (def) {
-          previewTitle.textContent = def.title;
-          previewHint.textContent = 'Preview of what this document covers (not legal advice).';
-          previewSummary.textContent = def.summary;
-
-          previewBullets.innerHTML = '';
-          def.bullets.forEach(item => {
-            const li = document.createElement('li');
-            li.textContent = item;
-            previewBullets.appendChild(li);
-          });
-        } else {
-          previewTitle.textContent = 'Document Preview';
-          previewHint.textContent = 'Preview not available for this document.';
-          previewSummary.textContent = '';
-          previewBullets.innerHTML = '';
-        }
-
-        // Enable the continue button now that a doc is selected
-        continueBtn.disabled = false;
-      });
-    });
-
-    // 5) When they click Continue, send them to Personal Intake with the document id
-    continueBtn.addEventListener('click', () => {
-      if (!selectedDocId) return;
-
-      // You can attach tier=1 here if you want it in the query string
-      const nextUrl = `${PERSONAL_INTAKE_PAGE}?tier=1&doc=${encodeURIComponent(selectedDocId)}`;
-      window.location.href = nextUrl;
-    });
-  </script>
 </body>
 </html>
