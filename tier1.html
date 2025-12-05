@@ -34,22 +34,13 @@
       justify-content: space-between;
       align-items: center;
     }
-    header h1 {
-      margin: 0;
-      font-size: 1.3rem;
-    }
-    header span {
-      font-size: 0.9rem;
-      opacity: 0.9;
-    }
+    header h1 { margin: 0; font-size: 1.3rem; }
+    header span { font-size: 0.9rem; opacity: 0.9; }
+
     main {
       max-width: 960px;
       margin: 2rem auto 3rem;
       padding: 0 1rem;
-    }
-    h2, h3 {
-      color: var(--accent);
-      margin-top: 0;
     }
     .card {
       background: #fff;
@@ -58,6 +49,8 @@
       box-shadow: 0 2px 8px rgba(0,0,0,0.06);
       margin-bottom: 1.5rem;
     }
+
+    h2, h3 { color: var(--accent); margin-top: 0; }
     .badge {
       display: inline-block;
       background: var(--primary);
@@ -73,39 +66,56 @@
       margin: 0.25rem 0 0.75rem;
       color: var(--primary-dark);
     }
-    p {
-      line-height: 1.6;
-      margin: 0.4rem 0 0.8rem;
+    p { line-height: 1.6; margin: 0.4rem 0 0.8rem; }
+    ul { padding-left: 1.2rem; margin: 0.3rem 0 1rem; }
+    li { margin-bottom: 0.3rem; }
+
+    .doc-list {
+      list-style: none;
+      padding: 0;
+      margin: 0.75rem 0 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
     }
-    ul {
-      padding-left: 1.2rem;
-      margin: 0.3rem 0 1rem;
-    }
-    li {
-      margin-bottom: 0.3rem;
-    }
-    .doc-preview {
-      background: #fff8f0;
-      border-radius: var(--radius);
-      border-left: 4px solid var(--primary);
-      padding: 1rem 1.2rem;
-      margin: 0.75rem 0 1.25rem;
+    .doc-item {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem 0.7rem;
+      align-items: center;
+      background: #f5f8ff;
+      border-radius: 6px;
+      border: 1px solid #dde5ff;
+      padding: 0.6rem 0.7rem;
       font-size: 0.95rem;
     }
-    .doc-preview p {
-      margin: 0.2rem 0 0.6rem;
+    .doc-item input[type="radio"] {
+      margin: 0;
     }
-    .doc-preview a {
-      color: var(--accent);
+    .doc-title {
       font-weight: 600;
-      text-decoration: none;
     }
-    .doc-preview a:hover {
+    .doc-desc {
+      font-size: 0.85rem;
+      color: #555;
+    }
+    .doc-actions {
+      margin-left: auto;
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .preview-link {
+      font-size: 0.85rem;
+      color: var(--accent);
       text-decoration: underline;
+      cursor: pointer;
     }
+
     .cta {
+      margin-top: 1.8rem;
       text-align: center;
-      margin-top: 1.5rem;
     }
     .btn {
       display: inline-block;
@@ -116,8 +126,8 @@
       color: #fff;
       font-weight: 600;
       font-size: 0.95rem;
-      text-decoration: none;
       cursor: pointer;
+      text-decoration: none;
       transition: background 0.15s ease, transform 0.05s ease;
     }
     .btn:hover {
@@ -129,11 +139,15 @@
       color: #666;
       margin-top: 0.75rem;
     }
-    @media (max-width: 600px) {
+
+    @media (max-width: 720px) {
       header .container {
         flex-direction: column;
         align-items: flex-start;
         gap: 0.3rem;
+      }
+      .doc-actions {
+        margin-left: 0;
       }
     }
   </style>
@@ -153,57 +167,235 @@
       <p class="price">$39.00 &mdash; One Document</p>
 
       <p>
-        Tier One is ideal when you need a single, straightforward document
-        prepared based on your information. Common examples include simple
-        agreements, letters, notices, or basic business forms.
+        Tier One is ideal when you need one straightforward legal document prepared
+        based on your information. Because we’re the new kid on the block, we let
+        you <strong>choose it clearly</strong> and, if you want, <strong>preview an example</strong>
+        before you continue.
       </p>
 
       <h3>What You Get</h3>
       <ul>
         <li>One legal document prepared from your answers</li>
+        <li>Plain-language structure and clear next steps</li>
         <li>Email delivery in PDF format</li>
-        <li>Turnaround within the stated time frame</li>
-        <li>Clear, plain-language structure and formatting</li>
       </ul>
 
-      <h3>Preview an Example</h3>
+      <h3>Select Your Document Type</h3>
       <p>
-        Below is a sample of the type of document you can expect. Your actual
-        document will be customized with your names, dates, and details.
+        Click the radio button for the document you want. You can optionally click
+        <em>Preview sample</em> to see an example in a new tab.
       </p>
 
-      <div class="doc-preview">
-        <p>
-          <strong>SAMPLE AGREEMENT</strong><br />
-          This Sample Agreement is made between <strong>[Your Name]</strong>
-          and <strong>[Other Party]</strong>, effective as of
-          <strong>[Date]</strong>. The purpose of this agreement is to
-          outline the basic understanding between the parties, including
-          responsibilities, timing, and any key conditions&hellip;
-        </p>
-        <a href="sample-tier1.pdf" target="_blank">
-          View a full sample Tier One document (PDF)
-        </a>
-      </div>
+      <ul class="doc-list">
+        <li class="doc-item">
+          <input
+            type="radio"
+            name="documentType"
+            value="LLC Single-Member Operating Agreement"
+          />
+          <div>
+            <div class="doc-title">LLC Single-Member Operating Agreement</div>
+            <div class="doc-desc">
+              For a single owner establishing the terms and structure of an LLC.
+            </div>
+          </div>
+          <div class="doc-actions">
+            <a
+              href="samples/singlemember.html"
+              target="_blank"
+              class="preview-link"
+            >
+              Preview sample
+            </a>
+          </div>
+        </li>
 
-      <h3>How It Works</h3>
+        <li class="doc-item">
+          <input
+            type="radio"
+            name="documentType"
+            value="LLC Two-Member Operating Agreement"
+          />
+          <div>
+            <div class="doc-title">LLC Two-Member Operating Agreement</div>
+            <div class="doc-desc">
+              For two owners outlining roles, responsibilities, and ownership.
+            </div>
+          </div>
+          <div class="doc-actions">
+            <a
+              href="samples/twomember.html"
+              target="_blank"
+              class="preview-link"
+            >
+              Preview sample
+            </a>
+          </div>
+        </li>
+
+        <li class="doc-item">
+          <input
+            type="radio"
+            name="documentType"
+            value="Non-Disclosure Agreement (NDA)"
+          />
+          <div>
+            <div class="doc-title">Non-Disclosure Agreement (NDA)</div>
+            <div class="doc-desc">
+              Protects confidential information when you need to share details.
+            </div>
+          </div>
+          <div class="doc-actions">
+            <a
+              href="samples/nda.html"
+              target="_blank"
+              class="preview-link"
+            >
+              Preview sample
+            </a>
+          </div>
+        </li>
+
+        <li class="doc-item">
+          <input
+            type="radio"
+            name="documentType"
+            value="Independent Contractor Agreement"
+          />
+          <div>
+            <div class="doc-title">Independent Contractor Agreement</div>
+            <div class="doc-desc">
+              Defines work, payment, and responsibilities for contractor services.
+            </div>
+          </div>
+          <div class="doc-actions">
+            <a
+              href="samples/contractor.html"
+              target="_blank"
+              class="preview-link"
+            >
+              Preview sample
+            </a>
+          </div>
+        </li>
+
+        <li class="doc-item">
+          <input
+            type="radio"
+            name="documentType"
+            value="Partnership Agreement"
+          />
+          <div>
+            <div class="doc-title">Partnership Agreement</div>
+            <div class="doc-desc">
+              Sets expectations and terms when two or more people go into business together.
+            </div>
+          </div>
+          <div class="doc-actions">
+            <a
+              href="samples/partnership.html"
+              target="_blank"
+              class="preview-link"
+            >
+              Preview sample
+            </a>
+          </div>
+        </li>
+
+        <li class="doc-item">
+          <input
+            type="radio"
+            name="documentType"
+            value="Promissory Note"
+          />
+          <div>
+            <div class="doc-title">Promissory Note</div>
+            <div class="doc-desc">
+              A written promise to repay money under agreed terms.
+            </div>
+          </div>
+          <div class="doc-actions">
+            <a
+              href="samples/promissory.html"
+              target="_blank"
+              class="preview-link"
+            >
+              Preview sample
+            </a>
+          </div>
+        </li>
+
+        <li class="doc-item">
+          <input
+            type="radio"
+            name="documentType"
+            value="Custom Single Document (describe in notes)"
+          />
+          <div>
+            <div class="doc-title">Custom Single Document</div>
+            <div class="doc-desc">
+              If none of the above fit, choose this and describe your situation in the intake form.
+            </div>
+          </div>
+          <div class="doc-actions">
+            <a
+              href="samples/service.html"
+              target="_blank"
+              class="preview-link"
+            >
+              Preview sample structure
+            </a>
+          </div>
+        </li>
+      </ul>
+
+      <h3>Next Step</h3>
       <ul>
-        <li>Step 1 &mdash; Click the button below to start your request.</li>
-        <li>Step 2 &mdash; Complete the Personal &amp; Business Intake form.</li>
-        <li>Step 3 &mdash; Provide your document details and review a summary.</li>
-        <li>Step 4 &mdash; Complete secure payment and receive your document by email.</li>
+        <li>Select the document you want using the radio button.</li>
+        <li>Optionally preview the sample in a new tab.</li>
+        <li>Click <strong>Continue to Intake</strong> to provide your information.</li>
       </ul>
 
       <div class="cta">
-        <a href="intake.html?tier=T1" class="btn">
-          Start My Tier One Request
-        </a>
+        <button type="button" id="continueBtn" class="btn">
+          Continue to Intake
+        </button>
         <div class="note">
-          You will not be charged on this page. We’ll collect payment only
-          after you’ve provided your information and reviewed a summary.
+          You must select a document above before continuing. You will not be
+          charged on this page. Payment happens only after intake and review.
         </div>
       </div>
     </section>
   </main>
+
+  <script>
+    // If user clicks a preview link, we can also auto-check that radio selection for clarity
+    document.querySelectorAll('.preview-link').forEach(link => {
+      link.addEventListener('click', function () {
+        const row = this.closest('.doc-item');
+        const radio = row.querySelector('input[type="radio"]');
+        if (radio) {
+          radio.checked = true;
+        }
+      });
+    });
+
+    document.getElementById('continueBtn').addEventListener('click', function () {
+      const selected = document.querySelector('input[name="documentType"]:checked');
+      if (!selected) {
+        alert('Please select a document type before continuing.');
+        return;
+      }
+
+      const docLabel = selected.value;
+
+      // Lock in the user’s choice for later pages (intake, review, etc.)
+      localStorage.setItem('selectedTier', 'Tier One – Single Document');
+      localStorage.setItem('selectedDocument', docLabel);
+
+      // Go to intake for Tier One
+      window.location.href = 'intake.html?tier=T1';
+    });
+  </script>
 </body>
 </html>
