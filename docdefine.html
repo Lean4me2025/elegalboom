@@ -26,6 +26,7 @@
     }
     .pill-row {
       display: flex;
+      flex-wrap: wrap;
       gap: 10px;
       margin-bottom: 18px;
     }
@@ -74,16 +75,24 @@
       justify-content: space-between;
       align-items: center;
       margin-top: 10px;
+      gap: 10px;
+      flex-wrap: wrap;
     }
     button {
       border-radius: 999px;
       padding: 8px 18px;
       border: none;
       cursor: pointer;
+      font-size: .9rem;
     }
     button.primary {
       background: #0d6efd;
       color: white;
+    }
+    button.secondary {
+      background: #f9fafb;
+      color: #374151;
+      border: 1px solid #d1d5db;
     }
     .party-box {
       border: 1px solid #e5e7eb;
@@ -100,14 +109,25 @@
       margin-top:16px;
       font-size:.85rem;
     }
+    .status {
+      font-size: .82rem;
+      color: #6b7280;
+    }
+    .status.ok { color: #166534; }
+    .status.err { color: #b91c1c; }
   </style>
+
+  <!-- Supabase client CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
 
 <main>
 
 <h1>Document Definition</h1>
-<p class="subtitle">You’ve completed payment. This page gathers the legal details needed to draft your document correctly.</p>
+<p class="subtitle">
+  You’ve completed payment. This page gathers the legal details needed to draft your document correctly.
+</p>
 
 <div class="pill-row">
   <div class="pill">Tier: <span id="tierDisplay">—</span></div>
@@ -115,90 +135,183 @@
 </div>
 
 <form id="docForm">
+  <fieldset>
+    <legend>Your Contact Information</legend>
+    <p class="hint">Who should we contact and where should we send the completed document?</p>
+    <label for="clientName">Full legal name</label>
+    <input id="clientName" name="clientName" required />
 
-<fieldset>
-  <legend>Your Contact Information</legend>
-  <input name="clientName" placeholder="Full legal name" required />
-  <input name="clientEmail" placeholder="Email address" type="email" required />
-  <input name="clientPhone" placeholder="Phone number" />
-  <input name="state" placeholder="State governing this document (e.g., TX, CA)" />
-</fieldset>
+    <label for="clientEmail">Email address</label>
+    <input id="clientEmail" name="clientEmail" type="email" required />
 
-<fieldset>
-  <legend>Parties Involved</legend>
-  <select id="partyCount">
-    <option value="2">2 Parties</option>
-    <option value="3">3 Parties</option>
-    <option value="4">4 Parties</option>
-    <option value="5">5 Parties</option>
-    <option value="6">6 Parties</option>
-  </select>
-  <div id="partyContainer"></div>
-</fieldset>
+    <label for="clientPhone">Phone number</label>
+    <input id="clientPhone" name="clientPhone" />
+    
+    <label for="state">State governing this document (e.g., TX, CA)</label>
+    <input id="state" name="state" />
+  </fieldset>
 
-<fieldset>
-  <legend>Money & Terms</legend>
-  <input name="amount" placeholder="Main dollar amount (if applicable)" />
-  <textarea name="terms" placeholder="Payment structure, profit split, major terms"></textarea>
-</fieldset>
+  <fieldset>
+    <legend>Parties Involved</legend>
+    <p class="hint">Tell us who is involved in this agreement.</p>
 
-<fieldset>
-  <legend>Document Details</legend>
-  <textarea name="purpose" placeholder="Explain exactly what this document should accomplish"></textarea>
-</fieldset>
+    <label for="partyCount">How many parties?</label>
+    <select id="partyCount">
+      <option value="2">2 Parties</option>
+      <option value="3">3 Parties</option>
+      <option value="4">4 Parties</option>
+      <option value="5">5 Parties</option>
+      <option value="6">6 Parties</option>
+    </select>
 
-<div class="caveat">
-<strong>Custom Situations &amp; Special Requirements</strong><br><br>
-Our forms are designed to capture most legal scenarios, including multi-party agreements and state variations.
-If your situation involves anything uncommon, industry-specific, or not directly covered by our checklist,
-please explain it below.<br><br>
-We will customize your document as needed to ensure accuracy and completeness.
-</div>
+    <div id="partyContainer"></div>
+  </fieldset>
 
-<label>Special Requests or Notes</label>
-<textarea name="special"></textarea>
+  <fieldset>
+    <legend>Money & Terms</legend>
+    <p class="hint">If money is involved, give us the basics so we understand how it should work.</p>
 
-<div class="actions">
-  <button type="button" onclick="history.back()">Back</button>
-  <button type="submit" class="primary">Submit Information</button>
-</div>
+    <label for="amount">Main dollar amount (if applicable)</label>
+    <input id="amount" name="amount" placeholder="e.g., 2500.00" />
+
+    <label for="terms">Payment structure, profit split, or key terms</label>
+    <textarea id="terms" name="terms"
+      placeholder="Example: 50% upfront, 50% on delivery. Or: profits split 60/40 after expenses."></textarea>
+  </fieldset>
+
+  <fieldset>
+    <legend>What This Document Should Do</legend>
+    <p class="hint">In your own words, describe what this document is supposed to accomplish.</p>
+
+    <label for="purpose">Document purpose</label>
+    <textarea id="purpose" name="purpose"
+      placeholder="Example: 3 partners forming a Texas partnership for a security business with unequal ownership, Alice managing."></textarea>
+  </fieldset>
+
+  <div class="caveat">
+    <strong>Custom Situations &amp; Special Requirements</strong><br><br>
+    Our forms are designed to capture most legal scenarios, including multi-party agreements and state variations.
+    If your situation involves anything uncommon, industry-specific, or not directly covered by our checklist,
+    please explain it below.<br><br>
+    We will customize your document as needed to ensure accuracy and completeness.
+  </div>
+
+  <label for="special">Special Requests or Notes</label>
+  <textarea id="special" name="special"
+    placeholder="Anything unique we should know (deadlines, special protections, extra parties, unusual terms, etc.)."></textarea>
+
+  <div class="actions">
+    <button type="button" class="secondary" onclick="history.back()">Back</button>
+    <div>
+      <div id="status" class="status"></div>
+      <button type="submit" class="primary">Submit Information</button>
+    </div>
+  </div>
 
 </form>
 
 </main>
 
 <script>
-const params = new URLSearchParams(window.location.search);
-const tier = params.get('tier') || '';
-const doc = params.get('doc') || '';
+  // --- 1. Read tier + doc from URL ---
+  const params = new URLSearchParams(window.location.search);
+  const tier = params.get('tier') || '';
+  const doc = params.get('doc') || '';
 
-document.getElementById("tierDisplay").textContent = tier;
-document.getElementById("docDisplay").textContent = doc;
+  document.getElementById("tierDisplay").textContent = tier || '—';
+  document.getElementById("docDisplay").textContent = doc || '—';
 
-const partyContainer = document.getElementById("partyContainer");
-const partySelect = document.getElementById("partyCount");
+  // --- 2. Dynamic party UI ---
+  const partyContainer = document.getElementById("partyContainer");
+  const partySelect = document.getElementById("partyCount");
 
-function renderParties(n){
-  partyContainer.innerHTML = '';
-  for(let i=1;i<=n;i++){
-    partyContainer.innerHTML += `
-      <div class="party-box">
-        <strong>Party ${i}</strong>
-        <input placeholder="Full name" name="p${i}_name"/>
-        <input placeholder="Role" name="p${i}_role"/>
-        <input placeholder="Ownership %" name="p${i}_share"/>
-      </div>
-    `;
+  function renderParties(n) {
+    partyContainer.innerHTML = '';
+    for (let i = 1; i <= n; i++) {
+      partyContainer.innerHTML += `
+        <div class="party-box">
+          <strong>Party ${i}</strong>
+          <label>Full name</label>
+          <input name="p${i}_name" placeholder="Full legal name of party ${i}" />
+          <label>Role</label>
+          <input name="p${i}_role" placeholder="e.g., Partner, Member, Lender, Borrower" />
+          <label>Ownership % (if applicable)</label>
+          <input name="p${i}_share" placeholder="e.g., 50" />
+        </div>
+      `;
+    }
   }
-}
-partySelect.onchange = ()=>renderParties(partySelect.value);
-renderParties(2);
 
-document.getElementById("docForm").onsubmit = e=>{
-  e.preventDefault();
-  alert("Your information has been sent. We’ll prepare your document and contact you if anything needs clarification.");
-  window.location="thankyou.html";
-};
+  partySelect.onchange = () => renderParties(Number(partySelect.value) || 2);
+  renderParties(2);
+
+  // --- 3. Supabase client setup ---
+  const { createClient } = supabase;
+
+  // TODO: REPLACE these two with your real values
+  const SUPABASE_URL = 'https://YOUR-PROJECT-ID.supabase.co';
+  const SUPABASE_ANON_KEY = 'YOUR_ANON_KEY_HERE';
+
+  const supa = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  // --- 4. Form submit handler: insert into "intakes" table ---
+  const form = document.getElementById("docForm");
+  const statusEl = document.getElementById("status");
+
+  form.onsubmit = async (e) => {
+    e.preventDefault();
+    statusEl.textContent = "Saving your information…";
+    statusEl.className = "status";
+
+    const partyCount = Number(partySelect.value) || 2;
+    const parties = [];
+    for (let i = 1; i <= partyCount; i++) {
+      parties.push({
+        name: form[`p${i}_name`]?.value || '',
+        role: form[`p${i}_role`]?.value || '',
+        ownership: form[`p${i}_share`]?.value || ''
+      });
+    }
+
+    const payload = {
+      tier: tier || null,
+      doc: doc || null,
+      customer_name: form.clientName.value || '',
+      customer_email: form.clientEmail.value || '',
+      customer_phone: form.clientPhone.value || '',
+      state: form.state.value || '',
+      parties_json: parties,        // jsonb column in Supabase
+      money_terms: form.terms.value || '',
+      amount: form.amount.value || null,
+      scope_notes: form.purpose.value || '',
+      special_notes: form.special.value || '',
+      paid: true                    // for now, assume they reached this page after payment
+    };
+
+    try {
+      const { error } = await supa
+        .from('intakes')
+        .insert([payload]);
+
+      if (error) {
+        console.error('Supabase insert error:', error);
+        statusEl.textContent = "We hit a problem saving your information. Please try again, and if it continues, contact us.";
+        statusEl.className = "status err";
+        return;
+      }
+
+      statusEl.textContent = "Information saved. Thank you! You may close this page.";
+      statusEl.className = "status ok";
+
+      // Optional: redirect to thank-you page
+      // window.location.href = "thankyou.html";
+
+    } catch (err) {
+      console.error('Unexpected error:', err);
+      statusEl.textContent = "Unexpected error saving your information. Please try again.";
+      statusEl.className = "status err";
+    }
+  };
 </script>
 
 </body>
