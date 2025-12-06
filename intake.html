@@ -2,328 +2,488 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>E-LegalBoom • Personal & Business Intake</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>E-LegalBoom – Secure Intake (Personal + Legal)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- Basic, clean styling -->
   <style>
-    :root {
-      --primary: #0f9d58;
-      --primary-dark: #0b7c45;
-      --accent: #2c3e50;
-      --bg: #f7f7f7;
-      --text: #333;
-      --radius: 8px;
-    }
-    * { box-sizing: border-box; }
     body {
       margin: 0;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
-        Roboto, sans-serif;
-      background: var(--bg);
-      color: var(--text);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background-color: #f5f7fb;
+      color: #111827;
     }
-    a {
-      color: #0077cc;
-      text-decoration: none;
-    }
-    a:hover {
-      text-decoration: underline;
-    }
+
     header {
-      background: var(--accent);
-      color: #fff;
-      padding: 1rem 0;
+      background: #0f172a;
+      color: #e5e7eb;
+      padding: 1rem 1.5rem;
     }
-    header .container {
-      max-width: 960px;
-      margin: 0 auto;
-      padding: 0 1rem;
+
+    header h1 {
+      margin: 0;
+      font-size: 1.1rem;
+      font-weight: 600;
+    }
+
+    header p {
+      margin: 0.3rem 0 0;
+      font-size: 0.9rem;
+      color: #9ca3af;
+    }
+
+    main {
+      max-width: 980px;
+      margin: 1.75rem auto 3rem;
+      padding: 1.5rem;
+      background: #ffffff;
+      border-radius: 0.85rem;
+      box-shadow: 0 14px 35px rgba(15, 23, 42, 0.12);
+    }
+
+    h2.section-title {
+      margin-top: 0;
+      margin-bottom: 0.3rem;
+      font-size: 1.3rem;
+      color: #0f172a;
+    }
+
+    p.section-subtitle {
+      margin-top: 0;
+      margin-bottom: 1.25rem;
+      font-size: 0.9rem;
+      color: #4b5563;
+    }
+
+    .section-divider {
+      border-top: 1px solid #e5e7eb;
+      margin: 1.75rem 0 1.25rem;
+    }
+
+    form {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1rem 1.5rem;
+    }
+
+    .field-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+    }
+
+    .field-group.full-width {
+      grid-column: 1 / -1;
+    }
+
+    label {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #374151;
+    }
+
+    .required {
+      color: #dc2626;
+      margin-left: 0.15rem;
+    }
+
+    input, select, textarea {
+      border-radius: 0.5rem;
+      border: 1px solid #d1d5db;
+      padding: 0.55rem 0.75rem;
+      font-size: 0.9rem;
+      font-family: inherit;
+      outline: none;
+      background-color: #f9fafb;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      border-color: #0ea5e9;
+      box-shadow: 0 0 0 1px #0ea5e9;
+      background-color: #ffffff;
+    }
+
+    textarea {
+      min-height: 110px;
+      resize: vertical;
+    }
+
+    .hint {
+      font-size: 0.8rem;
+      color: #6b7280;
+    }
+
+    .actions-row {
+      grid-column: 1 / -1;
+      margin-top: 1.75rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
-    }
-    header h1 {
-      margin: 0;
-      font-size: 1.3rem;
-    }
-    header span {
-      font-size: 0.9rem;
-      opacity: 0.9;
-    }
-    main {
-      max-width: 960px;
-      margin: 2rem auto 3rem;
-      padding: 0 1rem;
-    }
-    .back-link {
-      font-size: 0.9rem;
-      margin-bottom: 0.75rem;
-    }
-    .card {
-      background: #fff;
-      border-radius: var(--radius);
-      padding: 1.75rem 1.5rem 2rem;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-    }
-    h2 {
-      margin-top: 0;
-      color: var(--accent);
-    }
-    .step-label {
-      font-size: 0.9rem;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-      color: #888;
-      margin-bottom: 0.25rem;
-    }
-    .intro {
-      font-size: 0.95rem;
-      line-height: 1.6;
-      margin-bottom: 1rem;
-    }
-    .intro strong {
-      font-weight: 600;
-    }
-    .selected-info {
-      font-size: 0.9rem;
-      margin-bottom: 1.5rem;
-      color: #555;
-    }
-    .selected-info span {
-      display: block;
-    }
-    .selected-info strong {
-      color: var(--accent);
-    }
-    form {
-      margin-top: 0.5rem;
-    }
-    .field-row {
-      display: flex;
       gap: 1rem;
-      margin-bottom: 1rem;
-    }
-    .field {
-      flex: 1;
-      min-width: 0;
-    }
-    label {
-      display: block;
-      font-size: 0.85rem;
-      font-weight: 600;
-      margin-bottom: 0.25rem;
-    }
-    label span.required {
-      color: #cc0000;
-      margin-left: 0.1rem;
-    }
-    input[type="text"],
-    input[type="email"],
-    textarea {
-      width: 100%;
-      padding: 0.6rem 0.7rem;
-      border-radius: 6px;
-      border: 1px solid #d0d0d0;
-      font-size: 0.95rem;
-      font-family: inherit;
-    }
-    textarea {
-      resize: vertical;
-      min-height: 80px;
-    }
-    .help {
-      font-size: 0.8rem;
-      color: #777;
-      margin-top: 0.2rem;
-    }
-    .actions {
-      display: flex;
       flex-wrap: wrap;
-      gap: 0.75rem;
-      margin-top: 1.5rem;
-      align-items: center;
     }
-    .btn {
-      display: inline-block;
-      padding: 0.8rem 1.6rem;
-      border-radius: var(--radius);
+
+    .actions-row .secondary-text {
+      font-size: 0.85rem;
+      color: #6b7280;
+    }
+
+    .btn-primary {
       border: none;
+      border-radius: 999px;
+      padding: 0.7rem 1.8rem;
       font-size: 0.95rem;
       font-weight: 600;
       cursor: pointer;
-      text-decoration: none;
-      text-align: center;
+      background: linear-gradient(135deg, #0ea5e9, #0369a1);
+      color: #f9fafb;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      box-shadow: 0 10px 24px rgba(37, 99, 235, 0.3);
+      transition: transform 0.12s ease, box-shadow 0.12s ease, opacity 0.12s ease;
     }
-    .btn-primary {
-      background: var(--primary);
-      color: #fff;
-    }
+
     .btn-primary:hover {
-      background: var(--primary-dark);
+      transform: translateY(-1px);
+      box-shadow: 0 14px 30px rgba(37, 99, 235, 0.38);
+      opacity: 0.97;
     }
-    .btn-secondary {
-      background: #fff;
-      color: #555;
-      border: 1px solid #ccc;
+
+    .btn-primary:active {
+      transform: translateY(0);
+      box-shadow: 0 8px 18px rgba(37, 99, 235, 0.26);
     }
-    .btn-secondary:hover {
-      background: #f1f1f1;
+
+    .btn-primary[disabled] {
+      opacity: 0.7;
+      cursor: wait;
+      box-shadow: none;
+      transform: none;
     }
-    .after-note {
-      font-size: 0.85rem;
-      color: #666;
+
+    .status-message {
+      grid-column: 1 / -1;
       margin-top: 0.5rem;
+      font-size: 0.85rem;
     }
-    @media (max-width: 720px) {
-      .field-row {
-        flex-direction: column;
-      }
-      header .container {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 0.3rem;
+
+    .status-message.error {
+      color: #dc2626;
+    }
+
+    .status-message.info {
+      color: #2563eb;
+    }
+
+    @media (max-width: 640px) {
+      main {
+        margin: 1rem;
+        padding: 1rem;
       }
     }
   </style>
+
+  <!-- jsPDF for PDF generation -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"
+          integrity="sha512-Au9PpD7WCKEQVtVZxY+Q4eG0EG5oTfGZmV2q4cEH+NVN4xH86AG2blXJdH3gnv1OHhVLHUuC9h8l7gYsWXBZ/Q=="
+          crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </head>
 <body>
   <header>
-    <div class="container">
-      <h1>E-LegalBoom</h1>
-      <span>Step 2 of 5 &mdash; Personal &amp; Business Intake</span>
-    </div>
+    <h1>E-LegalBoom – Secure Intake</h1>
+    <p>One simple intake: personal + legal details, then PDF + payment.</p>
   </header>
 
   <main>
-    <div class="back-link">
-      <a href="catalog.html">&larr; Back to catalog</a>
-    </div>
-
-    <section class="card">
-      <div class="step-label">Step 2 of 5</div>
-      <h2>Personal &amp; Business Intake</h2>
-
-      <p class="intro">
-        This short intake gives us the information we need to prepare your document
-        correctly for the right tier and document type.
-        After you submit, you’ll be taken to the
-        <strong>Document Details</strong> step for this order.
+    <section>
+      <h2 class="section-title">1. Your Personal & Business Information</h2>
+      <p class="section-subtitle">
+        This lets us identify your matter and contact you with confirmations and updates.
       </p>
+    </section>
 
-      <div class="selected-info">
-        <span>Selected Tier:
-          <strong id="selectedTier">From catalog</strong>
-        </span>
-        <span>Selected Document:
-          <strong>Chosen on tier page</strong>
-        </span>
+    <form id="intake-form" novalidate>
+      <!-- PERSONAL / CONTACT -->
+      <div class="field-group">
+        <label for="first_name">First name<span class="required">*</span></label>
+        <input type="text" id="first_name" name="first_name" required autocomplete="given-name" />
       </div>
 
-      <!-- When this form is submitted, we go to the Document Details step -->
-      <form id="intakeForm" action="details.html" method="GET" novalidate>
-        <div class="field-row">
-          <div class="field">
-            <label for="firstName">First Name <span class="required">*</span></label>
-            <input type="text" id="firstName" name="firstName" required />
-          </div>
-          <div class="field">
-            <label for="lastName">Last Name <span class="required">*</span></label>
-            <input type="text" id="lastName" name="lastName" required />
-          </div>
-        </div>
+      <div class="field-group">
+        <label for="last_name">Last name<span class="required">*</span></label>
+        <input type="text" id="last_name" name="last_name" required autocomplete="family-name" />
+      </div>
 
-        <div class="field-row">
-          <div class="field">
-            <label for="email">Email <span class="required">*</span></label>
-            <input type="email" id="email" name="email" required />
-            <div class="help">
-              We’ll send your completed document to this address.
-            </div>
-          </div>
-          <div class="field">
-            <label for="phone">Phone (optional)</label>
-            <input type="text" id="phone" name="phone" />
-            <div class="help">
-              Helpful if we need a quick clarification.
-            </div>
-          </div>
-        </div>
+      <div class="field-group">
+        <label for="email">Email address<span class="required">*</span></label>
+        <input type="email" id="email" name="email" required autocomplete="email" />
+        <div class="hint">We’ll send confirmations and a copy of your completed document here.</div>
+      </div>
 
-        <div class="field-row">
-          <div class="field">
-            <label for="businessName">Business Name (if any)</label>
-            <input type="text" id="businessName" name="businessName" />
-          </div>
-          <div class="field">
-            <label for="primaryState">Primary State <span class="required">*</span></label>
-            <input
-              type="text"
-              id="primaryState"
-              name="primaryState"
-              placeholder="CA, TX, NY..."
-              required
-            />
-            <div class="help">
-              State where this document will primarily be used.
-            </div>
-          </div>
-        </div>
+      <div class="field-group">
+        <label for="phone">Mobile number (optional)</label>
+        <input type="tel" id="phone" name="phone" autocomplete="tel" />
+      </div>
 
-        <div class="field">
-          <label for="notes">Anything specific we should know?</label>
-          <textarea
-            id="notes"
-            name="notes"
-            placeholder="Example: I’m lending money to my cousin for a truck purchase; we’d like payments monthly."
-          ></textarea>
-          <div class="help">
-            Optional: describe your situation in a sentence or two.
-          </div>
-        </div>
+      <div class="field-group">
+        <label for="city">City</label>
+        <input type="text" id="city" name="city" />
+      </div>
 
-        <div class="actions">
-          <button type="submit" class="btn btn-primary">
-            Submit &amp; Continue to Document Details
-          </button>
+      <div class="field-group">
+        <label for="state">State</label>
+        <input type="text" id="state" name="state" placeholder="e.g., CA, TX" />
+      </div>
 
-          <a href="catalog.html" class="btn btn-secondary">
-            Cancel &amp; return to catalog
-          </a>
-        </div>
+      <div class="field-group">
+        <label for="zip">ZIP / Postal code</label>
+        <input type="text" id="zip" name="zip" />
+      </div>
 
-        <div class="after-note">
-          After you submit, a confirmation message will appear on this page and
-          you’ll be able to continue directly to the
-          <strong>Document Details</strong> step. Payment is collected later,
-          after you’ve reviewed a summary of your request.
+      <div class="field-group">
+        <label for="preferred_contact">Preferred way to reach you</label>
+        <select id="preferred_contact" name="preferred_contact">
+          <option value="">No preference</option>
+          <option value="email">Email</option>
+          <option value="phone">Phone call</option>
+          <option value="text">Text message</option>
+        </select>
+      </div>
+
+      <div class="field-group full-width">
+        <label for="business_name">Business or individual name for this document<span class="required">*</span></label>
+        <input type="text" id="business_name" name="business_name" required />
+      </div>
+
+      <div class="field-group full-width">
+        <label for="notes">Anything specific we should know?</label>
+        <textarea id="notes" name="notes"
+          placeholder="Deadlines, special circumstances, or guidance you want us to consider."></textarea>
+      </div>
+
+      <!-- DIVIDER -->
+      <div class="section-divider full-width"></div>
+
+      <!-- LEGAL / DOCUMENT DETAILS -->
+      <section class="full-width">
+        <h2 class="section-title">2. Legal & Document Details</h2>
+        <p class="section-subtitle">
+          Tell us what kind of help you need so we can prepare the right document for you.
+        </p>
+      </section>
+
+      <div class="field-group">
+        <label for="tier">Package / Tier<span class="required">*</span></label>
+        <select id="tier" name="tier" required>
+          <option value="">Select your package…</option>
+          <option value="Tier 1">Tier 1 – Single Document</option>
+          <option value="Tier 2">Tier 2 – Bundle</option>
+          <option value="Tier 3">Tier 3 – Ongoing</option>
+          <option value="Entrepreneur">Entrepreneur Package</option>
+        </select>
+      </div>
+
+      <div class="field-group">
+        <label for="service_type">Service type<span class="required">*</span></label>
+        <select id="service_type" name="service_type" required>
+          <option value="">What are you looking for?</option>
+          <option value="Formation">Business formation / startup</option>
+          <option value="Contract">Contract / agreement</option>
+          <option value="Compliance">Compliance / policy</option>
+          <option value="Other">Other / not sure</option>
+        </select>
+      </div>
+
+      <div class="field-group">
+        <label for="business_type">Business type</label>
+        <select id="business_type" name="business_type">
+          <option value="">Select one (if known)</option>
+          <option value="LLC">LLC</option>
+          <option value="Corporation">Corporation</option>
+          <option value="Sole Proprietor">Sole proprietor</option>
+          <option value="Partnership">Partnership</option>
+          <option value="Nonprofit">Nonprofit</option>
+        </select>
+      </div>
+
+      <div class="field-group">
+        <label for="entity_exists">Do you already have an existing entity?</label>
+        <select id="entity_exists" name="entity_exists">
+          <option value="">Select one…</option>
+          <option value="true">Yes, it’s already formed</option>
+          <option value="false">No, this is a new setup</option>
+        </select>
+      </div>
+
+      <div class="field-group full-width">
+        <label for="document_title">Document you need or main purpose<span class="required">*</span></label>
+        <input type="text" id="document_title" name="document_title" required
+               placeholder="Example: Service Agreement for Harris Security & Client" />
+      </div>
+
+      <div class="field-group">
+        <label for="party_two">Name of the other party</label>
+        <input type="text" id="party_two" name="party_two" placeholder="Company or person on the other side" />
+      </div>
+
+      <div class="field-group">
+        <label for="effective_date">Effective date (if known)</label>
+        <input type="date" id="effective_date" name="effective_date" />
+      </div>
+
+      <div class="field-group">
+        <label for="governing_state">Governing state / jurisdiction</label>
+        <input type="text" id="governing_state" name="governing_state" placeholder="e.g., CA, TX, FL" />
+      </div>
+
+      <div class="field-group">
+        <label for="urgency">How urgent is this?</label>
+        <select id="urgency" name="urgency">
+          <option value="">Normal (5–7 business days)</option>
+          <option value="High">High – within 3–5 days</option>
+          <option value="Emergency">Emergency – within 24–48 hours</option>
+        </select>
+      </div>
+
+      <div class="field-group full-width">
+        <label for="description_of_need">Briefly describe what you need this document to cover<span class="required">*</span></label>
+        <textarea id="description_of_need" name="description_of_need" required
+          placeholder="Share the situation in plain language. We’ll translate it into legal structure."></textarea>
+      </div>
+
+      <div class="field-group full-width">
+        <label for="key_terms">Key names, terms, or clauses you want included (optional)</label>
+        <textarea id="key_terms" name="key_terms"
+          placeholder="Names of parties, payment terms, time periods, non-compete, non-disclosure, etc."></textarea>
+      </div>
+
+      <div id="status" class="status-message" aria-live="polite"></div>
+
+      <div class="actions-row">
+        <div class="secondary-text">
+          After you submit, you’ll receive a PDF summary of this request and move directly to secure payment.
         </div>
-      </form>
-    </section>
+        <button type="submit" id="submit-btn" class="btn-primary">
+          Download PDF &amp; Continue to Secure Payment
+          <span>→</span>
+        </button>
+      </div>
+    </form>
   </main>
 
   <script>
-    // Read ?tier= from the URL so we can display which tier they started from
     (function () {
-      const params = new URLSearchParams(window.location.search);
-      const tier = params.get('tier');
-      if (tier) {
-        // Display a friendly version, e.g., T1 → Tier One, BUNDLE → Entrepreneur Bundle
-        const map = {
-          'T1': 'Tier One – Single Document',
-          'T2': 'Tier Two – Two Documents',
-          'T3': 'Tier Three – Three Documents',
-          'BUNDLE': 'Entrepreneur Starter Bundle'
-        };
-        const display = map[tier] || tier;
-        document.getElementById('selectedTier').textContent = display;
+      const { jsPDF } = window.jspdf;
+      const PAYMENT_URL = 'https://your-payment-page-here.com'; // TODO: replace with your real payment URL
 
-        // Also pass it forward to details.html
-        // by appending it as a hidden input so it stays in the query string.
-        const hidden = document.createElement('input');
-        hidden.type = 'hidden';
-        hidden.name = 'tier';
-        hidden.value = tier;
-        document.getElementById('intakeForm').appendChild(hidden);
+      const form = document.getElementById('intake-form');
+      const submitBtn = document.getElementById('submit-btn');
+      const statusEl = document.getElementById('status');
+
+      function setStatus(message, type) {
+        statusEl.textContent = message || '';
+        statusEl.className = 'status-message ' + (type || '');
       }
+
+      form.addEventListener('submit', async function (e) {
+        e.preventDefault();
+        setStatus('', '');
+
+        // Basic required validation
+        const requiredIds = ['first_name', 'last_name', 'email', 'business_name', 'tier', 'service_type', 'document_title', 'description_of_need'];
+        for (const id of requiredIds) {
+          const el = document.getElementById(id);
+          if (!el || !el.value.trim()) {
+            setStatus('Please complete all required fields (marked with *).', 'error');
+            el && el.focus();
+            return;
+          }
+        }
+
+        // Gather all values
+        const data = {
+          firstName: document.getElementById('first_name').value.trim(),
+          lastName: document.getElementById('last_name').value.trim(),
+          email: document.getElementById('email').value.trim(),
+          phone: document.getElementById('phone').value.trim(),
+          city: document.getElementById('city').value.trim(),
+          state: document.getElementById('state').value.trim(),
+          zip: document.getElementById('zip').value.trim(),
+          preferredContact: document.getElementById('preferred_contact').value,
+          businessName: document.getElementById('business_name').value.trim(),
+          notes: document.getElementById('notes').value.trim(),
+
+          tier: document.getElementById('tier').value,
+          serviceType: document.getElementById('service_type').value,
+          businessType: document.getElementById('business_type').value,
+          entityExists: document.getElementById('entity_exists').value,
+          documentTitle: document.getElementById('document_title').value.trim(),
+          partyTwo: document.getElementById('party_two').value.trim(),
+          effectiveDate: document.getElementById('effective_date').value,
+          governingState: document.getElementById('governing_state').value.trim(),
+          urgency: document.getElementById('urgency').value,
+          descriptionOfNeed: document.getElementById('description_of_need').value.trim(),
+          keyTerms: document.getElementById('key_terms').value.trim(),
+          intakeId: 'EB-' + Date.now().toString(36)
+        };
+
+        // Generate PDF
+        try {
+          submitBtn.disabled = true;
+          setStatus('Generating your PDF summary…', 'info');
+
+          const doc = new jsPDF();
+          let y = 10;
+
+          const addLine = (label, value) => {
+            if (y > 280) {
+              doc.addPage();
+              y = 10;
+            }
+            doc.text(`${label}: ${value || ''}`, 10, y);
+            y += 7;
+          };
+
+          doc.setFontSize(14);
+          doc.text('E-LegalBoom – Intake Summary', 10, y);
+          y += 10;
+
+          doc.setFontSize(11);
+          addLine('Intake ID', data.intakeId);
+          addLine('Tier', data.tier);
+          addLine('Service Type', data.serviceType);
+          y += 3;
+
+          addLine('Name', data.firstName + ' ' + data.lastName);
+          addLine('Email', data.email);
+          addLine('Phone', data.phone);
+          addLine('City / State / ZIP', `${data.city} ${data.state} ${data.zip}`.trim());
+          addLine('Preferred Contact', data.preferredContact || 'No preference');
+          addLine('Business Name', data.businessName);
+          addLine('Notes', data.notes);
+
+          y += 5;
+          addLine('Business Type', data.businessType);
+          addLine('Existing Entity', data.entityExists === 'true' ? 'Yes' : data.entityExists === 'false' ? 'No' : '');
+          addLine('Document Title/Purpose', data.documentTitle);
+          addLine('Other Party', data.partyTwo);
+          addLine('Effective Date', data.effectiveDate);
+          addLine('Governing State', data.governingState);
+          addLine('Urgency', data.urgency || 'Normal');
+          addLine('Description of Need', data.descriptionOfNeed);
+          addLine('Key Terms / Clauses', data.keyTerms);
+
+          doc.save(`E-LegalBoom-Intake-${data.intakeId}.pdf`);
+        } catch (err) {
+          console.error(err);
+          setStatus('There was a problem generating your PDF. You can still proceed to payment.', 'error');
+        }
+
+        // Redirect to payment
+        window.location.href = PAYMENT_URL;
+      });
     })();
   </script>
 </body>
