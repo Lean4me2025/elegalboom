@@ -335,11 +335,32 @@
       const backUrl = 'details.html?' + params.toString();
       window.location.href = backUrl;
     }
+function goToPayment() {
+  const params = new URLSearchParams(window.location.search);
 
-    function goToPayment() {
-      const params = new URLSearchParams(window.location.search);
-      const payUrl = 'payment.html?' + params.toString();
-      window.location.href = payUrl;
+  // This is what we passed in from the tier pages: T1, T2, T3, BUNDLE (or similar)
+  const tier = params.get('tier');
+
+  let payPage = 'payment.html'; // fallback, just in case
+
+  switch (tier) {
+    case 'T1':
+      payPage = 'pay-tier1.html';
+      break;
+    case 'T2':
+      payPage = 'pay-tier2.html';
+      break;
+    case 'T3':
+      payPage = 'pay-tier3.html';
+      break;
+    case 'BUNDLE':          // if your URL says tier=BUNDLE
+      payPage = 'pay-bundle.html';
+      break;
+  }
+
+  window.location.href = `${payPage}?${params.toString()}`;
+}
+    
     }
 
     document.addEventListener('DOMContentLoaded', initPage);
