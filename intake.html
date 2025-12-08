@@ -2,489 +2,475 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>E-LegalBoom – Secure Intake (Personal + Legal)</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>E-LegalBoom | Intake Form</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <!-- Basic, clean styling -->
+  <!-- Your main stylesheet -->
+  <link rel="stylesheet" href="style.css" />
+
+  <!-- Supabase JS v2 -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    // 🔴 REPLACE THESE WITH YOUR REAL VALUES
+    const SUPABASE_URL = "https://YOUR_PROJECT_ID.supabase.co";
+    const SUPABASE_ANON_KEY = "YOUR_PUBLIC_ANON_KEY";
+
+    const { createClient } = supabase;
+    const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  </script>
+
   <style>
+    /* Light, safe defaults in case style.css is minimal */
     body {
-      margin: 0;
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background-color: #f5f7fb;
-      color: #111827;
-    }
-
-    header {
-      background: #0f172a;
-      color: #e5e7eb;
-      padding: 1rem 1.5rem;
-    }
-
-    header h1 {
       margin: 0;
-      font-size: 1.1rem;
-      font-weight: 600;
+      background-color: #f5f5f7;
+      color: #222;
     }
-
-    header p {
-      margin: 0.3rem 0 0;
+    .site-header, .site-footer {
+      background-color: #111827;
+      color: #f9fafb;
+      padding: 12px 20px;
+    }
+    .site-header h1 {
+      margin: 0;
+      font-size: 1.2rem;
+    }
+    .site-header p {
+      margin: 4px 0 0;
+      font-size: 0.85rem;
+      opacity: 0.8;
+    }
+    .main-nav a {
+      color: #e5e7eb;
+      text-decoration: none;
+      margin-right: 16px;
       font-size: 0.9rem;
-      color: #9ca3af;
     }
-
-    main {
-      max-width: 980px;
-      margin: 1.75rem auto 3rem;
-      padding: 1.5rem;
+    .main-nav a:hover {
+      text-decoration: underline;
+    }
+    .page-content {
+      max-width: 900px;
+      margin: 20px auto 40px;
       background: #ffffff;
-      border-radius: 0.85rem;
-      box-shadow: 0 14px 35px rgba(15, 23, 42, 0.12);
+      padding: 20px 20px 32px;
+      border-radius: 8px;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.06);
     }
-
-    h2.section-title {
+    .form-intro h2 {
       margin-top: 0;
-      margin-bottom: 0.3rem;
-      font-size: 1.3rem;
-      color: #0f172a;
     }
-
-    p.section-subtitle {
-      margin-top: 0;
-      margin-bottom: 1.25rem;
-      font-size: 0.9rem;
-      color: #4b5563;
+    form label {
+      display: block;
+      margin-bottom: 12px;
+      font-size: 0.95rem;
     }
-
-    .section-divider {
-      border-top: 1px solid #e5e7eb;
-      margin: 1.75rem 0 1.25rem;
-    }
-
-    form {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 1rem 1.5rem;
-    }
-
-    .field-group {
-      display: flex;
-      flex-direction: column;
-      gap: 0.3rem;
-    }
-
-    .field-group.full-width {
-      grid-column: 1 / -1;
-    }
-
-    label {
-      font-size: 0.9rem;
-      font-weight: 600;
-      color: #374151;
-    }
-
-    .required {
-      color: #dc2626;
-      margin-left: 0.15rem;
-    }
-
-    input, select, textarea {
-      border-radius: 0.5rem;
+    form input[type="text"],
+    form input[type="email"],
+    form input[type="tel"],
+    form select,
+    form textarea {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 8px 10px;
+      margin-top: 4px;
+      border-radius: 4px;
       border: 1px solid #d1d5db;
-      padding: 0.55rem 0.75rem;
-      font-size: 0.9rem;
-      font-family: inherit;
-      outline: none;
-      background-color: #f9fafb;
-      transition: border-color 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
+      font-size: 0.95rem;
     }
-
-    input:focus, select:focus, textarea:focus {
-      border-color: #0ea5e9;
-      box-shadow: 0 0 0 1px #0ea5e9;
-      background-color: #ffffff;
-    }
-
-    textarea {
-      min-height: 110px;
+    form textarea {
       resize: vertical;
     }
-
-    .hint {
+    fieldset {
+      border: 1px solid #e5e7eb;
+      border-radius: 4px;
+      padding: 10px 12px;
+      margin-bottom: 12px;
+    }
+    fieldset legend {
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+    .checkbox-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 6px;
+      font-size: 0.9rem;
+    }
+    .btn-primary {
+      background-color: #2563eb;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      padding: 10px 16px;
+      font-size: 0.95rem;
+      cursor: pointer;
+    }
+    .btn-primary:hover {
+      background-color: #1d4ed8;
+    }
+    .small-note {
       font-size: 0.8rem;
       color: #6b7280;
     }
-
-    .actions-row {
-      grid-column: 1 / -1;
-      margin-top: 1.75rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 1rem;
-      flex-wrap: wrap;
+    .section-title {
+      margin-top: 20px;
+      font-size: 1.05rem;
+      border-bottom: 1px solid #e5e7eb;
+      padding-bottom: 4px;
+      margin-bottom: 12px;
     }
-
-    .actions-row .secondary-text {
+    .error-message {
+      color: #b91c1c;
       font-size: 0.85rem;
-      color: #6b7280;
-    }
-
-    .btn-primary {
-      border: none;
-      border-radius: 999px;
-      padding: 0.7rem 1.8rem;
-      font-size: 0.95rem;
-      font-weight: 600;
-      cursor: pointer;
-      background: linear-gradient(135deg, #0ea5e9, #0369a1);
-      color: #f9fafb;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.45rem;
-      box-shadow: 0 10px 24px rgba(37, 99, 235, 0.3);
-      transition: transform 0.12s ease, box-shadow 0.12s ease, opacity 0.12s ease;
-    }
-
-    .btn-primary:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 14px 30px rgba(37, 99, 235, 0.38);
-      opacity: 0.97;
-    }
-
-    .btn-primary:active {
-      transform: translateY(0);
-      box-shadow: 0 8px 18px rgba(37, 99, 235, 0.26);
-    }
-
-    .btn-primary[disabled] {
-      opacity: 0.7;
-      cursor: wait;
-      box-shadow: none;
-      transform: none;
-    }
-
-    .status-message {
-      grid-column: 1 / -1;
-      margin-top: 0.5rem;
-      font-size: 0.85rem;
-    }
-
-    .status-message.error {
-      color: #dc2626;
-    }
-
-    .status-message.info {
-      color: #2563eb;
-    }
-
-    @media (max-width: 640px) {
-      main {
-        margin: 1rem;
-        padding: 1rem;
-      }
+      margin-bottom: 10px;
+      display: none;
     }
   </style>
-
-  <!-- jsPDF for PDF generation -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"
-          integrity="sha512-Au9PpD7WCKEQVtVZxY+Q4eG0EG5oTfGZmV2q4cEH+NVN4xH86AG2blXJdH3gnv1OHhVLHUuC9h8l7gYsWXBZ/Q=="
-          crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </head>
 <body>
-  <header>
-    <h1>E-LegalBoom – Secure Intake</h1>
-    <p>One simple intake: personal + legal details, then PDF + payment.</p>
-  </header>
 
-  <main>
-    <section>
-      <h2 class="section-title">1. Your Personal & Business Information</h2>
-      <p class="section-subtitle">
-        This lets us identify your matter and contact you with confirmations and updates.
-      </p>
-    </section>
+<header class="site-header">
+  <div>
+    <h1>E-LegalBoom</h1>
+    <p>Secure, structured intake for your custom legal documents</p>
+  </div>
+  <nav class="main-nav">
+    <a href="index.html">Home</a>
+    <a href="catalog.html">Catalog</a>
+    <a href="bundle.html">Bundles</a>
+  </nav>
+</header>
 
-    <form id="intake-form" novalidate>
-      <!-- PERSONAL / CONTACT -->
-      <div class="field-group">
-        <label for="first_name">First name<span class="required">*</span></label>
-        <input type="text" id="first_name" name="first_name" required autocomplete="given-name" />
-      </div>
+<main class="page-content">
 
-      <div class="field-group">
-        <label for="last_name">Last name<span class="required">*</span></label>
-        <input type="text" id="last_name" name="last_name" required autocomplete="family-name" />
-      </div>
+  <section class="form-intro">
+    <h2>Client Intake</h2>
+    <p>
+      Please complete this intake form. Your responses will be used to
+      prepare the framework of your legal document. You will review
+      and approve the final version before it is used.
+    </p>
+    <p class="small-note">
+      Fields marked with * are required. Some options (management, dispute resolution, etc.)
+      may not apply to every document type; you may leave them blank when not relevant.
+    </p>
+  </section>
 
-      <div class="field-group">
-        <label for="email">Email address<span class="required">*</span></label>
-        <input type="email" id="email" name="email" required autocomplete="email" />
-        <div class="hint">We’ll send confirmations and a copy of your completed document here.</div>
-      </div>
+  <section class="form-section">
+    <div id="error-box" class="error-message"></div>
 
-      <div class="field-group">
-        <label for="phone">Mobile number (optional)</label>
-        <input type="tel" id="phone" name="phone" autocomplete="tel" />
-      </div>
+    <form id="intake-form">
 
-      <div class="field-group">
-        <label for="city">City</label>
-        <input type="text" id="city" name="city" />
-      </div>
+      <!-- Hidden: document type & tier from URL -->
+      <input type="hidden" id="doc_type" name="doc_type">
+      <input type="hidden" id="tier" name="tier">
 
-      <div class="field-group">
-        <label for="state">State</label>
-        <input type="text" id="state" name="state" placeholder="e.g., CA, TX" />
-      </div>
+      <!-- 1. Contact Information -->
+      <div class="section-title">1. Contact Information</div>
 
-      <div class="field-group">
-        <label for="zip">ZIP / Postal code</label>
-        <input type="text" id="zip" name="zip" />
-      </div>
+      <label>
+        Full Name *
+        <input type="text" name="customer_name" required>
+      </label>
 
-      <div class="field-group">
-        <label for="preferred_contact">Preferred way to reach you</label>
-        <select id="preferred_contact" name="preferred_contact">
-          <option value="">No preference</option>
-          <option value="email">Email</option>
-          <option value="phone">Phone call</option>
-          <option value="text">Text message</option>
+      <label>
+        Email Address *
+        <input type="email" name="customer_email" required>
+      </label>
+
+      <label>
+        Phone (optional)
+        <input type="tel" name="customer_phone">
+      </label>
+
+      <!-- 2. Entity Information -->
+      <div class="section-title">2. Entity / Relationship Information</div>
+
+      <label>
+        Entity Type *
+        <select name="entity_type" required>
+          <option value="">Select entity type...</option>
+          <option value="individual">Individual</option>
+          <option value="partnership">Partnership</option>
+          <option value="llc">LLC</option>
+          <option value="corporation">Corporation</option>
+          <option value="trust">Trust</option>
+          <option value="other">Other</option>
         </select>
-      </div>
+      </label>
 
-      <div class="field-group full-width">
-        <label for="business_name">Business or individual name for this document<span class="required">*</span></label>
-        <input type="text" id="business_name" name="business_name" required />
-      </div>
+      <label>
+        Entity / Business / Trust Name
+        <input type="text" name="entity_name">
+      </label>
 
-      <div class="field-group full-width">
-        <label for="notes">Anything specific we should know?</label>
-        <textarea id="notes" name="notes"
-          placeholder="Deadlines, special circumstances, or guidance you want us to consider."></textarea>
-      </div>
-
-      <!-- DIVIDER -->
-      <div class="section-divider full-width"></div>
-
-      <!-- LEGAL / DOCUMENT DETAILS -->
-      <section class="full-width">
-        <h2 class="section-title">2. Legal & Document Details</h2>
-        <p class="section-subtitle">
-          Tell us what kind of help you need so we can prepare the right document for you.
-        </p>
-      </section>
-
-      <div class="field-group">
-        <label for="tier">Package / Tier<span class="required">*</span></label>
-        <select id="tier" name="tier" required>
-          <option value="">Select your package…</option>
-          <option value="Tier 1">Tier 1 – Single Document</option>
-          <option value="Tier 2">Tier 2 – Bundle</option>
-          <option value="Tier 3">Tier 3 – Ongoing</option>
-          <option value="Entrepreneur">Entrepreneur Package</option>
+      <label>
+        Governing State / Jurisdiction *
+        <select name="governing_state" required>
+          <option value="">Select state...</option>
+          <option>Alabama</option><option>Alaska</option><option>Arizona</option>
+          <option>Arkansas</option><option>California</option><option>Colorado</option>
+          <option>Connecticut</option><option>Delaware</option><option>Florida</option>
+          <option>Georgia</option><option>Hawaii</option><option>Idaho</option>
+          <option>Illinois</option><option>Indiana</option><option>Iowa</option>
+          <option>Kansas</option><option>Kentucky</option><option>Louisiana</option>
+          <option>Maine</option><option>Maryland</option><option>Massachusetts</option>
+          <option>Michigan</option><option>Minnesota</option><option>Mississippi</option>
+          <option>Missouri</option><option>Montana</option><option>Nebraska</option>
+          <option>Nevada</option><option>New Hampshire</option><option>New Jersey</option>
+          <option>New Mexico</option><option>New York</option><option>North Carolina</option>
+          <option>North Dakota</option><option>Ohio</option><option>Oklahoma</option>
+          <option>Oregon</option><option>Pennsylvania</option><option>Rhode Island</option>
+          <option>South Carolina</option><option>South Dakota</option><option>Tennessee</option>
+          <option>Texas</option><option>Utah</option><option>Vermont</option>
+          <option>Virginia</option><option>Washington</option><option>West Virginia</option>
+          <option>Wisconsin</option><option>Wyoming</option>
         </select>
-      </div>
+      </label>
 
-      <div class="field-group">
-        <label for="service_type">Service type<span class="required">*</span></label>
-        <select id="service_type" name="service_type" required>
-          <option value="">What are you looking for?</option>
-          <option value="Formation">Business formation / startup</option>
-          <option value="Contract">Contract / agreement</option>
-          <option value="Compliance">Compliance / policy</option>
-          <option value="Other">Other / not sure</option>
+      <label>
+        Names of Other Parties / Members / Trustees / Partners
+        <textarea name="other_parties" rows="3" placeholder="List other individuals or entities involved, separated by commas."></textarea>
+      </label>
+
+      <!-- 3. Ownership & Financial Terms (especially for partnerships / LLCs) -->
+      <div class="section-title">3. Ownership & Financial Terms</div>
+
+      <label>
+        Ownership Percentages (if applicable)
+        <textarea name="ownership_split" rows="2" placeholder="Example: Partner A 60%, Partner B 40%."></textarea>
+      </label>
+
+      <label>
+        Capital Contributions Description
+        <textarea name="capital_contrib" rows="3" placeholder="Describe who is contributing what (cash, property, services, crypto, etc.)."></textarea>
+      </label>
+
+      <label>
+        Profit & Loss Split
+        <textarea name="profit_loss_split" rows="2" placeholder="Example: Profits and losses shared in proportion to ownership."></textarea>
+      </label>
+
+      <!-- 4. Key Business Terms / Controls -->
+      <div class="section-title">4. Management, Disputes & Restrictions</div>
+
+      <label>
+        Management Structure (optional)
+        <select name="management_model">
+          <option value="">Select...</option>
+          <option value="managing_partner">Managing Partner</option>
+          <option value="equal_authority">Equal Authority</option>
+          <option value="vote_based">Vote-Based Authority</option>
+          <option value="custom">Custom / Describe in Notes</option>
         </select>
-      </div>
+      </label>
 
-      <div class="field-group">
-        <label for="business_type">Business type</label>
-        <select id="business_type" name="business_type">
-          <option value="">Select one (if known)</option>
-          <option value="LLC">LLC</option>
-          <option value="Corporation">Corporation</option>
-          <option value="Sole Proprietor">Sole proprietor</option>
-          <option value="Partnership">Partnership</option>
-          <option value="Nonprofit">Nonprofit</option>
+      <label>
+        Dispute Resolution (optional)
+        <select name="dispute_method">
+          <option value="">Select...</option>
+          <option value="arbitration">Arbitration</option>
+          <option value="court">Court Litigation</option>
+          <option value="mediation_then_arbitration">Mediation then Arbitration</option>
+          <option value="mediation_then_court">Mediation then Court</option>
+          <option value="custom">Custom / Describe in Notes</option>
         </select>
-      </div>
+      </label>
 
-      <div class="field-group">
-        <label for="entity_exists">Do you already have an existing entity?</label>
-        <select id="entity_exists" name="entity_exists">
-          <option value="">Select one…</option>
-          <option value="true">Yes, it’s already formed</option>
-          <option value="false">No, this is a new setup</option>
+      <label>
+        Non-Compete (optional)
+        <select name="non_compete_option">
+          <option value="">Select...</option>
+          <option value="include">Include Non-Compete Clause</option>
+          <option value="exclude">Do NOT Include Non-Compete Clause</option>
+          <option value="custom">Custom / Describe in Notes</option>
         </select>
-      </div>
+      </label>
 
-      <div class="field-group full-width">
-        <label for="document_title">Document you need or main purpose<span class="required">*</span></label>
-        <input type="text" id="document_title" name="document_title" required
-               placeholder="Example: Service Agreement for Harris Security & Client" />
-      </div>
-
-      <div class="field-group">
-        <label for="party_two">Name of the other party</label>
-        <input type="text" id="party_two" name="party_two" placeholder="Company or person on the other side" />
-      </div>
-
-      <div class="field-group">
-        <label for="effective_date">Effective date (if known)</label>
-        <input type="date" id="effective_date" name="effective_date" />
-      </div>
-
-      <div class="field-group">
-        <label for="governing_state">Governing state / jurisdiction</label>
-        <input type="text" id="governing_state" name="governing_state" placeholder="e.g., CA, TX, FL" />
-      </div>
-
-      <div class="field-group">
-        <label for="urgency">How urgent is this?</label>
-        <select id="urgency" name="urgency">
-          <option value="">Normal (5–7 business days)</option>
-          <option value="High">High – within 3–5 days</option>
-          <option value="Emergency">Emergency – within 24–48 hours</option>
-        </select>
-      </div>
-
-      <div class="field-group full-width">
-        <label for="description_of_need">Briefly describe what you need this document to cover<span class="required">*</span></label>
-        <textarea id="description_of_need" name="description_of_need" required
-          placeholder="Share the situation in plain language. We’ll translate it into legal structure."></textarea>
-      </div>
-
-      <div class="field-group full-width">
-        <label for="key_terms">Key names, terms, or clauses you want included (optional)</label>
-        <textarea id="key_terms" name="key_terms"
-          placeholder="Names of parties, payment terms, time periods, non-compete, non-disclosure, etc."></textarea>
-      </div>
-
-      <div id="status" class="status-message" aria-live="polite"></div>
-
-      <div class="actions-row">
-        <div class="secondary-text">
-          After you submit, you’ll receive a PDF summary of this request and move directly to secure payment.
+      <fieldset>
+        <legend>Capital Contributions (check all that apply)</legend>
+        <div class="checkbox-row">
+          <input type="checkbox" name="capital_types[]" value="cash" id="cap_cash">
+          <label for="cap_cash">Cash</label>
         </div>
-        <button type="submit" id="submit-btn" class="btn-primary">
-          Download PDF &amp; Continue to Secure Payment
-          <span>→</span>
-        </button>
+        <div class="checkbox-row">
+          <input type="checkbox" name="capital_types[]" value="property" id="cap_property">
+          <label for="cap_property">Property</label>
+        </div>
+        <div class="checkbox-row">
+          <input type="checkbox" name="capital_types[]" value="services" id="cap_services">
+          <label for="cap_services">Services</label>
+        </div>
+        <div class="checkbox-row">
+          <input type="checkbox" name="capital_types[]" value="cryptocurrency" id="cap_crypto">
+          <label for="cap_crypto">Cryptocurrency</label>
+        </div>
+        <div class="checkbox-row">
+          <input type="checkbox" name="capital_types[]" value="ip" id="cap_ip">
+          <label for="cap_ip">Intellectual Property</label>
+        </div>
+        <div class="checkbox-row">
+          <input type="checkbox" name="capital_types[]" value="custom" id="cap_custom">
+          <label for="cap_custom">Other (describe in notes)</label>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Optional Special Clauses (check all that apply)</legend>
+        <div class="checkbox-row">
+          <input type="checkbox" name="special_clauses[]" value="non_solicitation" id="sc_non_solicit">
+          <label for="sc_non_solicit">Non-Solicitation</label>
+        </div>
+        <div class="checkbox-row">
+          <input type="checkbox" name="special_clauses[]" value="ip_assignment" id="sc_ip_assign">
+          <label for="sc_ip_assign">Intellectual Property Assignment</label>
+        </div>
+        <div class="checkbox-row">
+          <input type="checkbox" name="special_clauses[]" value="buyout_rules" id="sc_buyout">
+          <label for="sc_buyout">Buyout Rules</label>
+        </div>
+        <div class="checkbox-row">
+          <input type="checkbox" name="special_clauses[]" value="succession" id="sc_succession">
+          <label for="sc_succession">Succession Clause</label>
+        </div>
+        <div class="checkbox-row">
+          <input type="checkbox" name="special_clauses[]" value="rofr" id="sc_rofr">
+          <label for="sc_rofr">Right of First Refusal</label>
+        </div>
+        <div class="checkbox-row">
+          <input type="checkbox" name="special_clauses[]" value="drag_tag" id="sc_drag_tag">
+          <label for="sc_drag_tag">Drag-Along / Tag-Along</label>
+        </div>
+        <div class="checkbox-row">
+          <input type="checkbox" name="special_clauses[]" value="custom" id="sc_custom">
+          <label for="sc_custom">Other (describe in notes)</label>
+        </div>
+      </fieldset>
+
+      <!-- 5. Special Notes -->
+      <div class="section-title">5. Special Instructions / Notes</div>
+
+      <label>
+        Special Instructions or Notes
+        <textarea name="special_notes" rows="4" placeholder="Anything you want emphasized, clarified, or customized."></textarea>
+      </label>
+
+      <!-- 6. Confirmations -->
+      <div class="section-title">6. Confirmations</div>
+
+      <div class="checkbox-row">
+        <input type="checkbox" id="confirm_accuracy" required>
+        <label for="confirm_accuracy">
+          I confirm that the information provided is accurate to the best of my knowledge.
+        </label>
       </div>
+
+      <div class="checkbox-row">
+        <input type="checkbox" id="confirm_no_legal_advice" required>
+        <label for="confirm_no_legal_advice">
+          I understand E-LegalBoom provides document frameworks only and does not provide legal advice
+          or create an attorney–client relationship.
+        </label>
+      </div>
+
+      <button type="submit" class="btn-primary">
+        Submit &amp; Continue to Payment
+      </button>
     </form>
-  </main>
+  </section>
+</main>
 
-  <script>
-    (function () {
-      const { jsPDF } = window.jspdf;
-      const PAYMENT_URL = 'https://your-payment-page-here.com'; // TODO: replace with your real payment URL
+<footer class="site-footer">
+  <p>&copy; 2025 E-LegalBoom. All rights reserved.</p>
+</footer>
 
-      const form = document.getElementById('intake-form');
-      const submitBtn = document.getElementById('submit-btn');
-      const statusEl = document.getElementById('status');
+<script>
+  // Pull doc_type and tier from the URL into hidden fields
+  (function syncQueryParams() {
+    const params = new URLSearchParams(window.location.search);
+    const docType = params.get('doc_type');
+    const tier = params.get('tier');
 
-      function setStatus(message, type) {
-        statusEl.textContent = message || '';
-        statusEl.className = 'status-message ' + (type || '');
+    if (docType) {
+      const dt = document.getElementById('doc_type');
+      if (dt) dt.value = docType;
+    }
+    if (tier) {
+      const t = document.getElementById('tier');
+      if (t) t.value = tier;
+    }
+  })();
+
+  const form = document.getElementById('intake-form');
+  const errorBox = document.getElementById('error-box');
+
+  form.addEventListener('submit', async function (e) {
+    e.preventDefault();
+    errorBox.style.display = 'none';
+    errorBox.textContent = '';
+
+    // Collect all fields
+    const formData = new FormData(form);
+
+    // Multi-select arrays
+    const capitalTypes = [];
+    document.querySelectorAll('input[name="capital_types[]"]:checked')
+      .forEach(cb => capitalTypes.push(cb.value));
+
+    const specialClauses = [];
+    document.querySelectorAll('input[name="special_clauses[]"]:checked')
+      .forEach(cb => specialClauses.push(cb.value));
+
+    // Turn into plain object for JSON
+    const payload = Object.fromEntries(formData.entries());
+
+    try {
+      const { data, error } = await supabaseClient
+        .from('document_requests')
+        .insert([{
+          doc_type: payload.doc_type || null,
+          customer_name: payload.customer_name,
+          customer_email: payload.customer_email,
+          entity_type: payload.entity_type,
+          governing_state: payload.governing_state,
+          entity_name: payload.entity_name || null,
+
+          // decision fields
+          management_model: payload.management_model || null,
+          dispute_method: payload.dispute_method || null,
+          non_compete_option: payload.non_compete_option || null,
+          capital_types: capitalTypes,
+          special_clauses: specialClauses,
+
+          status: 'new',
+
+          // full raw payload for engine use later
+          data: {
+            ...payload,
+            capital_types: capitalTypes,
+            special_clauses: specialClauses
+          }
+        }]);
+
+      if (error) {
+        console.error('Supabase insert error:', error);
+        errorBox.textContent = 'There was an error submitting your intake. Please try again.';
+        errorBox.style.display = 'block';
+        return;
       }
 
-      form.addEventListener('submit', async function (e) {
-        e.preventDefault();
-        setStatus('', '');
+      // On success, go to payment page
+      window.location.href = 'payment.html';
+    } catch (err) {
+      console.error('Unexpected error:', err);
+      errorBox.textContent = 'An unexpected error occurred. Please try again.';
+      errorBox.style.display = 'block';
+    }
+  });
+</script>
 
-        // Basic required validation
-        const requiredIds = ['first_name', 'last_name', 'email', 'business_name', 'tier', 'service_type', 'document_title', 'description_of_need'];
-        for (const id of requiredIds) {
-          const el = document.getElementById(id);
-          if (!el || !el.value.trim()) {
-            setStatus('Please complete all required fields (marked with *).', 'error');
-            el && el.focus();
-            return;
-          }
-        }
-
-        // Gather all values
-        const data = {
-          firstName: document.getElementById('first_name').value.trim(),
-          lastName: document.getElementById('last_name').value.trim(),
-          email: document.getElementById('email').value.trim(),
-          phone: document.getElementById('phone').value.trim(),
-          city: document.getElementById('city').value.trim(),
-          state: document.getElementById('state').value.trim(),
-          zip: document.getElementById('zip').value.trim(),
-          preferredContact: document.getElementById('preferred_contact').value,
-          businessName: document.getElementById('business_name').value.trim(),
-          notes: document.getElementById('notes').value.trim(),
-
-          tier: document.getElementById('tier').value,
-          serviceType: document.getElementById('service_type').value,
-          businessType: document.getElementById('business_type').value,
-          entityExists: document.getElementById('entity_exists').value,
-          documentTitle: document.getElementById('document_title').value.trim(),
-          partyTwo: document.getElementById('party_two').value.trim(),
-          effectiveDate: document.getElementById('effective_date').value,
-          governingState: document.getElementById('governing_state').value.trim(),
-          urgency: document.getElementById('urgency').value,
-          descriptionOfNeed: document.getElementById('description_of_need').value.trim(),
-          keyTerms: document.getElementById('key_terms').value.trim(),
-          intakeId: 'EB-' + Date.now().toString(36)
-        };
-
-        // Generate PDF
-        try {
-          submitBtn.disabled = true;
-          setStatus('Generating your PDF summary…', 'info');
-
-          const doc = new jsPDF();
-          let y = 10;
-
-          const addLine = (label, value) => {
-            if (y > 280) {
-              doc.addPage();
-              y = 10;
-            }
-            doc.text(`${label}: ${value || ''}`, 10, y);
-            y += 7;
-          };
-
-          doc.setFontSize(14);
-          doc.text('E-LegalBoom – Intake Summary', 10, y);
-          y += 10;
-
-          doc.setFontSize(11);
-          addLine('Intake ID', data.intakeId);
-          addLine('Tier', data.tier);
-          addLine('Service Type', data.serviceType);
-          y += 3;
-
-          addLine('Name', data.firstName + ' ' + data.lastName);
-          addLine('Email', data.email);
-          addLine('Phone', data.phone);
-          addLine('City / State / ZIP', `${data.city} ${data.state} ${data.zip}`.trim());
-          addLine('Preferred Contact', data.preferredContact || 'No preference');
-          addLine('Business Name', data.businessName);
-          addLine('Notes', data.notes);
-
-          y += 5;
-          addLine('Business Type', data.businessType);
-          addLine('Existing Entity', data.entityExists === 'true' ? 'Yes' : data.entityExists === 'false' ? 'No' : '');
-          addLine('Document Title/Purpose', data.documentTitle);
-          addLine('Other Party', data.partyTwo);
-          addLine('Effective Date', data.effectiveDate);
-          addLine('Governing State', data.governingState);
-          addLine('Urgency', data.urgency || 'Normal');
-          addLine('Description of Need', data.descriptionOfNeed);
-          addLine('Key Terms / Clauses', data.keyTerms);
-
-          doc.save(`E-LegalBoom-Intake-${data.intakeId}.pdf`);
-        } catch (err) {
-          console.error(err);
-          setStatus('There was a problem generating your PDF. You can still proceed to payment.', 'error');
-        }
-
-        // Redirect to payment
-        window.location.href = PAYMENT_URL;
-      });
-    })();
-  </script>
 </body>
 </html>
