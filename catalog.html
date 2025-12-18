@@ -2,332 +2,222 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>E-LegalBoom | Find your Document in our Tiers</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>E-LegalBoom – Document Catalog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
   <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
-        sans-serif;
+    :root {
+      --eb-navy: #1e1e2f;
+      --eb-blue: #2b6cff;
+      --eb-blue-dark: #1e54cc;
+      --eb-accent: #ff7b2c;
+      --eb-bg1: #f0f5ff;
+      --eb-bg2: #e6edff;
+      --eb-card-bg: #ffffff;
     }
+
+    * { box-sizing: border-box; }
 
     body {
-      background: #f3f4f8;
-      color: #111827;
-      min-height: 100vh;
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: linear-gradient(135deg, var(--eb-bg1), var(--eb-bg2));
+      color: #222;
     }
 
-    a {
-      color: inherit;
-      text-decoration: none;
+    header {
+      background: var(--eb-navy);
+      color: #fff;
+      padding: 14px 20px;
     }
 
-    .site-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 14px 24px;
-      background: #ffffff;
-      border-bottom: 1px solid #e5e7eb;
-    }
-
-    .site-brand {
-      font-size: 20px;
+    header .brand {
       font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-size: 0.9rem;
     }
 
-    .site-nav a {
-      margin-left: 18px;
-      font-size: 14px;
-      color: #374151;
+    header .tagline {
+      font-size: 0.8rem;
+      opacity: 0.8;
     }
 
-    .site-nav a:hover {
-      color: #1d4ed8;
-      text-decoration: underline;
-    }
-
-    .page {
-      max-width: 1120px;
-      margin: 28px auto 40px;
-      padding: 0 16px;
+    .page-wrap {
+      max-width: 1100px;
+      margin: 24px auto 40px;
+      padding: 0 16px 40px;
     }
 
     h1 {
-      font-size: 24px;
-      font-weight: 700;
-      margin-bottom: 6px;
+      margin: 0 0 6px;
+      font-size: 1.8rem;
+      color: var(--eb-navy);
     }
 
-    .lead {
-      font-size: 14px;
-      color: #4b5563;
-      margin-bottom: 22px;
+    .page-intro {
+      max-width: 760px;
+      font-size: 0.95rem;
+      color: #444;
+      line-height: 1.5;
     }
 
-    .grid {
+    /* CATALOG LIST */
+
+    .catalog-list {
+      margin-top: 28px;
+      background: var(--eb-card-bg);
+      border-radius: 14px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+      overflow: hidden;
+    }
+
+    .catalog-row {
       display: grid;
-      gap: 18px;
+      grid-template-columns: 1fr auto;
+      gap: 16px;
+      padding: 18px 20px;
+      border-bottom: 1px solid rgba(0,0,0,0.06);
+      align-items: center;
     }
 
-    @media (min-width: 900px) {
-      .grid {
-        grid-template-columns: repeat(4, minmax(0, 1fr));
-      }
+    .catalog-row:last-child {
+      border-bottom: none;
     }
 
-    .tier-card {
-      background: #ffffff;
-      border-radius: 12px;
-      padding: 16px 16px 18px;
-      border: 1px solid #e5e7eb;
-      box-shadow: 0 14px 30px rgba(15, 23, 42, 0.08);
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
+    .doc-title {
+      margin: 0 0 4px;
+      font-size: 1rem;
+      color: var(--eb-navy);
     }
 
-    .tier-label {
-      font-size: 11px;
-      font-weight: 600;
-      color: #6b7280;
+    .doc-desc {
+      font-size: 0.88rem;
+      color: #444;
+      max-width: 720px;
+    }
+
+    .doc-meta {
+      text-align: right;
+      white-space: nowrap;
+    }
+
+    .doc-tier {
+      font-size: 0.75rem;
       text-transform: uppercase;
-      letter-spacing: 0.08em;
-      margin-bottom: 4px;
-    }
-
-    .tier-title {
-      font-size: 16px;
-      font-weight: 700;
-      margin-bottom: 4px;
-    }
-
-    .tier-price {
-      font-size: 14px;
-      font-weight: 600;
-      color: #0f766e;
-      margin-bottom: 8px;
-    }
-
-    .tier-body {
-      font-size: 13px;
-      color: #4b5563;
-      margin-bottom: 8px;
-    }
-
-    .doc-list {
-      font-size: 13px;
-      color: #374151;
-      margin-left: 16px;
-      margin-bottom: 10px;
-    }
-
-    .doc-list li {
-      margin-bottom: 3px;
-    }
-
-    .flag {
-      display: inline-block;
-      padding: 3px 7px;
-      border-radius: 999px;
-      font-size: 11px;
-      font-weight: 600;
-      background: #fef3c7;
-      color: #92400e;
+      letter-spacing: 0.06em;
+      color: #666;
       margin-bottom: 6px;
     }
 
-    .btn-primary,
-    .btn-secondary {
-      display: block;
-      width: 100%;
-      text-align: center;
-      padding: 8px 10px;
-      border-radius: 999px;
-      font-size: 13px;
-      text-decoration: none;
-      margin-top: 8px;
-      cursor: pointer;
-    }
-
-    .btn-primary {
-      background: #0f766e;
-      color: #ffffff;
+    .doc-action {
+      display: inline-block;
+      background: transparent;
+      color: var(--eb-blue);
+      border: 1px solid var(--eb-blue);
+      padding: 6px 10px;
+      border-radius: 6px;
+      font-size: 0.8rem;
       font-weight: 600;
-      border: 1px solid #0f766e;
+      text-decoration: none;
+      transition: background 0.15s ease, color 0.15s ease;
     }
 
-    .btn-primary:hover {
-      background: #115e59;
+    .doc-action:hover {
+      background: var(--eb-blue);
+      color: #fff;
     }
 
-    .btn-secondary {
-      background: #ffffff;
-      color: #1d4ed8;
-      border: 1px solid #cbd5f5;
-    }
+    @media (max-width: 700px) {
+      .catalog-row {
+        grid-template-columns: 1fr;
+        text-align: left;
+      }
 
-    .btn-secondary:hover {
-      background: #e0edff;
-    }
-
-    .hint {
-      font-size: 11px;
-      color: #6b7280;
-      margin-top: 4px;
+      .doc-meta {
+        text-align: left;
+        margin-top: 10px;
+      }
     }
   </style>
 </head>
+
 <body>
-  <header class="site-header">
-    <div class="site-brand">E-LegalBoom</div>
-    <nav class="site-nav">
-      <a href="index.html">Home</a>
-      <a href="catalog.html">Catalog</a>
-      <a href="how-it-works.html">How It Works</a>
-      <a href="orders.html">My Orders</a>
-    </nav>
-  </header>
 
-  <main class="page">
-    <h1>Find and Identify Your needed Document in the E-LegalBoom Tiers</h1>
-    <p class="lead">
-      Find the doucument you want within the four tiers below. Once you do, select Continue or View a sample. Each tier is priced per
-      document, and the Entrepreneur Starter Bundle is available when you plan
-      multiple documents within a focused window. You’ll confirm details first,
-      then <strong>complete secure payment</strong>.
-    </p>
+<header>
+  <div class="brand">E-LEGALBOOM</div>
+  <div class="tagline">Legal Confidence for Everyday Entrepreneurs</div>
+</header>
 
-    <section class="grid">
-      <!-- Tier 1 -->
-      <article class="tier-card">
-        <div>
-          <div class="tier-label">Tier 1</div>
-          <h2 class="tier-title">Startup &amp; Essential Documents</h2>
-          <p class="tier-price">$39 per document</p>
-          <p class="tier-body">
-            Ideal for simple but important agreements that protect your ideas,
-            clarify money owed, or document a single-owner business structure.
-          </p>
-          <ul class="doc-list">
-            <li>Mutual NDA (Non-Disclosure Agreement)</li>
-            <li>Promissory Note</li>
-            <li>Single-Member LLC Operating Agreement</li>
-            <li>Simple Payment / IOU Agreement</li>
-            <li>Basic Contractor / Service Letter</li>
-            <li>Other Basic Business Forms</li>
-          </ul>
-        </div>
-        <div>
-          <a href="tier1.html" class="btn-primary">
-            Continue – Details &amp; Payment
-          </a>
-          <a href="tier1.html#samples" class="btn-secondary">
-            View Tier 1 Samples
-          </a>
-          <p class="hint">
-            One document per purchase. Need more than one? Place a second order
-            or use the Bundle.
-          </p>
-        </div>
-      </article>
+<main class="page-wrap">
+  <h1>Legal Document Catalog</h1>
 
-      <!-- Tier 2 -->
-      <article class="tier-card">
-        <div>
-          <div class="tier-label">Tier 2</div>
-          <h2 class="tier-title">Business Foundation Documents</h2>
-          <p class="tier-price">$59 per document</p>
-          <p class="tier-body">
-            For partnerships, multi-owner businesses, and agreements where roles
-            and profit-sharing must be clear.
-          </p>
-          <ul class="doc-list">
-            <li>Partnership Agreement</li>
-            <li>Two-Member LLC Agreement</li>
-            <li>Buy–Sell / Investor Arrangements</li>
-            <li>Other Core Business Agreements</li>
-          </ul>
-        </div>
-        <div>
-          <a href="tier2.html" class="btn-primary">
-            Continue – Details &amp; Payment
-          </a>
-          <a href="tier2.html#samples" class="btn-secondary">
-            View Tier 2 Samples
-          </a>
-          <p class="hint">
-            One document per purchase in Tier 2. Multiple documents require
-            multiple orders unless you use the Bundle.
-          </p>
-        </div>
-      </article>
+  <p class="page-intro">
+    Browse our core legal documents below. Each document is prepared using structured intake
+    and plain-language drafting to help you move forward with confidence.
+    You’ll select your tier after choosing a document.
+  </p>
 
-      <!-- Tier 3 -->
-      <article class="tier-card">
-        <div>
-          <div class="tier-label">Tier 3</div>
-          <h2 class="tier-title">Premium Business Agreements</h2>
-          <p class="tier-price">$99 per document</p>
-          <p class="tier-body">
-            For higher-impact business relationships, ongoing services, and more
-            complex operational agreements.
-          </p>
-          <ul class="doc-list">
-            <li>Service / Independent Contractor Agreements</li>
-            <li>Consulting &amp; Professional Services</li>
-            <li>Joint Venture / Founder Arrangements</li>
-            <li>Custom Structured Agreements</li>
-          </ul>
-        </div>
-        <div>
-          <a href="tier3.html" class="btn-primary">
-            Continue – Details &amp; Payment
-          </a>
-          <a href="tier3.html#samples" class="btn-secondary">
-            View Tier 3 Samples
-          </a>
-          <p class="hint">
-            Tier 3 checkout covers one document. For more than two or three,
-            the Entrepreneur Bundle may be better value.
-          </p>
-        </div>
-      </article>
+  <div class="catalog-list">
 
-      <!-- Bundle -->
-      <article class="tier-card">
-        <div>
-          <span class="flag">Best for builders</span>
-          <div class="tier-label">Bundle</div>
-          <h2 class="tier-title">Entrepreneur Starter Bundle</h2>
-          <p class="tier-price">Bundle Price: $149 flat + 30-day access</p>
-          <p class="tier-body">
-            For founders who know they’ll need multiple documents in a short
-            window and want the best overall value.
-          </p>
-          <ul class="doc-list">
-            <li>Tier 1 document types</li>
-            <li>Tier 2 document types</li>
-            <li>Tier 3 document types</li>
-            <li>One intake per document during the 30-day window</li>
-          </ul>
+    <!-- LLC Single Member -->
+    <div class="catalog-row">
+      <div>
+        <h2 class="doc-title">LLC Operating Agreement – Single Member</h2>
+        <div class="doc-desc">
+          Establishes ownership, authority, and operating rules for a single-owner LLC.
         </div>
-        <div>
-          <a href="bundle.html" class="btn-primary">
-            Continue – Bundle Details &amp; Payment
-          </a>
-          <a href="bundle.html#samples" class="btn-secondary">
-            View Bundle Samples
-          </a>
-          <p class="hint">
-            Ideal when you’re forming, documenting, and hiring within the same
-            30 days and expect more than two documents.
-          </p>
+      </div>
+      <div class="doc-meta">
+        <div class="doc-tier">Tier One</div>
+        <a href="intake.html?doc_type=llc_single_member" class="doc-action">Start</a>
+      </div>
+    </div>
+
+    <!-- LLC Multi Member -->
+    <div class="catalog-row">
+      <div>
+        <h2 class="doc-title">LLC Operating Agreement – Multi Member</h2>
+        <div class="doc-desc">
+          Defines ownership percentages, voting rights, profit sharing, and exits for multiple members.
         </div>
-      </article>
-    </section>
-  </main>
+      </div>
+      <div class="doc-meta">
+        <div class="doc-tier">Tier Two</div>
+        <a href="intake.html?doc_type=llc_multi_member" class="doc-action">Start</a>
+      </div>
+    </div>
+
+    <!-- NDA -->
+    <div class="catalog-row">
+      <div>
+        <h2 class="doc-title">Non-Disclosure Agreement (NDA)</h2>
+        <div class="doc-desc">
+          Protects confidential information shared with contractors, partners, or employees.
+        </div>
+      </div>
+      <div class="doc-meta">
+        <div class="doc-tier">Tier One</div>
+        <a href="intake.html?doc_type=nda" class="doc-action">Start</a>
+      </div>
+    </div>
+
+    <!-- Independent Contractor -->
+    <div class="catalog-row">
+      <div>
+        <h2 class="doc-title">Independent Contractor Agreement</h2>
+        <div class="doc-desc">
+          Clarifies scope of work, payment terms, and ownership of work product.
+        </div>
+      </div>
+      <div class="doc-meta">
+        <div class="doc-tier">Tier Two</div>
+        <a href="intake.html?doc_type=independent_contractor" class="doc-action">Start</a>
+      </div>
+    </div>
+
+  </div>
+</main>
+
 </body>
 </html>
