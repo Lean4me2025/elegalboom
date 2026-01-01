@@ -2,251 +2,173 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>E-LegalBoom | Document Intake</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>E-LegalBoom — Intake</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-  <!-- Supabase JS -->
-  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <style>
     body {
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: #f3f4f8;
-      color: #111827;
+      background: #f6f8fb;
       margin: 0;
+      padding: 0;
+      color: #1f2937;
     }
-
-    header {
-      background: #ffffff;
-      border-bottom: 1px solid #e5e7eb;
-      padding: 14px 24px;
+    .container {
+      max-width: 900px;
+      margin: 32px auto;
+      background: #fff;
+      padding: 28px;
+      border-radius: 12px;
+      box-shadow: 0 10px 28px rgba(0,0,0,.08);
+    }
+    h1 { margin-top: 0; }
+    .meta {
+      background: #f1f5ff;
+      border: 1px solid #dbe4ff;
+      padding: 14px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      font-size: 14px;
+    }
+    label {
+      display: block;
+      font-weight: 600;
+      margin-top: 14px;
+    }
+    input, textarea {
+      width: 100%;
+      padding: 10px;
+      margin-top: 6px;
+      border-radius: 6px;
+      border: 1px solid #cbd5e1;
+      font-size: 14px;
+    }
+    textarea { min-height: 90px; }
+    button {
+      margin-top: 24px;
+      padding: 14px 20px;
+      font-size: 16px;
+      font-weight: 800;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+      background: #2563eb;
+      color: #fff;
+    }
+    #status {
+      margin-top: 16px;
       font-weight: 700;
     }
-
-    main {
-      max-width: 920px;
-      margin: 28px auto 60px;
-      padding: 0 16px;
-    }
-
-    h1 {
-      font-size: 22px;
-      margin-bottom: 6px;
-    }
-
-    .lead {
-      font-size: 14px;
-      color: #4b5563;
-      margin-bottom: 22px;
-    }
-
-    .section {
-      background: #ffffff;
-      border: 1px solid #e5e7eb;
-      border-radius: 10px;
-      padding: 16px;
-      margin-bottom: 18px;
-    }
-
-    .section h2 {
-      font-size: 16px;
-      margin-bottom: 10px;
-    }
-
-    .field {
-      margin-bottom: 12px;
-    }
-
-    .field label {
-      display: block;
-      font-size: 13px;
-      font-weight: 600;
-      margin-bottom: 4px;
-    }
-
-    .field input,
-    .field textarea {
-      width: 100%;
-      padding: 8px;
-      border: 1px solid #d1d5db;
-      border-radius: 6px;
-      font-size: 14px;
-    }
-
-    .actions {
-      margin-top: 24px;
-      text-align: right;
-    }
-
-    button {
-      background: #0f766e;
-      color: #ffffff;
-      padding: 10px 18px;
-      border-radius: 999px;
-      border: none;
-      font-size: 14px;
-      font-weight: 600;
-      cursor: pointer;
-    }
-
-    button:hover {
-      background: #115e59;
-    }
-
-    .error {
-      color: #b91c1c;
-      font-size: 13px;
-      margin-top: 8px;
-    }
-
-    .success {
-      color: #065f46;
-      font-size: 14px;
-      margin-top: 12px;
-      font-weight: 600;
-    }
+    .success { color: #15803d; }
+    .error { color: #b91c1c; }
   </style>
 </head>
 
 <body>
+<div class="container">
 
-<header>
-  E-LegalBoom — Document Intake
-</header>
-
-<main>
   <h1>Document Intake</h1>
-  <p class="lead">
-    Complete the intake below. Your responses will be used to generate your legal document.
-  </p>
+
+  <div class="meta">
+    <div><strong>Order ID:</strong> <span id="orderIdDisplay"></span></div>
+    <div><strong>Tier:</strong> <span id="tierDisplay"></span></div>
+    <div><strong>Document:</strong> <span id="docDisplay"></span></div>
+  </div>
 
   <form id="intakeForm">
-    <input type="hidden" name="tier" id="tier">
-    <input type="hidden" name="doc_type" id="doc_type">
-    <input type="hidden" name="doc_name" id="doc_name">
 
-    <div id="formSections"></div>
+    <label>Client Name
+      <input name="customer_name" required />
+    </label>
 
-    <div class="actions">
-      <button type="submit">Submit Intake</button>
-      <div id="status"></div>
-    </div>
+    <label>Email
+      <input type="email" name="customer_email" required />
+    </label>
+
+    <label>Entity Name
+      <input name="entity_name" />
+    </label>
+
+    <label>Governing State
+      <input name="governing_state" />
+    </label>
+
+    <label>Special Notes
+      <textarea name="special_clauses"></textarea>
+    </label>
+
+    <button type="submit">Submit Intake</button>
   </form>
-</main>
+
+  <div id="status"></div>
+
+</div>
 
 <script>
-/* =========================
-   CONFIG — YOU EDIT HERE
-   ========================= */
-
+/* ===============================
+   SUPABASE CONFIG
+================================ */
 const SUPABASE_URL = "https://vvjbjfltqsivvxxifnvi.supabase.co";
-const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ2amJqZmx0cXNpdnZ4eGlmbnZpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc5NzYzNTAsImV4cCI6MjA3MzU1MjM1MH0.F4zzcpCHl9v-Rnj0wgKJ5zBf1HteVyXelMLQDDEN28QE";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ2amJqZmx0cXNpdnZ4eGlmbnZpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc5NzYzNTAsImV4cCI6MjA3MzU1MjM1MH0.F4zzcpCHl9v-Rnj0wgKJ5zBf1HteVyXelMLQDDEN28Q";
 
-/* ========================= */
-
-const supabase = supabasejs.createClient(
+const supabase = supabase.createClient(
   SUPABASE_URL,
   SUPABASE_ANON_KEY
 );
 
-/* =========================
+/* ===============================
    CONTEXT FROM URL
-   ========================= */
-
+================================ */
 const params = new URLSearchParams(window.location.search);
-const tier = params.get("tier") || "";
-const docType = params.get("doc_type") || "";
-const docName = params.get("doc_name") || "";
 
-document.getElementById("tier").value = tier;
-document.getElementById("doc_type").value = docType;
-document.getElementById("doc_name").value = docName;
+const tier = params.get("tier") || "UNKNOWN";
+const docType = params.get("doc_type") || "UNKNOWN";
+const docName = params.get("doc_name") || docType;
 
-/* =========================
-   UNIVERSAL FIELD MAP (21)
-   ========================= */
+/* ===============================
+   ORDER ID GENERATION
+================================ */
+function generateOrderId() {
+  const ts = new Date().toISOString().replace(/[-:.TZ]/g, "").slice(0, 12);
+  const rand = Math.random().toString(36).substring(2, 6).toUpperCase();
+  return `ELB-${ts}-${rand}`;
+}
 
-const fieldMap = [
-  ["Client Information", "customer_name", "Client Name"],
-  ["Entity Information", "entity_name", "Entity / Business Name"],
-  ["Entity Information", "other_parties", "Other Parties"],
-  ["Jurisdiction", "governing_state", "Governing State"],
-  ["Custom", "special_notes", "Special Notes"],
-  ["Ownership & Economics", "ownership_split", "Ownership Split"],
-  ["Ownership & Economics", "capital_contrib", "Capital Contributions"],
-  ["Ownership & Economics", "profit_loss_split", "Profit / Loss Split"],
-  ["Management", "management_type", "Management Type"],
-  ["Management", "decision_rules", "Decision Rules"],
-  ["Dispute & Exit", "dissolution_terms", "Dissolution Terms"],
-  ["Dispute & Exit", "transfer_rules", "Transfer Rules"],
-  ["Restrictions", "non_compete", "Non-Compete Terms"],
-  ["Restrictions", "confidentiality", "Confidentiality Terms"],
-  ["Dispute & Exit", "dispute_resolution", "Dispute Resolution"],
-  ["Custom", "special_clauses", "Special Clauses"],
-  ["Management", "management_model", "Management Model"],
-  ["Dispute & Exit", "dispute_method", "Dispute Method"],
-  ["Restrictions", "non_compete_option", "Non-Compete Options"],
-  ["Ownership & Economics", "capital_types", "Capital Types"],
-  ["Custom", "special_provisions", "Special Provisions"]
-];
+const orderId = generateOrderId();
 
-/* =========================
-   RENDER FORM
-   ========================= */
+/* ===============================
+   DISPLAY CONTEXT
+================================ */
+document.getElementById("orderIdDisplay").textContent = orderId;
+document.getElementById("tierDisplay").textContent = tier;
+document.getElementById("docDisplay").textContent = docName;
 
-const container = document.getElementById("formSections");
-const sections = {};
-
-fieldMap.forEach(([section, name, label]) => {
-  if (!sections[section]) sections[section] = [];
-  sections[section].push({ name, label });
-});
-
-Object.entries(sections).forEach(([section, fields]) => {
-  const div = document.createElement("div");
-  div.className = "section";
-
-  const h2 = document.createElement("h2");
-  h2.textContent = section;
-  div.appendChild(h2);
-
-  fields.forEach(f => {
-    const fieldDiv = document.createElement("div");
-    fieldDiv.className = "field";
-
-    const label = document.createElement("label");
-    label.textContent = f.label;
-
-    const input = document.createElement("textarea");
-    input.name = f.name;
-    input.rows = 2;
-
-    fieldDiv.appendChild(label);
-    fieldDiv.appendChild(input);
-    div.appendChild(fieldDiv);
-  });
-
-  container.appendChild(div);
-});
-
-/* =========================
+/* ===============================
    SUBMIT → SUPABASE
-   ========================= */
-
+================================ */
 document.getElementById("intakeForm").addEventListener("submit", async (e) => {
   e.preventDefault();
+
   const status = document.getElementById("status");
   status.textContent = "";
 
   const payload = {
-    tier,
+    request_uuid: orderId,
     doc_type: docType,
-    doc_name: docName
+    customer_name: e.target.customer_name.value,
+    customer_email: e.target.customer_email.value,
+    entity_name: e.target.entity_name.value,
+    governing_state: e.target.governing_state.value,
+    data: {
+      tier,
+      document_name: docName,
+      special_clauses: e.target.special_clauses.value
+    },
+    status: "submitted",
+    payment_status: "pending"
   };
-
-  new FormData(e.target).forEach((value, key) => {
-    payload[key] = value;
-  });
 
   const { error } = await supabase
     .from("document_requests")
