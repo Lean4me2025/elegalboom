@@ -2,188 +2,184 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>E-LegalBoom — Intake</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>E-LegalBoom – Intake</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <!-- Supabase JS v2 -->
+  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 
   <style>
     body {
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: #f6f8fb;
+      font-family: Arial, sans-serif;
+      background: #f6f7f9;
       margin: 0;
       padding: 0;
-      color: #1f2937;
     }
     .container {
-      max-width: 900px;
-      margin: 32px auto;
-      background: #fff;
-      padding: 28px;
-      border-radius: 12px;
-      box-shadow: 0 10px 28px rgba(0,0,0,.08);
-    }
-    h1 { margin-top: 0; }
-    .meta {
-      background: #f1f5ff;
-      border: 1px solid #dbe4ff;
-      padding: 14px;
+      max-width: 760px;
+      margin: 40px auto;
+      background: #ffffff;
+      padding: 32px;
       border-radius: 8px;
-      margin-bottom: 20px;
-      font-size: 14px;
+    }
+    h1 {
+      margin-top: 0;
     }
     label {
       display: block;
-      font-weight: 600;
-      margin-top: 14px;
+      margin-top: 18px;
+      font-weight: bold;
     }
-    input, textarea {
+    input, select, textarea {
       width: 100%;
       padding: 10px;
       margin-top: 6px;
-      border-radius: 6px;
-      border: 1px solid #cbd5e1;
-      font-size: 14px;
+      box-sizing: border-box;
     }
-    textarea { min-height: 90px; }
     button {
-      margin-top: 24px;
-      padding: 14px 20px;
+      margin-top: 28px;
+      padding: 14px 24px;
       font-size: 16px;
-      font-weight: 800;
-      border-radius: 10px;
-      border: none;
-      cursor: pointer;
-      background: #2563eb;
+      background: #0a5cff;
       color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
     }
-    #status {
-      margin-top: 16px;
-      font-weight: 700;
+    button:disabled {
+      background: #999;
     }
-    .success { color: #15803d; }
-    .error { color: #b91c1c; }
   </style>
 </head>
 
 <body>
-<div class="container">
+  <div class="container">
+    <h1>Document Intake</h1>
 
-  <h1>Document Intake</h1>
+    <form id="intakeForm">
 
-  <div class="meta">
-    <div><strong>Order ID:</strong> <span id="orderIdDisplay"></span></div>
-    <div><strong>Tier:</strong> <span id="tierDisplay"></span></div>
-    <div><strong>Document:</strong> <span id="docDisplay"></span></div>
+      <!-- Hidden / Context Fields -->
+      <input type="hidden" id="order_id" />
+      <input type="hidden" id="document_type" />
+      <input type="hidden" id="tier" />
+
+      <label>First Name</label>
+      <input type="text" id="first_name" required />
+
+      <label>Last Name</label>
+      <input type="text" id="last_name" required />
+
+      <label>Email</label>
+      <input type="email" id="email" required />
+
+      <label>Phone</label>
+      <input type="text" id="phone" />
+
+      <label>Business / Entity Name</label>
+      <input type="text" id="business_name" />
+
+      <label>Street Address</label>
+      <input type="text" id="street" />
+
+      <label>City</label>
+      <input type="text" id="city" />
+
+      <label>State of Residence</label>
+      <input type="text" id="state" />
+
+      <label>ZIP Code</label>
+      <input type="text" id="zip" />
+
+      <label>Governing State (for document)</label>
+      <input type="text" id="governing_state" />
+
+      <label>Additional Details</label>
+      <textarea id="details" rows="4"></textarea>
+
+      <button type="submit" id="submitBtn">Submit Intake</button>
+    </form>
   </div>
 
-  <form id="intakeForm">
+  <script>
+    /*************************************************
+     * Supabase Client (SINGLE, NON-SHADOWING)
+     *************************************************/
+    const SUPABASE_URL = https://vvjbjfltqsivvxxifnvi.supabase.co;
+    const SUPABASE_ANON_KEY = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ2amJqZmx0cXNpdnZ4eGlmbnZpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc5NzYzNTAsImV4cCI6MjA3MzU1MjM1MH0.F4zzcpCHl9v-Rnj0wgKJ5zBf1HteVyXelMLQDDEN28Q;
 
-    <label>Client Name
-      <input name="customer_name" required />
-    </label>
+    const supabaseClient = supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_ANON_KEY
+    );
 
-    <label>Email
-      <input type="email" name="customer_email" required />
-    </label>
+    /*************************************************
+     * Helpers
+     *************************************************/
+    function generateOrderId() {
+      return "ORD-" + Date.now() + "-" + Math.floor(Math.random() * 100000);
+    }
 
-    <label>Entity Name
-      <input name="entity_name" />
-    </label>
+    function getQueryParam(name) {
+      const params = new URLSearchParams(window.location.search);
+      return params.get(name);
+    }
 
-    <label>Governing State
-      <input name="governing_state" />
-    </label>
+    /*************************************************
+     * Initialize Context
+     *************************************************/
+    const orderId = generateOrderId();
+    const documentType = getQueryParam("document") || "";
+    const tier = getQueryParam("tier") || "";
 
-    <label>Special Notes
-      <textarea name="special_clauses"></textarea>
-    </label>
+    document.getElementById("order_id").value = orderId;
+    document.getElementById("document_type").value = documentType;
+    document.getElementById("tier").value = tier;
 
-    <button type="submit">Submit Intake</button>
-  </form>
+    // Persist for payment page
+    localStorage.setItem("order_id", orderId);
+    localStorage.setItem("document_type", documentType);
+    localStorage.setItem("tier", tier);
 
-  <div id="status"></div>
+    /*************************************************
+     * Submit Handler
+     *************************************************/
+    document.getElementById("intakeForm").addEventListener("submit", async function (e) {
+      e.preventDefault();
 
-</div>
+      const submitBtn = document.getElementById("submitBtn");
+      submitBtn.disabled = true;
 
-<script>
-/* ===============================
-   SUPABASE CONFIG
-================================ */
-const SUPABASE_URL = "https://vvjbjfltqsivvxxifnvi.supabase.co";
-const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ2amJqZmx0cXNpdnZ4eGlmbnZpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc5NzYzNTAsImV4cCI6MjA3MzU1MjM1MH0.F4zzcpCHl9v-Rnj0wgKJ5zBf1HteVyXelMLQDDEN28Q";
+      const payload = {
+        order_id: orderId,
+        document_type: documentType,
+        tier: tier,
+        first_name: document.getElementById("first_name").value,
+        last_name: document.getElementById("last_name").value,
+        email: document.getElementById("email").value,
+        phone: document.getElementById("phone").value,
+        business_name: document.getElementById("business_name").value,
+        street: document.getElementById("street").value,
+        city: document.getElementById("city").value,
+        state: document.getElementById("state").value,
+        zip: document.getElementById("zip").value,
+        governing_state: document.getElementById("governing_state").value,
+        details: document.getElementById("details").value
+      };
 
-const supabase = supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_ANON_KEY
-);
+      const { error } = await supabaseClient
+        .from("requests")
+        .insert([payload]);
 
-/* ===============================
-   CONTEXT FROM URL
-================================ */
-const params = new URLSearchParams(window.location.search);
+      if (error) {
+        console.error("Supabase insert error:", error);
+        alert("There was an error submitting your intake. Please try again.");
+        submitBtn.disabled = false;
+        return;
+      }
 
-const tier = params.get("tier") || "UNKNOWN";
-const docType = params.get("doc_type") || "UNKNOWN";
-const docName = params.get("doc_name") || docType;
-
-/* ===============================
-   ORDER ID GENERATION
-================================ */
-function generateOrderId() {
-  const ts = new Date().toISOString().replace(/[-:.TZ]/g, "").slice(0, 12);
-  const rand = Math.random().toString(36).substring(2, 6).toUpperCase();
-  return `ELB-${ts}-${rand}`;
-}
-
-const orderId = generateOrderId();
-
-/* ===============================
-   DISPLAY CONTEXT
-================================ */
-document.getElementById("orderIdDisplay").textContent = orderId;
-document.getElementById("tierDisplay").textContent = tier;
-document.getElementById("docDisplay").textContent = docName;
-
-/* ===============================
-   SUBMIT → SUPABASE
-================================ */
-document.getElementById("intakeForm").addEventListener("submit", async (e) => {
-  e.preventDefault();
-
-  const status = document.getElementById("status");
-  status.textContent = "";
-
-  const payload = {
-    request_uuid: orderId,
-    doc_type: docType,
-    customer_name: e.target.customer_name.value,
-    customer_email: e.target.customer_email.value,
-    entity_name: e.target.entity_name.value,
-    governing_state: e.target.governing_state.value,
-    data: {
-      tier,
-      document_name: docName,
-      special_clauses: e.target.special_clauses.value
-    },
-    status: "submitted",
-    payment_status: "pending"
-  };
-
-  const { error } = await supabase
-    .from("document_requests")
-    .insert([payload]);
-
-  if (error) {
-    status.textContent = "Error submitting intake: " + error.message;
-    status.className = "error";
-  } else {
-    status.textContent = "Intake submitted successfully.";
-    status.className = "success";
-    e.target.reset();
-  }
-});
-</script>
-
+      // SUCCESS → redirect
+      window.location.href = "payment.html";
+    });
+  </script>
 </body>
 </html>
