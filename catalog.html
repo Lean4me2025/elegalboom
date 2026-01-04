@@ -2,166 +2,275 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>E-LegalBoom | Select Your Document</title>
+  <title>E-LegalBoom | Document Catalog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <link rel="stylesheet" href="style.css" />
-
   <style>
-    .hidden { display: none; }
-    .center { max-width: 1100px; margin: 0 auto; padding: 20px; }
-    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; }
-    .btn-primary { padding: 12px 18px; background:#0a4cff; color:#fff; border:none; cursor:pointer; }
-    .btn-secondary { padding: 10px 16px; background:#eee; border:1px solid #ccc; cursor:pointer; }
-    .price { font-weight: bold; margin: 8px 0; }
-    .tier-card, .doc-card { border: 1px solid #ddd; padding: 20px; border-radius: 6px; }
-    .flag { background:#ffd700; padding:4px 8px; font-size:12px; display:inline-block; margin-bottom:8px; }
+    :root {
+      --primary: #0a7c86;
+      --secondary: #0f4c5c;
+      --light-bg: #f6f8fa;
+      --card-bg: #ffffff;
+      --border: #e1e4e8;
+      --text: #1f2933;
+      --muted: #6b7280;
+      --accent: #e09f3e;
+      --radius: 14px;
+    }
+
+    * {
+      box-sizing: border-box;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Inter, sans-serif;
+    }
+
+    body {
+      margin: 0;
+      background: var(--light-bg);
+      color: var(--text);
+    }
+
+    header {
+      background: #fff;
+      border-bottom: 1px solid var(--border);
+      padding: 18px 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 20px;
+      font-weight: 700;
+    }
+
+    nav a {
+      margin-left: 20px;
+      text-decoration: none;
+      color: var(--muted);
+      font-weight: 500;
+    }
+
+    nav a:hover {
+      color: var(--primary);
+    }
+
+    main {
+      max-width: 1200px;
+      margin: 40px auto 80px;
+      padding: 0 20px;
+    }
+
+    .page-title {
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .page-subtitle {
+      color: var(--muted);
+      margin-bottom: 36px;
+      max-width: 820px;
+    }
+
+    .tier-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 24px;
+    }
+
+    .tier-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+
+    .tier-label {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: .04em;
+      color: var(--primary);
+      margin-bottom: 6px;
+    }
+
+    .tier-title {
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .tier-price {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--primary);
+      margin-bottom: 12px;
+    }
+
+    .tier-desc {
+      color: var(--muted);
+      font-size: 14px;
+      margin-bottom: 16px;
+    }
+
+    ul {
+      padding-left: 18px;
+      margin-bottom: 24px;
+      font-size: 14px;
+    }
+
+    ul li {
+      margin-bottom: 6px;
+    }
+
+    .actions {
+      margin-top: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      padding: 12px;
+      border-radius: 999px;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      text-align: center;
+    }
+
+    .btn-secondary {
+      background: #eef6f7;
+      color: var(--primary);
+      border: none;
+      padding: 10px;
+      border-radius: 999px;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      text-align: center;
+    }
+
+    .bundle-badge {
+      background: #fff3e0;
+      color: #a45c00;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 6px 10px;
+      border-radius: 999px;
+      display: inline-block;
+      margin-bottom: 8px;
+      width: fit-content;
+    }
   </style>
 </head>
 
 <body>
 
-<main class="center">
+<header>
+  <h1>E-LegalBoom</h1>
+  <nav>
+    <a href="/">Home</a>
+    <a href="/catalog.html">Catalog</a>
+    <a href="/how-it-works.html">How It Works</a>
+    <a href="/orders.html">My Orders</a>
+  </nav>
+</header>
 
-  <!-- ========================= -->
-  <!-- CATALOG VIEW -->
-  <!-- ========================= -->
-  <section id="catalog-view">
-    <h1>Select Your Legal Document</h1>
-    <p>Choose the document you need. You’ll select your service level next.</p>
+<main>
+  <div class="page-title">Find and Identify Your Needed Document in the E-LegalBoom Tiers</div>
+  <div class="page-subtitle">
+    Select the document you need from the tiers below. You’ll confirm details first, then complete a secure intake before payment.
+  </div>
 
-    <div class="grid">
+  <div class="tier-grid">
 
-      <article class="doc-card">
-        <h3>LLC Operating Agreement</h3>
-        <p>Ownership and governance rules for your LLC.</p>
-        <button class="btn-primary" onclick="showTiers('llc')">Continue</button>
-      </article>
-
-      <article class="doc-card">
-        <h3>Partnership Agreement</h3>
-        <p>Define partner roles, equity, and responsibilities.</p>
-        <button class="btn-primary" onclick="showTiers('partnership')">Continue</button>
-      </article>
-
-      <article class="doc-card">
-        <h3>Non-Disclosure Agreement (NDA)</h3>
-        <p>Protect confidential business information.</p>
-        <button class="btn-primary" onclick="showTiers('nda')">Continue</button>
-      </article>
-
-    </div>
-  </section>
-
-  <!-- ========================= -->
-  <!-- TIER VIEW -->
-  <!-- ========================= -->
-  <section id="tier-view" class="hidden">
-
-    <h1>Select Your Service Tier</h1>
-    <p id="selected-doc-label"></p>
-
-    <div class="grid">
-
-      <!-- TIER 1 -->
-      <article class="tier-card">
-        <h3>Tier 1 – Startup Essentials</h3>
-        <p class="price">$39 per document</p>
-        <p>Ideal for simple, single-owner needs.</p>
-        <ul>
-          <li>Mutual NDA</li>
-          <li>Promissory Note</li>
-          <li>Single-Member LLC Agreement</li>
-        </ul>
-        <button class="btn-primary" onclick="selectTier('tier1', 39)">
-          Continue
-        </button>
-      </article>
-
-      <!-- TIER 2 -->
-      <article class="tier-card">
-        <h3>Tier 2 – Business Foundation</h3>
-        <p class="price">$59 per document</p>
-        <p>For partnerships and multi-owner businesses.</p>
-        <ul>
-          <li>Partnership Agreement</li>
-          <li>Two-Member LLC Agreement</li>
-          <li>Buy-Sell Agreement</li>
-        </ul>
-        <button class="btn-primary" onclick="selectTier('tier2', 59)">
-          Continue
-        </button>
-      </article>
-
-      <!-- TIER 3 -->
-      <article class="tier-card">
-        <h3>Tier 3 – Premium Business</h3>
-        <p class="price">$99 per document</p>
-        <p>Advanced and ongoing business agreements.</p>
-        <ul>
-          <li>Independent Contractor Agreement</li>
-          <li>Consulting Agreement</li>
-          <li>Joint Venture Agreement</li>
-        </ul>
-        <button class="btn-primary" onclick="selectTier('tier3', 99)">
-          Continue
-        </button>
-      </article>
-
-      <!-- BUNDLE -->
-      <article class="tier-card">
-        <span class="flag">Best Value</span>
-        <h3>Bundle – Entrepreneur Pack</h3>
-        <p class="price">$149 flat · 30 days</p>
-        <p>Best value when you need multiple documents.</p>
-        <ul>
-          <li>Access to all Tier 1–3 documents</li>
-          <li>Multiple intakes over 30 days</li>
-        </ul>
-        <button class="btn-primary" onclick="selectTier('bundle', 149)">
-          Continue
-        </button>
-      </article>
-
+    <!-- TIER 1 -->
+    <div class="tier-card">
+      <div class="tier-label">TIER 1</div>
+      <div class="tier-title">Startup & Essential Documents</div>
+      <div class="tier-price">$39 per document</div>
+      <div class="tier-desc">
+        Ideal for simple but important agreements and single-owner business needs.
+      </div>
+      <ul>
+        <li>Mutual NDA</li>
+        <li>Promissory Note</li>
+        <li>Single-Member LLC Agreement</li>
+        <li>IOU / Payment Agreement</li>
+        <li>Basic Contractor Letter</li>
+      </ul>
+      <div class="actions">
+        <a class="btn-primary" href="/summary.html?tier=1">Continue – Details & Payment</a>
+        <a class="btn-secondary" href="/samples.html?tier=1">View Tier 1 Samples</a>
+      </div>
     </div>
 
-    <br />
-    <button class="btn-secondary" onclick="goBackToCatalog()">← Back</button>
+    <!-- TIER 2 -->
+    <div class="tier-card">
+      <div class="tier-label">TIER 2</div>
+      <div class="tier-title">Business Foundation Documents</div>
+      <div class="tier-price">$59 per document</div>
+      <div class="tier-desc">
+        For partnerships and multi-owner business structures.
+      </div>
+      <ul>
+        <li>Partnership Agreement</li>
+        <li>Two-Member LLC Agreement</li>
+        <li>Buy-Sell Agreements</li>
+      </ul>
+      <div class="actions">
+        <a class="btn-primary" href="/summary.html?tier=2">Continue – Details & Payment</a>
+        <a class="btn-secondary" href="/samples.html?tier=2">View Tier 2 Samples</a>
+      </div>
+    </div>
 
-  </section>
+    <!-- TIER 3 -->
+    <div class="tier-card">
+      <div class="tier-label">TIER 3</div>
+      <div class="tier-title">Premium Business Agreements</div>
+      <div class="tier-price">$99 per document</div>
+      <div class="tier-desc">
+        Higher-impact and ongoing business agreements.
+      </div>
+      <ul>
+        <li>Independent Contractor Agreements</li>
+        <li>Consulting Agreements</li>
+        <li>Joint Venture Agreements</li>
+      </ul>
+      <div class="actions">
+        <a class="btn-primary" href="/summary.html?tier=3">Continue – Details & Payment</a>
+        <a class="btn-secondary" href="/samples.html?tier=3">View Tier 3 Samples</a>
+      </div>
+    </div>
 
+    <!-- BUNDLE -->
+    <div class="tier-card">
+      <div class="bundle-badge">Best for builders</div>
+      <div class="tier-label">BUNDLE</div>
+      <div class="tier-title">Entrepreneur Starter Bundle</div>
+      <div class="tier-price">$149 flat · 30-day access</div>
+      <div class="tier-desc">
+        Best value when you need multiple documents in a short window.
+      </div>
+      <ul>
+        <li>Access to all Tier 1–3 documents</li>
+        <li>Multiple intakes over 30 days</li>
+      </ul>
+      <div class="actions">
+        <a class="btn-primary" href="/summary.html?bundle=true">Continue – Bundle Details</a>
+        <a class="btn-secondary" href="/samples.html?bundle=true">View Bundle Samples</a>
+      </div>
+    </div>
+
+  </div>
 </main>
-
-<!-- ========================= -->
-<!-- STATE & FLOW LOGIC -->
-<!-- ========================= -->
-<script>
-  function showTiers(doc) {
-    sessionStorage.clear();
-    sessionStorage.setItem('doc', doc);
-
-    document.getElementById('catalog-view').classList.add('hidden');
-    document.getElementById('tier-view').classList.remove('hidden');
-
-    document.getElementById('selected-doc-label').innerText =
-      'Selected document: ' + doc.toUpperCase();
-
-    window.scrollTo(0, 0);
-  }
-
-  function selectTier(tier, price) {
-    sessionStorage.setItem('tier', tier);
-    sessionStorage.setItem('price', price);
-
-    window.location.href = 'summary.html';
-  }
-
-  function goBackToCatalog() {
-    sessionStorage.clear();
-    document.getElementById('tier-view').classList.add('hidden');
-    document.getElementById('catalog-view').classList.remove('hidden');
-  }
-</script>
 
 </body>
 </html>
