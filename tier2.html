@@ -2,36 +2,41 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>E-LegalBoom | Tier 2</title>
+  <title>E-LegalBoom • Tier 2</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <style>
     :root {
-      --accent: #e67e22;
-      --ink: #1f2937;
-      --muted: #6b7280;
-      --bg: #f3f4f6;
-      --paper: #ffffff;
-      --border: #d1d5db;
+      --primary: #e67e22;
+      --primary-dark: #c76b1c;
+      --accent: #2c3e50;
+      --bg: #f6f7f9;
+      --text: #333;
+      --radius: 8px;
     }
+
+    * { box-sizing: border-box; }
 
     body {
       margin: 0;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
-        Roboto, sans-serif;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       background: var(--bg);
-      color: var(--ink);
+      color: var(--text);
     }
 
     header {
-      background: #111827;
+      background: var(--accent);
       color: #fff;
-      padding: 1rem;
+      padding: 1rem 0;
     }
 
-    header h1 {
-      margin: 0;
-      font-size: 1.25rem;
+    header .container {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 0 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
 
     main {
@@ -41,165 +46,137 @@
     }
 
     .card {
-      background: var(--paper);
-      border: 1px solid var(--border);
+      background: #fff;
+      border-radius: var(--radius);
       padding: 2rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
     }
 
-    .tier-meta {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 1.5rem;
-    }
-
-    .tier-meta h2 {
-      margin: 0;
+    h1, h2 {
+      color: var(--accent);
+      margin-top: 0;
     }
 
     .price {
-      font-size: 1.25rem;
+      font-size: 1.4rem;
       font-weight: 600;
-      color: var(--accent);
+      color: var(--primary-dark);
+      margin-bottom: 1rem;
     }
 
-    p {
-      line-height: 1.6;
+    ul {
+      padding-left: 1.2rem;
     }
 
-    .docs {
-      margin-top: 2rem;
+    li {
+      margin-bottom: 0.6rem;
     }
 
     .doc {
-      border: 1px solid var(--border);
+      border: 1px solid #e1e4e8;
+      border-radius: var(--radius);
       padding: 1rem;
-      margin-bottom: 0.75rem;
-      cursor: pointer;
-    }
-
-    .doc.selected {
-      border-color: var(--accent);
-      background: #fff7ed;
+      margin-bottom: 1rem;
     }
 
     .doc h3 {
-      margin: 0 0 0.25rem 0;
-      font-size: 1rem;
+      margin-top: 0;
+      margin-bottom: 0.4rem;
     }
 
-    .doc p {
-      margin: 0;
-      color: var(--muted);
-      font-size: 0.9rem;
-    }
-
-    .actions {
-      margin-top: 2rem;
-      text-align: right;
-    }
-
-    button {
-      padding: 0.75rem 1.5rem;
-      background: var(--accent);
+    .btn {
+      display: inline-block;
+      margin-top: 0.75rem;
+      padding: 0.6rem 1.2rem;
+      background: var(--primary);
       color: #fff;
       border: none;
-      font-size: 0.95rem;
+      border-radius: var(--radius);
       cursor: pointer;
+      font-weight: 600;
     }
 
-    button:hover {
-      opacity: 0.9;
+    .btn:hover {
+      background: var(--primary-dark);
     }
 
     .note {
-      margin-top: 0.75rem;
       font-size: 0.85rem;
-      color: var(--muted);
+      color: #666;
+      margin-top: 1.5rem;
     }
   </style>
 </head>
 
 <body>
-
-<header>
-  <h1>E-LegalBoom</h1>
-</header>
-
-<main>
-  <div class="card">
-
-    <div class="tier-meta">
-      <h2>Tier 2 — Two-Document Package</h2>
-      <div class="price">$69.00</div>
+  <header>
+    <div class="container">
+      <h1>E-LegalBoom</h1>
+      <span>Tier 2 • Single Legal Document</span>
     </div>
+  </header>
 
-    <p>
-      Tier 2 is designed for situations where two related legal documents are
-      needed to work together — for example, a primary agreement and a supporting
-      document.
-    </p>
+  <main>
+    <div class="card">
+      <h2>Tier 2 — Choose One Legal Document</h2>
+      <div class="price">$149 — One Document</div>
 
-    <p>
-      Please select <strong>one document</strong> below to begin your request.
-    </p>
+      <p>
+        Tier 2 is designed for situations where you need a single,
+        professionally structured legal document prepared from your answers.
+      </p>
 
-    <div class="docs">
-      <div class="doc" onclick="selectDoc('Independent Contractor Agreement')">
+      <h3>Available Documents</h3>
+
+      <div class="doc">
+        <h3>Partnership Agreement</h3>
+        <p>Defines ownership, roles, profit sharing, and responsibilities between partners.</p>
+        <button class="btn" onclick="selectDocument('Partnership Agreement')">
+          Select This Document
+        </button>
+      </div>
+
+      <div class="doc">
+        <h3>Operating Agreement (LLC)</h3>
+        <p>Outlines management structure, voting rights, and member obligations.</p>
+        <button class="btn" onclick="selectDocument('Operating Agreement')">
+          Select This Document
+        </button>
+      </div>
+
+      <div class="doc">
         <h3>Independent Contractor Agreement</h3>
-        <p>Defines scope, compensation, and independent status.</p>
+        <p>Defines scope of work, payment terms, and contractor status.</p>
+        <button class="btn" onclick="selectDocument('Independent Contractor Agreement')">
+          Select This Document
+        </button>
       </div>
 
-      <div class="doc" onclick="selectDoc('Non-Disclosure Agreement')">
-        <h3>Non-Disclosure Agreement (NDA)</h3>
-        <p>Protects confidential information shared between parties.</p>
-      </div>
-
-      <div class="doc" onclick="selectDoc('Partnership Agreement (Basic)')">
-        <h3>Partnership Agreement (Basic)</h3>
-        <p>Outlines ownership, roles, and profit sharing.</p>
-      </div>
-    </div>
-
-    <div class="actions">
-      <button type="button" onclick="goToSummary()">Continue</button>
       <div class="note">
-        You will review your selection on the next screen before entering details.
+        You will review your selection on the next screen before providing details.
       </div>
     </div>
+  </main>
 
-  </div>
-</main>
+  <script>
+    function selectDocument(docName) {
+      const payload = {
+        tier: "2",
+        doc_type: docName,
+        price: 149,
+        order_id: crypto.randomUUID(),
+        created_at: Date.now()
+      };
 
-<script>
-  // -----------------------------
-  // Canonical Tier → Summary Logic
-  // -----------------------------
+      // SINGLE canonical write location
+      sessionStorage.setItem(
+        "orderPayload",
+        JSON.stringify(payload)
+      );
 
-  const TIER_NUMBER = 2;
-  let selectedDoc = null;
-
-  function selectDoc(docName) {
-    selectedDoc = docName;
-
-    // visual state
-    document.querySelectorAll('.doc').forEach(el => {
-      el.classList.remove('selected');
-    });
-
-    event.currentTarget.classList.add('selected');
-  }
-
-  function goToSummary() {
-    if (!selectedDoc) {
-      alert("Please select a document to continue.");
-      return;
+      // Navigate only after write
+      window.location.href = "summary.html";
     }
-
-    window.location.href =
-      `summary.html?tier=${TIER_NUMBER}&doc=${encodeURIComponent(selectedDoc)}`;
-  }
-</script>
-
+  </script>
 </body>
 </html>
