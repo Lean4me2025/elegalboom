@@ -6,161 +6,65 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <style>
-    body {
-      font-family: Georgia, serif;
-      background: #f4f4f4;
-      margin: 0;
-      padding: 0;
-    }
-
-    .page {
-      max-width: 1200px;
-      margin: 40px auto;
-      background: #ffffff;
-      padding: 50px;
-    }
-
-    h1 {
-      margin-top: 0;
-      border-bottom: 1px solid #ccc;
-      padding-bottom: 12px;
-    }
-
-    p.intro {
-      font-size: 17px;
-      color: #444;
-      margin-bottom: 40px;
-    }
-
-    .tier-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 25px;
-    }
-
-    /* 🔑 CLICKABLE WRAPPER */
-    .tier-link {
-      text-decoration: none;
-      color: inherit;
-      display: block;
-    }
-
-    .tier-card {
-      border: 1px solid #ddd;
-      background: #fafafa;
-      padding: 25px;
-      height: 100%;
-      cursor: pointer;
-    }
-
-    .tier-card:hover {
-      background: #eef3ff;
-    }
-
-    .tier-card h2 {
-      margin-top: 0;
-      font-size: 20px;
-    }
-
-    .tier-card p {
-      color: #555;
-      font-size: 15px;
-      line-height: 1.4;
-    }
-
-    .tier-card ul {
-      margin: 15px 0;
-      padding-left: 18px;
-      font-size: 14px;
-      color: #444;
-    }
-
-    .cta {
-      margin-top: 18px;
-      padding: 12px 20px;
-      background: #0a4cff;
-      color: #ffffff;
-      display: inline-block;
-      font-size: 15px;
-    }
-
-    .bundle {
-      background: #fffbe6;
-      border-color: #c9a300;
-    }
+    body { font-family: Georgia, serif; background:#f4f4f4; margin:0; }
+    .page { max-width:1100px; margin:40px auto; background:#fff; padding:50px; }
+    h1 { border-bottom:1px solid #ccc; padding-bottom:12px; }
+    p { color:#444; font-size:16px; }
+    .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:25px; margin-top:40px; }
+    .card { border:1px solid #ddd; background:#fafafa; padding:25px; }
+    .card h2 { margin-top:0; }
+    .card ul { padding-left:18px; }
+    .cta { margin-top:18px; display:inline-block; padding:12px 20px; background:#0a4cff; color:#fff; text-decoration:none; }
+    .bundle { background:#fffbe6; border-color:#c9a300; }
   </style>
 </head>
 
 <body>
-
 <div class="page">
   <h1>Find the Legal Document You Need</h1>
+  <p>Select the service tier that best matches your situation.</p>
 
-  <p class="intro">
-    Select the service tier that best matches your situation.
-    You will choose your specific document on the next page.
-  </p>
+  <div class="grid">
+    <div class="card">
+      <h2>Tier 1 — Essential</h2>
+      <ul>
+        <li>NDAs</li>
+        <li>Promissory Notes</li>
+        <li>Single-Member LLC</li>
+      </ul>
+      <a class="cta" href="tier1.html">View Tier 1</a>
+    </div>
 
-  <div class="tier-grid">
+    <div class="card">
+      <h2>Tier 2 — Business Foundation</h2>
+      <ul>
+        <li>Partnership Agreements</li>
+        <li>Two-Member LLC</li>
+        <li>Buy-Sell</li>
+      </ul>
+      <a class="cta" href="tier2.html">View Tier 2</a>
+    </div>
 
-    <!-- Tier 1 -->
-    <a href="tier.html?tier=1" class="tier-link">
-      <div class="tier-card">
-        <h2>Tier 1 — Essential</h2>
-        <p>Core documents for straightforward personal and business needs.</p>
-        <ul>
-          <li>Mutual & One-Way NDAs</li>
-          <li>Promissory Notes</li>
-          <li>Single-Member LLC Agreements</li>
-        </ul>
-        <div class="cta">View Tier 1 Documents</div>
-      </div>
-    </a>
+    <div class="card">
+      <h2>Tier 3 — Advanced</h2>
+      <ul>
+        <li>Independent Contractor</li>
+        <li>Consulting</li>
+        <li>Joint Venture</li>
+      </ul>
+      <a class="cta" href="tier3.html">View Tier 3</a>
+    </div>
 
-    <!-- Tier 2 -->
-    <a href="tier.html?tier=2" class="tier-link">
-      <div class="tier-card">
-        <h2>Tier 2 — Business Foundation</h2>
-        <p>Documents for partnerships and multi-party arrangements.</p>
-        <ul>
-          <li>Partnership Agreements</li>
-          <li>Two-Member LLC Agreements</li>
-          <li>Buy-Sell Agreements</li>
-        </ul>
-        <div class="cta">View Tier 2 Documents</div>
-      </div>
-    </a>
-
-    <!-- Tier 3 -->
-    <a href="tier.html?tier=3" class="tier-link">
-      <div class="tier-card">
-        <h2>Tier 3 — Advanced</h2>
-        <p>Advanced documents for ongoing or complex business relationships.</p>
-        <ul>
-          <li>Independent Contractor Agreements</li>
-          <li>Consulting Agreements</li>
-          <li>Joint Venture Agreements</li>
-        </ul>
-        <div class="cta">View Tier 3 Documents</div>
-      </div>
-    </a>
-
-    <!-- Tier 4 -->
-    <a href="tier.html?tier=4" class="tier-link">
-      <div class="tier-card bundle">
-        <h2>Tier 4 — Bundle</h2>
-        <p>Full access to all Tier 1–3 documents for a defined period.</p>
-        <ul>
-          <li>Multiple document generation</li>
-          <li>Best value option</li>
-          <li>Ideal for startups and founders</li>
-        </ul>
-        <div class="cta">View Bundle Details</div>
-      </div>
-    </a>
-
+    <div class="card bundle">
+      <h2>Tier 4 — Bundle</h2>
+      <ul>
+        <li>All Tier 1–3 documents</li>
+        <li>Multiple intakes</li>
+        <li>Best value</li>
+      </ul>
+      <a class="cta" href="tier4.html">View Bundle</a>
+    </div>
   </div>
 </div>
-
 </body>
 </html>
