@@ -1,42 +1,145 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>E-LegalBoom • Intake</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<title>E-LegalBoom | Intake</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<!-- Supabase JS -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <style>
-  body{font-family:system-ui,sans-serif;background:#f7f7f7;margin:0}
-  main{max-width:900px;margin:2rem auto;padding:2rem;background:#fff;border-radius:8px}
-  h1{color:#2c3e50}
-  label{display:block;margin-top:1rem;font-weight:600}
-  input,textarea{width:100%;padding:.6rem;margin-top:.3rem}
-  .btn{margin-top:1.5rem;padding:.8rem 1.6rem;background:#e67e22;color:#fff;border:none;border-radius:6px}
+/* Minimal styling – unchanged look for Step 1 */
+body { font-family: system-ui, sans-serif; background:#f3f4f6; margin:0; }
+main { max-width:900px; margin:2rem auto; background:#fff; padding:2rem; }
+label { font-weight:600; display:block; margin-top:1rem; }
+input, textarea, select { width:100%; padding:.5rem; margin-top:.25rem; }
+button { margin-top:1.5rem; padding:.75rem 1.25rem; }
 </style>
 </head>
+
 <body>
+
 <main>
-  <h1>Client Intake</h1>
-  <p><strong>Tier:</strong> <span id="tier"></span></p>
-  <p><strong>Order ID:</strong> <span id="order"></span></p>
+  <h1>E-LegalBoom Intake</h1>
 
-  <form>
-    <label>Full Name</label>
-    <input required>
+  <div id="summary"></div>
 
-    <label>Email</label>
-    <input type="email" required>
+  <form id="intakeForm">
+    <label>Full Name
+      <input name="client_name" required />
+    </label>
 
-    <label>Describe what you need</label>
-    <textarea rows="5"></textarea>
+    <label>Email
+      <input type="email" name="email" required />
+    </label>
 
-    <button class="btn" type="submit">Submit Intake</button>
+    <label>Details / Context
+      <textarea name="details"></textarea>
+    </label>
+
+    <label>Urgency
+      <select name="urgency">
+        <option value="standard">Standard</option>
+        <option value="rush">Rush</option>
+      </select>
+    </label>
+
+    <label>File Format
+      <select name="file_option">
+        <option value="pdf">PDF</option>
+        <option value="docx">DOCX</option>
+      </select>
+    </label>
+
+    <button type="submit">Submit Intake</button>
   </form>
 </main>
 
 <script>
-  const p=new URLSearchParams(window.location.search);
-  document.getElementById('tier').textContent=p.get('tier');
-  document.getElementById('order').textContent=p.get('order');
+/* ===============================
+   SUPABASE CLIENT (DIRECT)
+================================ */
+const supabaseUrl = 'https://YOUR_PROJECT_ID.supabase.co';
+const supabaseAnonKey = 'YOUR_PUBLIC_ANON_KEY';
+const supabase = supabase.createClient(supabaseUrl, supabaseAnonKey);
+
+/* ===============================
+   LOAD PAYLOAD FROM SUMMARY
+================================ */
+const payload = JSON.parse(sessionStorage.getItem('order_payload')) || {};
+const orderId = payload.order_uuid || crypto.randomUUID();
+const tier = payload.tier;
+const docs = payload.docs || [];
+const packageName = payload.package || '';
+const resolvedDocs = payload.resolved_docs || [];
+
+/* Display summary (logic check only) */
+document.getElementById('summary').innerHTML = `
+  <p><strong>Tier:</strong> ${tier}</p>
+  <p><strong>Selection:</strong>
+    ${packageName ? packageName : docs.join(', ')}
+  </p>
+`;
+
+/* ===============================
+   SUBMIT HANDLER
+================================ */
+document.getElementById('intakeForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+
+  const form = new FormData(e.target);
+  const data = Object.fromEntries(form.entries());
+
+  /* 1️⃣ UPSERT ORDER (ONE ROW) */
+  const { error: orderError } = await supabase
+    .from('pweb_orders')
+    .upsert({
+      order_id: orderId,
+      email: data.email,
+      tier: tier,
+      order_status: 'intake_completed',
+      intake_completed: true
+    });
+
+  if (orderError) {
+    alert('Order creation failed.');
+    console.error(orderError);
+    return;
+  }
+
+  /* 2️⃣ RESOLVE DOCUMENT LIST */
+  let documents = [];
+
+  if (tier === '3') {
+    documents = resolvedDocs; // predefined package
+  } else {
+    documents = docs; // Tier 1, 2, or 4
+  }
+
+  /* 3️⃣ INSERT DOCUMENT REQUESTS */
+  for (const doc of documents) {
+    const { error: docError } = await supabase
+      .from('document_requests')
+      .insert({
+        order_id: orderId,
+        doc_type: doc,
+        urgency: data.urgency,
+        file_option: data.file_option,
+        details: data.details
+      });
+
+    if (docError) {
+      alert('Document request failed.');
+      console.error(docError);
+      return;
+    }
+  }
+
+  /* 4️⃣ CONTINUE */
+  window.location.href = `payment.html?order=${orderId}`;
+});
 </script>
+
 </body>
 </html>
