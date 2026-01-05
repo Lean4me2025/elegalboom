@@ -2,96 +2,156 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Order Summary – E-LegalBoom</title>
+  <title>Order Summary • E-LegalBoom</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <style>
     body {
-      font-family: system-ui, sans-serif;
-      background: #f5f6f7;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #f5f5f5;
+      margin: 0;
+      padding: 0;
     }
+
     .wrap {
       max-width: 900px;
       margin: 3rem auto;
-      padding: 2rem;
+      padding: 0 1rem;
     }
+
     .card {
       background: #fff;
       border-radius: 8px;
       padding: 2rem;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.08);
     }
+
+    h1 {
+      margin-top: 0;
+    }
+
     .row {
       display: flex;
       justify-content: space-between;
-      margin: 1rem 0;
+      padding: 0.6rem 0;
+      border-bottom: 1px solid #eee;
     }
+
+    .row:last-child {
+      border-bottom: none;
+    }
+
+    .total {
+      font-weight: bold;
+      font-size: 1.2rem;
+      margin-top: 1rem;
+    }
+
+    .cta {
+      text-align: right;
+      margin-top: 2rem;
+    }
+
     .btn {
-      background: #e56722;
+      background: #e66722;
       color: #fff;
       border: none;
-      padding: 0.8rem 1.5rem;
+      padding: 0.7rem 1.4rem;
       font-size: 1rem;
       border-radius: 4px;
       cursor: pointer;
+    }
+
+    .btn:hover {
+      background: #cc5b1d;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 3rem 0;
+      color: #777;
+      font-size: 1.1rem;
     }
   </style>
 </head>
 
 <body>
   <div class="wrap">
-    <div class="card">
-      <h1>Order Summary</h1>
-
-      <div id="summary"></div>
-
-      <div class="row">
-        <strong>Total</strong>
-        <strong id="price"></strong>
-      </div>
-
-      <div style="text-align:right; margin-top:2rem;">
-        <button class="btn" id="continueBtn">
-          Continue to Intake
-        </button>
+    <div class="card" id="card">
+      <div class="loading" id="loading">
+        Preparing your order summary…
       </div>
     </div>
   </div>
 
   <script>
-    // 🔒 RECEIVER-ONLY SUMMARY PAGE
+    const STORAGE_KEY = "orderPayload";
+    const MAX_WAIT_MS = 600;     // total wait window
+    const CHECK_INTERVAL = 50;   // poll interval
+    let waited = 0;
 
-    const raw = sessionStorage.getItem("orderPayload");
+    function renderSummary(payload) {
+      const card = document.getElementById("card");
 
-    if (!raw) {
-      alert("Missing order information. Please start again.");
-      window.location.href = "catalog.html";
+      card.innerHTML = `
+        <h1>Order Summary</h1>
+
+        <div class="row">
+          <span>Tier Selected</span>
+          <span>Tier ${payload.tier}</span>
+        </div>
+
+        <div class="row">
+          <span>Document</span>
+          <span>${payload.doc_type}</span>
+        </div>
+
+        <div class="row">
+          <span>Order ID</span>
+          <span>${payload.order_id}</span>
+        </div>
+
+        <div class="row total">
+          <span>Total</span>
+          <span>$${payload.price.toFixed(2)}</span>
+        </div>
+
+        <div class="cta">
+          <button class="btn" id="continue">Continue to Intake</button>
+        </div>
+      `;
+
+      document.getElementById("continue").onclick = () => {
+        window.location.href = "intake.html";
+      };
     }
 
-    const payload = JSON.parse(raw);
+    function waitForPayload() {
+      const raw = sessionStorage.getItem(STORAGE_KEY);
 
-    const summaryEl = document.getElementById("summary");
-    const priceEl = document.getElementById("price");
+      if (raw) {
+        try {
+          const payload = JSON.parse(raw);
+          renderSummary(payload);
+          return;
+        } catch (e) {
+          console.error("Invalid payload JSON", e);
+        }
+      }
 
-    summaryEl.innerHTML = `
-      <div class="row">
-        <span>Tier Selected</span>
-        <span>Tier ${payload.tier}</span>
-      </div>
-      <div class="row">
-        <span>Document</span>
-        <span>${payload.doc_type}</span>
-      </div>
-      <div class="row">
-        <span>Order ID</span>
-        <span>${payload.order_id}</span>
-      </div>
-    `;
+      waited += CHECK_INTERVAL;
 
-    priceEl.textContent = `$${payload.price.toFixed(2)}`;
+      if (waited >= MAX_WAIT_MS) {
+        alert("Missing order information. Please start again.");
+        window.location.href = "catalog.html";
+        return;
+      }
 
-    document.getElementById("continueBtn").onclick = () => {
-      window.location.href = "intake.html";
-    };
+      setTimeout(waitForPayload, CHECK_INTERVAL);
+    }
+
+    // Receiver starts waiting immediately
+    waitForPayload();
   </script>
 </body>
 </html>
