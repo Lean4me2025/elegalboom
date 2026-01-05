@@ -1,145 +1,178 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<title>E-LegalBoom | Intake</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8" />
+  <title>E-LegalBoom Intake</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-<!-- Supabase JS -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <!-- BASIC STYLING -->
+  <style>
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #f6f6f6;
+      margin: 0;
+      padding: 0;
+    }
+    .wrap {
+      max-width: 800px;
+      margin: 2rem auto;
+      background: #fff;
+      border-radius: 8px;
+      padding: 2rem;
+    }
+    h1 {
+      margin-top: 0;
+    }
+    label {
+      display: block;
+      margin-top: 1rem;
+      font-weight: 600;
+    }
+    input, textarea, select {
+      width: 100%;
+      padding: 0.6rem;
+      margin-top: 0.4rem;
+      font-size: 1rem;
+    }
+    button {
+      margin-top: 1.5rem;
+      padding: 0.8rem 1.2rem;
+      font-size: 1rem;
+      background: #e4572e;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .note {
+      margin-top: 1rem;
+      color: #666;
+      font-size: 0.9rem;
+    }
+  </style>
 
-<style>
-/* Minimal styling – unchanged look for Step 1 */
-body { font-family: system-ui, sans-serif; background:#f3f4f6; margin:0; }
-main { max-width:900px; margin:2rem auto; background:#fff; padding:2rem; }
-label { font-weight:600; display:block; margin-top:1rem; }
-input, textarea, select { width:100%; padding:.5rem; margin-top:.25rem; }
-button { margin-top:1.5rem; padding:.75rem 1.25rem; }
-</style>
+  <!-- SUPABASE CLIENT -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 
 <body>
+  <div class="wrap">
+    <h1>E-LegalBoom Intake</h1>
 
-<main>
-  <h1>E-LegalBoom Intake</h1>
+    <form id="intakeForm">
+      <label for="full_name">Full Name</label>
+      <input id="full_name" required />
 
-  <div id="summary"></div>
+      <label for="email">Email</label>
+      <input id="email" type="email" required />
 
-  <form id="intakeForm">
-    <label>Full Name
-      <input name="client_name" required />
-    </label>
+      <label for="details">Details / Context</label>
+      <textarea id="details" rows="4"></textarea>
 
-    <label>Email
-      <input type="email" name="email" required />
-    </label>
-
-    <label>Details / Context
-      <textarea name="details"></textarea>
-    </label>
-
-    <label>Urgency
-      <select name="urgency">
+      <label for="urgency">Urgency</label>
+      <select id="urgency">
         <option value="standard">Standard</option>
-        <option value="rush">Rush</option>
+        <option value="urgent">Urgent</option>
       </select>
-    </label>
 
-    <label>File Format
-      <select name="file_option">
-        <option value="pdf">PDF</option>
-        <option value="docx">DOCX</option>
+      <label for="file_option">File Format</label>
+      <select id="file_option">
+        <option value="PDF">PDF</option>
+        <option value="DOCX">DOCX</option>
       </select>
-    </label>
 
-    <button type="submit">Submit Intake</button>
-  </form>
-</main>
+      <button type="submit">Submit Intake</button>
+    </form>
 
-<script>
-/* ===============================
-   SUPABASE CLIENT (DIRECT)
-================================ */
-const supabaseUrl = 'https://vvjbjfltqsivvxxifnvi.supabase.co';
-const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ2amJqZmx0cXNpdnZ4eGlmbnZpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc5NzYzNTAsImV4cCI6MjA3MzU1MjM1MH0.F4zzcpCHl9v-Rnj0wgKJ5zBf1HteVyXelMLQDDEN28Q';
-const supabase = supabase.createClient(supabaseUrl, supabaseAnonKey);
+    <div class="note">
+      Your document will be prepared after intake review.
+    </div>
+  </div>
 
-/* ===============================
-   LOAD PAYLOAD FROM SUMMARY
-================================ */
-const payload = JSON.parse(sessionStorage.getItem('order_payload')) || {};
-const orderId = payload.order_uuid || crypto.randomUUID();
-const tier = payload.tier;
-const docs = payload.docs || [];
-const packageName = payload.package || '';
-const resolvedDocs = payload.resolved_docs || [];
+  <!-- LOGIC -->
+  <script>
+    /* ===============================
+       1. INIT SUPABASE
+       =============================== */
 
-/* Display summary (logic check only) */
-document.getElementById('summary').innerHTML = `
-  <p><strong>Tier:</strong> ${tier}</p>
-  <p><strong>Selection:</strong>
-    ${packageName ? packageName : docs.join(', ')}
-  </p>
-`;
+    const supabaseUrl = "https://vvjbjfltqsivvxxifnvi.supabase.co";
+    const supabaseAnonKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ2amJqZmx0cXNpdnZ4eGlmbnZpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc5NzYzNTAsImV4cCI6MjA3MzU1MjM1MH0.F4zzcpCHl9v-Rnj0wgKJ5zBf1HteVyXelMLQDDEN28Q";
 
-/* ===============================
-   SUBMIT HANDLER
-================================ */
-document.getElementById('intakeForm').addEventListener('submit', async (e) => {
-  e.preventDefault();
+    const supabase = window.supabase.createClient(
+      supabaseUrl,
+      supabaseAnonKey
+    );
 
-  const form = new FormData(e.target);
-  const data = Object.fromEntries(form.entries());
+    /* ===============================
+       2. LOAD ORDER PAYLOAD
+       =============================== */
 
-  /* 1️⃣ UPSERT ORDER (ONE ROW) */
-  const { error: orderError } = await supabase
-    .from('pweb_orders')
-    .upsert({
-      order_id: orderId,
-      email: data.email,
-      tier: tier,
-      order_status: 'intake_completed',
-      intake_completed: true
-    });
+    const orderPayload = JSON.parse(
+      sessionStorage.getItem("orderPayload")
+    );
 
-  if (orderError) {
-    alert('Order creation failed.');
-    console.error(orderError);
-    return;
-  }
-
-  /* 2️⃣ RESOLVE DOCUMENT LIST */
-  let documents = [];
-
-  if (tier === '3') {
-    documents = resolvedDocs; // predefined package
-  } else {
-    documents = docs; // Tier 1, 2, or 4
-  }
-
-  /* 3️⃣ INSERT DOCUMENT REQUESTS */
-  for (const doc of documents) {
-    const { error: docError } = await supabase
-      .from('document_requests')
-      .insert({
-        order_id: orderId,
-        doc_type: doc,
-        urgency: data.urgency,
-        file_option: data.file_option,
-        details: data.details
-      });
-
-    if (docError) {
-      alert('Document request failed.');
-      console.error(docError);
-      return;
+    if (!orderPayload || !orderPayload.order_id) {
+      alert("Order information missing. Please start again.");
+      window.location.href = "catalog.html";
     }
-  }
 
-  /* 4️⃣ CONTINUE */
-  window.location.href = `payment.html?order=${orderId}`;
-});
-</script>
+    /* ===============================
+       3. HANDLE SUBMIT
+       =============================== */
 
+    document
+      .getElementById("intakeForm")
+      .addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const fullName = document.getElementById("full_name").value.trim();
+        const email = document.getElementById("email").value.trim();
+        const details = document.getElementById("details").value.trim();
+        const urgency = document.getElementById("urgency").value;
+        const fileOption = document.getElementById("file_option").value;
+
+        const nameParts = fullName.split(" ");
+        const firstName = nameParts.shift();
+        const lastName = nameParts.join(" ");
+
+        /* ===============================
+           4. CANONICAL DB RECORD
+           (MATCHES pweb_orders)
+           =============================== */
+
+        const record = {
+          request_uuid: orderPayload.order_id,
+          client_first_name: firstName || null,
+          client_last_name: lastName || null,
+          client_email: email,
+          doc_type: orderPayload.doc_type,
+          governing_state: null,
+          urgency: urgency,
+          details: details,
+          file_option: fileOption,
+          order_status: "intake_completed"
+        };
+
+        /* ===============================
+           5. INSERT INTO SUPABASE
+           =============================== */
+
+        const { error } = await supabase
+          .from("pweb_orders")
+          .insert([record]);
+
+        if (error) {
+          console.error("Supabase insert error:", error);
+          alert("There was an error submitting your intake.");
+          return;
+        }
+
+        /* ===============================
+           6. SUCCESS → NEXT STEP
+           =============================== */
+
+        window.location.href = "payment.html";
+      });
+  </script>
 </body>
 </html>
