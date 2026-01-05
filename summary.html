@@ -2,231 +2,71 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>E-LegalBoom • Order Summary</title>
+  <title>Order Summary • E-LegalBoom</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
-    :root {
-      --primary: #e67e22;
-      --primary-dark: #c76b1c;
-      --accent: #2c3e50;
-      --bg: #f7f7f7;
-      --text: #333;
-      --radius: 8px;
-    }
-
-    body {
-      margin: 0;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
-        Roboto, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-    }
-
-    main {
-      max-width: 760px;
-      margin: 3rem auto;
-      padding: 2rem;
-      background: #fff;
-      border-radius: var(--radius);
-      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-    }
-
-    h1 {
-      margin-top: 0;
-      color: var(--accent);
-    }
-
-    .section {
-      margin: 1.25rem 0;
-    }
-
-    .label {
-      font-weight: 600;
-      color: var(--accent);
-    }
-
-    .value {
-      margin-top: 0.25rem;
-      font-size: 1.05rem;
-    }
-
-    .price {
-      font-size: 1.4rem;
-      font-weight: 600;
-      color: var(--primary-dark);
-    }
-
-    .order-id {
-      font-size: 0.85rem;
-      color: #666;
-      margin-top: 0.25rem;
-    }
-
-    .next-steps ul {
-      padding-left: 1.2rem;
-      margin: 0.5rem 0 0;
-    }
-
-    .next-steps li {
-      margin-bottom: 0.4rem;
-    }
-
-    .cta {
-      text-align: center;
-      margin-top: 2rem;
-    }
-
-    .btn {
-      display: inline-block;
-      padding: 0.85rem 1.75rem;
-      border-radius: var(--radius);
-      border: none;
-      background: var(--primary);
-      color: #fff;
-      font-weight: 600;
-      font-size: 1rem;
-      cursor: pointer;
-      text-decoration: none;
-    }
-
-    .btn:hover {
-      background: var(--primary-dark);
-    }
-
-    .back-link {
-      display: block;
-      margin-top: 1rem;
-      font-size: 0.85rem;
-      text-align: center;
-    }
-
-    .back-link a {
-      color: var(--accent);
-      text-decoration: none;
-    }
-
-    .back-link a:hover {
-      text-decoration: underline;
-    }
+    body { font-family: system-ui, sans-serif; background:#f7f7f7; margin:0; }
+    .wrap { max-width:900px; margin:2rem auto; padding:1rem; }
+    .card { background:#fff; border-radius:8px; padding:1.5rem; box-shadow:0 2px 8px rgba(0,0,0,.06); }
+    h1 { margin-top:0; }
+    ul { margin: .5rem 0 1rem 1.2rem; }
+    .row { display:flex; justify-content:space-between; margin:.5rem 0; }
+    .cta { text-align:right; margin-top:1.5rem; }
+    .btn { background:#e67e22; color:#fff; border:none; padding:.8rem 1.4rem; border-radius:6px; font-weight:600; cursor:pointer; }
   </style>
 </head>
 <body>
+  <div class="wrap">
+    <div class="card">
+      <h1>Order Summary</h1>
 
-<main>
-  <h1>Order Summary</h1>
+      <div id="summary"></div>
 
-  <div class="section">
-    <div class="label">Tier Selected</div>
-    <div class="value" id="tierDisplay"></div>
-    <div class="price" id="priceDisplay"></div>
+      <div class="row">
+        <strong>Total</strong>
+        <strong id="price"></strong>
+      </div>
+
+      <div class="cta">
+        <button class="btn" id="continue">Continue to Intake</button>
+      </div>
+    </div>
   </div>
 
-  <div class="section">
-    <div class="label">Document Selected</div>
-    <div class="value" id="docDisplay"></div>
-  </div>
+  <script>
+    // 1) Read payload
+    const payload = JSON.parse(sessionStorage.getItem('order_payload') || '{}');
 
-  <div class="section">
-    <div class="label">Order Reference</div>
-    <div class="order-id" id="orderDisplay"></div>
-  </div>
-
-  <div class="section next-steps">
-    <div class="label">What happens next</div>
-    <ul>
-      <li>You’ll complete a short intake form</li>
-      <li>We’ll prepare your document based on your answers</li>
-      <li>You’ll review and complete payment</li>
-      <li>Your document will be delivered by email</li>
-    </ul>
-  </div>
-
-  <div class="cta">
-    <button id="continueBtn" class="btn">
-      Continue to Intake
-    </button>
-  </div>
-
-  <div class="back-link">
-    <a href="catalog.html">Need to change your tier?</a>
-  </div>
-</main>
-
-<!-- Supabase JS v2 -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script>
-  /* ==============================
-     CONFIG — replace with real values
-     ============================== */
-  const SUPABASE_URL = "https://vvjbjfltqsivvxxifnvi.supabase.co";
-  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ2amJqZmx0cXNpdnZ4eGlmbnZpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc5NzYzNTAsImV4cCI6MjA3MzU1MjM1MH0.F4zzcpCHl9v-Rnj0wgKJ5zBf1HteVyXelMLQDDEN28Q";
-
-  const supabaseClient = supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_ANON_KEY
-  );
-
-  /* ==============================
-     Read URL params
-     ============================== */
-  const params = new URLSearchParams(window.location.search);
-  const tier = params.get("tier");
-  const doc = params.get("doc");
-
-  /* ==============================
-     Tier mapping (customer-facing)
-     ============================== */
-  const tierMap = {
-    1: { name: "Tier One — Single Document", price: "$39.00" },
-    2: { name: "Tier Two — Two Documents", price: "$69.00" },
-    3: { name: "Tier Three — Three Documents", price: "$99.00" },
-    4: { name: "Tier Four — Bundle", price: "$149.00" }
-  };
-
-  const tierInfo = tierMap[tier];
-
-  /* ==============================
-     Generate Order ID
-     ============================== */
-  const orderId =
-    "ELB-" + Math.random().toString(36).substring(2, 8).toUpperCase();
-
-  /* ==============================
-     Display values
-     ============================== */
-  document.getElementById("tierDisplay").textContent =
-    tierInfo ? tierInfo.name : "Unknown Tier";
-
-  document.getElementById("priceDisplay").textContent =
-    tierInfo ? tierInfo.price : "";
-
-  document.getElementById("docDisplay").textContent =
-    doc || "Document not specified";
-
-  document.getElementById("orderDisplay").textContent = orderId;
-
-  /* ==============================
-     Insert order + continue
-     ============================== */
-  document.getElementById("continueBtn").addEventListener("click", async () => {
-    const { error } = await supabaseClient
-      .from("pweb_orders")
-      .insert({
-        order_id: orderId,
-        tier: Number(tier),
-        status: "intake_pending"
-      });
-
-    if (error) {
-      console.error(error);
-      alert("We couldn’t start your order. Please try again.");
-      return;
+    if (!payload.tier) {
+      alert('Missing order information. Please start again.');
+      location.href = 'catalog.html';
     }
 
-    window.location.href =
-      `intake.html?tier=${tier}&order_id=${orderId}&doc=${encodeURIComponent(doc || "")}`;
-  });
-</script>
+    const summaryEl = document.getElementById('summary');
+    const priceEl = document.getElementById('price');
 
+    // 2) Render
+    let html = `<div class="row"><strong>Tier</strong><span>Tier ${payload.tier}</span></div>`;
+
+    if (payload.tier === '3' && payload.package) {
+      html += `
+        <div class="row"><strong>Package</strong><span>${payload.package}</span></div>
+        <p>Includes three coordinated documents.</p>
+      `;
+    } else if (Array.isArray(payload.docs)) {
+      html += `<strong>Selected Document(s)</strong><ul>`;
+      payload.docs.forEach(d => html += `<li>${d}</li>`);
+      html += `</ul>`;
+    }
+
+    summaryEl.innerHTML = html;
+    priceEl.textContent = `$${payload.price}`;
+
+    // 3) Continue
+    document.getElementById('continue').onclick = () => {
+      sessionStorage.setItem('intake_payload', JSON.stringify(payload));
+      location.href = 'intake.html';
+    };
+  </script>
 </body>
 </html>
