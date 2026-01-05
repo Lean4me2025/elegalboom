@@ -5,23 +5,21 @@
   <title>E-LegalBoom Intake</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-  <!-- BASIC STYLING -->
+  <!-- Supabase client (LOAD ONCE) -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
   <style>
     body {
       font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-      background: #f6f6f6;
-      margin: 0;
-      padding: 0;
-    }
-    .wrap {
-      max-width: 800px;
-      margin: 2rem auto;
-      background: #fff;
-      border-radius: 8px;
+      background: #f6f7f8;
       padding: 2rem;
     }
-    h1 {
-      margin-top: 0;
+    .wrap {
+      max-width: 720px;
+      margin: auto;
+      background: #fff;
+      padding: 2rem;
+      border-radius: 8px;
     }
     label {
       display: block;
@@ -31,13 +29,11 @@
     input, textarea, select {
       width: 100%;
       padding: 0.6rem;
-      margin-top: 0.4rem;
-      font-size: 1rem;
+      margin-top: 0.25rem;
     }
     button {
       margin-top: 1.5rem;
-      padding: 0.8rem 1.2rem;
-      font-size: 1rem;
+      padding: 0.75rem 1.25rem;
       background: #e4572e;
       color: #fff;
       border: none;
@@ -46,13 +42,10 @@
     }
     .note {
       margin-top: 1rem;
-      color: #666;
       font-size: 0.9rem;
+      color: #555;
     }
   </style>
-
-  <!-- SUPABASE CLIENT -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 
 <body>
@@ -67,7 +60,7 @@
       <input id="email" type="email" required />
 
       <label for="details">Details / Context</label>
-      <textarea id="details" rows="4"></textarea>
+      <textarea id="details" rows="5"></textarea>
 
       <label for="urgency">Urgency</label>
       <select id="urgency">
@@ -89,37 +82,33 @@
     </div>
   </div>
 
-  <!-- LOGIC -->
   <script>
-    /* ===============================
-       1. INIT SUPABASE
-       =============================== */
+    /************************************************************
+     * 1. INIT SUPABASE (ONCE — NO DUPLICATES)
+     ************************************************************/
+    const SUPABASE_URL = "https://vvjbjfltqsivvxxifnvi.supabase.co";
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ2amJqZmx0cXNpdnZ4eGlmbnZpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc5NzYzNTAsImV4cCI6MjA3MzU1MjM1MH0.F4zzcpCHl9v-Rnj0wgKJ5zBf1HteVyXelMLQDDEN28Q";
 
-    const supabaseUrl = "https://vvjbjfltqsivvxxifnvi.supabase.co";
-    const supabaseAnonKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ2amJqZmx0cXNpdnZ4eGlmbnZpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc5NzYzNTAsImV4cCI6MjA3MzU1MjM1MH0.F4zzcpCHl9v-Rnj0wgKJ5zBf1HteVyXelMLQDDEN28Q";
-
-    const supabase = window.supabase.createClient(
-      supabaseUrl,
-      supabaseAnonKey
+    const supabaseClient = window.supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_ANON_KEY
     );
 
-    /* ===============================
-       2. LOAD ORDER PAYLOAD
-       =============================== */
-
+    /************************************************************
+     * 2. LOAD ORDER CONTEXT (CANONICAL SOURCE)
+     ************************************************************/
     const orderPayload = JSON.parse(
       sessionStorage.getItem("orderPayload")
     );
 
-    if (!orderPayload || !orderPayload.order_id) {
-      alert("Order information missing. Please start again.");
+    if (!orderPayload || !orderPayload.doc_type) {
+      alert("Missing order context. Please start again.");
       window.location.href = "catalog.html";
     }
 
-    /* ===============================
-       3. HANDLE SUBMIT
-       =============================== */
-
+    /************************************************************
+     * 3. HANDLE SUBMIT
+     ************************************************************/
     document
       .getElementById("intakeForm")
       .addEventListener("submit", async (e) => {
@@ -132,18 +121,16 @@
         const fileOption = document.getElementById("file_option").value;
 
         const nameParts = fullName.split(" ");
-        const firstName = nameParts.shift();
-        const lastName = nameParts.join(" ");
+        const firstName = nameParts.shift() || null;
+        const lastName = nameParts.join(" ") || null;
 
-        /* ===============================
-           4. CANONICAL DB RECORD
-           (MATCHES pweb_orders)
-           =============================== */
-
+        /********************************************************
+         * 4. CANONICAL DB RECORD (MATCHES pweb_orders)
+         ********************************************************/
         const record = {
-          request_uuid: crypto.randomUUID (),
-          client_first_name: firstName || null,
-          client_last_name: lastName || null,
+          request_uuid: crypto.randomUUID(),
+          client_first_name: firstName,
+          client_last_name: lastName,
           client_email: email,
           doc_type: orderPayload.doc_type,
           governing_state: null,
@@ -153,11 +140,10 @@
           order_status: "intake_completed"
         };
 
-        /* ===============================
-           5. INSERT INTO SUPABASE
-           =============================== */
-
-        const { error } = await supabase
+        /********************************************************
+         * 5. INSERT
+         ********************************************************/
+        const { error } = await supabaseClient
           .from("pweb_orders")
           .insert([record]);
 
@@ -167,10 +153,9 @@
           return;
         }
 
-        /* ===============================
-           6. SUCCESS → NEXT STEP
-           =============================== */
-
+        /********************************************************
+         * 6. NEXT STEP
+         ********************************************************/
         window.location.href = "payment.html";
       });
   </script>
