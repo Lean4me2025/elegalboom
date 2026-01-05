@@ -141,7 +141,7 @@
            =============================== */
 
         const record = {
-          request_uuid: orderPayload.order_id,
+          request_uuid: crypto.randomUUID (),
           client_first_name: firstName || null,
           client_last_name: lastName || null,
           client_email: email,
