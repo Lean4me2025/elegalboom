@@ -1,232 +1,144 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>E-LegalBoom | Catalog</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <title>E-LegalBoom | Document Catalog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <style>
     body {
+      font-family: Georgia, serif;
+      background: #f4f4f4;
       margin: 0;
-      font-family: Arial, Helvetica, sans-serif;
-      background: #f6f7f9;
-      color: #1f2933;
+      padding: 0;
     }
 
-    header {
-      background: #ffffff;
-      border-bottom: 1px solid #ddd;
-      padding: 16px 24px;
-      font-size: 20px;
-      font-weight: bold;
-    }
-
-    main {
+    .page {
       max-width: 1100px;
       margin: 40px auto;
-      padding: 0 20px;
+      background: #ffffff;
+      padding: 50px;
     }
 
     h1 {
-      margin-bottom: 8px;
+      margin-top: 0;
+      border-bottom: 1px solid #ccc;
+      padding-bottom: 12px;
     }
 
-    .subtitle {
-      color: #555;
-      margin-bottom: 30px;
+    p.intro {
+      font-size: 17px;
+      color: #444;
+      margin-bottom: 35px;
     }
 
-    /* ---------- CATALOG GRID ---------- */
     .tier-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 20px;
+      gap: 25px;
     }
 
     .tier-card {
-      background: #ffffff;
       border: 1px solid #ddd;
-      border-radius: 10px;
-      padding: 20px;
-      cursor: pointer;
-      transition: box-shadow 0.2s ease;
+      background: #fafafa;
+      padding: 25px;
     }
 
-    .tier-card:hover {
-      box-shadow: 0 6px 18px rgba(0,0,0,0.1);
-    }
-
-    .tier-card h3 {
+    .tier-card h2 {
       margin-top: 0;
+      font-size: 20px;
     }
 
-    /* ---------- TIER VIEWS ---------- */
-    .tier-view {
-      display: none;
-      background: #ffffff;
-      border: 1px solid #ddd;
-      border-radius: 10px;
-      padding: 30px;
+    .tier-card p {
+      color: #555;
+      font-size: 15px;
+      line-height: 1.4;
     }
 
-    .tier-view h2 {
-      margin-top: 0;
-    }
-
-    ul {
+    .tier-card ul {
+      margin: 15px 0;
       padding-left: 18px;
-    }
-
-    .actions {
-      margin-top: 30px;
-      display: flex;
-      gap: 16px;
-    }
-
-    .btn {
-      padding: 12px 18px;
-      border-radius: 30px;
-      border: none;
-      cursor: pointer;
       font-size: 14px;
+      color: #444;
     }
 
-    .btn-back {
-      background: #eaeaea;
-    }
-
-    .btn-forward {
-      background: #0a7c86;
+    .tier-card a {
+      display: inline-block;
+      margin-top: 18px;
+      padding: 12px 20px;
+      background: #0a4cff;
       color: #ffffff;
       text-decoration: none;
-      display: inline-block;
+      font-size: 15px;
+    }
+
+    .bundle {
+      border-color: #c9a300;
+      background: #fffbe6;
     }
   </style>
 </head>
 
 <body>
 
-<header>
-  E-LegalBoom
-</header>
+<div class="page">
+  <h1>Find the Legal Document You Need</h1>
 
-<main>
+  <p class="intro">
+    Select the service tier that best matches your situation.
+    You will choose your specific document on the next page.
+  </p>
 
-  <!-- ===== CATALOG ===== -->
-  <section id="catalog">
-    <h1>Document Catalog</h1>
-    <div class="subtitle">
-      Choose a tier to view available documents.
+  <div class="tier-grid">
+
+    <div class="tier-card">
+      <h2>Tier 1 — Essential</h2>
+      <p>Core documents for straightforward personal and business needs.</p>
+      <ul>
+        <li>Mutual & One-Way NDAs</li>
+        <li>Promissory Notes</li>
+        <li>Single-Member LLC Agreements</li>
+      </ul>
+      <a href="tier.html?tier=1">View Tier 1 Documents</a>
     </div>
 
-    <div class="tier-grid">
-      <div class="tier-card" onclick="showTier('tier1')">
-        <h3>Tier 1</h3>
-        <p>Essential starter documents</p>
-      </div>
-
-      <div class="tier-card" onclick="showTier('tier2')">
-        <h3>Tier 2</h3>
-        <p>Business foundation agreements</p>
-      </div>
-
-      <div class="tier-card" onclick="showTier('tier3')">
-        <h3>Tier 3</h3>
-        <p>Advanced & premium agreements</p>
-      </div>
-
-      <div class="tier-card" onclick="showTier('bundle')">
-        <h3>Bundle</h3>
-        <p>All tiers, one package</p>
-      </div>
+    <div class="tier-card">
+      <h2>Tier 2 — Business Foundation</h2>
+      <p>Documents for partnerships and multi-party arrangements.</p>
+      <ul>
+        <li>Partnership Agreements</li>
+        <li>Two-Member LLC Agreements</li>
+        <li>Buy-Sell Agreements</li>
+      </ul>
+      <a href="tier.html?tier=2">View Tier 2 Documents</a>
     </div>
-  </section>
 
-  <!-- ===== TIER 1 ===== -->
-  <section id="tier1" class="tier-view">
-    <h2>Tier 1 — Essential Documents</h2>
-    <ul>
-      <li>Mutual NDA</li>
-      <li>Promissory Note</li>
-      <li>Single-Member LLC Agreement</li>
-    </ul>
-
-    <div class="actions">
-      <button class="btn btn-back" onclick="backToCatalog()">← Back to Catalog</button>
-      <a class="btn btn-forward"
-         href="thankyou.html?tier=1&doc=Mutual%20NDA">
-         Continue
-      </a>
+    <div class="tier-card">
+      <h2>Tier 3 — Advanced</h2>
+      <p>Advanced documents for ongoing or complex business relationships.</p>
+      <ul>
+        <li>Independent Contractor Agreements</li>
+        <li>Consulting Agreements</li>
+        <li>Joint Venture Agreements</li>
+      </ul>
+      <a href="tier.html?tier=3">View Tier 3 Documents</a>
     </div>
-  </section>
 
-  <!-- ===== TIER 2 ===== -->
-  <section id="tier2" class="tier-view">
-    <h2>Tier 2 — Business Foundations</h2>
-    <ul>
-      <li>Partnership Agreement</li>
-      <li>Multi-Member LLC Agreement</li>
-      <li>Buy-Sell Agreement</li>
-    </ul>
-
-    <div class="actions">
-      <button class="btn btn-back" onclick="backToCatalog()">← Back to Catalog</button>
-      <a class="btn btn-forward"
-         href="thankyou.html?tier=2&doc=Partnership%20Agreement">
-         Continue
-      </a>
+    <div class="tier-card bundle">
+      <h2>Tier 4 — Bundle</h2>
+      <p>
+        Full access to all Tier 1–3 documents for a defined period.
+      </p>
+      <ul>
+        <li>Multiple document generation</li>
+        <li>Best value option</li>
+        <li>Ideal for startups and founders</li>
+      </ul>
+      <a href="tier.html?tier=4">View Bundle Details</a>
     </div>
-  </section>
 
-  <!-- ===== TIER 3 ===== -->
-  <section id="tier3" class="tier-view">
-    <h2>Tier 3 — Premium Agreements</h2>
-    <ul>
-      <li>Consulting Agreement</li>
-      <li>Independent Contractor Agreement</li>
-      <li>Joint Venture Agreement</li>
-    </ul>
-
-    <div class="actions">
-      <button class="btn btn-back" onclick="backToCatalog()">← Back to Catalog</button>
-      <a class="btn btn-forward"
-         href="thankyou.html?tier=3&doc=Consulting%20Agreement">
-         Continue
-      </a>
-    </div>
-  </section>
-
-  <!-- ===== BUNDLE ===== -->
-  <section id="bundle" class="tier-view">
-    <h2>Entrepreneur Bundle</h2>
-    <ul>
-      <li>Access to Tier 1, 2, and 3 documents</li>
-      <li>Multiple documents in a single purchase window</li>
-    </ul>
-
-    <div class="actions">
-      <button class="btn btn-back" onclick="backToCatalog()">← Back to Catalog</button>
-      <a class="btn btn-forward"
-         href="thankyou.html?tier=bundle">
-         Continue
-      </a>
-    </div>
-  </section>
-
-</main>
-
-<script>
-  function showTier(id) {
-    document.getElementById("catalog").style.display = "none";
-    document.querySelectorAll(".tier-view").forEach(v => v.style.display = "none");
-    document.getElementById(id).style.display = "block";
-  }
-
-  function backToCatalog() {
-    document.querySelectorAll(".tier-view").forEach(v => v.style.display = "none");
-    document.getElementById("catalog").style.display = "block";
-  }
-</script>
+  </div>
+</div>
 
 </body>
 </html>
