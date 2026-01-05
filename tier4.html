@@ -4,44 +4,80 @@
   <meta charset="UTF-8" />
   <title>E-LegalBoom • Tier Four – Bundle</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    :root{--primary:#e67e22;--primary-dark:#c76b1c;--accent:#2c3e50;--bg:#f7f7f7;--text:#333;--radius:8px}
+    *{box-sizing:border-box}
+    body{margin:0;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--text)}
+    header{background:var(--accent);color:#fff;padding:1rem 0}
+    header .container{max-width:960px;margin:0 auto;padding:0 1rem;display:flex;justify-content:space-between;align-items:center}
+    header h1{margin:0;font-size:1.3rem}
+    header span{font-size:.9rem;opacity:.9}
+    main{max-width:960px;margin:2rem auto 3rem;padding:0 1rem}
+    h2,h3{color:var(--accent);margin-top:0}
+    .card{background:#fff;border-radius:var(--radius);padding:1.5rem 1.5rem 2rem;box-shadow:0 2px 8px rgba(0,0,0,.06);margin-bottom:1.5rem}
+    .badge{display:inline-block;background:var(--primary);color:#fff;border-radius:999px;padding:.2rem .7rem;font-size:.8rem;margin-bottom:.75rem}
+    .price{font-size:1.4rem;font-weight:600;margin:.25rem 0 .75rem;color:var(--primary-dark)}
+    p{line-height:1.6;margin:.4rem 0 .8rem}
+    ul{padding-left:1.2rem;margin:.3rem 0 1rem}
+    li{margin-bottom:.3rem}
+    .doc-preview{background:#f7f0ff;border-radius:var(--radius);border-left:4px solid #8e44ad;padding:1rem 1.2rem;margin:.75rem 0 1.25rem;font-size:.95rem}
+    .doc-preview a{color:#8e44ad;font-weight:600;text-decoration:none}
+    .cta{text-align:center;margin-top:1.5rem}
+    .btn{display:inline-block;padding:.8rem 1.6rem;border-radius:var(--radius);background:var(--primary);color:#fff;font-weight:600;text-decoration:none}
+    .note{font-size:.85rem;color:#666;margin-top:.75rem}
+    @media (max-width:600px){header .container{flex-direction:column;align-items:flex-start;gap:.3rem}}
+  </style>
 </head>
 <body>
-  <header>
-    <div class="container">
-      <h1>E-LegalBoom</h1>
-      <span>Tier Four • Bundle</span>
-    </div>
-  </header>
+<header>
+  <div class="container">
+    <h1>E-LegalBoom</h1>
+    <span>Tier Four • Bundle</span>
+  </div>
+</header>
 
-  <main>
-    <section class="card">
-      <div class="badge">Tier Four</div>
-      <h2>Full Document Bundle Access</h2>
-      <p class="price">$149.00 — Bundle</p>
+<main>
+<section class="card">
+  <div class="badge">Tier Four</div>
+  <h2>Complete Legal Document Bundle</h2>
+  <p class="price">$149.00 — Bundle Access</p>
 
-      <p>
-        Tier Four provides full access to all Tier One, Two, and Three document
-        types. This option is best for founders, startups, and ongoing projects
-        where multiple documents are needed over time.
-      </p>
+  <p>
+    Tier Four provides ongoing access to all Tier One, Two, and Three
+    document types for complex or continuing needs.
+  </p>
 
-      <h3>What You Get</h3>
-      <ul>
-        <li>Access to all Tier 1–3 document types</li>
-        <li>Multiple document requests</li>
-        <li>Best overall value</li>
-        <li>Consistent structure across documents</li>
-      </ul>
+  <h3>What You Get</h3>
+  <ul>
+    <li>Access to all Tier 1–3 document types</li>
+    <li>Multiple document requests</li>
+    <li>Best overall value</li>
+    <li>Consistent structure across documents</li>
+  </ul>
 
-      <div class="cta">
-        <a href="summary.html?tier=4" class="btn">
-          Start My Bundle Request
-        </a>
-        <div class="note">
-          You will not be charged on this page. Information first, payment later.
-        </div>
-      </div>
-    </section>
-  </main>
+  <h3>Preview an Example</h3>
+  <div class="doc-preview">
+    <p>
+      <strong>SAMPLE BUNDLE PACKAGE</strong><br />
+      A coordinated set of agreements, policies, and notices used together
+      across multiple situations.
+    </p>
+    <a href="#">View a sample Bundle package (PDF)</a>
+  </div>
+
+  <h3>How It Works</h3>
+  <ul>
+    <li>Step 1 — Start your Bundle request below.</li>
+    <li>Step 2 — Complete the Personal &amp; Business Intake form.</li>
+    <li>Step 3 — Review your summary.</li>
+    <li>Step 4 — Complete secure payment and receive documents by email.</li>
+  </ul>
+
+  <div class="cta">
+    <a href="summary.html?tier=4" class="btn">Start My Bundle Request</a>
+    <div class="note">You will not be charged on this page.</div>
+  </div>
+</section>
+</main>
 </body>
 </html>
