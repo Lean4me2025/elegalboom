@@ -4,23 +4,84 @@
   <meta charset="UTF-8" />
   <title>Order Summary • E-LegalBoom</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
   <style>
-    body { font-family: system-ui, sans-serif; background:#f7f7f7; margin:0; }
-    .wrap { max-width:900px; margin:2rem auto; padding:1rem; }
-    .card { background:#fff; border-radius:8px; padding:1.5rem; box-shadow:0 2px 8px rgba(0,0,0,.06); }
-    h1 { margin-top:0; }
-    ul { margin: .5rem 0 1rem 1.2rem; }
-    .row { display:flex; justify-content:space-between; margin:.5rem 0; }
-    .cta { text-align:right; margin-top:1.5rem; }
-    .btn { background:#e67e22; color:#fff; border:none; padding:.8rem 1.4rem; border-radius:6px; font-weight:600; cursor:pointer; }
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #f5f6f8;
+      margin: 0;
+      padding: 0;
+    }
+
+    .wrap {
+      max-width: 900px;
+      margin: 3rem auto;
+      padding: 0 1rem;
+    }
+
+    .card {
+      background: #ffffff;
+      border-radius: 8px;
+      padding: 2rem;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    }
+
+    h1 {
+      margin-top: 0;
+      margin-bottom: 1.5rem;
+    }
+
+    .summary-line {
+      margin-bottom: 0.75rem;
+      font-size: 1.05rem;
+    }
+
+    .summary-line strong {
+      display: inline-block;
+      min-width: 160px;
+    }
+
+    .divider {
+      height: 1px;
+      background: #e5e7eb;
+      margin: 1.5rem 0;
+    }
+
+    .row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 1.15rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .cta {
+      text-align: right;
+    }
+
+    .btn {
+      background: #e86722;
+      color: #ffffff;
+      border: none;
+      border-radius: 6px;
+      padding: 0.9rem 1.5rem;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+
+    .btn:hover {
+      background: #d75e1f;
+    }
   </style>
 </head>
+
 <body>
   <div class="wrap">
     <div class="card">
       <h1>Order Summary</h1>
 
       <div id="summary"></div>
+
+      <div class="divider"></div>
 
       <div class="row">
         <strong>Total</strong>
@@ -34,39 +95,58 @@
   </div>
 
   <script>
-    // 1) Read payload
-    const payload = JSON.parse(sessionStorage.getItem('order_payload') || '{}');
+    // Delay execution slightly to avoid race conditions with sessionStorage
+    document.addEventListener("DOMContentLoaded", () => {
+      setTimeout(initSummary, 150);
+    });
 
-    if (!payload.tier) {
-      alert('Missing order information. Please start again.');
-      location.href = 'catalog.html';
-    }
+    function initSummary() {
+      const raw = sessionStorage.getItem("order");
 
-    const summaryEl = document.getElementById('summary');
-    const priceEl = document.getElementById('price');
+      if (!raw) {
+        alert("Missing order information. Please start again.");
+        window.location.href = "catalog.html";
+        return;
+      }
 
-    // 2) Render
-    let html = `<div class="row"><strong>Tier</strong><span>Tier ${payload.tier}</span></div>`;
+      let payload;
+      try {
+        payload = JSON.parse(raw);
+      } catch (err) {
+        alert("Order data error. Please start again.");
+        window.location.href = "catalog.html";
+        return;
+      }
 
-    if (payload.tier === '3' && payload.package) {
-      html += `
-        <div class="row"><strong>Package</strong><span>${payload.package}</span></div>
-        <p>Includes three coordinated documents.</p>
+      if (!payload.tier || !payload.doc) {
+        alert("Missing order information. Please start again.");
+        window.location.href = "catalog.html";
+        return;
+      }
+
+      // Render summary
+      const summaryEl = document.getElementById("summary");
+      summaryEl.innerHTML = `
+        <div class="summary-line">
+          <strong>Tier Selected:</strong> ${payload.tier}
+        </div>
+        <div class="summary-line">
+          <strong>Document Selected:</strong> ${payload.doc}
+        </div>
+        <div class="summary-line">
+          <strong>Order Reference:</strong> ${payload.orderId || "Pending"}
+        </div>
       `;
-    } else if (Array.isArray(payload.docs)) {
-      html += `<strong>Selected Document(s)</strong><ul>`;
-      payload.docs.forEach(d => html += `<li>${d}</li>`);
-      html += `</ul>`;
+
+      // Render price
+      document.getElementById("price").textContent =
+        payload.price ? "$" + payload.price : "";
+
+      // Continue to intake
+      document.getElementById("continue").onclick = () => {
+        window.location.href = "intake.html";
+      };
     }
-
-    summaryEl.innerHTML = html;
-    priceEl.textContent = `$${payload.price}`;
-
-    // 3) Continue
-    document.getElementById('continue').onclick = () => {
-      sessionStorage.setItem('intake_payload', JSON.stringify(payload));
-      location.href = 'intake.html';
-    };
   </script>
 </body>
 </html>
