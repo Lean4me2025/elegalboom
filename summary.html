@@ -109,10 +109,6 @@
     const orderPayload = JSON.parse(
       localStorage.getItem("orderPayload")
     );
-
-    if (!orderPayload || !orderPayload.order_id) {
-      alert("Missing order information. Please start again.");
-      window.location.href = "catalog.html";
     }
 
     // -----------------------------
