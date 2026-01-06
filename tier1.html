@@ -3,61 +3,117 @@
 <head>
   <meta charset="UTF-8" />
   <title>Tier 1 – E-LegalBoom</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <link rel="stylesheet" href="style.css" />
+
   <style>
-    body {
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
-      background: #f4f6f8;
-      padding: 2rem;
-    }
-    .card {
-      background: #fff;
-      max-width: 600px;
-      margin: auto;
-      padding: 2rem;
+    .tier-container {
+      max-width: 900px;
+      margin: 60px auto;
+      background: #ffffff;
+      padding: 40px;
       border-radius: 8px;
-      box-shadow: 0 10px 30px rgba(0,0,0,.08);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.08);
     }
+
+    h1 {
+      margin-bottom: 10px;
+    }
+
     .price {
-      font-size: 1.5rem;
-      font-weight: 700;
-      margin: 1rem 0;
+      font-size: 28px;
+      font-weight: bold;
+      color: #e26a00;
+      margin-bottom: 25px;
     }
-    button {
-      background: #e86c1a;
-      color: white;
+
+    .doc-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .doc-list li {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 0;
+      border-bottom: 1px solid #eee;
+    }
+
+    .doc-name {
+      font-weight: 500;
+    }
+
+    .select-btn {
+      background: #e26a00;
+      color: #fff;
       border: none;
-      padding: 0.75rem 1.5rem;
-      font-size: 1rem;
-      border-radius: 6px;
+      padding: 10px 16px;
+      border-radius: 4px;
       cursor: pointer;
+      font-size: 14px;
+    }
+
+    .select-btn:hover {
+      background: #c85f00;
     }
   </style>
 </head>
 
 <body>
-  <div class="card">
-    <h1>Tier 1</h1>
-    <h3>Single Document Package</h3>
-    <div class="price">$59.00</div>
 
-    <p>Includes one professionally prepared legal document.</p>
+<div class="tier-container">
+  <h1>Tier 1 – Starter Documents</h1>
+  <div class="price">$29 per document</div>
 
-    <button onclick="selectDocument()">Select This Document</button>
-  </div>
+  <ul class="doc-list">
 
-  <script>
-    function selectDocument() {
-      const payload = {
-        tier: 1,
-        doc_type: "Single Document",
-        price: 59,
-        order_id: crypto.randomUUID(),
-        created_at: Date.now()
-      };
+    <li>
+      <span class="doc-name">LLC Operating Agreement</span>
+      <button class="select-btn"
+        onclick="goToSummary('LLC Operating Agreement')">
+        Select
+      </button>
+    </li>
 
-      sessionStorage.setItem("order_payload", JSON.stringify(payload));
-      window.location.href = "summary.html";
-    }
-  </script>
+    <li>
+      <span class="doc-name">Independent Contractor Agreement</span>
+      <button class="select-btn"
+        onclick="goToSummary('Independent Contractor Agreement')">
+        Select
+      </button>
+    </li>
+
+    <li>
+      <span class="doc-name">Non-Disclosure Agreement (NDA)</span>
+      <button class="select-btn"
+        onclick="goToSummary('Non-Disclosure Agreement')">
+        Select
+      </button>
+    </li>
+
+    <li>
+      <span class="doc-name">Basic Services Agreement</span>
+      <button class="select-btn"
+        onclick="goToSummary('Basic Services Agreement')">
+        Select
+      </button>
+    </li>
+
+  </ul>
+</div>
+
+<script>
+  function goToSummary(documentName) {
+    const tier = 1; // ✅ NUMERIC — REQUIRED
+    const doc = encodeURIComponent(documentName);
+
+    window.location.href =
+      `summary.html?tier=${tier}&doc=${doc}`;
+  }
+</script>
+
 </body>
 </html>
