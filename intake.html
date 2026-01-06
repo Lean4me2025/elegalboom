@@ -70,8 +70,8 @@
     }
   </style>
 </head>
-<body>
 
+<body>
   <div class="container">
     <h1>Document Intake</h1>
 
@@ -80,7 +80,6 @@
     </div>
 
     <form id="intakeForm">
-
       <label>
         Full Legal Name
         <input type="text" id="full_name" required />
@@ -109,50 +108,62 @@
     </form>
   </div>
 
-<script>
-/*
-  =========================================================
-  CLEAN INTAKE LOGIC — NO LEGACY, NO GUARDS
-  =========================================================
-*/
+  <script>
+    /*
+    =========================================================
+    INTAKE JAVASCRIPT — CLEAN, NON-BLOCKING
+    =========================================================
+    RULES:
+    - Page always loads
+    - No guards on page load
+    - No alerts about missing context
+    - Reads URL parameters if present
+    =========================================================
+    */
 
-/* 1. Read context ONLY from URL (if present) */
-const params = new URLSearchParams(window.location.search);
-const tier = params.get("tier") || "";
-const doc  = params.get("doc")  || "";
-const price = params.get("price") || "";
+    (function () {
+      // 1. Read URL parameters (optional)
+      const params = new URLSearchParams(window.location.search);
+      const tier  = params.get("tier")  || "";
+      const doc   = params.get("doc")   || "";
+      const price = params.get("price") || "";
 
-/* 2. Display context to customer (informational only) */
-const summary = document.getElementById("orderSummary");
-summary.textContent =
-  `Selected: ${doc || "Document"} ${tier ? "(Tier " + tier + ")" : ""} ${price ? "– $" + price : ""}`;
+      // 2. Display informational summary only
+      const summary = document.getElementById("orderSummary");
+      let summaryText = "You are starting a document request.";
+      if (doc)   summaryText += " Document: " + decodeURIComponent(doc) + ".";
+      if (tier)  summaryText += " Tier: " + tier + ".";
+      if (price) summaryText += " Price: $" + price + ".";
+      summary.textContent = summaryText;
 
-/* 3. Handle form submission */
-document.getElementById("intakeForm").addEventListener("submit", function (e) {
-  e.preventDefault();
+      // 3. Handle form submission
+      const form = document.getElementById("intakeForm");
+      form.addEventListener("submit", function (e) {
+        e.preventDefault();
 
-  const payload = {
-    request_id: crypto.randomUUID(),
-    tier: tier,
-    doc: doc,
-    price: price,
-    full_name: document.getElementById("full_name").value.trim(),
-    email: document.getElementById("email").value.trim(),
-    details: document.getElementById("details").value.trim(),
-    file_type: document.getElementById("file_type").value
-  };
+        const payload = {
+          request_id: crypto.randomUUID(),
+          tier: tier,
+          doc: doc,
+          price: price,
+          full_name: document.getElementById("full_name").value.trim(),
+          email: document.getElementById("email").value.trim(),
+          details: document.getElementById("details").value.trim(),
+          file_type: document.getElementById("file_type").value,
+          created_at: new Date().toISOString()
+        };
 
-  /* Persist ONLY for payment handoff */
-  sessionStorage.setItem("intakePayload", JSON.stringify(payload));
+        // Persist ONLY to hand off to payment
+        sessionStorage.setItem("intakePayload", JSON.stringify(payload));
 
-  /* Go to payment */
-  window.location.href =
-    "payment.html" +
-    "?tier=" + encodeURIComponent(tier) +
-    "&doc=" + encodeURIComponent(doc) +
-    "&price=" + encodeURIComponent(price);
-});
-</script>
-
+        // Go to payment — no conditions
+        window.location.href =
+          "payment.html" +
+          "?tier="  + encodeURIComponent(tier) +
+          "&doc="   + encodeURIComponent(doc) +
+          "&price=" + encodeURIComponent(price);
+      });
+    })();
+  </script>
 </body>
 </html>
