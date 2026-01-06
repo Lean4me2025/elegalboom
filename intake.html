@@ -1,80 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>E-LegalBoom – Intake</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <h1>Document Intake</h1>
+
+  <p id="orderSummary" style="font-weight:600;"></p>
+
+  <form id="intakeForm">
+    <label>
+      Full Name
+      <input type="text" id="full_name" required />
+    </label>
+
+    <label>
+      Email
+      <input type="email" id="email" required />
+    </label>
+
+    <label>
+      Details / Notes
+      <textarea id="details"></textarea>
+    </label>
+
+    <label>
+      Urgency
+      <select id="urgency">
+        <option value="standard">Standard</option>
+        <option value="rush">Rush</option>
+      </select>
+    </label>
+
+    <label>
+      File Option
+      <select id="file_option">
+        <option value="pdf">PDF</option>
+        <option value="docx">Word</option>
+      </select>
+    </label>
+
+    <button type="submit">Continue to Payment</button>
+  </form>
+
 <script>
-/************************************************************
- * 1. LOAD ORDER CONTEXT (FROM SUMMARY)
- ************************************************************/
-const orderPayloadRaw = sessionStorage.getItem("orderPayload");
+/* ============================================================
+   1. READ CONTEXT FROM URL (TIERS ARE SOURCE OF TRUTH)
+   ============================================================ */
 
-if (!orderPayloadRaw) {
-  alert("Missing order context. Please start again.");
-  window.location.href = "catalog.html";
-}
+const params = new URLSearchParams(window.location.search);
+const tier = params.get("tier");
+const doc = params.get("doc");
 
-const orderPayload = JSON.parse(orderPayloadRaw);
+const PRICES = {
+  "1": 39,
+  "2": 59,
+  "3": 399,
+  "4": 0
+};
 
-if (!orderPayload || !orderPayload.doc_type) {
-  alert("Missing order context. Please start again.");
-  window.location.href = "catalog.html";
-}
+const amount = PRICES[tier] ?? 0;
 
-/************************************************************
- * 2. HANDLE INTAKE SUBMIT
- ************************************************************/
-document
-  .getElementById("intakeForm")
-  .addEventListener("submit", async (e) => {
-    e.preventDefault();
+document.getElementById("orderSummary").textContent =
+  `You selected: ${doc || "Document"} (Tier ${tier || "?"}) – $${amount}`;
 
-    /* ----------------------------------
-       Collect form values
-    ---------------------------------- */
-    const fullName = document.getElementById("full_name").value.trim();
-    const email = document.getElementById("email").value.trim();
-    const details = document.getElementById("details").value.trim();
-    const urgency = document.getElementById("urgency").value;
-    const fileOption = document.getElementById("file_option").value;
+/* ============================================================
+   2. HANDLE INTAKE SUBMIT (NO GUARDS, NO REDIRECT BLOCKERS)
+   ============================================================ */
 
-    if (!fullName || !email) {
-      alert("Name and email are required.");
-      return;
-    }
+document.getElementById("intakeForm").addEventListener("submit", (e) => {
+  e.preventDefault();
 
-    /* ----------------------------------
-       Split name safely
-    ---------------------------------- */
-    const nameParts = fullName.split(" ");
-    const firstName = nameParts.shift() || null;
-    const lastName = nameParts.join(" ") || null;
+  const fullName = document.getElementById("full_name").value.trim();
+  const email = document.getElementById("email").value.trim();
+  const details = document.getElementById("details").value.trim();
+  const urgency = document.getElementById("urgency").value;
+  const fileOption = document.getElementById("file_option").value;
 
-    /********************************************************
-     * 3. CANONICAL INTAKE RECORD
-     *    (MATCHES pub_orders STRUCTURE)
-     ********************************************************/
-    const intakeRecord = {
-      request_uuid: crypto.randomUUID(),
-      client_first_name: firstName,
-      client_last_name: lastName,
-      client_email: email,
-      doc_type: orderPayload.doc_type,
-      governing_state: null,
-      urgency: urgency,
-      details: details,
-      file_option: fileOption,
-      tier: orderPayload.tier,
-      amount: orderPayload.amount,
-      order_status: "intake_completed"
-    };
+  if (!fullName || !email) {
+    alert("Name and email are required.");
+    return;
+  }
 
-    /* ----------------------------------
-       Persist for next step
-    ---------------------------------- */
-    sessionStorage.setItem(
-      "intakeRecord",
-      JSON.stringify(intakeRecord)
-    );
+  const nameParts = fullName.split(" ");
+  const firstName = nameParts.shift() || "";
+  const lastName = nameParts.join(" ");
 
-    /* ----------------------------------
-       Advance flow
-    ---------------------------------- */
-    window.location.href = "payment.html";
-  });
+  const intakeRecord = {
+    request_uuid: crypto.randomUUID(),
+    client_first_name: firstName,
+    client_last_name: lastName,
+    client_email: email,
+    doc_type: doc,
+    tier: tier,
+    amount: amount,
+    urgency: urgency,
+    details: details,
+    file_option: fileOption,
+    order_status: "intake_complete"
+  };
+
+  sessionStorage.setItem("intakeRecord", JSON.stringify(intakeRecord));
+
+  window.location.href = "payment.html";
+});
 </script>
+
+</body>
+</html>
