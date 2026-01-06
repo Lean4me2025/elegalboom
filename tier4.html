@@ -1,56 +1,74 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Tier 4 – E-LegalBoom</title>
+  <meta charset="utf-8" />
+  <title>Tier 4 – Bundle (Choose Any 3)</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
-    body { margin:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; background:#f6f7f8; }
-    header { background:#0a2540; color:#fff; padding:1rem; }
-    header .container { max-width:900px; margin:auto; }
-    main { max-width:900px; margin:2rem auto; padding:0 1rem; }
-    .card { background:#fff; border-radius:8px; padding:2rem; box-shadow:0 2px 10px rgba(0,0,0,.06); }
-    .badge { display:inline-block; background:#6f42c1; color:#fff; padding:.35rem .75rem; border-radius:999px; font-size:.85rem; }
-    .price { font-size:1.6rem; font-weight:700; margin:1rem 0; }
-    .btn { display:inline-block; background:#6f42c1; color:#fff; padding:.75rem 1.5rem; border-radius:6px; text-decoration:none; font-weight:600; }
-    .btn:hover { background:#5a35a0; }
-    ul { margin-top:1rem; }
+    body{font-family:system-ui;background:#f7f9fc;margin:0}
+    .wrap{max-width:960px;margin:40px auto;padding:24px;background:#fff;border-radius:10px}
+    fieldset{border:1px solid #e5e7eb;border-radius:8px;padding:16px;margin-bottom:16px}
+    legend{font-weight:700}
+    .row{display:flex;align-items:center;gap:8px;margin:6px 0}
+    .bar{display:flex;justify-content:space-between;align-items:center;margin-top:12px}
+    button{padding:10px 14px;border-radius:6px;border:1px solid #111827;background:#111827;color:#fff;cursor:pointer}
+    .price{font-size:20px;font-weight:700}
   </style>
 </head>
-
 <body>
-<header>
-  <div class="container">
-    <strong>E-LegalBoom</strong><br />
-    <span>Tier Four • Complete Legal Bundle</span>
+  <div class="wrap">
+    <h1>Tier 4 — Bundle</h1>
+    <p class="price">Price: $699 — Choose any three documents</p>
+
+    <form id="bundle">
+      <fieldset>
+        <legend>Tier 1 Documents</legend>
+        <label class="row"><input type="checkbox" value="NDA"> NDA</label>
+        <label class="row"><input type="checkbox" value="Independent Contractor Agreement"> Independent Contractor Agreement</label>
+        <label class="row"><input type="checkbox" value="Services Agreement"> Services Agreement</label>
+        <label class="row"><input type="checkbox" value="Single-Member LLC Operating Agreement"> Single-Member LLC Operating Agreement</label>
+      </fieldset>
+
+      <fieldset>
+        <legend>Tier 2 Documents</legend>
+        <label class="row"><input type="checkbox" value="Partnership Agreement"> Partnership Agreement</label>
+        <label class="row"><input type="checkbox" value="Two-Member LLC Operating Agreement"> Two-Member LLC Operating Agreement</label>
+        <label class="row"><input type="checkbox" value="Promissory Note"> Promissory Note</label>
+      </fieldset>
+
+      <fieldset>
+        <legend>Tier 3 Documents</legend>
+        <label class="row"><input type="checkbox" value="Launch Kit"> Launch Kit</label>
+      </fieldset>
+
+      <div class="bar">
+        <div id="count">0 of 3 selected</div>
+        <button type="submit">Continue to Intake</button>
+      </div>
+    </form>
   </div>
-</header>
 
-<main>
-  <section class="card">
-    <div class="badge">Tier 4</div>
-    <h2>Complete Business Legal Bundle</h2>
-    <div class="price">$699.00</div>
+  <script>
+    const form = document.getElementById('bundle');
+    const boxes = Array.from(form.querySelectorAll('input[type="checkbox"]'));
+    const count = document.getElementById('count');
 
-    <p>
-      Tier Four is the full legal foundation for a serious business.
-      Best for founders who want everything aligned from day one.
-    </p>
+    function update(){
+      const sel = boxes.filter(b=>b.checked);
+      if (sel.length > 3) this.checked = false;
+      count.textContent = sel.length + ' of 3 selected';
+    }
+    boxes.forEach(b=>b.addEventListener('change', update));
 
-    <ul>
-      <li>Operating Agreement</li>
-      <li>Master Service Agreement</li>
-      <li>Partnership or Shareholder Agreement</li>
-      <li>Independent Contractor Agreement</li>
-    </ul>
-
-    <br />
-
-    <a class="btn"
-       href="summary.html?tier=4&doc=Complete%20Legal%20Bundle&price=699">
-       Continue to Order Summary
-    </a>
-  </section>
-</main>
+    form.addEventListener('submit', (e)=>{
+      e.preventDefault();
+      const sel = boxes.filter(b=>b.checked).map(b=>b.value);
+      if (sel.length !== 3) { alert('Please select exactly three documents.'); return; }
+      const docs = encodeURIComponent(sel.join(','));
+      window.location.href = `intake.html?tier=4&docs=${docs}&price=699`;
+    });
+  </script>
 </body>
-</html>Is
+</html>
+
+
