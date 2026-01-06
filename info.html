@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Order Information</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    body{font-family:system-ui;background:#f7f9fc;margin:0}
+    .wrap{max-width:800px;margin:40px auto;padding:24px;background:#fff;border-radius:10px}
+    .row{margin:6px 0}
+    .btn{display:inline-block;margin-top:12px;padding:10px 14px;border-radius:6px;border:1px solid #111827;background:#111827;color:#fff;text-decoration:none}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>Order Information</h1>
+    <p>Please print this page for your records.</p>
+
+    <div class="row"><strong>Tier:</strong> <span id="tier"></span></div>
+    <div class="row"><strong>Document:</strong> <span id="doc"></span></div>
+    <div class="row"><strong>Selected Documents:</strong> <span id="docs"></span></div>
+    <div class="row"><strong>Price:</strong> $<span id="price"></span></div>
+
+    <a id="go" class="btn" href="intake.html">Continue to Intake</a>
+  </div>
+
+  <script>
+    const p = new URLSearchParams(location.search);
+    const tier = p.get('tier') || '';
+    const doc  = p.get('doc') || '';
+    const docs = p.get('docs') || '';
+    const price = p.get('price') || '';
+
+    if (tier) document.getElementById('tier').textContent = tier;
+    if (doc) document.getElementById('doc').textContent = decodeURIComponent(doc);
+    if (docs) document.getElementById('docs').textContent = decodeURIComponent(docs);
+    if (price) document.getElementById('price').textContent = price;
+
+    const go = document.getElementById('go');
+    let qs = [];
+    if (tier) qs.push('tier='+encodeURIComponent(tier));
+    if (doc) qs.push('doc='+encodeURIComponent(doc));
+    if (docs) qs.push('docs='+encodeURIComponent(docs));
+    if (price) qs.push('price='+encodeURIComponent(price));
+    if (qs.length) go.href = 'intake.html?' + qs.join('&');
+  </script>
+</body>
+</html>
