@@ -3,37 +3,46 @@
 <head>
   <meta charset="UTF-8" />
   <title>Order Summary • E-LegalBoom</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <style>
     body {
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-      background: #f5f5f5;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #f7f7f7;
       margin: 0;
       padding: 0;
+      color: #333;
     }
 
-    .wrap {
+    header {
+      background: #2c3e50;
+      color: #fff;
+      padding: 1rem;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 1.2rem;
+    }
+
+    main {
       max-width: 900px;
-      margin: 3rem auto;
-      padding: 0 1rem;
-    }
-
-    .card {
+      margin: 2rem auto;
       background: #fff;
-      border-radius: 8px;
       padding: 2rem;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
     }
 
-    h1 {
+    h2 {
       margin-top: 0;
+      color: #2c3e50;
     }
 
     .row {
       display: flex;
       justify-content: space-between;
-      padding: 0.6rem 0;
+      padding: 0.75rem 0;
       border-bottom: 1px solid #eee;
     }
 
@@ -41,117 +50,152 @@
       border-bottom: none;
     }
 
-    .total {
-      font-weight: bold;
-      font-size: 1.2rem;
-      margin-top: 1rem;
+    .label {
+      font-weight: 600;
     }
 
-    .cta {
+    .value {
       text-align: right;
-      margin-top: 2rem;
     }
 
-    .btn {
-      background: #e66722;
-      color: #fff;
+    .total {
+      font-size: 1.3rem;
+      font-weight: bold;
+      color: #e67e22;
+    }
+
+    .actions {
+      margin-top: 2rem;
+      text-align: right;
+    }
+
+    button {
+      background: #e67e22;
       border: none;
-      padding: 0.7rem 1.4rem;
+      color: #fff;
+      padding: 0.75rem 1.5rem;
       font-size: 1rem;
-      border-radius: 4px;
+      border-radius: 6px;
       cursor: pointer;
     }
 
-    .btn:hover {
-      background: #cc5b1d;
-    }
-
-    .loading {
-      text-align: center;
-      padding: 3rem 0;
-      color: #777;
-      font-size: 1.1rem;
+    button:hover {
+      background: #cf711f;
     }
   </style>
 </head>
 
 <body>
-  <div class="wrap">
-    <div class="card" id="card">
-      <div class="loading" id="loading">
-        Preparing your order summary…
-      </div>
-    </div>
+
+<header>
+  <h1>E-LegalBoom • Order Summary</h1>
+</header>
+
+<main>
+  <h2>Review Your Order</h2>
+
+  <div class="row">
+    <div class="label">Tier</div>
+    <div class="value" id="tier"></div>
   </div>
 
-  <script>
-    const STORAGE_KEY = "orderPayload";
-    const MAX_WAIT_MS = 600;     // total wait window
-    const CHECK_INTERVAL = 50;   // poll interval
-    let waited = 0;
+  <div class="row">
+    <div class="label">Document</div>
+    <div class="value" id="doc"></div>
+  </div>
 
-    function renderSummary(payload) {
-      const card = document.getElementById("card");
+  <div class="row">
+    <div class="label">Price</div>
+    <div class="value total" id="price"></div>
+  </div>
 
-      card.innerHTML = `
-        <h1>Order Summary</h1>
+  <div class="actions">
+    <button id="continue">Continue to Intake</button>
+  </div>
+</main>
 
-        <div class="row">
-          <span>Tier Selected</span>
-          <span>Tier ${payload.tier}</span>
-        </div>
+<script>
+  // -----------------------------
+  // CONFIG
+  // -----------------------------
+  const STORAGE_KEY = "orderPayload";
 
-        <div class="row">
-          <span>Document</span>
-          <span>${payload.doc_type}</span>
-        </div>
+  const PRICE_BY_TIER = {
+    1: 29,
+    2: 59,
+    3: 99,
+    4: 149
+  };
 
-        <div class="row">
-          <span>Order ID</span>
-          <span>${payload.order_id}</span>
-        </div>
+  // -----------------------------
+  // BOOT
+  // -----------------------------
+  const raw = sessionStorage.getItem(STORAGE_KEY);
 
-        <div class="row total">
-          <span>Total</span>
-          <span>$${payload.price.toFixed(2)}</span>
-        </div>
+  if (!raw) {
+    alert("Missing order information. Please start again.");
+    window.location.href = "catalog.html";
+    throw new Error("No payload in sessionStorage");
+  }
 
-        <div class="cta">
-          <button class="btn" id="continue">Continue to Intake</button>
-        </div>
-      `;
+  let payload;
+  try {
+    payload = JSON.parse(raw);
+  } catch (e) {
+    console.error("Invalid payload JSON:", raw);
+    alert("Invalid order data. Please start again.");
+    sessionStorage.removeItem(STORAGE_KEY);
+    window.location.href = "catalog.html";
+    throw e;
+  }
 
-      document.getElementById("continue").onclick = () => {
-        window.location.href = "intake.html";
-      };
-    }
+  // -----------------------------
+  // VALIDATE
+  // -----------------------------
+  if (!payload.tier || !payload.doc_type) {
+    console.error("Incomplete payload:", payload);
+    alert("Incomplete order information. Please start again.");
+    sessionStorage.removeItem(STORAGE_KEY);
+    window.location.href = "catalog.html";
+    throw new Error("Incomplete payload");
+  }
 
-    function waitForPayload() {
-      const raw = sessionStorage.getItem(STORAGE_KEY);
+  const tierNum = Number(payload.tier);
+  const price = PRICE_BY_TIER[tierNum];
 
-      if (raw) {
-        try {
-          const payload = JSON.parse(raw);
-          renderSummary(payload);
-          return;
-        } catch (e) {
-          console.error("Invalid payload JSON", e);
-        }
-      }
+  if (!price) {
+    console.error("Invalid tier pricing:", payload.tier);
+    alert("Invalid tier selected. Please start again.");
+    sessionStorage.removeItem(STORAGE_KEY);
+    window.location.href = "catalog.html";
+    throw new Error("Invalid tier pricing");
+  }
 
-      waited += CHECK_INTERVAL;
+  // -----------------------------
+  // FINALIZE PAYLOAD
+  // -----------------------------
+  payload.price = price;
 
-      if (waited >= MAX_WAIT_MS) {
-        alert("Missing order information. Please start again.");
-        window.location.href = "catalog.html";
-        return;
-      }
+  if (!payload.order_id) {
+    payload.order_id = crypto.randomUUID();
+  }
 
-      setTimeout(waitForPayload, CHECK_INTERVAL);
-    }
+  sessionStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
 
-    // Receiver starts waiting immediately
-    waitForPayload();
-  </script>
+  // -----------------------------
+  // RENDER
+  // -----------------------------
+  document.getElementById("tier").textContent = "Tier " + tierNum;
+  document.getElementById("doc").textContent = payload.doc_type;
+  document.getElementById("price").textContent = "$" + price.toFixed(2);
+
+  // -----------------------------
+  // ACTIONS
+  // -----------------------------
+  document.getElementById("continue").onclick = () => {
+    window.location.href = "intake.html";
+  };
+</script>
+
 </body>
 </html>
