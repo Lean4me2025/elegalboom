@@ -2,204 +2,62 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>E-LegalBoom • Tier One — Single Document</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
+  <title>Tier 1 – E-LegalBoom</title>
   <style>
-    :root {
-      --primary: #e67e22;
-      --primary-dark: #c76b1c;
-      --accent: #2c3e50;
-      --bg: #f7f7f7;
-      --text: #333;
-      --radius: 8px;
-    }
-
-    * { box-sizing: border-box; }
-
     body {
-      margin: 0;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
-        Roboto, sans-serif;
-      background: var(--bg);
-      color: var(--text);
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+      background: #f4f6f8;
+      padding: 2rem;
     }
-
-    header {
-      background: var(--accent);
-      color: #fff;
-      padding: 1rem 0;
-    }
-
-    header .container {
-      max-width: 960px;
-      margin: 0 auto;
-      padding: 0 1rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    main {
-      max-width: 960px;
-      margin: 2rem auto 3rem;
-      padding: 0 1rem;
-    }
-
     .card {
       background: #fff;
-      border-radius: var(--radius);
-      padding: 1.5rem 1.75rem 2rem;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-      margin-bottom: 1.5rem;
+      max-width: 600px;
+      margin: auto;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 10px 30px rgba(0,0,0,.08);
     }
-
-    .badge {
-      display: inline-block;
-      background: var(--primary);
-      color: #fff;
-      border-radius: 999px;
-      padding: 0.25rem 0.8rem;
-      font-size: 0.8rem;
-      margin-bottom: 0.75rem;
-    }
-
     .price {
       font-size: 1.5rem;
-      font-weight: 600;
-      color: var(--primary-dark);
-      margin: 0.5rem 0 1rem;
+      font-weight: 700;
+      margin: 1rem 0;
     }
-
-    h2, h3 {
-      color: var(--accent);
-      margin-top: 0;
-    }
-
-    ul {
-      padding-left: 1.2rem;
-    }
-
-    li {
-      margin-bottom: 0.4rem;
-    }
-
-    .doc {
-      border: 1px solid #ddd;
-      border-radius: var(--radius);
-      padding: 1rem 1.25rem;
-      margin-bottom: 1rem;
-    }
-
-    .doc h4 {
-      margin: 0 0 0.4rem;
-      color: var(--accent);
-    }
-
-    .doc p {
-      margin: 0 0 0.75rem;
-      font-size: 0.95rem;
-    }
-
-    .btn {
-      display: inline-block;
-      padding: 0.65rem 1.3rem;
-      border-radius: var(--radius);
-      background: var(--primary);
-      color: #fff;
-      font-weight: 600;
-      font-size: 0.9rem;
-      text-decoration: none;
-    }
-
-    .btn:hover {
-      background: var(--primary-dark);
-    }
-
-    .note {
-      font-size: 0.85rem;
-      color: #666;
-      margin-top: 0.75rem;
+    button {
+      background: #e86c1a;
+      color: white;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      font-size: 1rem;
+      border-radius: 6px;
+      cursor: pointer;
     }
   </style>
 </head>
+
 <body>
+  <div class="card">
+    <h1>Tier 1</h1>
+    <h3>Single Document Package</h3>
+    <div class="price">$59.00</div>
 
-<header>
-  <div class="container">
-    <strong>E-LegalBoom</strong>
-    <span>Tier One • Single Document</span>
+    <p>Includes one professionally prepared legal document.</p>
+
+    <button onclick="selectDocument()">Select This Document</button>
   </div>
-</header>
 
-<main>
+  <script>
+    function selectDocument() {
+      const payload = {
+        tier: 1,
+        doc_type: "Single Document",
+        price: 59,
+        order_id: crypto.randomUUID(),
+        created_at: Date.now()
+      };
 
-  <section class="card">
-    <div class="badge">Tier One</div>
-    <h2>One Legal Document</h2>
-    <div class="price">$39.00</div>
-
-    <p>
-      Tier One is designed for straightforward legal needs where you only
-      require a single, well-prepared document tailored to your situation.
-    </p>
-
-    <h3>Select Your Document</h3>
-
-    <div class="doc">
-      <h4>Non-Disclosure Agreement (NDA)</h4>
-      <p>Protect confidential information shared between parties.</p>
-      <a class="btn" href="summary.html?tier=1&doc=Non-Disclosure%20Agreement">
-        Select This Document
-      </a>
-    </div>
-
-    <div class="doc">
-      <h4>Independent Contractor Agreement</h4>
-      <p>Define scope, payment, and responsibilities for a 1099 contractor.</p>
-      <a class="btn" href="summary.html?tier=1&doc=Independent%20Contractor%20Agreement">
-        Select This Document
-      </a>
-    </div>
-
-    <div class="doc">
-      <h4>Consulting Agreement</h4>
-      <p>Formalize consulting services, timelines, and compensation.</p>
-      <a class="btn" href="summary.html?tier=1&doc=Consulting%20Agreement">
-        Select This Document
-      </a>
-    </div>
-
-    <div class="doc">
-      <h4>Demand Letter</h4>
-      <p>Formally demand action, payment, or compliance.</p>
-      <a class="btn" href="summary.html?tier=1&doc=Demand%20Letter">
-        Select This Document
-      </a>
-    </div>
-
-    <div class="doc">
-      <h4>Cease &amp; Desist Letter</h4>
-      <p>Require a party to stop specified actions immediately.</p>
-      <a class="btn" href="summary.html?tier=1&doc=Cease%20and%20Desist%20Letter">
-        Select This Document
-      </a>
-    </div>
-
-    <div class="doc">
-      <h4>Basic Service Agreement</h4>
-      <p>Outline services, expectations, and general terms.</p>
-      <a class="btn" href="summary.html?tier=1&doc=Basic%20Service%20Agreement">
-        Select This Document
-      </a>
-    </div>
-
-    <p class="note">
-      You’ll provide details for your document in the next step.
-    </p>
-  </section>
-
-</main>
-
+      sessionStorage.setItem("order_payload", JSON.stringify(payload));
+      window.location.href = "summary.html";
+    }
+  </script>
 </body>
 </html>
