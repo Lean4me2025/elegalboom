@@ -1,43 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Tier 2 – E-LegalBoom</title>
+  <meta charset="utf-8" />
+  <title>Tier 2 – Enhanced Document</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
-    body { font-family: system-ui; background:#f6f7f8; padding:2rem; }
-    .card { max-width:700px; margin:auto; background:#fff; padding:2rem; border-radius:8px; }
-    .doc { border:1px solid #ddd; padding:1rem; border-radius:6px; margin-top:1rem; }
-    .btn { display:inline-block; margin-top:1rem; padding:.7rem 1.4rem; background:#e4572e; color:#fff; text-decoration:none; border-radius:6px; }
-    .btn:hover { background:#c94622; }
+    body{font-family:system-ui;background:#f7f9fc;margin:0}
+    .wrap{max-width:960px;margin:40px auto;padding:24px;background:#fff;border-radius:10px}
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+    .card{border:1px solid #e5e7eb;border-radius:8px;padding:16px}
+    .actions{display:flex;gap:12px;margin-top:12px}
+    a.btn{padding:10px 14px;border-radius:6px;border:1px solid #111827;background:#111827;color:#fff;text-decoration:none}
+    a.link{color:#2563eb;text-decoration:underline}
+    .price{font-size:20px;font-weight:700}
   </style>
 </head>
 <body>
+  <div class="wrap">
+    <h1>Tier 2 — Enhanced Document</h1>
+    <p class="price">Price: $59</p>
 
-<div class="card">
-  <h1>Tier 2</h1>
-  <h2>Two-Document Legal Package</h2>
-  <p>Select one of the documents below.</p>
+    <div class="grid">
+      <div class="card">
+        <h3>Partnership Agreement</h3>
+        <div class="actions">
+          <a class="link" href="/samples/partnership.html" target="_blank" rel="noopener">View Sample</a>
+          <a class="btn" href="intake.html?tier=2&doc=Partnership%20Agreement&price=59">Select</a>
+        </div>
+      </div>
 
-  <div class="doc">
-    <h3>Partnership Agreement</h3>
-    <p>Defines roles, profit sharing, and governance.</p>
-    <a class="btn"
-       href="summary.html?tier=2&doc=Partnership%20Agreement">
-       Select This Document
-    </a>
+      <div class="card">
+        <h3>Two-Member LLC Operating Agreement</h3>
+        <div class="actions">
+          <a class="link" href="/samples/twomember.html" target="_blank" rel="noopener">View Sample</a>
+          <a class="btn" href="intake.html?tier=2&doc=Two-Member%20LLC%20Operating%20Agreement&price=59">Select</a>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Promissory Note</h3>
+        <div class="actions">
+          <a class="link" href="/samples/promissory.html" target="_blank" rel="noopener">View Sample</a>
+          <a class="btn" href="intake.html?tier=2&doc=Promissory%20Note&price=59">Select</a>
+        </div>
+      </div>
+    </div>
   </div>
-
-  <div class="doc">
-    <h3>Operating Agreement (LLC)</h3>
-    <p>Establishes ownership and management rules.</p>
-    <a class="btn"
-       href="summary.html?tier=2&doc=Operating%20Agreement">
-       Select This Document
-    </a>
-  </div>
-
-</div>
-
 </body>
 </html>
