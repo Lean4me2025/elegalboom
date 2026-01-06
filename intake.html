@@ -124,7 +124,6 @@
         /********************************************************
          * 4. CANONICAL DB RECORD (MATCHES pweb_orders)
          ********************************************************/
-        const record = {
           request_uuid: crypto.randomUUID(),
           client_first_name: firstName,
           client_last_name: lastName,
@@ -137,24 +136,8 @@
           order_status: "intake_completed"
         };
 
-        /********************************************************
-         * 5. INSERT
-         ********************************************************/
-        const { error } = await supabaseClient
-          .from("pweb_orders")
-          .insert([record]);
-
-        if (error) {
-          console.error("Supabase insert error:", error);
-          alert("There was an error submitting your intake.");
-          return;
-        }
-
-        /********************************************************
-         * 6. NEXT STEP
-         ********************************************************/
-        window.location.href = "payment.html";
-      });
   </script>
+<script src="documentSchemas.js"></script>
+<script src="intake.js"></script>
 </body>
 </html>
