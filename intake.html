@@ -1,143 +1,80 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <title>E-LegalBoom Intake</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+<script>
+/************************************************************
+ * 1. LOAD ORDER CONTEXT (FROM SUMMARY)
+ ************************************************************/
+const orderPayloadRaw = sessionStorage.getItem("orderPayload");
 
-  <style>
-    body {
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-      background: #f6f7f8;
-      padding: 2rem;
+if (!orderPayloadRaw) {
+  alert("Missing order context. Please start again.");
+  window.location.href = "catalog.html";
+}
+
+const orderPayload = JSON.parse(orderPayloadRaw);
+
+if (!orderPayload || !orderPayload.doc_type) {
+  alert("Missing order context. Please start again.");
+  window.location.href = "catalog.html";
+}
+
+/************************************************************
+ * 2. HANDLE INTAKE SUBMIT
+ ************************************************************/
+document
+  .getElementById("intakeForm")
+  .addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    /* ----------------------------------
+       Collect form values
+    ---------------------------------- */
+    const fullName = document.getElementById("full_name").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const details = document.getElementById("details").value.trim();
+    const urgency = document.getElementById("urgency").value;
+    const fileOption = document.getElementById("file_option").value;
+
+    if (!fullName || !email) {
+      alert("Name and email are required.");
+      return;
     }
-    .wrap {
-      max-width: 720px;
-      margin: auto;
-      background: #fff;
-      padding: 2rem;
-      border-radius: 8px;
-    }
-    label {
-      display: block;
-      margin-top: 1rem;
-      font-weight: 600;
-    }
-    input, textarea, select {
-      width: 100%;
-      padding: 0.6rem;
-      margin-top: 0.25rem;
-    }
-    button {
-      margin-top: 1.5rem;
-      padding: 0.75rem 1.25rem;
-      background: #e4572e;
-      color: #fff;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-    }
-    .note {
-      margin-top: 1rem;
-      font-size: 0.9rem;
-      color: #555;
-    }
-  </style>
-</head>
 
-<body>
-  <div class="wrap">
-    <h1>E-LegalBoom Intake</h1>
+    /* ----------------------------------
+       Split name safely
+    ---------------------------------- */
+    const nameParts = fullName.split(" ");
+    const firstName = nameParts.shift() || null;
+    const lastName = nameParts.join(" ") || null;
 
-    <form id="intakeForm">
-      <label for="full_name">Full Name</label>
-      <input id="full_name" required />
+    /********************************************************
+     * 3. CANONICAL INTAKE RECORD
+     *    (MATCHES pub_orders STRUCTURE)
+     ********************************************************/
+    const intakeRecord = {
+      request_uuid: crypto.randomUUID(),
+      client_first_name: firstName,
+      client_last_name: lastName,
+      client_email: email,
+      doc_type: orderPayload.doc_type,
+      governing_state: null,
+      urgency: urgency,
+      details: details,
+      file_option: fileOption,
+      tier: orderPayload.tier,
+      amount: orderPayload.amount,
+      order_status: "intake_completed"
+    };
 
-      <label for="email">Email</label>
-      <input id="email" type="email" required />
-
-      <label for="details">Details / Context</label>
-      <textarea id="details" rows="5"></textarea>
-
-      <label for="urgency">Urgency</label>
-      <select id="urgency">
-        <option value="standard">Standard</option>
-        <option value="urgent">Urgent</option>
-      </select>
-
-      <label for="file_option">File Format</label>
-      <select id="file_option">
-        <option value="PDF">PDF</option>
-        <option value="DOCX">DOCX</option>
-      </select>
-
-      <button type="submit">Submit Intake</button>
-    </form>
-
-    <div class="note">
-      Your document will be prepared after intake review.
-    </div>
-  </div>
-
-  <script>
-    /************************************************************
-     * 1. INIT SUPABASE (ONCE — NO DUPLICATES)
-     ************************************************************/
-    const SUPABASE_URL = "https://vvjbjfltqsivvxxifnvi.supabase.co";
-    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ2amJqZmx0cXNpdnZ4eGlmbnZpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc5NzYzNTAsImV4cCI6MjA3MzU1MjM1MH0.F4zzcpCHl9v-Rnj0wgKJ5zBf1HteVyXelMLQDDEN28Q";
-
-    const supabaseClient = window.supabase.createClient(
-      SUPABASE_URL,
-      SUPABASE_ANON_KEY
+    /* ----------------------------------
+       Persist for next step
+    ---------------------------------- */
+    sessionStorage.setItem(
+      "intakeRecord",
+      JSON.stringify(intakeRecord)
     );
 
-    /************************************************************
-     * 2. LOAD ORDER CONTEXT (CANONICAL SOURCE)
-     ************************************************************/
-    const orderPayload = JSON.parse(
-      sessionStorage.getItem("orderPayload")
-    );
-
-    if (!orderPayload || !orderPayload.doc_type) {
-      alert("Missing order context. Please start again.");
-      window.location.href = "catalog.html";
-    }
-
-    /************************************************************
-     * 3. HANDLE SUBMIT
-     ************************************************************/
-    document
-      .getElementById("intakeForm")
-      .addEventListener("submit", async (e) => {
-        e.preventDefault();
-
-        const fullName = document.getElementById("full_name").value.trim();
-        const email = document.getElementById("email").value.trim();
-        const details = document.getElementById("details").value.trim();
-        const urgency = document.getElementById("urgency").value;
-        const fileOption = document.getElementById("file_option").value;
-
-        const nameParts = fullName.split(" ");
-        const firstName = nameParts.shift() || null;
-        const lastName = nameParts.join(" ") || null;
-
-        /********************************************************
-         * 4. CANONICAL DB RECORD (MATCHES pweb_orders)
-         ********************************************************/
-          request_uuid: crypto.randomUUID(),
-          client_first_name: firstName,
-          client_last_name: lastName,
-          client_email: email,
-          doc_type: orderPayload.doc_type,
-          governing_state: null,
-          urgency: urgency,
-          details: details,
-          file_option: fileOption,
-          order_status: "intake_completed"
-        };
-
-  </script>
-<script src="documentSchemas.js"></script>
-<script src="intake.js"></script>
-</body>
-</html>
+    /* ----------------------------------
+       Advance flow
+    ---------------------------------- */
+    window.location.href = "payment.html";
+  });
+</script>
