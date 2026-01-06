@@ -4,109 +4,153 @@
   <meta charset="UTF-8" />
   <title>E-LegalBoom – Intake</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link rel="stylesheet" href="style.css" />
+
+  <style>
+    body {
+      margin: 0;
+      padding: 40px;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #f6f8fb;
+      color: #222;
+    }
+
+    .container {
+      max-width: 760px;
+      margin: auto;
+      background: #fff;
+      padding: 32px;
+      border-radius: 10px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    }
+
+    h1 {
+      margin-top: 0;
+    }
+
+    .summary {
+      background: #eef3ff;
+      padding: 14px 18px;
+      border-radius: 6px;
+      margin-bottom: 24px;
+      font-size: 14px;
+    }
+
+    label {
+      display: block;
+      margin-top: 18px;
+      font-weight: 600;
+    }
+
+    input, textarea, select {
+      width: 100%;
+      margin-top: 6px;
+      padding: 10px;
+      font-size: 15px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+
+    textarea {
+      min-height: 120px;
+    }
+
+    button {
+      margin-top: 28px;
+      background: #2b6cff;
+      color: #fff;
+      border: none;
+      padding: 14px 22px;
+      font-size: 16px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #1e54cc;
+    }
+  </style>
 </head>
 <body>
 
-  <h1>Document Intake</h1>
+  <div class="container">
+    <h1>Document Intake</h1>
 
-  <p id="orderSummary" style="font-weight:600;"></p>
+    <div class="summary" id="orderSummary">
+      Preparing your document…
+    </div>
 
-  <form id="intakeForm">
-    <label>
-      Full Name
-      <input type="text" id="full_name" required />
-    </label>
+    <form id="intakeForm">
 
-    <label>
-      Email
-      <input type="email" id="email" required />
-    </label>
+      <label>
+        Full Legal Name
+        <input type="text" id="full_name" required />
+      </label>
 
-    <label>
-      Details / Notes
-      <textarea id="details"></textarea>
-    </label>
+      <label>
+        Email Address
+        <input type="email" id="email" required />
+      </label>
 
-    <label>
-      Urgency
-      <select id="urgency">
-        <option value="standard">Standard</option>
-        <option value="rush">Rush</option>
-      </select>
-    </label>
+      <label>
+        Document Instructions / Notes
+        <textarea id="details"
+          placeholder="Add any specific instructions, parties, or requirements here…"></textarea>
+      </label>
 
-    <label>
-      File Option
-      <select id="file_option">
-        <option value="pdf">PDF</option>
-        <option value="docx">Word</option>
-      </select>
-    </label>
+      <label>
+        Delivery Preference
+        <select id="file_type">
+          <option value="pdf">PDF</option>
+          <option value="docx">Word (DOCX)</option>
+        </select>
+      </label>
 
-    <button type="submit">Continue to Payment</button>
-  </form>
+      <button type="submit">Continue to Payment</button>
+    </form>
+  </div>
 
 <script>
-/* ============================================================
-   1. READ CONTEXT FROM URL (TIERS ARE SOURCE OF TRUTH)
-   ============================================================ */
+/*
+  =========================================================
+  CLEAN INTAKE LOGIC — NO LEGACY, NO GUARDS
+  =========================================================
+*/
 
+/* 1. Read context ONLY from URL (if present) */
 const params = new URLSearchParams(window.location.search);
-const tier = params.get("tier");
-const doc = params.get("doc");
+const tier = params.get("tier") || "";
+const doc  = params.get("doc")  || "";
+const price = params.get("price") || "";
 
-const PRICES = {
-  "1": 39,
-  "2": 59,
-  "3": 399,
-  "4": 0
-};
+/* 2. Display context to customer (informational only) */
+const summary = document.getElementById("orderSummary");
+summary.textContent =
+  `Selected: ${doc || "Document"} ${tier ? "(Tier " + tier + ")" : ""} ${price ? "– $" + price : ""}`;
 
-const amount = PRICES[tier] ?? 0;
-
-document.getElementById("orderSummary").textContent =
-  `You selected: ${doc || "Document"} (Tier ${tier || "?"}) – $${amount}`;
-
-/* ============================================================
-   2. HANDLE INTAKE SUBMIT (NO GUARDS, NO REDIRECT BLOCKERS)
-   ============================================================ */
-
-document.getElementById("intakeForm").addEventListener("submit", (e) => {
+/* 3. Handle form submission */
+document.getElementById("intakeForm").addEventListener("submit", function (e) {
   e.preventDefault();
 
-  const fullName = document.getElementById("full_name").value.trim();
-  const email = document.getElementById("email").value.trim();
-  const details = document.getElementById("details").value.trim();
-  const urgency = document.getElementById("urgency").value;
-  const fileOption = document.getElementById("file_option").value;
-
-  if (!fullName || !email) {
-    alert("Name and email are required.");
-    return;
-  }
-
-  const nameParts = fullName.split(" ");
-  const firstName = nameParts.shift() || "";
-  const lastName = nameParts.join(" ");
-
-  const intakeRecord = {
-    request_uuid: crypto.randomUUID(),
-    client_first_name: firstName,
-    client_last_name: lastName,
-    client_email: email,
-    doc_type: doc,
+  const payload = {
+    request_id: crypto.randomUUID(),
     tier: tier,
-    amount: amount,
-    urgency: urgency,
-    details: details,
-    file_option: fileOption,
-    order_status: "intake_complete"
+    doc: doc,
+    price: price,
+    full_name: document.getElementById("full_name").value.trim(),
+    email: document.getElementById("email").value.trim(),
+    details: document.getElementById("details").value.trim(),
+    file_type: document.getElementById("file_type").value
   };
 
-  sessionStorage.setItem("intakeRecord", JSON.stringify(intakeRecord));
+  /* Persist ONLY for payment handoff */
+  sessionStorage.setItem("intakePayload", JSON.stringify(payload));
 
-  window.location.href = "payment.html";
+  /* Go to payment */
+  window.location.href =
+    "payment.html" +
+    "?tier=" + encodeURIComponent(tier) +
+    "&doc=" + encodeURIComponent(doc) +
+    "&price=" + encodeURIComponent(price);
 });
 </script>
 
