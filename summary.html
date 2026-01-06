@@ -1,137 +1,35 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <title>Order Summary – E-LegalBoom</title>
+<script>
+  // READ FROM URL ONLY — NO GUARDS, NO STORAGE, NO REDIRECTS
 
-  <style>
-    body {
-      margin: 0;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-      background: #f3f4f6;
-    }
+  const params = new URLSearchParams(window.location.search);
 
-    .wrapper {
-      max-width: 900px;
-      margin: 80px auto;
-      background: #ffffff;
-      border-radius: 10px;
-      padding: 40px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-    }
+  const tier = params.get("tier");
+  const doc  = params.get("doc");
 
-    h1 {
-      margin-bottom: 30px;
-    }
+  const PRICES = {
+    "1": 39,
+    "2": 59,
+    "3": 399,
+    "4": 0
+  };
 
-    .row {
-      display: flex;
-      justify-content: space-between;
-      padding: 14px 0;
-      border-bottom: 1px solid #e5e7eb;
-    }
+  const price = PRICES[tier] ?? 0;
 
-    .row:last-child {
-      border-bottom: none;
-    }
+  document.getElementById("tier").textContent =
+    tier ? `Tier ${tier}` : "—";
 
-    .label {
-      font-weight: 600;
-      color: #374151;
-    }
+  document.getElementById("doc").textContent =
+    doc ? decodeURIComponent(doc) : "—";
 
-    .value {
-      color: #111827;
-    }
+  document.getElementById("price").textContent =
+    `$${price.toFixed(2)}`;
 
-    .total {
-      font-size: 20px;
-      font-weight: 700;
-    }
+  // Cosmetic only — NOT authoritative
+  document.getElementById("orderId").textContent =
+    crypto.randomUUID().slice(0, 8);
 
-    .cta {
-      margin-top: 40px;
-      text-align: right;
-    }
-
-    button {
-      background: #ea580c;
-      border: none;
-      color: white;
-      padding: 14px 28px;
-      font-size: 16px;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-
-    button:hover {
-      background: #c2410c;
-    }
-  </style>
-</head>
-
-<body>
-  <div class="wrapper">
-    <h1>Order Summary</h1>
-
-    <div class="row">
-      <span class="label">Tier Selected</span>
-      <span class="value" id="tier">—</span>
-    </div>
-
-    <div class="row">
-      <span class="label">Document</span>
-      <span class="value" id="doc">—</span>
-    </div>
-
-    <div class="row">
-      <span class="label">Order ID</span>
-      <span class="value" id="orderId">—</span>
-    </div>
-
-    <div class="row total">
-      <span class="label">Total</span>
-      <span class="value" id="price">—</span>
-    </div>
-
-    <div class="cta">
-      <button id="continueBtn">Continue to Intake</button>
-    </div>
-  </div>
-
-  <script>
-    // ----------------------------------------
-    // SUMMARY PAGE — READ ONLY
-    // NO REDIRECTS
-    // NO ALERTS
-    // NO VALIDATION
-    // ----------------------------------------
-
-    let payload = null;
-
-    try {
-      payload = JSON.parse(localStorage.getItem("orderPayload"));
-    } catch (e) {
-      payload = null;
-    }
-
-    const tier  = payload?.tier ?? "—";
-    const doc   = payload?.doc_type ?? "—";
-    const id    = payload?.order_id ?? "—";
-    const price = payload?.price;
-
-    document.getElementById("tier").textContent = tier === "—" ? "—" : `Tier ${tier}`;
-    document.getElementById("doc").textContent = doc;
-    document.getElementById("orderId").textContent = id;
-
-    document.getElementById("price").textContent =
-      typeof price === "number"
-        ? `$${price.toFixed(2)}`
-        : "—";
-
-    document.getElementById("continueBtn").onclick = () => {
-      window.location.href = "intake.html";
-    };
-  </script>
-</body>
-</html>
+  document.getElementById("continue").onclick = () => {
+    window.location.href =
+      `intake.html?tier=${tier ?? ""}&doc=${encodeURIComponent(doc ?? "")}&price=${price}`;
+  };
+</script>
