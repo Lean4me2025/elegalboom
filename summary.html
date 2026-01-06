@@ -2,139 +2,136 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Order Summary | E-LegalBoom</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Order Summary – E-LegalBoom</title>
 
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background: #f6f7f9;
       margin: 0;
-      padding: 40px;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #f3f4f6;
     }
 
-    .summary-box {
-      max-width: 720px;
-      margin: 0 auto;
+    .wrapper {
+      max-width: 900px;
+      margin: 80px auto;
       background: #ffffff;
-      border-radius: 8px;
-      padding: 32px;
+      border-radius: 10px;
+      padding: 40px;
       box-shadow: 0 10px 30px rgba(0,0,0,0.08);
     }
 
     h1 {
-      margin-top: 0;
+      margin-bottom: 30px;
     }
 
     .row {
       display: flex;
       justify-content: space-between;
-      padding: 12px 0;
-      border-bottom: 1px solid #eee;
+      padding: 14px 0;
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    .row:last-child {
+      border-bottom: none;
     }
 
     .label {
       font-weight: 600;
+      color: #374151;
     }
 
     .value {
-      text-align: right;
+      color: #111827;
     }
 
     .total {
-      font-size: 22px;
-      font-weight: bold;
-      margin-top: 20px;
+      font-size: 20px;
+      font-weight: 700;
     }
 
-    .continue-btn {
-      margin-top: 30px;
-      width: 100%;
-      padding: 14px;
-      font-size: 16px;
-      background: #0057ff;
-      color: white;
+    .cta {
+      margin-top: 40px;
+      text-align: right;
+    }
+
+    button {
+      background: #ea580c;
       border: none;
+      color: white;
+      padding: 14px 28px;
+      font-size: 16px;
       border-radius: 6px;
       cursor: pointer;
     }
 
-    .continue-btn:hover {
-      background: #0044cc;
-    }
-
-    .order-id {
-      font-size: 12px;
-      color: #666;
-      margin-top: 20px;
-      text-align: center;
+    button:hover {
+      background: #c2410c;
     }
   </style>
 </head>
 
 <body>
-
-  <div class="summary-box">
+  <div class="wrapper">
     <h1>Order Summary</h1>
 
     <div class="row">
-      <div class="label">Tier</div>
-      <div class="value" id="tier"></div>
+      <span class="label">Tier Selected</span>
+      <span class="value" id="tier">—</span>
     </div>
 
     <div class="row">
-      <div class="label">Document</div>
-      <div class="value" id="doc"></div>
+      <span class="label">Document</span>
+      <span class="value" id="doc">—</span>
+    </div>
+
+    <div class="row">
+      <span class="label">Order ID</span>
+      <span class="value" id="orderId">—</span>
     </div>
 
     <div class="row total">
-      <div class="label">Total</div>
-      <div class="value" id="price"></div>
+      <span class="label">Total</span>
+      <span class="value" id="price">—</span>
     </div>
 
-    <button class="continue-btn" id="continueBtn">
-      Continue to Intake
-    </button>
-
-    <div class="order-id">
-      Order ID: <span id="orderId"></span>
+    <div class="cta">
+      <button id="continueBtn">Continue to Intake</button>
     </div>
   </div>
 
   <script>
-    // -----------------------------
-    // READ ORDER (NO MUTATION)
-    // -----------------------------
+    // ----------------------------------------
+    // SUMMARY PAGE — READ ONLY
+    // NO REDIRECTS
+    // NO ALERTS
+    // NO VALIDATION
+    // ----------------------------------------
 
-    const orderPayload = JSON.parse(
-      localStorage.getItem("orderPayload")
-    );
+    let payload = null;
+
+    try {
+      payload = JSON.parse(localStorage.getItem("orderPayload"));
+    } catch (e) {
+      payload = null;
     }
 
-    // -----------------------------
-    // RENDER
-    // -----------------------------
+    const tier  = payload?.tier ?? "—";
+    const doc   = payload?.doc_type ?? "—";
+    const id    = payload?.order_id ?? "—";
+    const price = payload?.price;
 
-    document.getElementById("tier").textContent =
-      `Tier ${orderPayload.tier}`;
-
-    document.getElementById("doc").textContent =
-      orderPayload.doc_type;
+    document.getElementById("tier").textContent = tier === "—" ? "—" : `Tier ${tier}`;
+    document.getElementById("doc").textContent = doc;
+    document.getElementById("orderId").textContent = id;
 
     document.getElementById("price").textContent =
-      `$${Number(orderPayload.price).toFixed(2)}`;
-
-    document.getElementById("orderId").textContent =
-      orderPayload.order_id;
-
-    // -----------------------------
-    // CONTINUE
-    // -----------------------------
+      typeof price === "number"
+        ? `$${price.toFixed(2)}`
+        : "—";
 
     document.getElementById("continueBtn").onclick = () => {
       window.location.href = "intake.html";
     };
   </script>
-
 </body>
 </html>
