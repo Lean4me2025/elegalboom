@@ -2,58 +2,61 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Review & Pay – E-LegalBoom</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>E-LegalBoom — Review & Pay</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <style>
     body {
       font-family: Arial, sans-serif;
-      background: #f5f5f5;
-      padding: 30px;
+      background: #f5f7fb;
+      padding: 40px;
     }
 
     .card {
-      max-width: 640px;
+      max-width: 520px;
       margin: auto;
       background: #ffffff;
       padding: 24px;
-      border-radius: 6px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      border-radius: 8px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.08);
     }
 
     h2 {
-      margin-top: 0;
+      margin-bottom: 20px;
+      text-align: center;
     }
 
-    .summary p {
-      font-size: 16px;
-      margin: 10px 0;
+    .row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      font-size: 15px;
     }
 
-    .summary strong {
-      display: inline-block;
-      width: 110px;
+    .label {
+      font-weight: bold;
     }
 
-    button {
+    .btn {
       width: 100%;
+      padding: 14px;
       margin-top: 20px;
-      padding: 12px;
-      font-size: 16px;
-      background: #0a5cff;
-      color: #fff;
+      background: #1f6fff;
+      color: white;
       border: none;
-      border-radius: 4px;
+      border-radius: 6px;
+      font-size: 16px;
       cursor: pointer;
     }
 
-    button:hover {
-      background: #0849cc;
+    .btn:hover {
+      background: #1658cc;
     }
 
-    .error {
+    .note {
       margin-top: 15px;
-      color: red;
+      font-size: 13px;
+      color: #666;
       text-align: center;
     }
   </style>
@@ -61,64 +64,94 @@
 
 <body>
 
-<div class="card">
-  <h2>Review Your Order</h2>
+  <div class="card">
+    <h2>Review Your Order</h2>
 
-  <div class="summary">
-    <p><strong>Document:</strong> <span id="doc">—</span></p>
-    <p><strong>Tier:</strong> <span id="tier">—</span></p>
-    <p><strong>Price:</strong> $<span id="price">—</span></p>
-    <p><strong>Order ID:</strong> <span id="orderId">—</span></p>
+    <div class="row">
+      <div class="label">Document:</div>
+      <div id="docType">—</div>
+    </div>
+
+    <div class="row">
+      <div class="label">Tier:</div>
+      <div id="tier">—</div>
+    </div>
+
+    <div class="row">
+      <div class="label">Price:</div>
+      <div id="price">$—</div>
+    </div>
+
+    <div class="row">
+      <div class="label">Order ID:</div>
+      <div id="orderId">—</div>
+    </div>
+
+    <button id="payBtn" class="btn">
+      Proceed to Secure Payment
+    </button>
+
+    <div class="note">
+      Secure checkout powered by GoDaddy
+    </div>
   </div>
 
-  <button id="payBtn">Proceed to Secure Payment</button>
-  <div id="error" class="error"></div>
-</div>
-
 <script>
-/* ============================
-   READ-ONLY PAYMENT LOGIC
-   NO DATABASE
-============================ */
-
-function getValue(key) {
-  return sessionStorage.getItem(key);
+/* --------------------------------------------------
+   SAFE READ FROM SESSION
+-------------------------------------------------- */
+function read(key) {
+  return sessionStorage.getItem(key) || "";
 }
 
-// Pull values set earlier in the flow
-const doc = getValue('doc_type');
-const tier = getValue('tier');
-const price = getValue('price');
-const orderId = getValue('order_id');
+const docType = read("doc_type");
+const tier    = read("tier");
+const price   = read("price");
+const orderId = read("order_id") || crypto.randomUUID();
 
-// Basic validation
-if (!tier || !price || !orderId) {
-  document.getElementById('error').innerText =
-    'Missing order information. Please restart your order.';
-}
+/* --------------------------------------------------
+   DISPLAY VALUES (NON-BLOCKING)
+-------------------------------------------------- */
+document.getElementById("docType").innerText = docType || "Selected Document";
+document.getElementById("tier").innerText    = tier || "Selected Tier";
+document.getElementById("price").innerText   = price ? `$${price}` : "As Selected";
+document.getElementById("orderId").innerText = orderId;
 
-// Display values
-document.getElementById('doc').textContent = doc || 'N/A';
-document.getElementById('tier').textContent = tier || 'N/A';
-document.getElementById('price').textContent = price || '0';
-document.getElementById('orderId').textContent = orderId || 'N/A';
+/* --------------------------------------------------
+   PAYMENT LINK MAP (OPTION A — CURRENT)
+-------------------------------------------------- */
+const paymentLinks = {
+  "Tier One Documents": "https://pay.elegalboom.org/e4b79a60-0fd7-431c-8bfc-ae0",
+  "Tier Two Documents": "https://pay.elegalboom.org/aeda586f-65f5-4bf0-98f3-7a2",
+  "Tier Three Documents": "https://pay.elegalboom.org/71ca7144-e537-4fbd-823d-c10",
+  "Entrepreneur Starter Bundle": "https://pay.elegalboom.org/55c7cd3d-1048-4b8c-aadb-843",
+  "30 days Unlimited Legal Documents": "https://pay.elegalboom.org/c9c5e4f6-cc37-4fd3-98a8-a84"
+};
 
-// Payment button handler
-document.getElementById('payBtn').addEventListener('click', function () {
-  if (!tier || !price) {
-    alert('Order information is incomplete.');
-    return;
-  }
+/* --------------------------------------------------
+   FALLBACK BY PRICE (SAFETY NET)
+-------------------------------------------------- */
+const priceFallback = {
+  "39": paymentLinks["Tier One Documents"],
+  "59": paymentLinks["Tier Two Documents"],
+  "99": paymentLinks["Tier Three Documents"],
+  "149": paymentLinks["Entrepreneur Starter Bundle"],
+  "199": paymentLinks["30 days Unlimited Legal Documents"]
+};
 
-  /*
-    🔒 IMPORTANT:
-    Replace the URL below with your ACTUAL GoDaddy / external payment link.
-    The payment processor does NOT need Supabase.
-  */
+/* --------------------------------------------------
+   RESOLVE FINAL PAYMENT LINK
+-------------------------------------------------- */
+let payUrl =
+  paymentLinks[tier] ||
+  priceFallback[price] ||
+  paymentLinks["Tier One Documents"]; // absolute fallback
 
-  const paymentUrl = `https://YOUR-PAYMENT-PROVIDER-LINK.com?amount=${encodeURIComponent(price)}`;
-
-  window.location.href = paymentUrl;
+/* --------------------------------------------------
+   BUTTON ACTION — NEVER BLOCK
+-------------------------------------------------- */
+document.getElementById("payBtn").addEventListener("click", () => {
+  window.location.href = payUrl;
 });
 </script>
 
