@@ -104,7 +104,7 @@
   document.getElementById("orderId").textContent = orderId;
 
   // Insert order BEFORE payment
-  await supabase.from("PWebOrders").insert([{
+  await supabase.from("PWeb_Orders").insert([{
     order_id: orderId,
     document_type: doc,
     tier: tier,
