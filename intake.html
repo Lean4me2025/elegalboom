@@ -55,8 +55,11 @@
   <h2>Client Intake</h2>
 
   <form id="intakeForm">
-    <label>Full Name</label>
-    <input type="text" id="full_name" required />
+    <label>First Name</label>
+    <input type="text" id="first_name" required />
+
+    <label>Last Name</label>
+    <input type="text" id="last_name" required />
 
     <label>Email</label>
     <input type="email" id="email" required />
@@ -73,9 +76,6 @@
 </div>
 
 <script>
-/* ============================
-   SUPABASE INITIALIZATION
-============================ */
 const SUPABASE_URL = "https://vvjbjfltqsivvxxifnvi.supabase.co";
 const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ2amJqZmx0cXNpdnZ4eGlmbnZpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc5NzYzNTAsImV4cCI6MjA3MzU1MjM1MH0.F4zzcpCHl9v-Rnj0wgKJ5zBf1HteVyXelMLQDDEN28Q";
 
@@ -84,80 +84,44 @@ const supabase = window.supabase.createClient(
   SUPABASE_ANON_KEY
 );
 
-/* ============================
-   HELPER FUNCTIONS
-============================ */
-function normalizeName(fullName) {
-  const cleaned = fullName.trim().replace(/\s+/g, ' ');
-  const parts = cleaned.split(' ');
-  return {
-    first: parts[0],
-    last: parts.length > 1 ? parts.slice(1).join(' ') : '(Not Provided)'
-  };
-}
-
 function getSessionValue(key) {
   return sessionStorage.getItem(key) || '';
 }
 
-/* ============================
-   SUBMIT HANDLER
-============================ */
-document.getElementById('intakeForm').addEventListener('submit', async function (e) {
+document.getElementById('intakeForm').addEventListener('submit', async (e) => {
   e.preventDefault();
   document.getElementById('error').innerText = '';
   document.getElementById('submitBtn').disabled = true;
 
   try {
-    // 🔒 Canonical inputs
-    const fullName = document.getElementById('full_name').value;
-    const email = document.getElementById('email').value;
-    const phone = document.getElementById('phone').value;
-    const notes = document.getElementById('notes').value;
-
-    const name = normalizeName(fullName);
-
-    // 🔒 Upstream values (from tier / summary)
-    const tier = getSessionValue('tier');
-    const doc_type = getSessionValue('doc_type');
-    const price = getSessionValue('price');
-
-    // 🔒 Generate order ID
-    const order_id = crypto.randomUUID();
-
-    // 🔒 Final payload (DB-safe)
     const payload = {
-      order_id,
-      client_first_name: name.first,
-      client_last_name: name.last,
-      email,
-      phone,
-      tier,
-      doc_type,
-      price,
+      order_id: crypto.randomUUID(),
+      client_first_name: document.getElementById('first_name').value.trim(),
+      client_last_name: document.getElementById('last_name').value.trim(),
+      email: document.getElementById('email').value.trim(),
+      phone: document.getElementById('phone').value.trim(),
+      tier: getSessionValue('tier'),
+      doc_type: getSessionValue('doc_type'),
+      price: getSessionValue('price'),
       intake_payload: {
-        notes
+        notes: document.getElementById('notes').value.trim()
       },
       status: 'intake_submitted'
     };
 
-    // ✅ SUPABASE INSERT (ONLY PLACE IT EVER HAPPENS)
     const { error } = await supabase
       .from('YOUR_TABLE_NAME')
       .insert([payload]);
 
     if (error) throw error;
 
-    // 🔒 Persist order ID for payment
-    sessionStorage.setItem('order_id', order_id);
-
-    // ➡️ Redirect to payment
-    window.location.href = "payment.html";
+    sessionStorage.setItem('order_id', payload.order_id);
+    window.location.href = 'review-and-pay.html';
 
   } catch (err) {
+    console.error(err);
     document.getElementById('error').innerText =
-      "Unable to submit intake. Please try again.";
-    console.error('INTAKE ERROR:', err);
+      'Unable to submit intake. Please try again.';
     document.getElementById('submitBtn').disabled = false;
   }
 });
