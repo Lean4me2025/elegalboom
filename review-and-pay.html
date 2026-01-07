@@ -2,158 +2,125 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Review Your Order – E-LegalBoom</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Review and Pay</title>
 
   <style>
     body {
-      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f7f7f7;
       padding: 40px;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: #f6f8fb;
-      color: #222;
     }
-
     .card {
-      max-width: 760px;
-      margin: auto;
       background: #fff;
-      padding: 32px;
-      border-radius: 12px;
-      box-shadow: 0 12px 30px rgba(0,0,0,.08);
+      padding: 25px;
+      max-width: 520px;
+      margin: auto;
+      border-radius: 6px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     }
-
-    h1 {
-      margin-top: 0;
-    }
-
-    .summary {
-      background: #eef3ff;
-      padding: 20px;
-      border-radius: 8px;
-      margin: 24px 0;
-    }
-
     .summary p {
       margin: 8px 0;
-      font-size: 16px;
     }
-
-    .order-id {
-      margin-top: 12px;
-      font-weight: 700;
-      font-size: 18px;
-    }
-
     button {
-      width: 100%;
-      margin-top: 28px;
-      padding: 16px;
-      font-size: 18px;
-      background: #2b6cff;
-      color: #fff;
-      border: none;
-      border-radius: 10px;
+      margin-top: 20px;
+      padding: 12px 18px;
+      font-size: 16px;
       cursor: pointer;
     }
-
-    button:hover {
-      background: #1e54cc;
+    .error {
+      color: red;
+      margin-top: 12px;
     }
-
-    .note {
-      margin-top: 18px;
-      font-size: 14px;
-      color: #666;
+    .success {
+      color: green;
+      margin-top: 12px;
     }
   </style>
 </head>
 
 <body>
-  <div class="card">
-    <h1>Review Your Order</h1>
-    <p>Please confirm the details below. When you continue, you’ll be redirected to secure payment.</p>
 
-    <div class="summary">
-      <p><strong>Document:</strong> <span id="doc"></span></p>
-      <p><strong>Tier:</strong> <span id="tier"></span></p>
-      <p><strong>Price:</strong> $<span id="price"></span></p>
-      <div class="order-id">
-        Order ID: <span id="orderId"></span>
-      </div>
-    </div>
+<div class="card">
+  <h2>Review Your Order</h2>
 
-    <button id="payBtn">Proceed to Secure Payment</button>
-
-    <div class="note">
-      Payment is handled securely via PayLink. Your order will be processed after payment.
-    </div>
+  <div class="summary">
+    <p><strong>Document:</strong> <span id="doc"></span></p>
+    <p><strong>Tier:</strong> <span id="tier"></span></p>
+    <p><strong>Price:</strong> $<span id="price"></span></p>
+    <p><strong>Order ID:</strong> <span id="orderId"></span></p>
   </div>
 
-  <script type="module">
-    import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
+  <button id="payBtn">Proceed to Secure Payment</button>
 
-    /* ==============================
-       SUPABASE CONFIG
-       ============================== */
-    const SUPABASE_URL = "https://vvjbjfltqsivvxxifnvi.supabase.co";
-    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ2amJqZmx0cXNpdnZ4eGlmbnZpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc5NzYzNTAsImV4cCI6MjA3MzU1MjM1MH0.F4zzcpCHl9v-Rnj0wgKJ5zBf1HteVyXelMLQDDEN28Q";
+  <div id="statusMsg"></div>
+</div>
 
-    const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+<script type="module">
+  import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
 
-    /* ==============================
-       READ URL PARAMS
-       ============================== */
-    const params = new URLSearchParams(window.location.search);
+  /* ===============================
+     SUPABASE CONFIG
+  =============================== */
+  const SUPABASE_URL = "https://vvjbjfltqsivvxxifnvi.supabase.co':
+  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ2amJqZmx0cXNpdnZ4eGlmbnZpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc5NzYzNTAsImV4cCI6MjA3MzU1MjM1MH0.F4zzcpCHl9v-Rnj0wgKJ5zBf1HteVyXelMLQDDEN28Q";
 
-    const doc   = params.get("doc")   || "Unknown";
-    const tier  = params.get("tier")  || "N/A";
-    const price = params.get("price") || "0";
+  const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    /* ==============================
-       GENERATE ORDER ID
-       ============================== */
-    const orderId = crypto.randomUUID();
+  /* ===============================
+     READ URL PARAMS
+  =============================== */
+  const params = new URLSearchParams(window.location.search);
 
-    /* ==============================
-       POPULATE PAGE
-       ============================== */
-    document.getElementById("doc").textContent = doc;
-    document.getElementById("tier").textContent = tier;
-    document.getElementById("price").textContent = price;
-    document.getElementById("orderId").textContent = orderId;
+  const doc = params.get("doc") || "Unknown";
+  const tier = params.get("tier") || "N/A";
+  const price = params.get("price") || "0";
 
-    /* ==============================
-       BUTTON CLICK HANDLER
-       ============================== */
-    document.getElementById("payBtn").addEventListener("click", async () => {
-      try {
-        const { error } = await supabase
-          .from("pweb_orders")
-          .insert([{
-            order_id: orderId,
-            document_type: doc,
-            tier: tier,
-            price: Number(price),
-            payment_provider: "paylink",
-            payment_status: "pending_payment",
-            created_at: new Date().toISOString()
-          }]);
+  const orderId = crypto.randomUUID();
 
-        if (error) {
-          console.error("Insert failed:", error);
-          alert("We couldn’t create your order. Please try again.");
-          return;
-        }
+  /* ===============================
+     DISPLAY VALUES
+  =============================== */
+  document.getElementById("doc").textContent = doc;
+  document.getElementById("tier").textContent = tier;
+  document.getElementById("price").textContent = price;
+  document.getElementById("orderId").textContent = orderId;
 
-        // ✅ Redirect ONLY after successful insert
-        window.location.href = "https://pay.elegalboom.org/YOUR_PAYLINK_ID";
+  /* ===============================
+     BUTTON CLICK → INSERT ROW
+  =============================== */
+  const payBtn = document.getElementById("payBtn");
+  const statusMsg = document.getElementById("statusMsg");
 
-      } catch (err) {
-        console.error("Unexpected error:", err);
-        alert("Unexpected error creating order.");
-      }
-    });
-  </script>
+  payBtn.addEventListener("click", async () => {
+    statusMsg.textContent = "Submitting order...";
+    statusMsg.className = "";
+
+    const { error } = await supabase
+      .from("pweb_orders")
+      .insert([{
+        order_id: orderId,
+        doc_type: doc,
+        tier: tier,
+        price: price,
+        order_status: "pending_payment"
+      }]);
+
+    if (error) {
+      console.error("Insert error:", error);
+      statusMsg.textContent = "❌ Database insert failed: " + error.message;
+      statusMsg.className = "error";
+      return;
+    }
+
+    statusMsg.textContent = "✅ Order recorded. Redirecting to payment…";
+    statusMsg.className = "success";
+
+    // OPTIONAL: redirect after success
+    setTimeout(() => {
+      window.location.href = "payment.html?order_id=" + orderId;
+    }, 1000);
+  });
+</script>
+
 </body>
 </html>
