@@ -2,22 +2,22 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>E-LegalBoom Intake</title>
+  <title>E-LegalBoom – Client Intake</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <!-- Supabase SDK -->
+  <!-- Supabase JS v2 -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <style>
     body {
       font-family: Arial, sans-serif;
-      background: #f7f7f7;
+      background: #f5f5f5;
       padding: 30px;
     }
     .container {
       max-width: 720px;
       margin: auto;
-      background: #fff;
+      background: #ffffff;
       padding: 24px;
       border-radius: 6px;
     }
@@ -35,12 +35,12 @@
     button {
       margin-top: 20px;
       background: #0a5cff;
-      color: #fff;
+      color: #ffffff;
       border: none;
       cursor: pointer;
     }
     button:disabled {
-      background: #999;
+      background: #999999;
       cursor: not-allowed;
     }
     .error {
@@ -70,15 +70,16 @@
       <label for="notes">Additional Notes</label>
       <textarea id="notes"></textarea>
 
-      <button type="submit" id="submitBtn">Continue to Payment</button>
+      <button type="submit" id="submitBtn">Continue to Review & Pay</button>
       <div id="error" class="error"></div>
     </form>
   </div>
 
   <script>
-    // ==============================
-    // Supabase Configuration
-    // ==============================
+    /* ===============================
+       SUPABASE CONFIG
+       =============================== */
+
     const SUPABASE_URL = "https://vvjbjfltqsivvxxifnvi.supabase.co";
     const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ2amJqZmx0cXNpdnZ4eGlmbnZpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc5NzYzNTAsImV4cCI6MjA3MzU1MjM1MH0.F4zzcpCHl9v-Rnj0wgKJ5zBf1HteVyXelMLQDDEN28Q";
 
@@ -87,27 +88,25 @@
       SUPABASE_ANON_KEY
     );
 
-    // ==============================
-    // Helpers
-    // ==============================
     function getSessionValue(key) {
-      return sessionStorage.getItem(key) || "";
+      return sessionStorage.getItem(key) || null;
     }
 
-    // ==============================
-    // Submit Handler
-    // ==============================
-    document.getElementById("intakeForm").addEventListener("submit", async function (e) {
+    /* ===============================
+       SUBMIT HANDLER
+       =============================== */
+
+    document.getElementById("intakeForm").addEventListener("submit", async (e) => {
       e.preventDefault();
 
       const errorEl = document.getElementById("error");
       const submitBtn = document.getElementById("submitBtn");
+
       errorEl.innerText = "";
       submitBtn.disabled = true;
 
       try {
         const payload = {
-          order_id: crypto.randomUUID(),
           client_first_name: document.getElementById("first_name").value.trim(),
           client_last_name: document.getElementById("last_name").value.trim(),
           email: document.getElementById("email").value.trim(),
@@ -115,10 +114,9 @@
           tier: getSessionValue("tier"),
           doc_type: getSessionValue("doc_type"),
           price: getSessionValue("price"),
-          intake_payload: {
-            notes: document.getElementById("notes").value.trim()
-          },
-          status: "intake_submitted"
+          notes: document.getElementById("notes").value.trim(),
+          status: "intake_submitted",
+          submitted_at: new Date().toISOString()
         };
 
         const { error } = await supabaseClient
@@ -127,7 +125,6 @@
 
         if (error) throw error;
 
-        sessionStorage.setItem("order_id", payload.order_id);
         window.location.href = "review-and-pay.html";
 
       } catch (err) {
