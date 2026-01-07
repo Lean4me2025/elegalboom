@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Review Your Order – E-LegalBoom</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <style>
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #f6f8fb;
+      color: #222;
+      padding: 40px;
+    }
+    .card {
+      max-width: 720px;
+      margin: auto;
+      background: #fff;
+      padding: 32px;
+      border-radius: 10px;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+    }
+    h1 {
+      margin-top: 0;
+    }
+    .summary {
+      margin: 24px 0;
+      padding: 18px;
+      background: #eef3ff;
+      border-radius: 6px;
+    }
+    .summary p {
+      margin: 6px 0;
+    }
+    .order-id {
+      font-weight: 700;
+      font-size: 18px;
+      margin-top: 16px;
+    }
+    button {
+      margin-top: 28px;
+      width: 100%;
+      padding: 16px;
+      font-size: 17px;
+      background: #2b6cff;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #1e54cc;
+    }
+    .note {
+      margin-top: 18px;
+      font-size: 14px;
+      color: #555;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="card">
+    <h1>Review Your Order</h1>
+
+    <p>Please review your order below. When you continue, you’ll be redirected to our secure payment provider to complete payment.</p>
+
+    <div class="summary">
+      <p><strong>Document:</strong> <span id="doc"></span></p>
+      <p><strong>Tier:</strong> <span id="tier"></span></p>
+      <p><strong>Price:</strong> $<span id="price"></span></p>
+      <div class="order-id">
+        Order ID: <span id="orderId"></span>
+      </div>
+    </div>
+
+    <button id="payBtn">Proceed to Secure Payment</button>
+
+    <div class="note">
+      Payment is handled securely via PayLink. Your order will be processed once payment is confirmed.
+    </div>
+  </div>
+
+<script type="module">
+  import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
+
+  // 🔐 INSERT YOUR SUPABASE VALUES HERE
+  const SUPABASE_URL = "https://vvjbjfltqsivvxxifnvi.supabase.co";
+  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ2amJqZmx0cXNpdnZ4eGlmbnZpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc5NzYzNTAsImV4cCI6MjA3MzU1MjM1MH0.F4zzcpCHl9v-Rnj0wgKJ5zBf1HteVyXelMLQDDEN28Q";
+
+  const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  const params = new URLSearchParams(window.location.search);
+  const doc = params.get("doc") || "Unknown";
+  const tier = params.get("tier") || "N/A";
+  const price = params.get("price") || "0";
+
+  const orderId = crypto.randomUUID();
+
+  document.getElementById("doc").textContent = doc;
+  document.getElementById("tier").textContent = tier;
+  document.getElementById("price").textContent = price;
+  document.getElementById("orderId").textContent = orderId;
+
+  // Insert order BEFORE payment
+  await supabase.from("PWebOrders").insert([{
+    order_id: orderId,
+    document_type: doc,
+    tier: tier,
+    price: price,
+    payment_provider: "paylink",
+    payment_status: "pending_payment",
+    created_at: new Date().toISOString()
+  }]);
+
+  document.getElementById("payBtn").onclick = () => {
+    window.location.href = "https://pay.elegalboom.org/e4b79a60-0fd7-431c-8bfc-ae0";
+  };
+</script>
+</body>
+</html>
