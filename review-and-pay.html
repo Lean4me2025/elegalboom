@@ -2,38 +2,59 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Review and Pay</title>
+  <title>Review & Pay – E-LegalBoom</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <style>
     body {
       font-family: Arial, sans-serif;
-      background: #f7f7f7;
-      padding: 40px;
+      background: #f5f5f5;
+      padding: 30px;
     }
+
     .card {
-      background: #fff;
-      padding: 25px;
-      max-width: 520px;
+      max-width: 640px;
       margin: auto;
+      background: #ffffff;
+      padding: 24px;
       border-radius: 6px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
     }
+
+    h2 {
+      margin-top: 0;
+    }
+
     .summary p {
-      margin: 8px 0;
-    }
-    button {
-      margin-top: 20px;
-      padding: 12px 18px;
       font-size: 16px;
+      margin: 10px 0;
+    }
+
+    .summary strong {
+      display: inline-block;
+      width: 110px;
+    }
+
+    button {
+      width: 100%;
+      margin-top: 20px;
+      padding: 12px;
+      font-size: 16px;
+      background: #0a5cff;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
       cursor: pointer;
     }
-    .error {
-      color: red;
-      margin-top: 12px;
+
+    button:hover {
+      background: #0849cc;
     }
-    .success {
-      color: green;
-      margin-top: 12px;
+
+    .error {
+      margin-top: 15px;
+      color: red;
+      text-align: center;
     }
   </style>
 </head>
@@ -44,82 +65,61 @@
   <h2>Review Your Order</h2>
 
   <div class="summary">
-    <p><strong>Document:</strong> <span id="doc"></span></p>
-    <p><strong>Tier:</strong> <span id="tier"></span></p>
-    <p><strong>Price:</strong> $<span id="price"></span></p>
-    <p><strong>Order ID:</strong> <span id="orderId"></span></p>
+    <p><strong>Document:</strong> <span id="doc">—</span></p>
+    <p><strong>Tier:</strong> <span id="tier">—</span></p>
+    <p><strong>Price:</strong> $<span id="price">—</span></p>
+    <p><strong>Order ID:</strong> <span id="orderId">—</span></p>
   </div>
 
   <button id="payBtn">Proceed to Secure Payment</button>
-
-  <div id="statusMsg"></div>
+  <div id="error" class="error"></div>
 </div>
 
-<script type="module">
-  import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
+<script>
+/* ============================
+   READ-ONLY PAYMENT LOGIC
+   NO DATABASE
+============================ */
 
-  /* ===============================
-     SUPABASE CONFIG
-  =============================== */
-  const SUPABASE_URL = "https://vvjbjfltqsivvxxifnvi.supabase.co':
-  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ2amJqZmx0cXNpdnZ4eGlmbnZpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc5NzYzNTAsImV4cCI6MjA3MzU1MjM1MH0.F4zzcpCHl9v-Rnj0wgKJ5zBf1HteVyXelMLQDDEN28Q";
+function getValue(key) {
+  return sessionStorage.getItem(key);
+}
 
-  const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+// Pull values set earlier in the flow
+const doc = getValue('doc_type');
+const tier = getValue('tier');
+const price = getValue('price');
+const orderId = getValue('order_id');
 
-  /* ===============================
-     READ URL PARAMS
-  =============================== */
-  const params = new URLSearchParams(window.location.search);
+// Basic validation
+if (!tier || !price || !orderId) {
+  document.getElementById('error').innerText =
+    'Missing order information. Please restart your order.';
+}
 
-  const doc = params.get("doc") || "Unknown";
-  const tier = params.get("tier") || "N/A";
-  const price = params.get("price") || "0";
+// Display values
+document.getElementById('doc').textContent = doc || 'N/A';
+document.getElementById('tier').textContent = tier || 'N/A';
+document.getElementById('price').textContent = price || '0';
+document.getElementById('orderId').textContent = orderId || 'N/A';
 
-  const orderId = crypto.randomUUID();
+// Payment button handler
+document.getElementById('payBtn').addEventListener('click', function () {
+  if (!tier || !price) {
+    alert('Order information is incomplete.');
+    return;
+  }
 
-  /* ===============================
-     DISPLAY VALUES
-  =============================== */
-  document.getElementById("doc").textContent = doc;
-  document.getElementById("tier").textContent = tier;
-  document.getElementById("price").textContent = price;
-  document.getElementById("orderId").textContent = orderId;
+  /*
+    🔒 IMPORTANT:
+    Replace the URL below with your ACTUAL GoDaddy / external payment link.
+    The payment processor does NOT need Supabase.
+  */
 
-  /* ===============================
-     BUTTON CLICK → INSERT ROW
-  =============================== */
-  const payBtn = document.getElementById("payBtn");
-  const statusMsg = document.getElementById("statusMsg");
+  const paymentUrl = `https://YOUR-PAYMENT-PROVIDER-LINK.com?amount=${encodeURIComponent(price)}`;
 
-  payBtn.addEventListener("click", async () => {
-    statusMsg.textContent = "Submitting order...";
-    statusMsg.className = "";
-
-    const { error } = await supabase
-      .from("pweb_orders")
-      .insert([{
-        order_id: orderId,
-        doc_type: doc,
-        tier: tier,
-        price: price,
-        order_status: "pending_payment"
-      }]);
-
-    if (error) {
-      console.error("Insert error:", error);
-      statusMsg.textContent = "❌ Database insert failed: " + error.message;
-      statusMsg.className = "error";
-      return;
-    }
-
-    statusMsg.textContent = "✅ Order recorded. Redirecting to payment…";
-    statusMsg.className = "success";
-
-    // OPTIONAL: redirect after success
-    setTimeout(() => {
-      window.location.href = "payment.html?order_id=" + orderId;
-    }, 1000);
-  });
+  window.location.href = paymentUrl;
+});
 </script>
 
 </body>
