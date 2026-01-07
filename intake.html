@@ -120,7 +120,7 @@
         };
 
         const { error } = await supabaseClient
-          .from("document_intake_data")
+          .from("pweb_orders")
           .insert([payload]);
 
         if (error) throw error;
