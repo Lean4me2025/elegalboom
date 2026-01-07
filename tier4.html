@@ -1,74 +1,134 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <title>Tier 4 – Bundle (Choose Any 3)</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="UTF-8" />
+  <title>E-LegalBoom Intake</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Supabase SDK (creates window.supabase) -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
   <style>
-    body{font-family:system-ui;background:#f7f9fc;margin:0}
-    .wrap{max-width:960px;margin:40px auto;padding:24px;background:#fff;border-radius:10px}
-    fieldset{border:1px solid #e5e7eb;border-radius:8px;padding:16px;margin-bottom:16px}
-    legend{font-weight:700}
-    .row{display:flex;align-items:center;gap:8px;margin:6px 0}
-    .bar{display:flex;justify-content:space-between;align-items:center;margin-top:12px}
-    button{padding:10px 14px;border-radius:6px;border:1px solid #111827;background:#111827;color:#fff;cursor:pointer}
-    .price{font-size:20px;font-weight:700}
+    body {
+      font-family: Arial, sans-serif;
+      background: #f7f7f7;
+      padding: 30px;
+    }
+    .container {
+      max-width: 720px;
+      margin: auto;
+      background: #fff;
+      padding: 24px;
+      border-radius: 6px;
+    }
+    label {
+      display: block;
+      margin-top: 14px;
+      font-weight: bold;
+    }
+    input, textarea, button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 6px;
+      font-size: 15px;
+    }
+    button {
+      margin-top: 20px;
+      background: #0a5cff;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+    }
+    button:disabled {
+      background: #999;
+      cursor: not-allowed;
+    }
+    .error {
+      color: red;
+      margin-top: 10px;
+    }
   </style>
 </head>
+
 <body>
-  <div class="wrap">
-    <h1>Tier 4 — Bundle</h1>
-    <p class="price">Price: $699 — Choose any three documents</p>
+  <div class="container">
+    <h2>Client Intake</h2>
 
-    <form id="bundle">
-      <fieldset>
-        <legend>Tier 1 Documents</legend>
-        <label class="row"><input type="checkbox" value="NDA"> NDA</label>
-        <label class="row"><input type="checkbox" value="Independent Contractor Agreement"> Independent Contractor Agreement</label>
-        <label class="row"><input type="checkbox" value="Services Agreement"> Services Agreement</label>
-        <label class="row"><input type="checkbox" value="Single-Member LLC Operating Agreement"> Single-Member LLC Operating Agreement</label>
-      </fieldset>
+    <form id="intakeForm">
+      <label for="first_name">First Name</label>
+      <input type="text" id="first_name" required />
 
-      <fieldset>
-        <legend>Tier 2 Documents</legend>
-        <label class="row"><input type="checkbox" value="Partnership Agreement"> Partnership Agreement</label>
-        <label class="row"><input type="checkbox" value="Two-Member LLC Operating Agreement"> Two-Member LLC Operating Agreement</label>
-        <label class="row"><input type="checkbox" value="Promissory Note"> Promissory Note</label>
-      </fieldset>
+      <label for="last_name">Last Name</label>
+      <input type="text" id="last_name" required />
 
-      <fieldset>
-        <legend>Tier 3 Documents</legend>
-        <label class="row"><input type="checkbox" value="Launch Kit"> Launch Kit</label>
-      </fieldset>
+      <label for="email">Email</label>
+      <input type="email" id="email" required />
 
-      <div class="bar">
-        <div id="count">0 of 3 selected</div>
-        <button type="submit">Continue to Intake</button>
-      </div>
+      <label for="phone">Phone</label>
+      <input type="tel" id="phone" />
+
+      <label for="notes">Additional Notes</label>
+      <textarea id="notes"></textarea>
+
+      <button type="submit" id="submitBtn">Continue to Review & Pay</button>
+      <div id="error" class="error"></div>
     </form>
   </div>
 
   <script>
-    const form = document.getElementById('bundle');
-    const boxes = Array.from(form.querySelectorAll('input[type="checkbox"]'));
-    const count = document.getElementById('count');
+    // ------------------------------
+    // Supabase Configuration
+    // ------------------------------
+    const SUPABASE_URL = "https://YOUR_PROJECT_ID.supabase.co";
+    const SUPABASE_ANON_KEY = "YOUR_PUBLIC_ANON_KEY";
 
-    function update(){
-      const sel = boxes.filter(b=>b.checked);
-      if (sel.length > 3) this.checked = false;
-      count.textContent = sel.length + ' of 3 selected';
+    // IMPORTANT: do NOT name this "supabase"
+    const supabaseClient = window.supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_ANON_KEY
+    );
+
+    function getSessionValue(key) {
+      return sessionStorage.getItem(key) || "";
     }
-    boxes.forEach(b=>b.addEventListener('change', update));
 
-    form.addEventListener('submit', (e)=>{
+    document.getElementById("intakeForm").addEventListener("submit", async (e) => {
       e.preventDefault();
-      const sel = boxes.filter(b=>b.checked).map(b=>b.value);
-      if (sel.length !== 3) { alert('Please select exactly three documents.'); return; }
-      const docs = encodeURIComponent(sel.join(','));
-      window.location.href = `intake.html?tier=4&docs=${docs}&price=699`;
+      document.getElementById("error").innerText = "";
+      document.getElementById("submitBtn").disabled = true;
+
+      try {
+        const payload = {
+          order_id: crypto.randomUUID(),
+          client_first_name: document.getElementById("first_name").value.trim(),
+          client_last_name: document.getElementById("last_name").value.trim(),
+          email: document.getElementById("email").value.trim(),
+          phone: document.getElementById("phone").value.trim(),
+          tier: getSessionValue("tier"),
+          doc_type: getSessionValue("doc_type"),
+          price: getSessionValue("price"),
+          intake_payload: {
+            notes: document.getElementById("notes").value.trim()
+          },
+          status: "intake_submitted"
+        };
+
+        const { error } = await supabaseClient
+          .from("orders")   // ✅ CHANGE ONLY IF YOUR TABLE NAME IS DIFFERENT
+          .insert([payload]);
+
+        if (error) throw error;
+
+        sessionStorage.setItem("order_id", payload.order_id);
+        window.location.href = "review-and-pay.html";
+
+      } catch (err) {
+        console.error("INTAKE ERROR:", err);
+        document.getElementById("error").innerText =
+          "Unable to submit intake. Please try again.";
+        document.getElementById("submitBtn").disabled = false;
+      }
     });
   </script>
 </body>
 </html>
-
-
