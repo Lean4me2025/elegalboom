@@ -1,63 +1,91 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <title>Tier 1 – Single Document</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="UTF-8" />
+  <title>Tier 1 – Essential Documents | E-LegalBoom</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="style.css" />
+
   <style>
-    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:#f7f9fc;margin:0}
-    .wrap{max-width:960px;margin:40px auto;padding:24px;background:#fff;border-radius:10px}
-    h1{margin-top:0}
-    .grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-    .card{border:1px solid #e5e7eb;border-radius:8px;padding:16px}
-    .actions{display:flex;gap:12px;margin-top:12px}
-    a.btn,button.btn{padding:10px 14px;border-radius:6px;border:1px solid #1f2937;background:#111827;color:#fff;text-decoration:none;cursor:pointer}
-    a.link{color:#2563eb;text-decoration:underline}
-    .price{font-size:20px;font-weight:700}
+    .page-wrapper {
+      max-width: 900px;
+      margin: 40px auto;
+      padding: 32px;
+      background: #ffffff;
+    }
+
+    h1 {
+      margin-bottom: 8px;
+    }
+
+    .price {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 24px;
+    }
+
+    .content-card {
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      padding: 24px;
+    }
+
+    .content-card ul {
+      margin: 0 0 24px 18px;
+    }
+
+    .content-card li {
+      margin-bottom: 8px;
+    }
+
+    .cta-button {
+      display: inline-block;
+      padding: 12px 24px;
+      background-color: #2c3e50;
+      color: #ffffff;
+      text-decoration: none;
+      font-weight: 600;
+      border-radius: 4px;
+    }
+
+    .nav-back {
+      margin-top: 40px;
+      text-align: center;
+    }
+
+    .nav-back a {
+      text-decoration: none;
+      font-weight: 600;
+      color: #2c3e50;
+    }
   </style>
 </head>
+
 <body>
-  <div class="wrap">
-    <h1>Tier 1 — Single Document</h1>
-    <p class="price">Price: $39</p>
 
-    <div class="grid">
-      <div class="card">
-        <h3>NDA</h3>
-        <p>Standard non-disclosure agreement.</p>
-        <div class="actions">
-          <a class="link" href="/samples/nda.html" target="_blank" rel="noopener">View Sample</a>
-          <a class="btn" href="intake.html?tier=1&doc=NDA&price=39">Select</a>
-        </div>
-      </div>
+  <div class="page-wrapper">
 
-      <div class="card">
-        <h3>Independent Contractor Agreement</h3>
-        <p>Define scope, pay, and IP.</p>
-        <div class="actions">
-          <a class="link" href="/samples/contractor.html" target="_blank" rel="noopener">View Sample</a>
-          <a class="btn" href="intake.html?tier=1&doc=Independent%20Contractor%20Agreement&price=39">Select</a>
-        </div>
-      </div>
+    <h1>Tier 1 — Essential Documents</h1>
+    <div class="price">Price: $39</div>
 
-      <div class="card">
-        <h3>Services Agreement</h3>
-        <p>Simple services contract.</p>
-        <div class="actions">
-          <a class="link" href="/samples/service.html" target="_blank" rel="noopener">View Sample</a>
-          <a class="btn" href="intake.html?tier=1&doc=Services%20Agreement&price=39">Select</a>
-        </div>
-      </div>
+    <div class="content-card">
+      <ul>
+        <li>Non-Disclosure Agreements (NDAs)</li>
+        <li>Promissory Notes</li>
+        <li>Single-Member LLC Formation</li>
+      </ul>
 
-      <div class="card">
-        <h3>Single-Member LLC Operating Agreement</h3>
-        <p>Foundational operating agreement.</p>
-        <div class="actions">
-          <a class="link" href="/samples/singlemember.html" target="_blank" rel="noopener">View Sample</a>
-          <a class="btn" href="intake.html?tier=1&doc=Single-Member%20LLC%20Operating%20Agreement&price=39">Select</a>
-        </div>
-      </div>
+      <a class="cta-button" href="intake.html?tier=1">
+        Select Tier 1
+      </a>
     </div>
+
+    <!-- Secondary / Escape Navigation -->
+    <div class="nav-back">
+      <a href="catalog.html">← Back to Catalog</a>
+    </div>
+
   </div>
+
 </body>
 </html>
