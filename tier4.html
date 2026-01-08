@@ -2,133 +2,40 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>E-LegalBoom Intake</title>
+  <title>Tier 4 – Complete Bundle | E-LegalBoom</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-  <!-- Supabase SDK (creates window.supabase) -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f7f7f7;
-      padding: 30px;
-    }
-    .container {
-      max-width: 720px;
-      margin: auto;
-      background: #fff;
-      padding: 24px;
-      border-radius: 6px;
-    }
-    label {
-      display: block;
-      margin-top: 14px;
-      font-weight: bold;
-    }
-    input, textarea, button {
-      width: 100%;
-      padding: 10px;
-      margin-top: 6px;
-      font-size: 15px;
-    }
-    button {
-      margin-top: 20px;
-      background: #0a5cff;
-      color: #fff;
-      border: none;
-      cursor: pointer;
-    }
-    button:disabled {
-      background: #999;
-      cursor: not-allowed;
-    }
-    .error {
-      color: red;
-      margin-top: 10px;
-    }
+    /* same styles as Tier 1 */
   </style>
 </head>
 
 <body>
-  <div class="container">
-    <h2>Client Intake</h2>
+  <div class="page-wrapper">
+    <h1>Tier 4 — Complete Legal Bundle</h1>
+    <div class="price">Price: $149</div>
 
-    <form id="intakeForm">
-      <label for="first_name">First Name</label>
-      <input type="text" id="first_name" required />
+    <div class="doc-stack">
+      <div class="doc-block">
+        <div class="doc-title">All Tier 1 Documents</div>
+        <div class="doc-purpose">Foundational protection and entity setup.</div>
+      </div>
 
-      <label for="last_name">Last Name</label>
-      <input type="text" id="last_name" required />
+      <div class="doc-block">
+        <div class="doc-title">All Tier 2 Documents</div>
+        <div class="doc-purpose">Core business operations and contractor coverage.</div>
+      </div>
 
-      <label for="email">Email</label>
-      <input type="email" id="email" required />
+      <div class="doc-block">
+        <div class="doc-title">All Tier 3 Documents</div>
+        <div class="doc-purpose">Advanced ownership and partnership structuring.</div>
+      </div>
+    </div>
 
-      <label for="phone">Phone</label>
-      <input type="tel" id="phone" />
+    <a class="cta" href="intake.html?tier=4">Select Bundle</a>
 
-      <label for="notes">Additional Notes</label>
-      <textarea id="notes"></textarea>
-
-      <button type="submit" id="submitBtn">Continue to Review & Pay</button>
-      <div id="error" class="error"></div>
-    </form>
+    <div class="nav-back">
+      <a href="catalog.html">← Back to Catalog</a>
+    </div>
   </div>
-
-  <script>
-    // ------------------------------
-    // Supabase Configuration
-    // ------------------------------
-    const SUPABASE_URL = "https://YOUR_PROJECT_ID.supabase.co";
-    const SUPABASE_ANON_KEY = "YOUR_PUBLIC_ANON_KEY";
-
-    // IMPORTANT: do NOT name this "supabase"
-    const supabaseClient = window.supabase.createClient(
-      SUPABASE_URL,
-      SUPABASE_ANON_KEY
-    );
-
-    function getSessionValue(key) {
-      return sessionStorage.getItem(key) || "";
-    }
-
-    document.getElementById("intakeForm").addEventListener("submit", async (e) => {
-      e.preventDefault();
-      document.getElementById("error").innerText = "";
-      document.getElementById("submitBtn").disabled = true;
-
-      try {
-        const payload = {
-          order_id: crypto.randomUUID(),
-          client_first_name: document.getElementById("first_name").value.trim(),
-          client_last_name: document.getElementById("last_name").value.trim(),
-          email: document.getElementById("email").value.trim(),
-          phone: document.getElementById("phone").value.trim(),
-          tier: getSessionValue("tier"),
-          doc_type: getSessionValue("doc_type"),
-          price: getSessionValue("price"),
-          intake_payload: {
-            notes: document.getElementById("notes").value.trim()
-          },
-          status: "intake_submitted"
-        };
-
-        const { error } = await supabaseClient
-          .from("orders")   // ✅ CHANGE ONLY IF YOUR TABLE NAME IS DIFFERENT
-          .insert([payload]);
-
-        if (error) throw error;
-
-        sessionStorage.setItem("order_id", payload.order_id);
-        window.location.href = "review-and-pay.html";
-
-      } catch (err) {
-        console.error("INTAKE ERROR:", err);
-        document.getElementById("error").innerText =
-          "Unable to submit intake. Please try again.";
-        document.getElementById("submitBtn").disabled = false;
-      }
-    });
-  </script>
 </body>
 </html>
