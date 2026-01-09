@@ -6,46 +6,53 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <style>
-    .page-wrapper { max-width: 900px; margin: 48px auto; padding: 40px; background:#fff; }
-    h1 { font-size: 2rem; margin-bottom: 10px; }
+    .page-wrapper { max-width: 900px; margin: 48px auto; padding: 40px; background: #fff; }
+    h1 { font-size: 2rem; margin-bottom: 18px; }
     .price { font-size: 1.3rem; font-weight: 600; margin-bottom: 36px; }
 
-    .doc-stack { display:flex; flex-direction:column; gap:22px; margin-bottom:36px; }
-    .doc-block { border:1px solid #ddd; border-radius:6px; padding:22px 26px; }
-    .doc-title { font-size:1.15rem; font-weight:600; margin-bottom:6px; }
-    .doc-purpose { font-size:0.95rem; color:#555; line-height:1.45; }
+    .doc-stack { display: flex; flex-direction: column; gap: 22px; margin-bottom: 36px; }
+    .doc-block { border: 1px solid #ddd; border-radius: 6px; padding: 22px 26px; }
+    .doc-title { font-size: 1.15rem; font-weight: 600; margin-bottom: 6px; }
+    .doc-purpose { font-size: 0.95rem; color: #555; line-height: 1.45; }
 
-    .cta { display:inline-block; padding:14px 28px; background:#2c3e50; color:#fff;
-           text-decoration:none; font-weight:600; border-radius:4px; }
-
-    .nav-back { margin-top:48px; text-align:center; }
-    .nav-back a { text-decoration:none; font-weight:600; color:#2c3e50; }
+    .cta { display: inline-block; padding: 14px 28px; background: #2c3e50; color: #fff; text-decoration: none; font-weight: 600; border-radius: 4px; border: none; cursor: pointer; }
+    .nav-back { margin-top: 48px; text-align: center; }
+    .nav-back a { text-decoration: none; font-weight: 600; color: #2c3e50; }
   </style>
 </head>
 
 <body>
   <div class="page-wrapper">
-    <h1>Tier 1 — Essential Documents</h1>
+    <h1>Tier 1 – Essential Documents</h1>
     <div class="price">Price: $39</div>
 
-    <div class="doc-stack">
-      <div class="doc-block">
-        <div class="doc-title">Non-Disclosure Agreement (NDA)</div>
-        <div class="doc-purpose">Protects confidential information shared between parties.</div>
+    <form action="intake.html" method="GET">
+      <input type="hidden" name="tier" value="1" />
+
+      <div class="doc-stack">
+
+        <label class="doc-block">
+          <input type="checkbox" name="documents" value="nda" checked />
+          <div class="doc-title">Non-Disclosure Agreement (NDA)</div>
+          <div class="doc-purpose">Protects confidential information shared between parties.</div>
+        </label>
+
+        <label class="doc-block">
+          <input type="checkbox" name="documents" value="promissory_note" />
+          <div class="doc-title">Promissory Note</div>
+          <div class="doc-purpose">Documents a loan and clearly defines repayment terms.</div>
+        </label>
+
+        <label class="doc-block">
+          <input type="checkbox" name="documents" value="single_member_llc" />
+          <div class="doc-title">Single-Member LLC Formation</div>
+          <div class="doc-purpose">Creates a legally recognized business owned by one individual.</div>
+        </label>
+
       </div>
 
-      <div class="doc-block">
-        <div class="doc-title">Promissory Note</div>
-        <div class="doc-purpose">Documents a loan and clearly defines repayment terms.</div>
-      </div>
-
-      <div class="doc-block">
-        <div class="doc-title">Single-Member LLC Formation</div>
-        <div class="doc-purpose">Creates a legally recognized business owned by one individual.</div>
-      </div>
-    </div>
-
-    <a class="cta" href="intake.html?tier=1">Select Tier 1</a>
+      <button type="submit" class="cta">Continue to Intake</button>
+    </form>
 
     <div class="nav-back">
       <a href="catalog.html">← Back to Catalog</a>
@@ -53,3 +60,4 @@
   </div>
 </body>
 </html>
+
