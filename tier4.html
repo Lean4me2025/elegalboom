@@ -2,142 +2,162 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <title>Tier 4 – $149 – Custom Bundle</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Tier 4 – $149 — Custom Bundle</title>
-
-  <link rel="stylesheet" href="styles.css" />
 
   <style>
     body {
-      font-family: Arial, Helvetica, sans-serif;
-      background-color: #f5f7fb;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #f6f8fb;
       margin: 0;
+      padding: 0;
       color: #222;
     }
 
     .container {
-      max-width: 1000px;
+      max-width: 900px;
       margin: 0 auto;
-      background: #ffffff;
-      padding: 40px 32px 80px;
+      padding: 24px;
     }
 
     .top-nav {
-      margin-bottom: 18px;
+      margin-bottom: 16px;
     }
 
     .top-nav a {
-      color: #1e5cff;
       text-decoration: none;
-      font-size: 14px;
+      color: #2563eb;
+      font-weight: 500;
     }
 
     h1 {
-      font-size: 36px;
-      margin: 10px 0 8px;
+      font-size: 2rem;
+      margin-bottom: 6px;
     }
 
     .subtitle {
-      font-size: 18px;
       color: #555;
-      margin-bottom: 32px;
+      margin-bottom: 24px;
     }
 
     .selector {
-      background: #f2f5fb;
-      padding: 32px;
-      border-radius: 10px;
-      margin-bottom: 50px;
+      background: #fff;
+      border-radius: 8px;
+      padding: 24px;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.08);
     }
 
     .selector h2 {
       margin-top: 0;
-      font-size: 24px;
-      margin-bottom: 18px;
+      margin-bottom: 16px;
     }
 
     .doc-grid {
       display: grid;
-      grid-template-columns: repeat(2, minmax(280px, 1fr));
-      gap: 12px 30px;
-      font-size: 16px;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px 24px;
     }
 
     .doc-grid label {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.95rem;
       cursor: pointer;
     }
 
+    .doc-grid input {
+      transform: scale(1.1);
+    }
+
     .cta {
+      margin-top: 28px;
       text-align: center;
-      margin-top: 40px;
     }
 
     .cta button {
-      background-color: #1e5cff;
-      color: #ffffff;
-      padding: 16px 40px;
-      font-size: 20px;
+      padding: 14px 28px;
+      font-size: 1rem;
+      background: #2563eb;
+      color: #fff;
       border: none;
       border-radius: 6px;
       cursor: pointer;
     }
 
     .cta button:hover {
-      background-color: #1648c7;
+      background: #1e4fd1;
+    }
+
+    @media (max-width: 640px) {
+      .doc-grid {
+        grid-template-columns: 1fr;
+      }
     }
   </style>
 </head>
 
 <body>
+  <div class="container">
 
-<div class="container">
-
-  <div class="top-nav">
-    <a href="catalog.html">← Back to Catalog</a>
-  </div>
-
-  <h1>Tier 4 – $149 — Custom Bundle</h1>
-  <div class="subtitle">
-    Select the documents you want included in your custom legal bundle.
-  </div>
-
-  <div class="selector">
-    <h2>Choose Your Documents</h2>
-
-    <div class="doc-grid">
-      <label><input type="checkbox" value="operating_agreement"> Operating Agreement</label>
-      <label><input type="checkbox" value="shareholder_agreement"> Shareholder Agreement</label>
-      <label><input type="checkbox" value="buy_sell_agreement"> Buy-Sell Agreement</label>
-      <label><input type="checkbox" value="management_services"> Management Services Agreement</label>
-      <label><input type="checkbox" value="ip_assignment"> Intellectual Property Assignment</label>
-      <label><input type="checkbox" value="non_compete"> Non-Compete / Non-Solicitation Agreement</label>
-      <label><input type="checkbox" value="corporate_resolutions"> Corporate Resolution Templates</label>
+    <div class="top-nav">
+      <a href="catalog.html">← Back to Catalog</a>
     </div>
+
+    <h1>Tier 4 – $149 — Custom Bundle</h1>
+    <div class="subtitle">
+      Select the documents you want included in your custom legal bundle.
+    </div>
+
+    <div class="selector">
+      <h2>Choose Your Documents</h2>
+
+      <div class="doc-grid">
+        <!-- Tier 1 -->
+        <label><input type="checkbox" value="operating_agreement"> Operating Agreement</label>
+        <label><input type="checkbox" value="independent_contractor"> Independent Contractor Agreement</label>
+        <label><input type="checkbox" value="service_agreement"> Service Agreement</label>
+
+        <!-- Tier 2 -->
+        <label><input type="checkbox" value="nda"> Non-Disclosure Agreement (NDA)</label>
+        <label><input type="checkbox" value="payment_terms"> Payment Terms / Promissory Template</label>
+
+        <!-- Tier 3 -->
+        <label><input type="checkbox" value="shareholder_agreement"> Shareholder Agreement</label>
+        <label><input type="checkbox" value="buy_sell"> Buy-Sell Agreement</label>
+        <label><input type="checkbox" value="management_services"> Management Services Agreement</label>
+        <label><input type="checkbox" value="ip_assignment"> Intellectual Property Assignment</label>
+        <label><input type="checkbox" value="non_compete"> Non-Compete / Non-Solicitation Agreement</label>
+        <label><input type="checkbox" value="corporate_resolutions"> Corporate Resolution Templates</label>
+        <label><input type="checkbox" value="officer_appointments"> Officer Appointment Documents</label>
+      </div>
+
+      <div class="cta">
+        <button id="continueBtn">Continue to Intake</button>
+      </div>
+    </div>
+
   </div>
 
-  <div class="cta">
-    <button id="continueBtn">Continue to Intake</button>
-  </div>
+  <script>
+    document.getElementById('continueBtn').onclick = () => {
+      const selected = Array.from(
+        document.querySelectorAll('.doc-grid input:checked')
+      ).map(el => el.value);
 
-</div>
+      if (selected.length === 0) {
+        alert('Please select at least one document.');
+        return;
+      }
 
-<script>
-document.getElementById('continueBtn').onclick = () => {
-  const selected = Array.from(
-    document.querySelectorAll('.doc-grid input:checked')
-  ).map(el => el.value);
+      // AUTHORITATIVE TIER 4 LOCK
+      localStorage.setItem('selectedTier', 'Tier 4');
+      localStorage.setItem('price', '149');
+      localStorage.setItem('selectedDocuments', JSON.stringify(selected));
 
-  if (selected.length === 0) {
-    alert('Please select at least one document.');
-    return;
-  }
-
-  localStorage.setItem('selectedTier', 'Tier 4');
-  localStorage.setItem('selectedDocuments', JSON.stringify(selected));
-
-  window.location.href = 'intake.html?tier=4';
-};
-</script>
+      window.location.href = 'intake.html?tier=4';
+    };
+  </script>
 
 </body>
 </html>
