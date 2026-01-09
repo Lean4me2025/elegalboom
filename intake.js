@@ -1,19 +1,115 @@
-<script type="module">
-  import DOCUMENT_SCHEMAS from './documentSchemas.js';
+// intake.js
+// Authoritative intake submit logic for E-LegalBoom
+// - Creates full pweb_orders record
+// - Generates order_id
+// - Inserts ONCE
+// - Redirects to review-and-pay.html
+// - No duplicate submit logic
 
-  const selectedDoc = sessionStorage.getItem("doc_type");
+import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
 
-  if (!selectedDoc || !DOCUMENT_SCHEMAS[selectedDoc]) {
-    alert("Missing or invalid document type.");
+/* =========================================================
+   SUPABASE CONFIGURATION
+   (Use your existing working values)
+========================================================= */
+const SUPABASE_URL = "YOUR_SUPABASE_URL_HERE";
+const SUPABASE_ANON_KEY = "YOUR_SUPABASE_ANON_KEY_HERE";
+
+const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+/* =========================================================
+   INTAKE SUBMIT HANDLER
+========================================================= */
+document.addEventListener("DOMContentLoaded", () => {
+  const form = document.getElementById("intake-form");
+
+  if (!form) {
+    console.error("Intake form not found.");
+    return;
   }
 
-  const schema = DOCUMENT_SCHEMAS[selectedDoc];
+  // Guard against accidental double-binding
+  if (form.dataset.bound === "true") return;
+  form.dataset.bound = "true";
 
-  renderIntake(schema);
+  form.addEventListener("submit", async (event) => {
+    event.preventDefault();
 
-  function renderIntake(schema) {
-    renderBasicFields(schema.fields.basic);
-    renderPartyFields(schema.fields.parties);
-    renderOptionFields(schema.fields.options);
-  }
-</script>
+    /* =====================================================
+       SYSTEM-GENERATED FIELDS
+    ===================================================== */
+    const order_id = `ELB-${crypto.randomUUID().toUpperCase()}`;
+
+    /* =====================================================
+       COLLECT INTAKE VALUES (CANONICAL, NO TRANSFORM)
+    ===================================================== */
+    const payload = {
+      order_id: order_id,
+
+      client_first_name:
+        document.getElementById("first_name")?.value.trim() || null,
+
+      client_last_name:
+        document.getElementById("last_name")?.value.trim() || null,
+
+      client_email:
+        document.getElementById("email")?.value.trim() || null,
+
+      client_phone:
+        document.getElementById("phone")?.value.trim() || null,
+
+      client_business_name:
+        document.getElementById("business_name")?.value.trim() || null,
+
+      client_state:
+        document.getElementById("client_state")?.value || null,
+
+      governing_state:
+        document.getElementById("governing_state")?.value || null,
+
+      doc_type:
+        document.getElementById("doc_type")?.value || null,
+
+      tier:
+        document.getElementById("tier")?.value || null,
+
+      file_option:
+        document.getElementById("file_option")?.value || null,
+
+      details:
+        document.getElementById("details")?.value.trim() || null,
+
+      order_status: "initiated"
+    };
+
+    /* =====================================================
+       REQUIRED FIELD CHECK (MINIMAL, PER MAPPING)
+    ===================================================== */
+    if (
+      !payload.client_first_name ||
+      !payload.client_last_name ||
+      !payload.client_email
+    ) {
+      alert("Please complete all required fields before continuing.");
+      return;
+    }
+
+    /* =====================================================
+       INSERT WEB ORDER (SINGLE INSERT)
+    ===================================================== */
+    const { error } = await supabase
+      .from("pweb_orders")
+      .insert([payload]);
+
+    if (error) {
+      console.error("Order insert failed:", error);
+      alert("There was an error submitting your order. Please try again.");
+      return;
+    }
+
+    /* =====================================================
+       REDIRECT TO REVIEW & PAYMENT
+    ===================================================== */
+    window.location.href = `/review-and-pay.html?order_id=${order_id}`;
+  });
+});
