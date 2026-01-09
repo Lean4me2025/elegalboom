@@ -1,166 +1,70 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <title>E-LegalBoom – Client Intake</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <!-- Supabase JS -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+// intake.js
+// Authoritative intake submit logic
+// Creates full pweb_orders record and redirects to review-and-pay.html
 
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f5f5f5;
-      padding: 30px;
+import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
+
+// 🔐 Supabase configuration (use your existing working values)
+const SUPABASE_URL = "https://vvjbjfltqsivvxxifnvi.supabase.co";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ2amJqZmx0cXNpdnZ4eGlmbnZpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc5NzYzNTAsImV4cCI6MjA3MzU1MjM1MH0.F4zzcpCHl9v-Rnj0wgKJ5zBf1HteVyXelMLQDDEN28Q";
+
+const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+document.addEventListener("DOMContentLoaded", () => {
+  const form = document.getElementById("intake-form");
+
+  if (!form) {
+    console.error("Intake form not found");
+    return;
+  }
+
+  form.addEventListener("submit", async (event) => {
+    event.preventDefault();
+
+    // 🔑 Generate authoritative order ID
+    const order_id = `ELB-${crypto.randomUUID().toUpperCase()}`;
+
+    // 📥 Collect mapped intake fields (NO transformation)
+    const payload = {
+      order_id,
+      client_first_name: document.getElementById("first_name")?.value.trim() || null,
+      client_last_name: document.getElementById("last_name")?.value.trim() || null,
+      client_email: document.getElementById("email")?.value.trim() || null,
+      client_phone: document.getElementById("phone")?.value.trim() || null,
+      client_business_name: document.getElementById("business_name")?.value.trim() || null,
+      client_state: document.getElementById("client_state")?.value || null,
+      governing_state: document.getElementById("governing_state")?.value || null,
+      doc_type: document.getElementById("doc_type")?.value || null,
+      tier: document.getElementById("tier")?.value || null,
+      file_option: document.getElementById("file_option")?.value || null,
+      details: document.getElementById("details")?.value.trim() || null,
+      order_status: "initiated"
+    };
+
+    // 🛑 Required-field guard (per mapping)
+    if (
+      !payload.client_first_name ||
+      !payload.client_last_name ||
+      !payload.client_email ||
+      !payload.doc_type
+    ) {
+      alert("Please complete all required fields before continuing.");
+      return;
     }
-    .container {
-      max-width: 760px;
-      margin: auto;
-      background: #fff;
-      padding: 24px;
-      border-radius: 6px;
+
+    // 📦 Insert full web order
+    const { error } = await supabase
+      .from("pweb_orders")
+      .insert([payload]);
+
+    if (error) {
+      console.error("Order insert failed:", error);
+      alert("There was an error submitting your order. Please try again.");
+      return;
     }
-    h2 {
-      margin-bottom: 20px;
-    }
-    label {
-      display: block;
-      margin-top: 14px;
-      font-weight: bold;
-    }
-    input, select, textarea, button {
-      width: 100%;
-      padding: 10px;
-      margin-top: 6px;
-      font-size: 15px;
-    }
-    button {
-      margin-top: 24px;
-      background: #0a5cff;
-      color: #fff;
-      border: none;
-      cursor: pointer;
-    }
-    button:disabled {
-      background: #999;
-      cursor: not-allowed;
-    }
-    .error {
-      color: red;
-      margin-top: 12px;
-    }
-  </style>
-</head>
 
-<body>
-  <div class="container">
-    <h2>Client Intake</h2>
-
-    <form id="intakeForm">
-
-      <label for="first_name">First Name</label>
-      <input id="first_name" type="text" required />
-
-      <label for="last_name">Last Name</label>
-      <input id="last_name" type="text" required />
-
-      <label for="email">Email</label>
-      <input id="email" type="email" required />
-
-      <label for="phone">Phone</label>
-      <input id="phone" type="tel" />
-
-      <label for="business_name">Business Name (if applicable)</label>
-      <input id="business_name" type="text" />
-
-      <label for="client_state">Client State</label>
-      <select id="client_state" required>
-        <option value="">Select state</option>
-        <option value="CA">CA</option>
-        <option value="TX">TX</option>
-        <option value="FL">FL</option>
-        <!-- add remaining states as needed -->
-      </select>
-
-      <label for="governing_state">Governing / Business State</label>
-      <select id="governing_state" required>
-        <option value="">Select state</option>
-        <option value="CA">CA</option>
-        <option value="TX">TX</option>
-        <option value="FL">FL</option>
-      </select>
-
-      <label for="notes">Additional Notes</label>
-      <textarea id="notes" rows="4"></textarea>
-
-      <button id="submitBtn" type="submit">
-        Continue to Review & Pay
-      </button>
-
-      <div id="error" class="error"></div>
-    </form>
-  </div>
-
-  <script>
-    /* ==========================
-       SUPABASE CONFIG
-       ========================== */
-
-    const SUPABASE_URL = "https://vvjbjfltqsivvxxifnvi.supabase.co";
-    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ2amJqZmx0cXNpdnZ4eGlmbnZpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc5NzYzNTAsImV4cCI6MjA3MzU1MjM1MH0.F4zzcpCHl9v-Rnj0wgKJ5zBf1HteVyXelMLQDDEN28Q";
-
-    const supabaseClient = window.supabase.createClient(
-      SUPABASE_URL,
-      SUPABASE_ANON_KEY
-    );
-
-    /* ==========================
-       FORM SUBMIT HANDLER
-       ========================== */
-
-    document.getElementById("intakeForm").addEventListener("submit", async (e) => {
-      e.preventDefault();
-
-      const errorEl = document.getElementById("error");
-      const submitBtn = document.getElementById("submitBtn");
-
-      errorEl.innerText = "";
-      submitBtn.disabled = true;
-
-      try {
-        const payload = {
-          client_first_name: document.getElementById("first_name").value.trim(),
-          client_last_name: document.getElementById("last_name").value.trim(),
-          client_email: document.getElementById("email").value.trim(),
-          client_phone: document.getElementById("phone").value.trim(),
-
-          client_business_name:
-            document.getElementById("business_name").value.trim() || null,
-
-          client_state: document.getElementById("client_state").value,
-          governing_state: document.getElementById("governing_state").value,
-
-          doc_type: sessionStorage.getItem("doc_type"),
-
-          notes: document.getElementById("notes").value.trim(),
-          order_status: "intake_submitted"
-        };
-
-        const { error } = await supabaseClient
-          .from("pweb_orders")
-          .insert([payload]);
-
-        if (error) throw error;
-
-        window.location.href = "review-and-pay.html";
-
-      } catch (err) {
-        console.error("INTAKE ERROR:", err);
-        errorEl.innerText = "Unable to submit intake. Please try again.";
-        submitBtn.disabled = false;
-      }
-    });
-  </script>
-</body>
-</html>
+    // ➡️ Redirect to existing review page
+    window.location.href = `/review-and-pay.html?order_id=${order_id}`;
+  });
+});
