@@ -3,45 +3,30 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Tier 3 – $99 – Advanced Control & Growth Protection</title>
+  <title>Tier 3 – Advanced Control & Growth Protection</title>
 
+  <!-- Keep existing global styles if you have them -->
   <link rel="stylesheet" href="styles.css" />
 
   <style>
+    /* NO VISUAL CHANGES — matches existing Tier 3 look */
     body {
       font-family: Arial, Helvetica, sans-serif;
       background-color: #f5f7fb;
       margin: 0;
       color: #222;
     }
-
     .container {
       max-width: 1100px;
       margin: 0 auto;
       background: #ffffff;
       padding: 40px 32px 80px;
     }
+    .top-nav { margin-bottom: 18px; }
+    .top-nav a { color: #1e5cff; text-decoration: none; font-size: 14px; }
 
-    .top-nav {
-      margin-bottom: 18px;
-    }
-
-    .top-nav a {
-      color: #1e5cff;
-      text-decoration: none;
-      font-size: 14px;
-    }
-
-    h1 {
-      font-size: 36px;
-      margin: 10px 0 8px;
-    }
-
-    .subtitle {
-      font-size: 18px;
-      color: #555;
-      margin-bottom: 28px;
-    }
+    h1 { font-size: 36px; margin: 10px 0 8px; }
+    .subtitle { font-size: 18px; color: #555; margin-bottom: 28px; }
 
     .hero {
       background: #f2f5fb;
@@ -49,45 +34,114 @@
       border-radius: 10px;
       margin-bottom: 50px;
     }
-
-    .hero h2 {
-      margin-top: 0;
-    }
-
-    .hero ul {
-      margin-left: 18px;
-      font-size: 17px;
-      line-height: 1.65;
-    }
+    .hero h2 { margin-top: 0; }
+    .hero ul { margin-left: 18px; font-size: 17px; line-height: 1.65; }
 
     .secondary {
       display: flex;
       gap: 32px;
       margin-top: 10px;
     }
-
     .box {
       flex: 1;
       background: #fafbfe;
       padding: 22px 24px;
       border-radius: 8px;
     }
-
     .box h3 {
       margin-top: 0;
       font-size: 18px;
       margin-bottom: 18px;
     }
-
-    .box ul {
-      margin-left: 18px;
-      font-size: 15px;
-      line-height: 1.6;
-    }
+    .box ul { margin-left: 18px; font-size: 15px; line-height: 1.6; }
 
     .cta {
       text-align: center;
       margin-top: 60px;
     }
-
     .cta button {
+      background-color: #1e5cff;
+      color: #ffffff;
+      padding: 16px 38px;
+      font-size: 20px;
+      border-radius: 6px;
+      border: none;
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+
+    <div class="top-nav">
+      <a href="catalog.html">← Back to Catalog</a>
+    </div>
+
+    <h1>Tier 3 – $99 – Advanced Control & Growth Protection</h1>
+    <div class="subtitle">
+      A curated, authoritative bundle for founders who want strong governance,
+      risk control, and operational clarity.
+    </div>
+
+    <!-- 
+      FORM WRAPS THE PAGE CONTENT.
+      NO VISIBLE SELECTIONS.
+      DOCUMENTS ARE PRESELECTED AND EMITTED VIA HIDDEN INPUTS.
+    -->
+    <form action="intake.html" method="GET">
+      <!-- Tier -->
+      <input type="hidden" name="tier" value="3" />
+
+      <!-- Curated document set (INVISIBLE, PRESELECTED) -->
+      <!-- Adjust values ONLY if your canonical doc keys differ -->
+      <input type="hidden" name="documents" value="llc_operating_agreement" />
+      <input type="hidden" name="documents" value="partnership_agreement" />
+      <input type="hidden" name="documents" value="buy_sell_agreement" />
+      <input type="hidden" name="documents" value="founder_agreement" />
+      <input type="hidden" name="documents" value="independent_contractor_agreement" />
+      <input type="hidden" name="documents" value="nda" />
+
+      <!-- Existing Tier 3 content (UNCHANGED VISUALLY) -->
+      <div class="hero">
+        <h2>What’s Included</h2>
+        <ul>
+          <li>LLC Operating Agreement</li>
+          <li>Partnership Agreement</li>
+          <li>Buy-Sell Agreement</li>
+          <li>Founder Agreement</li>
+          <li>Independent Contractor Agreement</li>
+          <li>Non-Disclosure Agreement (NDA)</li>
+        </ul>
+      </div>
+
+      <div class="secondary">
+        <div class="box">
+          <h3>Why Tier 3</h3>
+          <ul>
+            <li>Clear ownership and control</li>
+            <li>Reduced founder and partner risk</li>
+            <li>Operational clarity as you scale</li>
+            <li>Stronger protection in disputes</li>
+          </ul>
+        </div>
+
+        <div class="box">
+          <h3>Best For</h3>
+          <ul>
+            <li>Growing businesses</li>
+            <li>Multiple stakeholders</li>
+            <li>Outside contractors</li>
+            <li>Long-term planning</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="cta">
+        <button type="submit">Continue to Intake</button>
+      </div>
+    </form>
+
+  </div>
+</body>
+</html>
