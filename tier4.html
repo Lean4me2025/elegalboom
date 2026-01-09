@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Tier 4 – Comprehensive Business Legal Suite</title>
+  <title>Tier 4 – $149 — Custom Bundle</title>
 
   <link rel="stylesheet" href="styles.css" />
 
@@ -12,7 +12,6 @@
       font-family: Arial, Helvetica, sans-serif;
       background-color: #f5f7fb;
       margin: 0;
-      padding: 0;
       color: #222;
     }
 
@@ -20,87 +19,70 @@
       max-width: 1000px;
       margin: 0 auto;
       background: #ffffff;
-      padding: 40px 30px 80px;
-      border-radius: 8px;
+      padding: 40px 32px 80px;
     }
 
     .top-nav {
-      margin-bottom: 20px;
+      margin-bottom: 18px;
     }
 
     .top-nav a {
-      text-decoration: none;
       color: #1e5cff;
+      text-decoration: none;
       font-size: 14px;
     }
 
     h1 {
       font-size: 36px;
-      margin-bottom: 8px;
+      margin: 10px 0 8px;
     }
 
-    .price-row {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      margin-bottom: 30px;
+    .subtitle {
+      font-size: 18px;
+      color: #555;
+      margin-bottom: 32px;
     }
 
-    .price {
-      font-size: 26px;
-      font-weight: bold;
-      color: #1e5cff;
+    .selector {
+      background: #f2f5fb;
+      padding: 32px;
+      border-radius: 10px;
+      margin-bottom: 50px;
     }
 
-    .best-value {
-      background: #ffb703;
-      color: #000;
-      font-weight: bold;
-      font-size: 14px;
-      padding: 6px 14px;
-      border-radius: 20px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-
-    h2 {
+    .selector h2 {
+      margin-top: 0;
       font-size: 24px;
-      margin-top: 40px;
-      margin-bottom: 16px;
-      border-bottom: 2px solid #e6e6e6;
-      padding-bottom: 6px;
+      margin-bottom: 18px;
     }
 
-    ul {
-      margin-left: 22px;
+    .doc-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(280px, 1fr));
+      gap: 12px 30px;
       font-size: 16px;
-      line-height: 1.8;
     }
 
-    .highlight {
-      background: #f0f4ff;
-      border-left: 6px solid #1e5cff;
-      padding: 22px 26px;
-      margin: 40px 0;
-      font-size: 17px;
+    .doc-grid label {
+      cursor: pointer;
     }
 
     .cta {
       text-align: center;
-      margin-top: 60px;
+      margin-top: 40px;
     }
 
-    .cta a {
+    .cta button {
       background-color: #1e5cff;
       color: #ffffff;
-      padding: 16px 36px;
+      padding: 16px 40px;
       font-size: 20px;
-      text-decoration: none;
+      border: none;
       border-radius: 6px;
-      display: inline-block;
+      cursor: pointer;
     }
 
-    .cta a:hover {
+    .cta button:hover {
       background-color: #1648c7;
     }
   </style>
@@ -108,53 +90,54 @@
 
 <body>
 
-  <div class="container">
+<div class="container">
 
-    <!-- Back to Catalog -->
-    <div class="top-nav">
-      <a href="catalog.html">← Back to Catalog</a>
-    </div>
-
-    <h1>Tier 4 — Comprehensive Business Legal Suite</h1>
-
-    <div class="price-row">
-      <div class="price">$149</div>
-      <div class="best-value">Best Value</div>
-    </div>
-
-    <p>
-      Tier 4 is a complete, unified legal framework designed for founders and
-      businesses that want everything aligned, protected, and ready for long-term operation.
-    </p>
-
-    <h2>What’s Included</h2>
-    <ul>
-      <li>All Tier 2 Documents</li>
-      <li>All Tier 3 Documents</li>
-      <li>Founder Exit & Succession Planning</li>
-      <li>Risk & Liability Positioning Documents</li>
-      <li>Business Continuity & Control Provisions</li>
-      <li>Cross-Agreement Consistency Alignment</li>
-    </ul>
-
-    <div class="highlight">
-      This tier eliminates document conflicts, reduces long-term legal risk,
-      and provides a single, cohesive legal architecture that grows with your business.
-    </div>
-
-    <h2>Who This Is For</h2>
-    <ul>
-      <li>Serious founders and operators</li>
-      <li>Investor-facing businesses</li>
-      <li>Companies planning for scale, sale, or succession</li>
-      <li>Anyone who wants to “do it once and do it right”</li>
-    </ul>
-
-    <div class="cta">
-      <a href="intake.html?tier=4">Continue to Intake</a>
-    </div>
-
+  <div class="top-nav">
+    <a href="catalog.html">← Back to Catalog</a>
   </div>
+
+  <h1>Tier 4 – $149 — Custom Bundle</h1>
+  <div class="subtitle">
+    Select the documents you want included in your custom legal bundle.
+  </div>
+
+  <div class="selector">
+    <h2>Choose Your Documents</h2>
+
+    <div class="doc-grid">
+      <label><input type="checkbox" value="operating_agreement"> Operating Agreement</label>
+      <label><input type="checkbox" value="shareholder_agreement"> Shareholder Agreement</label>
+      <label><input type="checkbox" value="buy_sell_agreement"> Buy-Sell Agreement</label>
+      <label><input type="checkbox" value="management_services"> Management Services Agreement</label>
+      <label><input type="checkbox" value="ip_assignment"> Intellectual Property Assignment</label>
+      <label><input type="checkbox" value="non_compete"> Non-Compete / Non-Solicitation Agreement</label>
+      <label><input type="checkbox" value="corporate_resolutions"> Corporate Resolution Templates</label>
+    </div>
+  </div>
+
+  <div class="cta">
+    <button id="continueBtn">Continue to Intake</button>
+  </div>
+
+</div>
+
+<script>
+document.getElementById('continueBtn').onclick = () => {
+  const selected = Array.from(
+    document.querySelectorAll('.doc-grid input:checked')
+  ).map(el => el.value);
+
+  if (selected.length === 0) {
+    alert('Please select at least one document.');
+    return;
+  }
+
+  localStorage.setItem('selectedTier', 'Tier 4');
+  localStorage.setItem('selectedDocuments', JSON.stringify(selected));
+
+  window.location.href = 'intake.html?tier=4';
+};
+</script>
 
 </body>
 </html>
