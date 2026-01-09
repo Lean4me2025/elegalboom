@@ -2,146 +2,114 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>E-LegalBoom – Intake</title>
+  <title>GetPass Intake</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <!-- Optional: your main stylesheet -->
-  <link rel="stylesheet" href="styles.css" />
+  <!-- Supabase CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
 </head>
 <body>
 
-  <main class="intake-container">
-    <h1>E-LegalBoom Intake Form</h1>
+  <h1>GetPass Intake</h1>
 
-    <form id="intake-form">
+  <form id="intake-form">
 
-      <!-- ========================= -->
-      <!-- CLIENT IDENTITY -->
-      <!-- ========================= -->
+    <!-- BASIC REQUIRED FIELDS -->
+    <label>
+      First Name *
+      <input type="text" id="first_name" required />
+    </label>
 
-      <fieldset>
-        <legend>Client Information</legend>
+    <label>
+      Last Name *
+      <input type="text" id="last_name" required />
+    </label>
 
-        <label for="first_name">First Name *</label>
-        <input
-          type="text"
-          id="first_name"
-          name="first_name"
-          required
-        />
+    <label>
+      Email *
+      <input type="email" id="email" required />
+    </label>
 
-        <label for="last_name">Last Name *</label>
-        <input
-          type="text"
-          id="last_name"
-          name="last_name"
-          required
-        />
+    <!-- OPTIONAL / PASSIVE FIELDS -->
+    <label>
+      Phone
+      <input type="text" id="phone" />
+    </label>
 
-        <label for="email">Email *</label>
-        <input
-          type="email"
-          id="email"
-          name="email"
-          required
-        />
+    <label>
+      Tier
+      <select id="tier">
+        <option value="">—</option>
+        <option value="1">Tier 1</option>
+        <option value="2">Tier 2</option>
+        <option value="3">Tier 3</option>
+        <option value="4">Tier 4</option>
+      </select>
+    </label>
 
-        <label for="phone">Phone</label>
-        <input
-          type="tel"
-          id="phone"
-          name="phone"
-        />
+    <label>
+      Document Type
+      <input type="text" id="doc_type" />
+    </label>
 
-        <label for="business_name">Business Name (if applicable)</label>
-        <input
-          type="text"
-          id="business_name"
-          name="business_name"
-        />
-      </fieldset>
+    <button type="submit">Continue</button>
+  </form>
 
-      <!-- ========================= -->
-      <!-- JURISDICTION -->
-      <!-- ========================= -->
+  <!-- ============================= -->
+  <!-- INLINE SUBMIT + DB LOGIC ONLY -->
+  <!-- ============================= -->
+  <script>
+    // ===== SUPABASE CONFIG =====
+    const SUPABASE_URL = "https://vvjbjfltqsivvxxifnvi.supabase.co";
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ2amJqZmx0cXNpdnZ4eGlmbnZpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc5NzYzNTAsImV4cCI6MjA3MzU1MjM1MH0.F4zzcpCHl9v-Rnj0wgKJ5zBf1HteVyXelMLQDDEN28Q";
 
-      <fieldset>
-        <legend>Jurisdiction</legend>
+    const supabase = window.supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_ANON_KEY
+    );
 
-        <label for="client_state">Client State *</label>
-        <select id="client_state" name="client_state" required>
-          <option value="">Select state</option>
-          <!-- populate states as needed -->
-        </select>
+    const form = document.getElementById("intake-form");
 
-        <label for="governing_state">Governing / Business State</label>
-        <select id="governing_state" name="governing_state">
-          <option value="">Select state</option>
-          <!-- populate states as needed -->
-        </select>
-      </fieldset>
+    form.addEventListener("submit", async function (e) {
+      e.preventDefault();
 
-      <!-- ========================= -->
-      <!-- ORDER / PRODUCT -->
-      <!-- ========================= -->
+      // Generate order_id
+      const order_id = "ELB-" + Date.now();
 
-      <fieldset>
-        <legend>Order Details</legend>
+      // Collect values
+      const payload = {
+        order_id: order_id,
+        client_first_name: document.getElementById("first_name").value.trim(),
+        client_last_name: document.getElementById("last_name").value.trim(),
+        client_email: document.getElementById("email").value.trim(),
+        client_phone: document.getElementById("phone").value.trim() || null,
+        tier: document.getElementById("tier").value || null,
+        doc_type: document.getElementById("doc_type").value || null,
+        order_status: "initiated"
+      };
 
-        <label for="doc_type">Document Type *</label>
-        <select id="doc_type" name="doc_type" required>
-          <option value="">Select document</option>
-          <!-- Tier logic may control options -->
-        </select>
+      // Minimal required validation
+      if (!payload.client_first_name || !payload.client_last_name || !payload.client_email) {
+        alert("Please complete required fields.");
+        return;
+      }
 
-        <label for="tier">Tier</label>
-        <select id="tier" name="tier">
-          <option value="">Select tier</option>
-          <option value="1">Tier 1</option>
-          <option value="2">Tier 2</option>
-          <option value="3">Tier 3</option>
-          <option value="4">Tier 4</option>
-        </select>
+      // Insert ONE row
+      const { error } = await supabase
+        .from("pweb_orders")
+        .insert([payload]);
 
-        <label for="file_option">File Option</label>
-        <select id="file_option" name="file_option">
-          <option value="">Select option</option>
-          <option value="docx">DOCX</option>
-          <option value="pdf">PDF</option>
-        </select>
-      </fieldset>
+      if (error) {
+        console.error(error);
+        alert("Error submitting intake.");
+        return;
+      }
 
-      <!-- ========================= -->
-      <!-- ADDITIONAL DETAILS -->
-      <!-- ========================= -->
-
-      <fieldset>
-        <legend>Additional Information</legend>
-
-        <label for="details">Additional Details / Notes</label>
-        <textarea
-          id="details"
-          name="details"
-          rows="4"
-        ></textarea>
-      </fieldset>
-
-      <!-- ========================= -->
-      <!-- SUBMIT -->
-      <!-- ========================= -->
-
-      <button type="submit">
-        Continue to Review
-      </button>
-
-    </form>
-  </main>
-
-  <!-- ========================= -->
-  <!-- INTAKE SUBMIT LOGIC -->
-  <!-- ========================= -->
-  <!-- Load AFTER the form -->
-  <script src="intake.js"></script>
+      // Redirect
+      window.location.href =
+        "review-and-pay.html?order_id=" + order_id;
+    });
+  </script>
 
 </body>
 </html>
