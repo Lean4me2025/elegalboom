@@ -2,23 +2,91 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Tier 2 – Business Formation & Core Agreements | E-LegalBoom</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tier 2 – $59 – Business Formation & Core Agreements</title>
+
+  <link rel="stylesheet" href="styles.css" />
 
   <style>
-    body { font-family: Arial, Helvetica, sans-serif; background-color: #f5f7fb; margin: 0; color: #222; }
-    .container { max-width: 1100px; margin: 0 auto; background: #fff; padding: 40px 32px 80px; }
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background-color: #f5f7fb;
+      margin: 0;
+      color: #222;
+    }
 
-    .top-nav { margin-bottom: 18px; }
-    .top-nav a { color: #1e5cff; text-decoration: none; font-size: 14px; }
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      background: #ffffff;
+      padding: 48px 32px 80px;
+    }
 
-    h1 { font-size: 36px; margin: 10px 0 8px; }
-    .subtitle { font-size: 18px; color: #555; margin-bottom: 28px; }
+    .top-nav {
+      margin-bottom: 18px;
+    }
 
-    .hero { background: #f2f5fb; padding: 36px; border-radius: 10px; }
-    .hero ul { margin-left: 18px; font-size: 17px; line-height: 1.65; }
+    .top-nav a {
+      color: #1e5cff;
+      text-decoration: none;
+      font-size: 14px;
+    }
 
-    .cta { text-align: center; margin-top: 60px; }
+    h1 {
+      font-size: 36px;
+      margin: 10px 0 8px;
+    }
+
+    .subtitle {
+      font-size: 18px;
+      color: #555;
+      margin-bottom: 28px;
+    }
+
+    .hero {
+      background: #f2f5fb;
+      padding: 32px;
+      border-radius: 10px;
+      margin-bottom: 48px;
+    }
+
+    .hero h2 {
+      margin-top: 0;
+    }
+
+    .doc-option {
+      display: block;
+      padding: 16px 16px 18px;
+      border-bottom: 1px solid #e3e6ee;
+    }
+
+    .doc-option:last-child {
+      border-bottom: none;
+    }
+
+    .doc-option input {
+      margin-right: 10px;
+      transform: scale(1.1);
+    }
+
+    .doc-title {
+      font-weight: 600;
+      font-size: 16px;
+    }
+
+    .doc-help {
+      font-size: 14px;
+      color: #555;
+      margin-left: 28px;
+      margin-top: 6px;
+      line-height: 1.45;
+    }
+
+    .cta {
+      text-align: center;
+      margin-top: 48px;
+    }
+
     .cta button {
       background-color: #1e5cff;
       color: #fff;
@@ -28,38 +96,97 @@
       border: none;
       cursor: pointer;
     }
+
+    .cta button:hover {
+      background-color: #1648c7;
+    }
   </style>
 </head>
 
 <body>
   <div class="container">
 
+    <!-- Back -->
     <div class="top-nav">
       <a href="catalog.html">← Back to Catalog</a>
     </div>
 
+    <!-- Title -->
     <h1>Tier 2 – $59 – Business Formation & Core Agreements</h1>
     <div class="subtitle">
       Foundational legal documents to properly form, protect, and operate your business.
     </div>
 
+    <!-- FORM -->
     <form action="intake.html" method="GET">
+
       <input type="hidden" name="tier" value="2" />
 
+      <!-- DOCUMENTS -->
       <div class="hero">
         <h2>Documents Included</h2>
 
-        <label><input type="checkbox" name="documents" value="operating_agreement" checked /> LLC Operating Agreement</label><br/><br/>
-        <label><input type="checkbox" name="documents" value="partnership_agreement" /> Partnership Agreement</label><br/><br/>
-        <label><input type="checkbox" name="documents" value="founder_agreement" /> Founder Agreement</label><br/><br/>
-        <label><input type="checkbox" name="documents" value="buy_sell_agreement" /> Buy-Sell Agreement</label><br/><br/>
-        <label><input type="checkbox" name="documents" value="independent_contractor_agreement" /> Independent Contractor Agreement</label><br/><br/>
-        <label><input type="checkbox" name="documents" value="nda" /> Non-Disclosure Agreement (NDA)</label>
+        <label class="doc-option">
+          <input type="checkbox" name="documents" value="operating_agreement" checked />
+          <span class="doc-title">LLC Operating Agreement</span>
+          <div class="doc-help">
+            Establishes ownership percentages, voting rights, profit distribution,
+            and management authority for the business.
+          </div>
+        </label>
+
+        <label class="doc-option">
+          <input type="checkbox" name="documents" value="partnership_agreement" />
+          <span class="doc-title">Partnership Agreement</span>
+          <div class="doc-help">
+            Defines partner roles, capital contributions, profit sharing,
+            decision-making authority, and exit terms.
+          </div>
+        </label>
+
+        <label class="doc-option">
+          <input type="checkbox" name="documents" value="founder_agreement" />
+          <span class="doc-title">Founder Agreement</span>
+          <div class="doc-help">
+            Clarifies founder responsibilities, equity allocation,
+            vesting schedules, and dispute resolution.
+          </div>
+        </label>
+
+        <label class="doc-option">
+          <input type="checkbox" name="documents" value="buy_sell_agreement" />
+          <span class="doc-title">Buy-Sell Agreement</span>
+          <div class="doc-help">
+            Sets rules for ownership transfers in the event of death,
+            disability, exit, or internal disputes.
+          </div>
+        </label>
+
+        <label class="doc-option">
+          <input type="checkbox" name="documents" value="independent_contractor_agreement" />
+          <span class="doc-title">Independent Contractor Agreement</span>
+          <div class="doc-help">
+            Defines scope of work, payment terms, IP ownership,
+            and limits legal exposure when using contractors.
+          </div>
+        </label>
+
+        <label class="doc-option">
+          <input type="checkbox" name="documents" value="nda" />
+          <span class="doc-title">Non-Disclosure Agreement (NDA)</span>
+          <div class="doc-help">
+            Protects confidential business information when working with
+            partners, contractors, investors, or advisors.
+          </div>
+        </label>
+
       </div>
 
+      <!-- CTA -->
       <div class="cta">
         <button type="submit">Continue to Intake</button>
       </div>
+
     </form>
 
   </div>
