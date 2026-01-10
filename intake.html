@@ -1,32 +1,103 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Intake</title>
+  <meta charset="UTF-8" />
+  <title>E-LegalBoom | Intake</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+      padding: 30px;
+    }
+    .container {
+      max-width: 600px;
+      margin: auto;
+      background: #fff;
+      padding: 25px;
+      border-radius: 6px;
+      border: 1px solid #ddd;
+    }
+    h2 {
+      margin-top: 0;
+    }
+    label {
+      display: block;
+      margin-top: 15px;
+    }
+    input, textarea {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+    }
+    button {
+      margin-top: 20px;
+      padding: 12px;
+      width: 100%;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    .summary {
+      background: #f9f9f9;
+      padding: 10px;
+      margin-bottom: 15px;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+  </style>
 </head>
 <body>
 
-<h2>Your Information</h2>
+<div class="container">
+  <h2>Client Intake</h2>
 
-<form onsubmit="saveIntake(); return false;">
-  <input name="first_name" placeholder="First Name" required><br>
-  <input name="last_name" placeholder="Last Name" required><br>
-  <input name="email" placeholder="Email" required><br>
-  <textarea name="notes" placeholder="Notes"></textarea><br>
-  <button type="submit">Continue to Pay</button>
-</form>
+  <div class="summary" id="summary"></div>
+
+  <form id="intakeForm">
+    <label>
+      First Name
+      <input type="text" id="firstName" required>
+    </label>
+
+    <label>
+      Last Name
+      <input type="text" id="lastName" required>
+    </label>
+
+    <label>
+      Email
+      <input type="email" id="email" required>
+    </label>
+
+    <label>
+      Notes (optional)
+      <textarea id="notes"></textarea>
+    </label>
+
+    <button type="submit">Continue to Review & Pay</button>
+  </form>
+</div>
 
 <script>
-const order = JSON.parse(localStorage.getItem('orderContext'));
-if (!order) window.location.replace('catalog.html');
+  const orderContext = JSON.parse(localStorage.getItem("orderContext"));
 
-function saveIntake() {
-  const form = document.querySelector('form');
-  const data = Object.fromEntries(new FormData(form).entries());
+  if (!orderContext) {
+    window.location.href = "catalog.html";
+  }
 
-  order.intake = data;
-  localStorage.setItem('orderContext', JSON.stringify(order));
-  window.location.href = 'payment.html';
-}
+  document.getElementById("summary").innerText =
+    orderContext.document + " — " + orderContext.tier + " ($" + orderContext.price + ")";
+
+  document.getElementById("intakeForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+
+    orderContext.firstName = document.getElementById("firstName").value;
+    orderContext.lastName = document.getElementById("lastName").value;
+    orderContext.email = document.getElementById("email").value;
+    orderContext.notes = document.getElementById("notes").value;
+
+    localStorage.setItem("orderContext", JSON.stringify(orderContext));
+    window.location.href = "review-and-pay.html";
+  });
 </script>
 
 </body>
