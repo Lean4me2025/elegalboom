@@ -3,185 +3,118 @@
 <head>
   <meta charset="UTF-8" />
   <title>E-LegalBoom | Document Catalog</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
   <style>
     body {
-      margin: 0;
-      font-family: "Georgia", serif;
+      font-family: Arial, sans-serif;
       background: #f7f7f7;
-      color: #222;
+      padding: 40px;
     }
-
-    .page-wrap {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 60px 20px;
+    h1 {
       text-align: center;
     }
-
-    h1 {
-      font-size: 38px;
-      margin-bottom: 10px;
+    .tiers {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+      margin-top: 30px;
     }
-
-    .subtitle {
-      font-size: 18px;
-      margin-bottom: 50px;
-      color: #555;
-    }
-
-    .tier-grid {
-      display: flex;
-      gap: 24px;
-      justify-content: space-between;
-      align-items: stretch;
-    }
-
-    .tier-card {
+    .tier {
       background: #fff;
-      border: 1px solid #dcdcdc;
+      border: 1px solid #ccc;
+      padding: 20px;
       border-radius: 6px;
-      padding: 28px 22px;
-      width: 100%;
-      max-width: 25%;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
     }
-
-    .tier-title {
-      font-size: 22px;
-      font-weight: bold;
-      margin-bottom: 10px;
+    .tier h3 {
+      margin-top: 0;
     }
-
-    .tier-sub {
-      font-size: 18px;
-      margin-bottom: 20px;
+    .documents {
+      margin-top: 10px;
     }
-
-    .tier-list {
-      text-align: left;
-      margin-bottom: 30px;
-    }
-
-    .tier-list li {
-      margin-bottom: 8px;
-    }
-
-    .tier-btn {
-      margin-top: auto;
-    }
-
-    .tier-btn a {
-      display: inline-block;
-      background: #0b2e59;
-      color: #fff;
-      padding: 12px 18px;
-      border-radius: 4px;
-      text-decoration: none;
-      font-weight: bold;
-    }
-
-    .tier-btn a:hover {
-      background: #163f73;
-    }
-
-    @media (max-width: 1100px) {
-      .tier-grid {
-        flex-wrap: wrap;
-      }
-
-      .tier-card {
-        max-width: 48%;
-      }
-    }
-
-    @media (max-width: 640px) {
-      .tier-card {
-        max-width: 100%;
-      }
+    button {
+      margin-top: 30px;
+      padding: 12px 20px;
+      font-size: 16px;
+      cursor: pointer;
     }
   </style>
 </head>
-
 <body>
-  <div class="page-wrap">
-    <h1>Find the Legal Document You Need</h1>
-    <div class="subtitle">
-      Select the service tier that best matches your situation.
+
+<h1>Find the Legal Document You Need</h1>
+<p style="text-align:center;">Select your tier and one document to continue.</p>
+
+<form id="catalogForm">
+
+  <div class="tiers">
+
+    <div class="tier">
+      <h3>Tier 1 – $39</h3>
+      <label><input type="radio" name="tier" value="tier1" required> Select Tier 1</label>
+      <div class="documents">
+        <label><input type="radio" name="document" value="NDA" required> NDA</label><br>
+        <label><input type="radio" name="document" value="Promissory Note"> Promissory Note</label><br>
+        <label><input type="radio" name="document" value="Single-Member LLC"> Single-Member LLC</label>
+      </div>
     </div>
 
-    <div class="tier-grid">
-
-      <!-- Tier 1 -->
-      <div class="tier-card">
-        <div>
-          <div class="tier-title">Tier 1 — $39</div>
-          <div class="tier-sub">Essential</div>
-          <ul class="tier-list">
-            <li>Non-Disclosure Agreements (NDAs)</li>
-            <li>Promissory Notes</li>
-            <li>Single-Member LLC Formation</li>
-          </ul>
-        </div>
-        <div class="tier-btn">
-          <a href="tier1.html">View Tier 1</a>
-        </div>
+    <div class="tier">
+      <h3>Tier 2 – $59</h3>
+      <label><input type="radio" name="tier" value="tier2"> Select Tier 2</label>
+      <div class="documents">
+        <label><input type="radio" name="document" value="Operating Agreement"> Operating Agreement</label><br>
+        <label><input type="radio" name="document" value="Independent Contractor"> Independent Contractor</label><br>
+        <label><input type="radio" name="document" value="Service Agreement"> Service Agreement</label>
       </div>
-
-      <!-- Tier 2 -->
-      <div class="tier-card">
-        <div>
-          <div class="tier-title">Tier 2 — $59</div>
-          <div class="tier-sub">Business Foundation</div>
-          <ul class="tier-list">
-            <li>Operating Agreement</li>
-            <li>Independent Contractor Agreement</li>
-            <li>Service Agreement</li>
-          </ul>
-        </div>
-        <div class="tier-btn">
-          <a href="tier2.html">View Tier 2</a>
-        </div>
-      </div>
-
-      <!-- Tier 3 -->
-      <div class="tier-card">
-        <div>
-          <div class="tier-title">Tier 3 — $99</div>
-          <div class="tier-sub">Premium Launch Kit</div>
-          <ul class="tier-list">
-            <li>Operating Agreement</li>
-            <li>Independent Contractor Agreement</li>
-            <li>Service Agreement</li>
-          </ul>
-        </div>
-        <div class="tier-btn">
-          <a href="tier3.html">View Tier 3</a>
-        </div>
-      </div>
-
-      <!-- Tier 4 -->
-      <div class="tier-card">
-        <div>
-          <div class="tier-title">Tier 4 — $149</div>
-          <div class="tier-sub">Bundle</div>
-          <ul class="tier-list">
-            <li>All Tier 1 documents</li>
-            <li>All Tier 2 documents</li>
-            <li>Tier 3 Launch Kit</li>
-            <li>Multiple intakes</li>
-            <li>Best value</li>
-          </ul>
-        </div>
-        <div class="tier-btn">
-          <a href="tier4.html">View Bundle</a>
-        </div>
-      </div>
-
     </div>
+
+    <div class="tier">
+      <h3>Tier 3 – $99</h3>
+      <label><input type="radio" name="tier" value="tier3"> Select Tier 3</label>
+      <div class="documents">
+        <label><input type="radio" name="document" value="Operating Agreement"> Operating Agreement</label><br>
+        <label><input type="radio" name="document" value="Independent Contractor"> Independent Contractor</label><br>
+        <label><input type="radio" name="document" value="Service Agreement"> Service Agreement</label>
+      </div>
+    </div>
+
+    <div class="tier">
+      <h3>Tier 4 – Entrepreneur Level</h3>
+      <label><input type="radio" name="tier" value="tier4"> Select Tier 4</label>
+      <div class="documents">
+        <label><input type="radio" name="document" value="Entrepreneur Document"> Entrepreneur Document</label>
+      </div>
+    </div>
+
   </div>
+
+  <div style="text-align:center;">
+    <button type="submit">Continue to Intake</button>
+  </div>
+
+</form>
+
+<script>
+  document.getElementById("catalogForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+
+    const tier = document.querySelector('input[name="tier"]:checked')?.value;
+    const documentType = document.querySelector('input[name="document"]:checked')?.value;
+
+    if (!tier || !documentType) {
+      alert("Please select a tier and a document.");
+      return;
+    }
+
+    const orderContext = {
+      tier,
+      document: documentType,
+      uuid: crypto.randomUUID()
+    };
+
+    localStorage.setItem("orderContext", JSON.stringify(orderContext));
+    window.location.href = "intake.html";
+  });
+</script>
+
 </body>
 </html>
