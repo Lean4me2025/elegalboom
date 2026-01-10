@@ -2,22 +2,22 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>E-LegalBoom – Intake</title>
+  <title>E-LegalBoom – Client Intake</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <!-- Supabase JS v2 -->
+  <!-- Supabase v2 CDN -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <style>
     body {
       font-family: Arial, sans-serif;
-      background: #f5f5f5;
-      padding: 30px;
+      background: #f4f6f8;
+      padding: 24px;
     }
     .container {
       max-width: 720px;
       margin: auto;
-      background: #ffffff;
+      background: #fff;
       padding: 24px;
       border-radius: 6px;
     }
@@ -35,24 +35,24 @@
     button {
       margin-top: 20px;
       background: #0a5cff;
-      color: #ffffff;
+      color: #fff;
       border: none;
       cursor: pointer;
     }
     button:disabled {
-      background: #999999;
+      background: #999;
       cursor: not-allowed;
-    }
-    .error {
-      color: red;
-      margin-top: 12px;
     }
     .summary {
       background: #f0f3ff;
       padding: 12px;
-      border-radius: 4px;
       margin-bottom: 16px;
+      border-radius: 4px;
       font-size: 14px;
+    }
+    .error {
+      color: red;
+      margin-top: 10px;
     }
   </style>
 </head>
@@ -61,7 +61,7 @@
   <div class="container">
     <h2>Client Intake</h2>
 
-    <!-- ORDER CONTEXT (RECEIVED, NOT DECIDED) -->
+    <!-- ORDER CONTEXT -->
     <div class="summary" id="orderSummary"></div>
 
     <form id="intakeForm">
@@ -81,7 +81,7 @@
       <label>Additional Notes</label>
       <textarea id="notes"></textarea>
 
-      <!-- Hidden fields populated from URL -->
+      <!-- Hidden order context -->
       <input type="hidden" id="tier" />
       <input type="hidden" id="doc_type" />
       <input type="hidden" id="price" />
@@ -92,10 +92,11 @@
   </div>
 
   <script>
+  document.addEventListener("DOMContentLoaded", () => {
+
     /* ===============================
        SUPABASE CONFIG
        =============================== */
-
     const SUPABASE_URL = "https://vvjbjfltqsivvxxifnvi.supabase.co";
     const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ2amJqZmx0cXNpdnZ4eGlmbnZpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc5NzYzNTAsImV4cCI6MjA3MzU1MjM1MH0.F4zzcpCHl9v-Rnj0wgKJ5zBf1HteVyXelMLQDDEN28Q";
 
@@ -107,10 +108,9 @@
     /* ===============================
        RECEIVE UPSTREAM CONTEXT
        =============================== */
-
     const params = new URLSearchParams(window.location.search);
     const tier = params.get("tier");
-    const docType = params.get("doc_type");
+    const docType = params.get("documents") || params.get("doc_type");
     const price = params.get("price");
 
     const summaryEl = document.getElementById("orderSummary");
@@ -118,28 +118,29 @@
 
     if (!tier || !docType || !price) {
       errorEl.innerText =
-        "Order context missing. Please return to the catalog and select a tier and document.";
+        "Order context missing. Please return to the catalog and select a tier.";
       document.getElementById("submitBtn").disabled = true;
-    } else {
-      document.getElementById("tier").value = tier;
-      document.getElementById("doc_type").value = docType;
-      document.getElementById("price").value = price;
-
-      summaryEl.innerHTML = `
-        <strong>Selected Tier:</strong> ${tier}<br/>
-        <strong>Document:</strong> ${docType}<br/>
-        <strong>Price:</strong> $${price}
-      `;
+      return;
     }
 
+    document.getElementById("tier").value = tier;
+    document.getElementById("doc_type").value = docType;
+    document.getElementById("price").value = price;
+
+    summaryEl.innerHTML = `
+      <strong>Tier:</strong> ${tier}<br/>
+      <strong>Documents:</strong> ${docType}<br/>
+      <strong>Price:</strong> $${price}
+    `;
+
     /* ===============================
-       SUBMIT HANDLER (AUTHORITATIVE)
+       AUTHORITATIVE SUBMIT HANDLER
        =============================== */
+    const form = document.getElementById("intakeForm");
+    const submitBtn = document.getElementById("submitBtn");
 
-    document.getElementById("intakeForm").addEventListener("submit", async (e) => {
+    form.addEventListener("submit", async (e) => {
       e.preventDefault();
-
-      const submitBtn = document.getElementById("submitBtn");
       submitBtn.disabled = true;
       errorEl.innerText = "";
 
@@ -149,35 +150,33 @@
           client_last_name: document.getElementById("last_name").value.trim(),
           client_email: document.getElementById("email").value.trim(),
           client_phone: document.getElementById("phone").value.trim() || null,
-          notes: document.getElementById("notes").value.trim() || null,
-
+          details: document.getElementById("notes").value.trim() || null,
           tier: tier,
           doc_type: docType,
           price: price,
-
           order_status: "intake_submitted"
         };
 
-        if (
-          !payload.client_first_name ||
-          !payload.client_last_name ||
-          !payload.client_email
-        ) {
+        if (!payload.client_first_name ||
+            !payload.client_last_name ||
+            !payload.client_email) {
           throw new Error("Required client fields are missing.");
         }
 
         const { data, error } = await supabase
           .from("pweb_orders")
           .insert([payload])
-          .select()
+          .select("id")
           .single();
 
         if (error) throw error;
         if (!data || !data.id) {
-          throw new Error("Order ID not returned from database.");
+          throw new Error("Database did not return an order ID.");
         }
 
-        // 🔑 DB-GENERATED UUID IS THE AUTHORITY
+        /* ===============================
+           DB UUID IS THE AUTHORITY
+           =============================== */
         window.location.href =
           "review-and-pay.html?order_id=" + data.id;
 
@@ -187,6 +186,9 @@
         submitBtn.disabled = false;
       }
     });
+
+  });
   </script>
+
 </body>
 </html>
