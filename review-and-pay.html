@@ -1,177 +1,28 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8" />
-  <title>E-LegalBoom — Review & Pay</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-  <style>
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
-      background: #f4f6fb;
-      margin: 0;
-      padding: 40px 20px;
-    }
-
-    .card {
-      max-width: 720px;
-      margin: 0 auto;
-      background: #fff;
-      border-radius: 10px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-      padding: 30px 32px 36px;
-    }
-
-    h1 {
-      margin-top: 0;
-      text-align: center;
-      font-size: 28px;
-    }
-
-    .row {
-      display: flex;
-      justify-content: space-between;
-      padding: 10px 0;
-      border-bottom: 1px solid #eee;
-    }
-
-    .row:last-child {
-      border-bottom: none;
-    }
-
-    .label {
-      font-weight: 600;
-      color: #555;
-    }
-
-    .value {
-      text-align: right;
-      max-width: 60%;
-      color: #111;
-      word-break: break-word;
-    }
-
-    .cta {
-      margin-top: 30px;
-      text-align: center;
-    }
-
-    button {
-      background: #1f4fff;
-      color: #fff;
-      border: none;
-      padding: 16px 28px;
-      font-size: 16px;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-
-    button:hover {
-      background: #163dcc;
-    }
-
-    .note {
-      margin-top: 14px;
-      text-align: center;
-      font-size: 13px;
-      color: #777;
-    }
-  </style>
+  <title>Review & Pay</title>
 </head>
-
 <body>
 
-  <div class="card">
-    <h1>Review Your Order</h1>
+<h2>Review</h2>
+<p>Tier: <span id="tier"></span></p>
+<p>Price: $<span id="price"></span></p>
 
-    <div class="row">
-      <div class="label">Documents</div>
-      <div class="value" id="docType">—</div>
-    </div>
+<button onclick="pay()">Pay Now</button>
 
-    <div class="row">
-      <div class="label">Tier</div>
-      <div class="value" id="tier">—</div>
-    </div>
+<script>
+const order = JSON.parse(localStorage.getItem('orderContext'));
+if (!order || !order.tier) window.location.replace('catalog.html');
 
-    <div class="row">
-      <div class="label">Price</div>
-      <div class="value" id="price">—</div>
-    </div>
+document.getElementById('tier').textContent = order.tier;
+document.getElementById('price').textContent = order.price;
 
-    <div class="row">
-      <div class="label">Order ID</div>
-      <div class="value" id="orderId">—</div>
-    </div>
-
-    <div class="cta">
-      <button id="payBtn">Proceed to Secure Payment</button>
-      <div class="note">Secure checkout powered by GoDaddy</div>
-    </div>
-  </div>
-
-  <script>
-    /* =========================================================
-       READ SELECTIONS (INTENT ONLY)
-       ========================================================= */
-    const read = (key) => localStorage.getItem(key) || "";
-
-    const selectedTier = read("selectedTier");
-    const selectedDocs = JSON.parse(read("selectedDocuments") || "[]");
-
-    /* =========================================================
-       AUTHORITATIVE PAY LINKS (NO FALLBACKS)
-       ========================================================= */
-    const payLinks = {
-      "Tier 1": "https://pay.elegalboom.org/e4b79a60-0fd7-431c-8bfc-ae0",
-      "Tier 2": "https://pay.elegalboom.org/aeda586f-65f5-4bf0-98f3-7a2",
-      "Tier 3": "https://pay.elegalboom.org/71ca7144-e537-4fbd-823d-c10",
-      "Tier 4": "https://pay.elegalboom.org/55c7cd3d-1048-4b8c-aadb-843",
-      "Unlimited": "https://pay.elegalboom.org/c9c5e4f6-ac37-4fd3-98a8-a84"
-    };
-
-    const tierPrices = {
-      "Tier 1": "$39",
-      "Tier 2": "$59",
-      "Tier 3": "$99",
-      "Tier 4": "$149",
-      "Unlimited": "$199"
-    };
-
-    /* =========================================================
-       DISPLAY CONFIRMATION (NON-BLOCKING)
-       ========================================================= */
-    document.getElementById("docType").innerText =
-      selectedDocs.length ? selectedDocs.join(", ") : "Selected Documents";
-
-    document.getElementById("tier").innerText =
-      selectedTier || "Selected Tier";
-
-    document.getElementById("price").innerText =
-      tierPrices[selectedTier] || "As Selected";
-
-    /* =========================================================
-       SHORT ORDER ID (DERIVED FROM UUID)
-       ========================================================= */
-    const uuid = crypto.randomUUID();
-    const shortOrderId =
-      "ELB-" + uuid.split("-").slice(-2).join("-").toUpperCase();
-
-    document.getElementById("orderId").innerText = shortOrderId;
-
-    /* =========================================================
-       FINAL PAYMENT ROUTE (HARD LOCKED)
-       ========================================================= */
-    const payUrl = payLinks[selectedTier];
-
-    document.getElementById("payBtn").addEventListener("click", () => {
-      if (!payUrl) {
-        alert("Payment link unavailable. Please return to the catalog.");
-        return;
-      }
-      window.location.href = payUrl;
-    });
-  </script>
+function pay() {
+  // ← Replace this with your existing payment link
+  window.location.href = 'thankyou.html';
+}
+</script>
 
 </body>
-</html>
+</html
