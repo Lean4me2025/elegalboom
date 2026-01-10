@@ -1,187 +1,30 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8" />
-  <title>E-LegalBoom | Document Catalog</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-  <style>
-    body {
-      margin: 0;
-      font-family: "Georgia", serif;
-      background: #f7f7f7;
-      color: #222;
-    }
-
-    .page-wrap {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 60px 20px;
-      text-align: center;
-    }
-
-    h1 {
-      font-size: 38px;
-      margin-bottom: 10px;
-    }
-
-    .subtitle {
-      font-size: 18px;
-      margin-bottom: 50px;
-      color: #555;
-    }
-
-    .tier-grid {
-      display: flex;
-      gap: 24px;
-      justify-content: space-between;
-      align-items: stretch;
-    }
-
-    .tier-card {
-      background: #fff;
-      border: 1px solid #dcdcdc;
-      border-radius: 6px;
-      padding: 28px 22px;
-      width: 100%;
-      max-width: 25%;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
-
-    .tier-title {
-      font-size: 22px;
-      font-weight: bold;
-      margin-bottom: 10px;
-    }
-
-    .tier-sub {
-      font-size: 18px;
-      margin-bottom: 20px;
-    }
-
-    .tier-list {
-      text-align: left;
-      margin-bottom: 30px;
-    }
-
-    .tier-list li {
-      margin-bottom: 8px;
-    }
-
-    .tier-btn {
-      margin-top: auto;
-    }
-
-    .tier-btn a {
-      display: inline-block;
-      background: #0b2e59;
-      color: #fff;
-      padding: 12px 18px;
-      border-radius: 4px;
-      text-decoration: none;
-      font-weight: bold;
-    }
-
-    .tier-btn a:hover {
-      background: #163f73;
-    }
-
-    @media (max-width: 1100px) {
-      .tier-grid {
-        flex-wrap: wrap;
-      }
-
-      .tier-card {
-        max-width: 48%;
-      }
-    }
-
-    @media (max-width: 640px) {
-      .tier-card {
-        max-width: 100%;
-      }
-    }
-  </style>
+  <title>E-LegalBoom Catalog</title>
 </head>
-
 <body>
-  <div class="page-wrap">
-    <h1>Find the Legal Document You Need</h1>
-    <div class="subtitle">
-      Select the service tier that best matches your situation.
-    </div>
 
-    <div class="tier-grid">
+<h2>Select Your Tier</h2>
 
-      <!-- Tier 1 -->
-      <div class="tier-card">
-        <div>
-          <div class="tier-title">Tier 1 — $39</div>
-          <div class="tier-sub">Essential</div>
-          <ul class="tier-list">
-            <li>Non-Disclosure Agreements (NDAs)</li>
-            <li>Promissory Notes</li>
-            <li>Single-Member LLC Formation</li>
-          </ul>
-        </div>
-        <div class="tier-btn">
-          <a href="tier1.html">View Tier 1</a>
-        </div>
-      </div>
+<button onclick="startOrder('Tier 1', 39)">Tier 1</button>
+<button onclick="startOrder('Tier 2', 59)">Tier 2</button>
+<button onclick="startOrder('Tier 3', 99)">Tier 3</button>
+<button onclick="startOrder('Tier 4', 149)">Bundle</button>
 
-      <!-- Tier 2 -->
-      <div class="tier-card">
-        <div>
-          <div class="tier-title">Tier 2 — $59</div>
-          <div class="tier-sub">Business Foundation</div>
-          <ul class="tier-list">
-            <li>Operating Agreement</li>
-            <li>Independent Contractor Agreement</li>
-            <li>Service Agreement</li>
-          </ul>
-        </div>
-        <div class="tier-btn">
-          <a href="tier2.html">View Tier 2</a>
-        </div>
-      </div>
+<script>
+function startOrder(tier, price) {
+  const order = {
+    orderId: Date.now(),
+    tier,
+    price,
+    intake: {}
+  };
 
-      <!-- Tier 3 -->
-      <div class="tier-card">
-        <div>
-          <div class="tier-title">Tier 3 — $99</div>
-          <div class="tier-sub">Premium Launch Kit</div>
-          <ul class="tier-list">
-            <li>Operating Agreement</li>
-            <li>Independent Contractor Agreement</li>
-            <li>Service Agreement</li>
-          </ul>
-        </div>
-        <div class="tier-btn">
-          <a href="tier3.html">View Tier 3</a>
-        </div>
-      </div>
+  localStorage.setItem('orderContext', JSON.stringify(order));
+  window.location.href = 'intake.html';
+}
+</script>
 
-      <!-- Tier 4 -->
-      <div class="tier-card">
-        <div>
-          <div class="tier-title">Tier 4 — $149</div>
-          <div class="tier-sub">Bundle</div>
-          <ul class="tier-list">
-            <li>All Tier 1 documents</li>
-            <li>All Tier 2 documents</li>
-            <li>Tier 3 Launch Kit</li>
-            <li>Multiple intakes</li>
-            <li>Best value</li>
-          </ul>
-        </div>
-        <div class="tier-btn">
-          <a href="tier4.html">View Bundle</a>
-        </div>
-      </div>
-
-    </div>
-  </div>
 </body>
 </html>
