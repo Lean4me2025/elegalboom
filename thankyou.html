@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Thank You</title>
+</head>
+<body>
+
+<h2>Thank you!</h2>
+<p>Your order is complete.</p>
+
+<script>
+(async () => {
+  const order = JSON.parse(localStorage.getItem('orderContext'));
+
+  // If there's no order, do nothing (page can be refreshed safely)
+  if (!order) return;
+
+  // 🔹 SEND TO SUPABASE / DATABASE HERE 🔹
+  // Replace this block with your existing Supabase insert logic
+  /*
+  await fetch('/api/save-order', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      order_id: order.orderId,
+      tier: order.tier,
+      price: order.price,
+      ...order.intake
+    })
+  });
+  */
+
+  // 🔹 CLEAR CONTEXT ONLY AFTER SAVE 🔹
+  localStorage.removeItem('orderContext');
+})();
+</script>
+
+</body>
+</html>
