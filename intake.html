@@ -1,42 +1,42 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
   <title>E-LegalBoom Intake</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
 
-<h1>E-LegalBoom Intake</h1>
+<h1>E-LegalBoom Client Intake</h1>
 
 <form id="intake-form">
 
-  <h3>Client Information</h3>
+  <h2>Client Information</h2>
 
-  <label>First Name</label><br/>
-  <input type="text" name="client_first_name" /><br/><br/>
+  <label>First Name</label><br>
+  <input type="text" name="client_first_name"><br><br>
 
-  <label>Last Name</label><br/>
-  <input type="text" name="client_last_name" /><br/><br/>
+  <label>Last Name</label><br>
+  <input type="text" name="client_last_name"><br><br>
 
-  <label>Email</label><br/>
-  <input type="email" name="client_email" /><br/><br/>
+  <label>Email</label><br>
+  <input type="email" name="client_email"><br><br>
 
-  <label>Phone</label><br/>
-  <input type="text" name="client_phone" /><br/><br/>
+  <label>Phone</label><br>
+  <input type="text" name="client_phone"><br><br>
 
-  <label>Business Name</label><br/>
-  <input type="text" name="client_business_name" /><br/><br/>
+  <label>Business Name (if applicable)</label><br>
+  <input type="text" name="client_business_name"><br><br>
 
-  <h3>Address</h3>
+  <h2>Address</h2>
 
-  <label>Street</label><br/>
-  <input type="text" name="client_street" /><br/><br/>
+  <label>Street</label><br>
+  <input type="text" name="client_street"><br><br>
 
-  <label>City</label><br/>
-  <input type="text" name="client_city" /><br/><br/>
+  <label>City</label><br>
+  <input type="text" name="client_city"><br><br>
 
-  <label>State</label><br/>
+  <label>State</label><br>
   <select name="client_state">
     <option value="">Select State</option>
     <option value="AL">Alabama</option><option value="AK">Alaska</option>
@@ -65,24 +65,24 @@
     <option value="WA">Washington</option><option value="WV">West Virginia</option>
     <option value="WI">Wisconsin</option><option value="WY">Wyoming</option>
     <option value="DC">District of Columbia</option>
-  </select><br/><br/>
+  </select><br><br>
 
-  <label>ZIP</label><br/>
-  <input type="text" name="client_zip" /><br/><br/>
+  <label>ZIP Code</label><br>
+  <input type="text" name="client_zip"><br><br>
 
-  <h3>Document Details</h3>
+  <h2>Document Details</h2>
 
-  <label>Document Type</label><br/>
-  <input type="text" name="doc_type" /><br/><br/>
+  <label>Document Type</label><br>
+  <input type="text" name="doc_type"><br><br>
 
-  <label>Governing State</label><br/>
-  <input type="text" name="governing_state" /><br/><br/>
+  <label>Governing State</label><br>
+  <input type="text" name="governing_state"><br><br>
 
-  <label>Details</label><br/>
-  <textarea name="details"></textarea><br/><br/>
+  <label>Details / Instructions</label><br>
+  <textarea name="details"></textarea><br><br>
 
-  <label>Notes</label><br/>
-  <textarea name="notes"></textarea><br/><br/>
+  <label>Notes</label><br>
+  <textarea name="notes"></textarea><br><br>
 
   <button type="submit">Submit Intake</button>
 
@@ -91,9 +91,7 @@
 <script type="module">
   import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
-  /* ===============================
-     REQUIRED SUPABASE CONFIG
-     =============================== */
+  /* REQUIRED CONFIG */
   const SUPABASE_URL = "https://vvjbjfltqsivvxxifnvi.supabase.co";
   const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ2amJqZmx0cXNpdnZ4eGlmbnZpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc5NzYzNTAsImV4cCI6MjA3MzU1MjM1MH0.F4zzcpCHl9v-Rnj0wgKJ5zBf1HteVyXelMLQDDEN28Q";
 
@@ -120,7 +118,7 @@
       notes: form.notes.value || null
     };
 
-    console.log("Submitting payload → pweb_orders", payload);
+    console.log("Submitting payload to pweb_orders:", payload);
 
     const { data, error } = await supabase
       .from("pweb_orders")
@@ -128,8 +126,8 @@
       .select();
 
     if (error) {
-      console.error("Insert error:", error);
-      alert("Insert failed. Check console.");
+      console.error("Insert failed:", error);
+      alert("Insert failed. See console.");
       return;
     }
 
