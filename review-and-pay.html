@@ -100,107 +100,37 @@
         <span id="totalPrice">—</span>
       </div>
 
-      <button onclick="payNow()">Proceed to Secure Payment</button>
+      <button id="payBtn">Proceed to Secure Payment</button>
 
       <div class="back">
-        <a href="/intake.html">← Back to Intake</a>
+        <a href="/catalog.html">← Back to Catalog</a>
       </div>
     </div>
   </div>
 
-  <script type="module">
-    import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
-
-    /* ---------- SUPABASE CLIENT ---------- */
-    const db = createClient(
-      "https://YOUR_PROJECT_ID.supabase.co",
-      "YOUR_PUBLIC_ANON_KEY"
-    );
-
-    /* ---------- READ ORDER ID FROM URL ---------- */
+  <script>
+    /* ---------- READ FROM URL (CATALOG IS SOURCE OF TRUTH) ---------- */
     const params = new URLSearchParams(window.location.search);
-    const orderId = params.get("order_id");
 
-    if (!orderId) {
-      alert("Missing order ID.");
+    const orderId  = params.get("order_id");
+    const document = params.get("document");
+    const tier     = params.get("tier");
+    const price    = params.get("price");
+    const payLink  = params.get("pay");
+
+    if (!orderId || !document || !tier || !price || !payLink) {
+      alert("Missing order information. Please return to the catalog.");
       window.location.href = "/catalog.html";
     }
 
     document.getElementById("orderId").innerText = orderId;
+    document.getElementById("documentName").innerText = document;
+    document.getElementById("tierName").innerText = tier;
+    document.getElementById("totalPrice").innerText = `$${price}.00`;
 
-    /* ---------- TIER + PAYMENT MAP ---------- */
-    const TIER_MAP = {
-      "Tier One": {
-        tier: "Tier One",
-        price: "$39.00",
-        payLink: "https://pay.elegalboom.org/e4b79a60-0fd7-431c-8bfc-ae0"
-      },
-      "Tier Two": {
-        tier: "Tier Two",
-        price: "$59.00",
-        payLink: "https://pay.elegalboom.org/aeda586f-65f5-4bf0-98f3-7a2"
-      },
-      "Tier Three": {
-        tier: "Tier Three",
-        price: "$99.00",
-        payLink: "https://pay.elegalboom.org/71ca7144-e537-4fbd-823d-c10"
-      },
-      "Tier Four": {
-        tier: "Tier Four",
-        price: "$149.00",
-        payLink: "https://pay.elegalboom.org/55c7cd3d-1048-4b8c-aadb-843"
-      }
-    };
-
-    let activePayLink = null;
-
-    /* ---------- FETCH ORDER ---------- */
-    async function loadOrder() {
-      const { data, error } = await db
-        .from("pweb_orders")
-        .select("order_id, doc_type")
-        .eq("order_id", orderId)
-        .single();
-
-      if (error || !data) {
-        alert("Order not found.");
-        return;
-      }
-
-      const docType = data.doc_type || "Unknown Document";
-      document.getElementById("documentName").innerText = docType;
-
-      /* ---------- DERIVE TIER ---------- */
-      let tierKey = null;
-
-      if (docType.toLowerCase().includes("tier one")) tierKey = "Tier One";
-      if (docType.toLowerCase().includes("tier two")) tierKey = "Tier Two";
-      if (docType.toLowerCase().includes("tier three")) tierKey = "Tier Three";
-      if (docType.toLowerCase().includes("tier four") || docType.toLowerCase().includes("bundle"))
-        tierKey = "Tier Four";
-
-      if (!tierKey || !TIER_MAP[tierKey]) {
-        alert("Unable to determine pricing tier.");
-        return;
-      }
-
-      const tierData = TIER_MAP[tierKey];
-
-      document.getElementById("tierName").innerText = tierData.tier;
-      document.getElementById("totalPrice").innerText = tierData.price;
-      activePayLink = tierData.payLink;
-    }
-
-    loadOrder();
-
-    /* ---------- PAY NOW ---------- */
-    function payNow() {
-      if (!activePayLink) {
-        alert("Payment link not available.");
-        return;
-      }
-      window.location.href = activePayLink;
-    }
+    document.getElementById("payBtn").addEventListener("click", () => {
+      window.location.href = payLink;
+    });
   </script>
 </body>
 </html>
