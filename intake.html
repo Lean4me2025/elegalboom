@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <title>E-LegalBoom Client Intake</title>
 
-  <!-- Supabase JS -->
+  <!-- Backend Client (vendor-agnostic use) -->
   <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 
   <style>
@@ -84,21 +84,37 @@
   <label>Party 4 Role <input name="party4_role"></label>
   <label>Party 4 Email <input name="party4_email"></label>
 
-  <!-- STATUS -->
+  <!-- INTERNAL -->
   <h2>Internal</h2>
-  <label>Order Status <input name="order_status" value="new"></label>
+  <label>Order Status <input name="order_status" value="pending"></label>
   <label>Notes <textarea name="notes"></textarea></label>
-  <label>Order ID <input name="order_id"></label>
 
   <button type="submit">Submit Intake</button>
 </form>
 
 <script>
-  // 🔑 REPLACE THESE
-  const SUPABASE_URL = "https://vvjbjfltqsivvxxifnvi.supabase.co";
-  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ2amJqZmx0cXNpdnZ4eGlmbnZpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc5NzYzNTAsImV4cCI6MjA3MzU1MjM1MH0.F4zzcpCHl9v-Rnj0wgKJ5zBf1HteVyXelMLQDDEN28Q";
+  /* ============================================================
+     CONFIG — PSEUDONAME (NO VENDOR COUPLING)
+     ============================================================ */
 
-  const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  const ORDER_DB_URL = "https://vvjbjfltqsivvxxifnvi.supabase.co";
+  const ORDER_DB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ2amJqZmx0cXNpdnZ4eGlmbnZpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc5NzYzNTAsImV4cCI6MjA3MzU1MjM1MH0.F4zzcpCHl9v-Rnj0wgKJ5zBf1HteVyXelMLQDDEN28Q";
+
+  const orderDB = supabase.createClient(ORDER_DB_URL, ORDER_DB_KEY);
+
+  /* ============================================================
+     ORDER ID GENERATION (AUTHORITATIVE)
+     ============================================================ */
+
+  function generateOrderId() {
+    const d = new Date().toISOString().slice(0,10).replace(/-/g,'');
+    const r = Math.floor(1000 + Math.random() * 9000);
+    return `ELB-${d}-${r}`;
+  }
+
+  /* ============================================================
+     SUBMIT HANDLER
+     ============================================================ */
 
   document.getElementById("intakeForm").addEventListener("submit", async (e) => {
     e.preventDefault();
@@ -106,19 +122,22 @@
     const formData = new FormData(e.target);
     const payload = Object.fromEntries(formData.entries());
 
+    // Canonical identifiers
     payload.request_uuid = crypto.randomUUID();
+    payload.order_id = generateOrderId();
 
-    const { error } = await supabase
+    const { error } = await orderDB
       .from("pweb_orders")
       .insert([payload]);
 
     if (error) {
-      alert("ERROR: " + error.message);
       console.error(error);
-    } else {
-      alert("Intake submitted successfully.");
-      e.target.reset();
+      alert("ERROR submitting intake: " + error.message);
+      return;
     }
+
+    // 🚀 FLOW CONTINUES HERE
+    window.location.href = `/review-pay.html?order_id=${payload.order_id}`;
   });
 </script>
 
