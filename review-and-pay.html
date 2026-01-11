@@ -3,15 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <title>E-LegalBoom | Review & Pay</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-  <!-- Supabase JS v2 -->
-  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <style>
     body {
       font-family: Georgia, serif;
-      background: #f5f6f7;
+      background: #f6f6f7;
       padding: 40px;
     }
     .wrapper {
@@ -21,32 +18,22 @@
     .card {
       background: #fff;
       border-radius: 6px;
-      padding: 35px;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+      padding: 36px;
+      box-shadow: 0 8px 24px rgba(0,0,0,.08);
     }
-    h1 {
-      margin-top: 0;
-    }
-    .sub {
-      color: #555;
-      margin-bottom: 25px;
-    }
+    h1 { margin-top: 0; }
     .row {
       display: flex;
       justify-content: space-between;
       padding: 12px 0;
       border-bottom: 1px solid #e5e7ea;
-      font-size: 16px;
+      font-size: 17px;
     }
-    .row:last-child {
-      border-bottom: none;
-    }
+    .row:last-child { border-bottom: none; }
     .total {
       font-size: 22px;
       font-weight: bold;
-      margin-top: 25px;
-      display: flex;
-      justify-content: space-between;
+      margin-top: 20px;
     }
     button {
       margin-top: 30px;
@@ -55,19 +42,22 @@
       font-size: 18px;
       cursor: pointer;
     }
-    .error {
-      color: #b00020;
-      margin-top: 20px;
-      font-weight: bold;
+    .back {
+      text-align: center;
+      margin-top: 15px;
+    }
+    .back a {
+      text-decoration: none;
+      color: #555;
     }
   </style>
 </head>
-<body>
 
+<body>
 <div class="wrapper">
   <div class="card">
     <h1>Review Your Order</h1>
-    <div class="sub">Please confirm your order details before payment.</div>
+    <p>Please confirm your order details before payment.</p>
 
     <div class="row">
       <span>Order ID</span>
@@ -76,7 +66,7 @@
 
     <div class="row">
       <span>Document</span>
-      <span id="docType">—</span>
+      <span id="document">—</span>
     </div>
 
     <div class="row">
@@ -84,68 +74,60 @@
       <span id="tier">—</span>
     </div>
 
-    <div class="total">
+    <div class="row total">
       <span>Total</span>
-      <span id="price">—</span>
+      <span id="total">—</span>
     </div>
 
-    <button id="payBtn">Proceed to Secure Payment</button>
+    <button onclick="payNow()">Proceed to Secure Payment</button>
 
-    <div id="error" class="error"></div>
+    <div class="back">
+      <a href="/intake.html">← Back to Intake</a>
+    </div>
   </div>
 </div>
 
-<script>
-  /************* CONFIG *************/
-  const SUPABASE_URL = "https://YOUR_PROJECT_ID.supabase.co";
-  const SUPABASE_ANON_KEY = "YOUR_PUBLIC_ANON_KEY";
-  const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+<script type="module">
+  import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
-  /************* READ ORDER ID *************/
+  // 🔒 PSEUDONAME CLIENT (no Supabase naming in app logic)
+  const db = createClient(
+    "https://PROJECT_URL.supabase.co",
+    "ANON_KEY"
+  );
+
   const params = new URLSearchParams(window.location.search);
-  const orderId = params.get("order_id");
+  const orderIdParam = params.get("order_id");
 
-  const errorEl = document.getElementById("error");
-
-  if (!orderId) {
-    errorEl.innerText = "Missing order reference. Please start from the catalog.";
-    throw new Error("order_id missing");
+  if (!orderIdParam) {
+    alert("Missing order ID.");
+    window.location.href = "/catalog.html";
   }
 
-  document.getElementById("orderId").innerText = orderId;
+  const { data, error } = await db
+    .from("pweb_orders")
+    .select("*")
+    .eq("order_id", orderIdParam)
+    .single();
 
-  /************* LOAD ORDER *************/
-  async function loadOrder() {
-    const { data, error } = await supabase
-      .from("pweb_orders")
-      .select("order_id, doc_type, tier, price, pay_link")
-      .eq("order_id", orderId)
-      .single();
-
-    if (error || !data) {
-      errorEl.innerText = "Order not found. Please restart your order.";
-      return;
-    }
-
-    // Defensive validation
-    if (!data.doc_type || !data.price || !data.pay_link) {
-      errorEl.innerText = "Order is missing required payment data.";
-      return;
-    }
-
-    // Populate UI
-    document.getElementById("docType").innerText = data.doc_type;
-    document.getElementById("tier").innerText = data.tier || "Standard";
-    document.getElementById("price").innerText = "$" + data.price;
-
-    // Wire payment
-    document.getElementById("payBtn").onclick = () => {
-      window.location.href = data.pay_link;
-    };
+  if (error || !data) {
+    alert("Order not found.");
+    window.location.href = "/catalog.html";
   }
 
-  loadOrder();
+  // Populate UI
+  document.getElementById("orderId").innerText = data.order_id;
+  document.getElementById("document").innerText = data.doc_type;
+  document.getElementById("tier").innerText = data.tier;
+  document.getElementById("total").innerText = `$${data.price}`;
+
+  window.payNow = function () {
+    if (!data.pay_link) {
+      alert("Payment link not available.");
+      return;
+    }
+    window.location.href = data.pay_link;
+  };
 </script>
-
 </body>
 </html>
