@@ -200,8 +200,8 @@
       .from("pweb_orders")
       .insert({
         id: orderId,
-        customer_name: payload.first_name + " " + payload.last_name,
-        customer_email: payload.email,
+        client_first_name payload.first_name + " " + payload.last_name,
+        client_email: payload.email,
         payload: payload,
         status: "initiated"
       });
