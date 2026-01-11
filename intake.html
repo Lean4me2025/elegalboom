@@ -1,137 +1,131 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>E-LegalBoom Intake</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <title>E-LegalBoom – Client Intake</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 </head>
 <body>
 
 <h1>E-LegalBoom Client Intake</h1>
+<p>Please complete this intake carefully. This information is used to prepare your legal document.</p>
 
-<form id="intake-form">
+<form id="intakeForm">
 
   <h2>Client Information</h2>
 
-  <label>First Name</label><br>
-  <input type="text" name="client_first_name"><br><br>
+  <label>First Name</label><br/>
+  <input type="text" id="client_first_name"><br/><br/>
 
-  <label>Last Name</label><br>
-  <input type="text" name="client_last_name"><br><br>
+  <label>Last Name</label><br/>
+  <input type="text" id="client_last_name"><br/><br/>
 
-  <label>Email</label><br>
-  <input type="email" name="client_email"><br><br>
+  <label>Email</label><br/>
+  <input type="email" id="client_email"><br/><br/>
 
-  <label>Phone</label><br>
-  <input type="text" name="client_phone"><br><br>
+  <label>Phone</label><br/>
+  <input type="text" id="client_phone"><br/><br/>
 
-  <label>Business Name (if applicable)</label><br>
-  <input type="text" name="client_business_name"><br><br>
+  <label>Business Name (if applicable)</label><br/>
+  <input type="text" id="client_business_name"><br/><br/>
 
   <h2>Address</h2>
 
-  <label>Street</label><br>
-  <input type="text" name="client_street"><br><br>
+  <label>Street Address</label><br/>
+  <input type="text" id="client_street"><br/><br/>
 
-  <label>City</label><br>
-  <input type="text" name="client_city"><br><br>
+  <label>City</label><br/>
+  <input type="text" id="client_city"><br/><br/>
 
-  <label>State</label><br>
-  <select name="client_state">
+  <label>State</label><br/>
+  <select id="client_state">
     <option value="">Select State</option>
-    <option value="AL">Alabama</option><option value="AK">Alaska</option>
-    <option value="AZ">Arizona</option><option value="AR">Arkansas</option>
-    <option value="CA">California</option><option value="CO">Colorado</option>
-    <option value="CT">Connecticut</option><option value="DE">Delaware</option>
-    <option value="FL">Florida</option><option value="GA">Georgia</option>
-    <option value="HI">Hawaii</option><option value="ID">Idaho</option>
-    <option value="IL">Illinois</option><option value="IN">Indiana</option>
-    <option value="IA">Iowa</option><option value="KS">Kansas</option>
-    <option value="KY">Kentucky</option><option value="LA">Louisiana</option>
-    <option value="ME">Maine</option><option value="MD">Maryland</option>
-    <option value="MA">Massachusetts</option><option value="MI">Michigan</option>
-    <option value="MN">Minnesota</option><option value="MS">Mississippi</option>
-    <option value="MO">Missouri</option><option value="MT">Montana</option>
-    <option value="NE">Nebraska</option><option value="NV">Nevada</option>
-    <option value="NH">New Hampshire</option><option value="NJ">New Jersey</option>
-    <option value="NM">New Mexico</option><option value="NY">New York</option>
-    <option value="NC">North Carolina</option><option value="ND">North Dakota</option>
-    <option value="OH">Ohio</option><option value="OK">Oklahoma</option>
-    <option value="OR">Oregon</option><option value="PA">Pennsylvania</option>
-    <option value="RI">Rhode Island</option><option value="SC">South Carolina</option>
-    <option value="SD">South Dakota</option><option value="TN">Tennessee</option>
-    <option value="TX">Texas</option><option value="UT">Utah</option>
-    <option value="VT">Vermont</option><option value="VA">Virginia</option>
-    <option value="WA">Washington</option><option value="WV">West Virginia</option>
-    <option value="WI">Wisconsin</option><option value="WY">Wyoming</option>
-    <option value="DC">District of Columbia</option>
-  </select><br><br>
+    <option>AL</option><option>AK</option><option>AZ</option><option>AR</option>
+    <option>CA</option><option>CO</option><option>CT</option><option>DE</option>
+    <option>FL</option><option>GA</option><option>HI</option><option>ID</option>
+    <option>IL</option><option>IN</option><option>IA</option><option>KS</option>
+    <option>KY</option><option>LA</option><option>ME</option><option>MD</option>
+    <option>MA</option><option>MI</option><option>MN</option><option>MS</option>
+    <option>MO</option><option>MT</option><option>NE</option><option>NV</option>
+    <option>NH</option><option>NJ</option><option>NM</option><option>NY</option>
+    <option>NC</option><option>ND</option><option>OH</option><option>OK</option>
+    <option>OR</option><option>PA</option><option>RI</option><option>SC</option>
+    <option>SD</option><option>TN</option><option>TX</option><option>UT</option>
+    <option>VT</option><option>VA</option><option>WA</option><option>WV</option>
+    <option>WI</option><option>WY</option><option>DC</option>
+  </select><br/><br/>
 
-  <label>ZIP Code</label><br>
-  <input type="text" name="client_zip"><br><br>
+  <label>ZIP Code</label><br/>
+  <input type="text" id="client_zip"><br/><br/>
 
   <h2>Document Details</h2>
 
-  <label>Document Type</label><br>
-  <input type="text" name="doc_type"><br><br>
+  <label>Document Type</label><br/>
+  <input type="text" id="doc_type"><br/><br/>
 
-  <label>Governing State</label><br>
-  <input type="text" name="governing_state"><br><br>
+  <label>Governing State</label><br/>
+  <input type="text" id="governing_state"><br/><br/>
 
-  <label>Details / Instructions</label><br>
-  <textarea name="details"></textarea><br><br>
+  <label>Details / Instructions</label><br/>
+  <textarea id="details"></textarea><br/><br/>
 
-  <label>Notes</label><br>
-  <textarea name="notes"></textarea><br><br>
+  <label>Additional Notes</label><br/>
+  <textarea id="notes"></textarea><br/><br/>
 
   <button type="submit">Submit Intake</button>
 
 </form>
 
-<script type="module">
-  import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+<!-- SUPABASE UMD LIBRARY (NO MODULES) -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-  /* REQUIRED CONFIG */
+<script>
+  /********************************************************
+   * REQUIRED CONFIG – INSERT YOUR REAL VALUES HERE
+   ********************************************************/
   const SUPABASE_URL = "https://vvjbjfltqsivvxxifnvi.supabase.co";
   const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ2amJqZmx0cXNpdnZ4eGlmbnZpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc5NzYzNTAsImV4cCI6MjA3MzU1MjM1MH0.F4zzcpCHl9v-Rnj0wgKJ5zBf1HteVyXelMLQDDEN28Q";
 
-  const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  const supabaseClient = supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_ANON_KEY
+  );
 
-  const form = document.getElementById("intake-form");
-
-  form.addEventListener("submit", async (e) => {
+  document.getElementById("intakeForm").addEventListener("submit", async function (e) {
     e.preventDefault();
 
     const payload = {
-      client_first_name: form.client_first_name.value || null,
-      client_last_name: form.client_last_name.value || null,
-      client_email: form.client_email.value || null,
-      client_phone: form.client_phone.value || null,
-      client_business_name: form.client_business_name.value || null,
-      client_street: form.client_street.value || null,
-      client_city: form.client_city.value || null,
-      client_state: form.client_state.value || null,
-      client_zip: form.client_zip.value || null,
-      doc_type: form.doc_type.value || null,
-      governing_state: form.governing_state.value || null,
-      details: form.details.value || null,
-      notes: form.notes.value || null
+      client_first_name: document.getElementById("client_first_name").value || null,
+      client_last_name: document.getElementById("client_last_name").value || null,
+      client_email: document.getElementById("client_email").value || null,
+      client_phone: document.getElementById("client_phone").value || null,
+      client_business_name: document.getElementById("client_business_name").value || null,
+
+      client_street: document.getElementById("client_street").value || null,
+      client_city: document.getElementById("client_city").value || null,
+      client_state: document.getElementById("client_state").value || null,
+      client_zip: document.getElementById("client_zip").value || null,
+
+      doc_type: document.getElementById("doc_type").value || null,
+      governing_state: document.getElementById("governing_state").value || null,
+
+      details: document.getElementById("details").value || null,
+      notes: document.getElementById("notes").value || null
     };
 
-    console.log("Submitting payload to pweb_orders:", payload);
+    console.log("SHOTGUN PAYLOAD → pweb_orders", payload);
 
-    const { data, error } = await supabase
+    const { data, error } = await supabaseClient
       .from("pweb_orders")
-      .insert([payload])
-      .select();
+      .insert([payload]);
 
     if (error) {
-      console.error("Insert failed:", error);
-      alert("Insert failed. See console.");
+      console.error("INSERT ERROR:", error);
+      alert("Insert failed. Check console.");
       return;
     }
 
-    console.log("Insert success:", data);
+    console.log("INSERT SUCCESS:", data);
     alert("Intake submitted successfully.");
   });
 </script>
