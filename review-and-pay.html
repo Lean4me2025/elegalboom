@@ -11,29 +11,24 @@
       background: #f6f6f7;
       padding: 40px;
     }
-
     .wrapper {
       max-width: 720px;
       margin: auto;
     }
-
     .card {
       background: #ffffff;
       border-radius: 6px;
       padding: 35px;
       box-shadow: 0 8px 24px rgba(0,0,0,0.08);
     }
-
     h1 {
       margin-top: 0;
       margin-bottom: 10px;
     }
-
     .sub {
       color: #555;
       margin-bottom: 25px;
     }
-
     .row {
       display: flex;
       justify-content: space-between;
@@ -41,11 +36,6 @@
       border-bottom: 1px solid #e5e7ea;
       font-size: 17px;
     }
-
-    .row:last-child {
-      border-bottom: none;
-    }
-
     .total {
       font-size: 20px;
       font-weight: bold;
@@ -53,7 +43,6 @@
       display: flex;
       justify-content: space-between;
     }
-
     button {
       margin-top: 30px;
       width: 100%;
@@ -61,12 +50,10 @@
       font-size: 18px;
       cursor: pointer;
     }
-
     .back {
       margin-top: 15px;
       text-align: center;
     }
-
     .back a {
       text-decoration: none;
       color: #555;
@@ -109,22 +96,34 @@
   </div>
 
   <script>
-    /* ---------- READ FROM URL (CATALOG IS SOURCE OF TRUTH) ---------- */
+    /* ---------- ORDER ID FROM URL ---------- */
     const params = new URLSearchParams(window.location.search);
+    const orderId = params.get("order_id");
 
-    const orderId  = params.get("order_id");
-    const document = params.get("document");
-    const tier     = params.get("tier");
-    const price    = params.get("price");
-    const payLink  = params.get("pay");
-
-    if (!orderId || !document || !tier || !price || !payLink) {
-      alert("Missing order information. Please return to the catalog.");
+    if (!orderId) {
+      alert("Missing order ID.");
       window.location.href = "/catalog.html";
     }
 
     document.getElementById("orderId").innerText = orderId;
-    document.getElementById("documentName").innerText = document;
+
+    /* ---------- ORDER CONTEXT FROM CATALOG ---------- */
+    const stored = localStorage.getItem("orderContext");
+    if (!stored) {
+      alert("Missing order details. Please return to the catalog.");
+      window.location.href = "/catalog.html";
+    }
+
+    const orderContext = JSON.parse(stored);
+
+    const {
+      document: documentName,
+      tier,
+      price,
+      payLink
+    } = orderContext;
+
+    document.getElementById("documentName").innerText = documentName;
     document.getElementById("tierName").innerText = tier;
     document.getElementById("totalPrice").innerText = `$${price}.00`;
 
