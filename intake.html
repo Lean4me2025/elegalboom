@@ -4,216 +4,101 @@
   <meta charset="UTF-8" />
   <title>E-LegalBoom | Client Intake</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f4f6f8;
-      margin: 0;
-      padding: 40px;
-    }
-    .container {
-      max-width: 760px;
-      margin: auto;
-      background: #ffffff;
-      padding: 32px;
-      border-radius: 8px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
-    }
-    h1 {
-      margin-top: 0;
-    }
-    label {
-      display: block;
-      margin-top: 18px;
-      font-weight: 600;
-    }
-    input, select, textarea {
-      width: 100%;
-      padding: 10px;
-      margin-top: 6px;
-      border-radius: 4px;
-      border: 1px solid #ccc;
-      font-size: 15px;
-    }
-    textarea {
-      min-height: 90px;
-    }
-    button {
-      margin-top: 30px;
-      width: 100%;
-      padding: 14px;
-      font-size: 16px;
-      background: #2b2bff;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-  </style>
 </head>
 
 <body>
 
-<div class="container">
-  <h1>Client Intake</h1>
+<h2>Client Intake</h2>
 
-  <div id="orderSummary" style="margin-bottom:20px;"></div>
+<form id="intakeForm">
 
-  <form id="intakeForm">
+  <label>First Name</label>
+  <input id="firstName" required />
 
-    <label for="firstName">First Name</label>
-    <input id="firstName" required />
+  <label>Last Name</label>
+  <input id="lastName" required />
 
-    <label for="lastName">Last Name</label>
-    <input id="lastName" required />
+  <label>Email</label>
+  <input id="email" type="email" required />
 
-    <label for="email">Email</label>
-    <input id="email" type="email" required />
+  <label>Phone</label>
+  <input id="phone" />
 
-    <label for="phone">Phone (optional)</label>
-    <input id="phone" />
+  <label>Business / Entity Name</label>
+  <input id="business" />
 
-    <label for="business">Business / Entity (optional)</label>
-    <input id="business" />
+  <label>State / Jurisdiction</label>
+  <select id="state" required>
+    <option value="">Select State</option>
+    <option>Alabama</option><option>Alaska</option><option>Arizona</option><option>Arkansas</option>
+    <option>California</option><option>Colorado</option><option>Connecticut</option><option>Delaware</option>
+    <option>Florida</option><option>Georgia</option><option>Hawaii</option><option>Idaho</option>
+    <option>Illinois</option><option>Indiana</option><option>Iowa</option><option>Kansas</option>
+    <option>Kentucky</option><option>Louisiana</option><option>Maine</option><option>Maryland</option>
+    <option>Massachusetts</option><option>Michigan</option><option>Minnesota</option><option>Mississippi</option>
+    <option>Missouri</option><option>Montana</option><option>Nebraska</option><option>Nevada</option>
+    <option>New Hampshire</option><option>New Jersey</option><option>New Mexico</option><option>New York</option>
+    <option>North Carolina</option><option>North Dakota</option><option>Ohio</option><option>Oklahoma</option>
+    <option>Oregon</option><option>Pennsylvania</option><option>Rhode Island</option><option>South Carolina</option>
+    <option>South Dakota</option><option>Tennessee</option><option>Texas</option><option>Utah</option>
+    <option>Vermont</option><option>Virginia</option><option>Washington</option><option>West Virginia</option>
+    <option>Wisconsin</option><option>Wyoming</option>
+  </select>
 
-    <label for="state">State / Jurisdiction</label>
-    <select id="state" required>
-      <option value="">Select a state</option>
-      <option value="AL">Alabama</option>
-      <option value="AK">Alaska</option>
-      <option value="AZ">Arizona</option>
-      <option value="AR">Arkansas</option>
-      <option value="CA">California</option>
-      <option value="CO">Colorado</option>
-      <option value="CT">Connecticut</option>
-      <option value="DE">Delaware</option>
-      <option value="FL">Florida</option>
-      <option value="GA">Georgia</option>
-      <option value="HI">Hawaii</option>
-      <option value="ID">Idaho</option>
-      <option value="IL">Illinois</option>
-      <option value="IN">Indiana</option>
-      <option value="IA">Iowa</option>
-      <option value="KS">Kansas</option>
-      <option value="KY">Kentucky</option>
-      <option value="LA">Louisiana</option>
-      <option value="ME">Maine</option>
-      <option value="MD">Maryland</option>
-      <option value="MA">Massachusetts</option>
-      <option value="MI">Michigan</option>
-      <option value="MN">Minnesota</option>
-      <option value="MS">Mississippi</option>
-      <option value="MO">Missouri</option>
-      <option value="MT">Montana</option>
-      <option value="NE">Nebraska</option>
-      <option value="NV">Nevada</option>
-      <option value="NH">New Hampshire</option>
-      <option value="NJ">New Jersey</option>
-      <option value="NM">New Mexico</option>
-      <option value="NY">New York</option>
-      <option value="NC">North Carolina</option>
-      <option value="ND">North Dakota</option>
-      <option value="OH">Ohio</option>
-      <option value="OK">Oklahoma</option>
-      <option value="OR">Oregon</option>
-      <option value="PA">Pennsylvania</option>
-      <option value="RI">Rhode Island</option>
-      <option value="SC">South Carolina</option>
-      <option value="SD">South Dakota</option>
-      <option value="TN">Tennessee</option>
-      <option value="TX">Texas</option>
-      <option value="UT">Utah</option>
-      <option value="VT">Vermont</option>
-      <option value="VA">Virginia</option>
-      <option value="WA">Washington</option>
-      <option value="WV">West Virginia</option>
-      <option value="WI">Wisconsin</option>
-      <option value="WY">Wyoming</option>
-    </select>
+  <label>Other Party (optional)</label>
+  <input id="counterparty" />
 
-    <label for="counterparty">Other Party (optional)</label>
-    <input id="counterparty" />
+  <label>Purpose / Context</label>
+  <textarea id="purpose"></textarea>
 
-    <label for="purpose">Purpose / Context</label>
-    <textarea id="purpose"></textarea>
+  <label>Amount (optional)</label>
+  <input id="amount" type="number" />
 
-    <label for="amount">Amount (optional)</label>
-    <input id="amount" />
+  <label>Effective Date</label>
+  <input id="effectiveDate" type="date" />
 
-    <label for="effectiveDate">Effective Date</label>
-    <input id="effectiveDate" type="date" />
+  <label>Additional Notes</label>
+  <textarea id="notes"></textarea>
 
-    <label for="notes">Additional Notes</label>
-    <textarea id="notes"></textarea>
+  <button type="submit">Continue</button>
 
-    <button type="submit">Continue to Review & Pay</button>
-  </form>
-</div>
+</form>
 
-<!-- Supabase v2 (single import, single client) -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
-  /* ===== CONFIG — REPLACE ONLY THESE TWO VALUES ===== */
   const SUPABASE_URL = "https://vvjbjfltqsivvxxifnvi.supabase.co";
   const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ2amJqZmx0cXNpdnZ4eGlmbnZpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc5NzYzNTAsImV4cCI6MjA3MzU1MjM1MH0.F4zzcpCHl9v-Rnj0wgKJ5zBf1HteVyXelMLQDDEN28Q";
-  /* ================================================= */
 
-  const supabaseClient = window.supabase.createClient(
+  const supabase = window.supabase.createClient(
     SUPABASE_URL,
     SUPABASE_ANON_KEY
   );
 
-  const orderContext = JSON.parse(localStorage.getItem("orderContext"));
-  if (!orderContext) {
-    window.location.href = "/catalog.html";
-  }
-
-  document.getElementById("orderSummary").innerHTML = `
-    <strong>Document:</strong> ${orderContext.document}<br>
-    <strong>Tier:</strong> ${orderContext.tier}
-  `;
-
-  document.getElementById("intakeForm").addEventListener("submit", async function (e) {
+  document.getElementById("intakeForm").addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    const orderId = crypto.randomUUID();
-
     const payload = {
-      document: orderContext.document,
-      tier: orderContext.tier,
-      first_name: firstName.value.trim(),
-      last_name: lastName.value.trim(),
-      email: email.value.trim(),
-      phone: phone.value.trim(),
-      business: business.value.trim(),
-      state: state.value,
-      counterparty: counterparty.value.trim(),
-      purpose: purpose.value.trim(),
-      amount: amount.value.trim(),
-      effective_date: effectiveDate.value,
-      notes: notes.value.trim()
+      request_uuid: crypto.randomUUID(),
+      client_first_name: firstName.value.trim(),
+      client_last_name: lastName.value.trim(),
+      client_email: email.value.trim(),
+      client_phone: phone.value.trim(),
+      client_business_name: business.value.trim(),
+      state: state.value
     };
 
-    const { error } = await supabaseClient
+    const { error } = await supabase
       .from("pweb_orders")
-      .insert({
-        id: orderId,
-        client_first_name payload.first_name + " " + payload.last_name,
-        client_email: payload.email,
-        payload: payload,
-        status: "initiated"
-      });
+      .insert(payload);
 
     if (error) {
-      console.error(error);
-      alert("Database insert failed.");
+      console.error("Supabase insert error:", error);
+      alert("Insert failed. Check console.");
       return;
     }
 
-    localStorage.setItem("orderId", orderId);
-    window.location.href = "/review-and-pay.html";
+    alert("Success — row inserted into pweb_orders");
   });
 </script>
 
