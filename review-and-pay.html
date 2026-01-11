@@ -3,7 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <title>E-LegalBoom | Review & Pay</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Supabase JS v2 -->
+  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
   <style>
     body {
       font-family: Georgia, serif;
@@ -12,7 +17,7 @@
     }
 
     .wrapper {
-      max-width: 700px;
+      max-width: 780px;
       margin: auto;
     }
 
@@ -46,9 +51,9 @@
     }
 
     .total {
-      font-size: 20px;
+      font-size: 22px;
       font-weight: bold;
-      margin-top: 20px;
+      margin-top: 25px;
       display: flex;
       justify-content: space-between;
     }
@@ -70,6 +75,12 @@
       text-decoration: none;
       color: #555;
     }
+
+    .error {
+      color: red;
+      margin-top: 20px;
+      font-weight: bold;
+    }
   </style>
 </head>
 <body>
@@ -80,47 +91,97 @@
     <div class="sub">Please confirm the details below before payment.</div>
 
     <div class="row">
+      <span>Order ID</span>
+      <span id="orderId">—</span>
+    </div>
+
+    <div class="row">
       <span>Document</span>
-      <span id="docName"></span>
+      <span id="docName">—</span>
     </div>
 
     <div class="row">
       <span>Tier</span>
-      <span id="tierName"></span>
+      <span id="tierName">—</span>
     </div>
 
     <div class="total">
       <span>Total</span>
-      <span id="price"></span>
+      <span id="price">—</span>
     </div>
 
-    <button onclick="payNow()">Proceed to Secure Payment</button>
+    <button id="payBtn">Proceed to Secure Payment</button>
 
     <div class="back">
       <a href="/intake.html">← Back to Intake</a>
     </div>
+
+    <div id="error" class="error"></div>
   </div>
 </div>
 
 <script>
-  const order = JSON.parse(localStorage.getItem("orderContext"));
+  /* ================================
+     CONFIG — REPLACE THESE
+  ================================= */
+  const SUPABASE_URL = "https://YOUR_PROJECT_ID.supabase.co";
+  const SUPABASE_ANON_KEY = "YOUR_PUBLIC_ANON_KEY";
 
-  if (!order) {
-    alert("Order context missing.");
-    window.location.href = "/catalog.html";
+  const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  /* ================================
+     UTILITIES
+  ================================= */
+  const params = new URLSearchParams(window.location.search);
+  const orderId = params.get("order_id");
+
+  const errorEl = document.getElementById("error");
+
+  if (!orderId) {
+    errorEl.innerText = "Missing order_id in URL.";
+    throw new Error("order_id missing");
   }
 
-  document.getElementById("docName").innerText = order.document;
-  document.getElementById("tierName").innerText = order.tier;
-  document.getElementById("price").innerText = `$${order.price}`;
+  document.getElementById("orderId").innerText = orderId;
 
-  function payNow() {
-    if (!order.payLink) {
-      alert("Payment link not found.");
-      return;
+  /* ================================
+     FETCH ORDER
+  ================================= */
+  async function loadOrder() {
+    const { data, error } = await supabase
+      .from("pweb_orders")
+      .select("*")
+      .eq("order_id", orderId)
+      .single();
+
+    if (error || !data) {
+      errorEl.innerText = "Order not found.";
+      throw error;
     }
-    window.location.href = order.payLink;
+
+    // REQUIRED FIELDS
+    const docType = data.doc_type;
+    const tier = data.tier || "Tier 1";
+    const price = data.price;
+    const payLink = data.pay_link;
+
+    if (!docType || !price || !payLink) {
+      errorEl.innerText = "Order is missing required payment data.";
+      throw new Error("Missing payment fields");
+    }
+
+    // Populate UI
+    document.getElementById("docName").innerText = docType;
+    document.getElementById("tierName").innerText = tier;
+    document.getElementById("price").innerText = `$${price}`;
+
+    // Attach payment handler
+    document.getElementById("payBtn").onclick = () => {
+      window.location.href = payLink;
+    };
   }
+
+  loadOrder();
 </script>
 
 </body>
