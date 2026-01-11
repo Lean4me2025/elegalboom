@@ -6,7 +6,7 @@
   <style>
     body {
       font-family: Arial, sans-serif;
-      background: #f5f5f5;
+      background: #f4f4f4;
       padding: 30px;
     }
     h1 {
@@ -15,88 +15,149 @@
     }
     .subtitle {
       text-align: center;
-      margin-bottom: 30px;
       color: #555;
+      margin-bottom: 30px;
     }
     .tier {
-      background: #fff;
+      background: #ffffff;
       border: 1px solid #ddd;
       border-radius: 6px;
       padding: 20px;
-      margin-bottom: 20px;
+      margin-bottom: 25px;
     }
     .tier h2 {
       margin-top: 0;
     }
     .doc {
-      margin: 10px 0;
-      padding: 10px;
       border: 1px solid #eee;
       border-radius: 4px;
+      padding: 12px;
+      margin-top: 10px;
       cursor: pointer;
     }
     .doc:hover {
-      background: #f0f8ff;
+      background: #eef6ff;
     }
     .doc small {
       display: block;
-      color: #666;
       margin-top: 4px;
+      color: #666;
     }
   </style>
 </head>
 <body>
 
-<h1>Choose Your Legal Document</h1>
-<div class="subtitle">Click a document to continue</div>
+<h1>Select Your Legal Document</h1>
+<div class="subtitle">Click a document to continue to intake</div>
 
+<!-- ================= TIER 1 ================= -->
 <div class="tier">
   <h2>Tier 1 — $39</h2>
 
-  <div class="doc" onclick="selectDoc('Tier 1','NDA',39,'https://pay.elegalboom.org/e4b79a60-0fd7-431c-8bfc-ae0')">
-    Non-Disclosure Agreement
-    <small>Protect confidential information when sharing ideas or data.</small>
+  <div class="doc" onclick="selectDoc('Tier 1','Non-Disclosure Agreement (NDA)',39,link.tier1)">
+    Non-Disclosure Agreement (NDA)
+    <small>Protect confidential information shared between parties.</small>
   </div>
 
-  <div class="doc" onclick="selectDoc('Tier 1','Promissory Note',39,'https://pay.elegalboom.org/e4b79a60-0fd7-431c-8bfc-ae0')">
+  <div class="doc" onclick="selectDoc('Tier 1','Promissory Note',39,link.tier1)">
     Promissory Note
-    <small>Formalize repayment terms for a loan.</small>
+    <small>Formal agreement outlining repayment of a loan.</small>
+  </div>
+
+  <div class="doc" onclick="selectDoc('Tier 1','Demand Letter',39,link.tier1)">
+    Demand Letter
+    <small>Formal request for payment or action before legal escalation.</small>
+  </div>
+
+  <div class="doc" onclick="selectDoc('Tier 1','Cease and Desist Letter',39,link.tier1)">
+    Cease and Desist Letter
+    <small>Notice demanding unlawful or harmful behavior stop immediately.</small>
   </div>
 </div>
 
+<!-- ================= TIER 2 ================= -->
 <div class="tier">
   <h2>Tier 2 — $59</h2>
 
-  <div class="doc" onclick="selectDoc('Tier 2','Independent Contractor Agreement',59,'https://pay.elegalboom.org/eeda586f-65f5-4bf0-98f3-7a2')">
+  <div class="doc" onclick="selectDoc('Tier 2','Independent Contractor Agreement',59,link.tier2)">
     Independent Contractor Agreement
-    <small>Define scope and payment for non-employee services.</small>
+    <small>Defines scope, payment, and obligations for contractors.</small>
   </div>
 
-  <div class="doc" onclick="selectDoc('Tier 2','Service Agreement',59,'https://pay.elegalboom.org/eeda586f-65f5-4bf0-98f3-7a2')">
+  <div class="doc" onclick="selectDoc('Tier 2','Service Agreement',59,link.tier2)">
     Service Agreement
-    <small>Outline services, timelines, and expectations.</small>
+    <small>Outlines services, timelines, and responsibilities.</small>
+  </div>
+
+  <div class="doc" onclick="selectDoc('Tier 2','Partnership Agreement',59,link.tier2)">
+    Partnership Agreement
+    <small>Establishes roles, profit sharing, and authority between partners.</small>
+  </div>
+
+  <div class="doc" onclick="selectDoc('Tier 2','Consulting Agreement',59,link.tier2)">
+    Consulting Agreement
+    <small>Defines advisory services, fees, and deliverables.</small>
   </div>
 </div>
 
+<!-- ================= TIER 3 ================= -->
 <div class="tier">
   <h2>Tier 3 — $99</h2>
 
-  <div class="doc" onclick="selectDoc('Tier 3','Operating Agreement',99,'https://pay.elegalboom.org/71ca7144-e537-4fbd-823d-c10')">
-    Operating Agreement
-    <small>Define ownership, roles, and governance of an LLC.</small>
+  <div class="doc" onclick="selectDoc('Tier 3','Operating Agreement (LLC)',99,link.tier3)">
+    Operating Agreement (LLC)
+    <small>Defines ownership, governance, and management structure.</small>
+  </div>
+
+  <div class="doc" onclick="selectDoc('Tier 3','Multi-Member LLC Agreement',99,link.tier3)">
+    Multi-Member LLC Agreement
+    <small>Governs relationships among multiple LLC owners.</small>
+  </div>
+
+  <div class="doc" onclick="selectDoc('Tier 3','Shareholder Agreement',99,link.tier3)">
+    Shareholder Agreement
+    <small>Outlines shareholder rights, voting, and ownership transfer.</small>
+  </div>
+
+  <div class="doc" onclick="selectDoc('Tier 3','Buy-Sell Agreement',99,link.tier3)">
+    Buy-Sell Agreement
+    <small>Controls ownership transitions due to exit, death, or sale.</small>
   </div>
 </div>
 
+<!-- ================= TIER 4 ================= -->
 <div class="tier">
   <h2>Tier 4 — Entrepreneur Level</h2>
 
-  <div class="doc" onclick="selectDoc('Tier 4','Entrepreneur Document',159,'https://pay.elegalboom.org/55c7cd3d-1048-4b8c-aadb-843')">
-    Entrepreneur-Focused Legal Document
-    <small>Advanced document tailored for business founders.</small>
+  <div class="doc" onclick="selectDoc('Tier 4','Entrepreneur Custom Legal Document',159,link.tier4)">
+    Entrepreneur Custom Legal Document
+    <small>Advanced, founder-focused agreement tailored to your situation.</small>
+  </div>
+
+  <div class="doc" onclick="selectDoc('Tier 4','Founder Agreement',159,link.tier4)">
+    Founder Agreement
+    <small>Defines equity, roles, vesting, and founder responsibilities.</small>
+  </div>
+
+  <div class="doc" onclick="selectDoc('Tier 4','Investor Readiness Agreement',159,link.tier4)">
+    Investor Readiness Agreement
+    <small>Prepares structure and protections before fundraising.</small>
+  </div>
+
+  <div class="doc" onclick="selectDoc('Tier 4','IP Assignment Agreement',159,link.tier4)">
+    IP Assignment Agreement
+    <small>Ensures intellectual property ownership is properly assigned.</small>
   </div>
 </div>
 
 <script>
+  const link = {
+    tier1: "https://pay.elegalboom.org/e4b79a60-0fd7-431c-8bfc-ae0",
+    tier2: "https://pay.elegalboom.org/eeda586f-65f5-4bf0-98f3-7a2",
+    tier3: "https://pay.elegalboom.org/71ca7144-e537-4fbd-823d-c10",
+    tier4: "https://pay.elegalboom.org/55c7cd3d-1048-4b8c-aadb-843"
+  };
+
   function selectDoc(tier, documentName, price, payLink) {
     const orderContext = {
       tier,
@@ -104,7 +165,6 @@
       price,
       payLink
     };
-
     localStorage.setItem("orderContext", JSON.stringify(orderContext));
     window.location.href = "intake.html";
   }
