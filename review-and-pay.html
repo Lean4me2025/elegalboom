@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <title>E-LegalBoom | Review & Pay</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <style>
     body {
@@ -12,16 +12,23 @@
       padding: 40px;
     }
     .wrapper {
-      max-width: 760px;
+      max-width: 720px;
       margin: auto;
     }
     .card {
-      background: #fff;
+      background: #ffffff;
       border-radius: 6px;
-      padding: 36px;
-      box-shadow: 0 8px 24px rgba(0,0,0,.08);
+      padding: 35px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.08);
     }
-    h1 { margin-top: 0; }
+    h1 {
+      margin-top: 0;
+      margin-bottom: 6px;
+    }
+    .sub {
+      color: #555;
+      margin-bottom: 25px;
+    }
     .row {
       display: flex;
       justify-content: space-between;
@@ -29,11 +36,15 @@
       border-bottom: 1px solid #e5e7ea;
       font-size: 17px;
     }
-    .row:last-child { border-bottom: none; }
+    .row:last-child {
+      border-bottom: none;
+    }
     .total {
       font-size: 22px;
       font-weight: bold;
       margin-top: 20px;
+      display: flex;
+      justify-content: space-between;
     }
     button {
       margin-top: 30px;
@@ -43,8 +54,8 @@
       cursor: pointer;
     }
     .back {
-      text-align: center;
       margin-top: 15px;
+      text-align: center;
     }
     .back a {
       text-decoration: none;
@@ -54,80 +65,48 @@
 </head>
 
 <body>
-<div class="wrapper">
-  <div class="card">
-    <h1>Review Your Order</h1>
-    <p>Please confirm your order details before payment.</p>
+  <div class="wrapper">
+    <div class="card">
+      <h1>Review Your Order</h1>
+      <div class="sub">Please confirm your order details before payment.</div>
 
-    <div class="row">
-      <span>Order ID</span>
-      <span id="orderId">—</span>
-    </div>
+      <div class="row">
+        <span>Order ID</span>
+        <span id="orderId">—</span>
+      </div>
 
-    <div class="row">
-      <span>Document</span>
-      <span id="document">—</span>
-    </div>
+      <div class="row">
+        <span>Document</span>
+        <span id="docName">—</span>
+      </div>
 
-    <div class="row">
-      <span>Tier</span>
-      <span id="tier">—</span>
-    </div>
+      <div class="row">
+        <span>Tier</span>
+        <span id="tierName">—</span>
+      </div>
 
-    <div class="row total">
-      <span>Total</span>
-      <span id="total">—</span>
-    </div>
+      <div class="total">
+        <span>Total</span>
+        <span id="price">—</span>
+      </div>
 
-    <button onclick="payNow()">Proceed to Secure Payment</button>
+      <button onclick="payNow()">Proceed to Secure Payment</button>
 
-    <div class="back">
-      <a href="/intake.html">← Back to Intake</a>
+      <div class="back">
+        <a href="/intake.html">← Back to Intake</a>
+      </div>
     </div>
   </div>
-</div>
 
-<script type="module">
-  import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+  <script type="module">
+    import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
-  // 🔒 PSEUDONAME CLIENT (no Supabase naming in app logic)
-  const db = createClient(
-    "https://PROJECT_URL.supabase.co",
-    "ANON_KEY"
-  );
+    /* -------------------------------------------------
+       PSEUDONAMED DB CLIENT (no Supabase naming in logic)
+    -------------------------------------------------- */
+    const db = createClient(
+      "https://YOUR_PROJECT_ID.supabase.co",
+      "YOUR_PUBLIC_ANON_KEY"
+    );
 
-  const params = new URLSearchParams(window.location.search);
-  const orderIdParam = params.get("order_id");
-
-  if (!orderIdParam) {
-    alert("Missing order ID.");
-    window.location.href = "/catalog.html";
-  }
-
-  const { data, error } = await db
-    .from("pweb_orders")
-    .select("*")
-    .eq("order_id", orderIdParam)
-    .single();
-
-  if (error || !data) {
-    alert("Order not found.");
-    window.location.href = "/catalog.html";
-  }
-
-  // Populate UI
-  document.getElementById("orderId").innerText = data.order_id;
-  document.getElementById("document").innerText = data.doc_type;
-  document.getElementById("tier").innerText = data.tier;
-  document.getElementById("total").innerText = `$${data.price}`;
-
-  window.payNow = function () {
-    if (!data.pay_link) {
-      alert("Payment link not available.");
-      return;
-    }
-    window.location.href = data.pay_link;
-  };
-</script>
-</body>
-</html>
+    /*
