@@ -2,131 +2,123 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>E-LegalBoom – Client Intake</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>E-LegalBoom Client Intake</title>
+
+  <!-- Supabase JS -->
+  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; }
+    h1, h2 { margin-top: 30px; }
+    label { display: block; margin-top: 12px; }
+    input, select, textarea { width: 100%; padding: 6px; }
+    button { margin-top: 20px; padding: 10px 20px; }
+  </style>
 </head>
 <body>
 
 <h1>E-LegalBoom Client Intake</h1>
-<p>Please complete this intake carefully. This information is used to prepare your legal document.</p>
 
 <form id="intakeForm">
 
+  <!-- CLIENT -->
   <h2>Client Information</h2>
+  <label>First Name <input name="client_first_name" required></label>
+  <label>Last Name <input name="client_last_name" required></label>
+  <label>Email <input name="client_email" type="email" required></label>
+  <label>Phone <input name="client_phone"></label>
+  <label>Business Name <input name="client_business_name"></label>
 
-  <label>First Name</label><br/>
-  <input type="text" id="client_first_name"><br/><br/>
-
-  <label>Last Name</label><br/>
-  <input type="text" id="client_last_name"><br/><br/>
-
-  <label>Email</label><br/>
-  <input type="email" id="client_email"><br/><br/>
-
-  <label>Phone</label><br/>
-  <input type="text" id="client_phone"><br/><br/>
-
-  <label>Business Name (if applicable)</label><br/>
-  <input type="text" id="client_business_name"><br/><br/>
-
+  <!-- ADDRESS -->
   <h2>Address</h2>
+  <label>Street <input name="client_street"></label>
+  <label>City <input name="client_city"></label>
 
-  <label>Street Address</label><br/>
-  <input type="text" id="client_street"><br/><br/>
+  <label>State
+    <select name="client_state" required>
+      <option value="">Select State</option>
+      <option>AL</option><option>AK</option><option>AZ</option><option>AR</option>
+      <option>CA</option><option>CO</option><option>CT</option><option>DE</option>
+      <option>FL</option><option>GA</option><option>HI</option><option>ID</option>
+      <option>IL</option><option>IN</option><option>IA</option><option>KS</option>
+      <option>KY</option><option>LA</option><option>ME</option><option>MD</option>
+      <option>MA</option><option>MI</option><option>MN</option><option>MS</option>
+      <option>MO</option><option>MT</option><option>NE</option><option>NV</option>
+      <option>NH</option><option>NJ</option><option>NM</option><option>NY</option>
+      <option>NC</option><option>ND</option><option>OH</option><option>OK</option>
+      <option>OR</option><option>PA</option><option>RI</option><option>SC</option>
+      <option>SD</option><option>TN</option><option>TX</option><option>UT</option>
+      <option>VT</option><option>VA</option><option>WA</option><option>WV</option>
+      <option>WI</option><option>WY</option>
+    </select>
+  </label>
 
-  <label>City</label><br/>
-  <input type="text" id="client_city"><br/><br/>
+  <label>ZIP <input name="client_zip"></label>
+  <label>Country <input name="client_country" value="USA"></label>
 
-  <label>State</label><br/>
-  <select id="client_state">
-    <option value="">Select State</option>
-    <option>AL</option><option>AK</option><option>AZ</option><option>AR</option>
-    <option>CA</option><option>CO</option><option>CT</option><option>DE</option>
-    <option>FL</option><option>GA</option><option>HI</option><option>ID</option>
-    <option>IL</option><option>IN</option><option>IA</option><option>KS</option>
-    <option>KY</option><option>LA</option><option>ME</option><option>MD</option>
-    <option>MA</option><option>MI</option><option>MN</option><option>MS</option>
-    <option>MO</option><option>MT</option><option>NE</option><option>NV</option>
-    <option>NH</option><option>NJ</option><option>NM</option><option>NY</option>
-    <option>NC</option><option>ND</option><option>OH</option><option>OK</option>
-    <option>OR</option><option>PA</option><option>RI</option><option>SC</option>
-    <option>SD</option><option>TN</option><option>TX</option><option>UT</option>
-    <option>VT</option><option>VA</option><option>WA</option><option>WV</option>
-    <option>WI</option><option>WY</option><option>DC</option>
-  </select><br/><br/>
-
-  <label>ZIP Code</label><br/>
-  <input type="text" id="client_zip"><br/><br/>
-
+  <!-- DOCUMENT -->
   <h2>Document Details</h2>
+  <label>Document Type <input name="doc_type" required></label>
+  <label>Governing State <input name="governing_state"></label>
+  <label>Preferred Deadline <input name="preferred_deadline" type="date"></label>
+  <label>Urgency <input name="urgency"></label>
+  <label>Details <textarea name="details"></textarea></label>
+  <label>File Option <input name="file_option"></label>
 
-  <label>Document Type</label><br/>
-  <input type="text" id="doc_type"><br/><br/>
+  <!-- PARTIES -->
+  <h2>Parties</h2>
 
-  <label>Governing State</label><br/>
-  <input type="text" id="governing_state"><br/><br/>
+  <label>Party 1 Name <input name="party1_name"></label>
+  <label>Party 1 Role <input name="party1_role"></label>
+  <label>Party 1 Email <input name="party1_email"></label>
 
-  <label>Details / Instructions</label><br/>
-  <textarea id="details"></textarea><br/><br/>
+  <label>Party 2 Name <input name="party2_name"></label>
+  <label>Party 2 Role <input name="party2_role"></label>
+  <label>Party 2 Email <input name="party2_email"></label>
 
-  <label>Additional Notes</label><br/>
-  <textarea id="notes"></textarea><br/><br/>
+  <label>Party 3 Name <input name="party3_name"></label>
+  <label>Party 3 Role <input name="party3_role"></label>
+  <label>Party 3 Email <input name="party3_email"></label>
+
+  <label>Party 4 Name <input name="party4_name"></label>
+  <label>Party 4 Role <input name="party4_role"></label>
+  <label>Party 4 Email <input name="party4_email"></label>
+
+  <!-- STATUS -->
+  <h2>Internal</h2>
+  <label>Order Status <input name="order_status" value="new"></label>
+  <label>Notes <textarea name="notes"></textarea></label>
+  <label>Order ID <input name="order_id"></label>
 
   <button type="submit">Submit Intake</button>
-
 </form>
 
-<!-- SUPABASE UMD LIBRARY (NO MODULES) -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
 <script>
-  /********************************************************
-   * REQUIRED CONFIG – INSERT YOUR REAL VALUES HERE
-   ********************************************************/
+  // 🔑 REPLACE THESE
   const SUPABASE_URL = "https://vvjbjfltqsivvxxifnvi.supabase.co";
   const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ2amJqZmx0cXNpdnZ4eGlmbnZpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc5NzYzNTAsImV4cCI6MjA3MzU1MjM1MH0.F4zzcpCHl9v-Rnj0wgKJ5zBf1HteVyXelMLQDDEN28Q";
 
-  const supabaseClient = supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_ANON_KEY
-  );
+  const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-  document.getElementById("intakeForm").addEventListener("submit", async function (e) {
+  document.getElementById("intakeForm").addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    const payload = {
-      client_first_name: document.getElementById("client_first_name").value || null,
-      client_last_name: document.getElementById("client_last_name").value || null,
-      client_email: document.getElementById("client_email").value || null,
-      client_phone: document.getElementById("client_phone").value || null,
-      client_business_name: document.getElementById("client_business_name").value || null,
+    const formData = new FormData(e.target);
+    const payload = Object.fromEntries(formData.entries());
 
-      client_street: document.getElementById("client_street").value || null,
-      client_city: document.getElementById("client_city").value || null,
-      client_state: document.getElementById("client_state").value || null,
-      client_zip: document.getElementById("client_zip").value || null,
+    payload.request_uuid = crypto.randomUUID();
 
-      doc_type: document.getElementById("doc_type").value || null,
-      governing_state: document.getElementById("governing_state").value || null,
-
-      details: document.getElementById("details").value || null,
-      notes: document.getElementById("notes").value || null
-    };
-
-    console.log("SHOTGUN PAYLOAD → pweb_orders", payload);
-
-    const { data, error } = await supabaseClient
+    const { error } = await supabase
       .from("pweb_orders")
       .insert([payload]);
 
     if (error) {
-      console.error("INSERT ERROR:", error);
-      alert("Insert failed. Check console.");
-      return;
+      alert("ERROR: " + error.message);
+      console.error(error);
+    } else {
+      alert("Intake submitted successfully.");
+      e.target.reset();
     }
-
-    console.log("INSERT SUCCESS:", data);
-    alert("Intake submitted successfully.");
   });
 </script>
 
