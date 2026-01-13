@@ -1,6 +1,8 @@
+// Tell Vercel to use Node.js (not Edge)
 export const config = {
   runtime: "nodejs",
 };
+
 import fs from "fs";
 import path from "path";
 import PizZip from "pizzip";
@@ -33,7 +35,7 @@ export default async function handler(req, res) {
       return res.status(404).json({ error: "Order not found" });
     }
 
-    // Safety check
+    // 3️⃣ Safety check
     if (order.order_status !== "pending") {
       return res.status(200).json({
         message: "Order is not pending; document not created",
@@ -41,21 +43,26 @@ export default async function handler(req, res) {
       });
     }
 
-    // 3️⃣ Load the DOCX template
+    // 4️⃣ Load the DOCX template
     const templatePath = path.resolve(
       process.cwd(),
       "templates",
       "operating-agreement.docx"
     );
 
+    if (!fs.existsSync(templatePath)) {
+      return res.status(500).json({ error: "Template file not found" });
+    }
+
     const content = fs.readFileSync(templatePath, "binary");
     const zip = new PizZip(content);
+
     const doc = new Docxtemplater(zip, {
       paragraphLoop: true,
       linebreaks: true,
     });
 
-    // 4️⃣ Inject data into the template
+    // 5️⃣ Inject data into the template
     doc.setData({
       company_name: order.company_name,
       state: order.governing_state,
@@ -79,47 +86,28 @@ export default async function handler(req, res) {
 
     doc.render();
 
+    // 6️⃣ Generate the DOCX file
     const buffer = doc.getZip().generate({
       type: "nodebuffer",
       compression: "DEFLATE",
     });
 
-    // 5️⃣ Store the file in Supabase Storage
-    const fileName = `${order_id}-operating-agreement.docx`;
-    const storagePath = `documents/${fileName}`;
+    // 7️⃣ EXPLICITLY tell the browser what this is
+    res.setHeader(
+      "Content-Type",
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+    );
 
-    const { error: uploadError } = await supabase.storage
-      .from("documents")
-      .upload(storagePath, buffer, {
-        contentType:
-          "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-        upsert: true,
-      });
+    res.setHeader(
+      "Content-Disposition",
+      `attachment; filename="Operating_Agreement_${order_id}.docx"`
+    );
 
-    if (uploadError) {
-      throw uploadError;
-    }
+    // 8️⃣ Send the file
+    return res.status(200).send(buffer);
 
-    // 6️⃣ Update database status + notes
-    await supabase
-      .from("document_requests")
-      .update({
-        order_status: "document_created",
-        notes: `Document generated at ${storagePath}`,
-      })
-      .eq("order_id", order_id);
-
-    // 7️⃣ Done
-    return res.status(200).json({
-      message: "Document created successfully",
-      order_id,
-      storagePath,
-    });
   } catch (err) {
-    console.error("Create document error:", err);
-    return res.status(500).json({
-      error: "Failed to create document",
-      details: err.message,
-    });
+    console.error("Document generation error:", err);
+    return res.status(500).json({ error: "Internal server error" });
   }
 }
