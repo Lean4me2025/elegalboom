@@ -1,4 +1,3 @@
-// Tell Vercel to use Node.js (not Edge)
 export const config = {
   runtime: "nodejs",
 };
@@ -9,7 +8,9 @@ import PizZip from "pizzip";
 import Docxtemplater from "docxtemplater";
 import { createClient } from "@supabase/supabase-js";
 
-// Initialize Supabase (server-side, secure)
+// ---------------------------
+// Initialize Supabase (SERVER-SIDE)
+// ---------------------------
 const supabase = createClient(
   process.env.SUPABASE_URL,
   process.env.SUPABASE_SERVICE_ROLE_KEY
@@ -17,14 +18,18 @@ const supabase = createClient(
 
 export default async function handler(req, res) {
   try {
-    // 1️⃣ Read input
+    // ---------------------------
+    // 1. Read input
+    // ---------------------------
     const { order_id } = req.query;
 
     if (!order_id) {
       return res.status(400).json({ error: "Missing order_id" });
     }
 
-    // 2️⃣ Fetch the order
+    // ---------------------------
+    // 2. Fetch order
+    // ---------------------------
     const { data: order, error: fetchError } = await supabase
       .from("document_requests")
       .select("*")
@@ -35,16 +40,20 @@ export default async function handler(req, res) {
       return res.status(404).json({ error: "Order not found" });
     }
 
-    // 3️⃣ Safety check
+    // ---------------------------
+    // 3. Safety check
+    // ---------------------------
     if (order.order_status !== "pending") {
       return res.status(200).json({
-        message: "Order is not pending; document not created",
+        message: "Order not pending, document not created",
         current_status: order.order_status,
       });
     }
 
-    // 4️⃣ Load the DOCX template
-    const templatePath = path.resolve(
+    // ---------------------------
+    // 4. Load DOCX template
+    // ---------------------------
+    const templatePath = path.join(
       process.cwd(),
       "templates",
       "operating-agreement.docx"
@@ -54,6 +63,95 @@ export default async function handler(req, res) {
       return res.status(500).json({ error: "Template file not found" });
     }
 
+    const content = fs.readFileSync(templatePath, "binary");
+    const zip = new PizZip(content);
+
+    const doc = new Docxtemplater(zip, {
+      paragraphLoop: true,
+      linebreaks: true,
+    });
+
+    // ---------------------------
+    // 5. Inject data
+    // ---------------------------
+    doc.setData({
+      company_name: order.company_name,
+      state: order.governing_state,
+      effective_date: new Date().toLocaleDateString(),
+
+      member_1_name: order.member_1_name,
+      member_1_percent: order.member_1_percent,
+
+      member_2_name: order.member_2_name,
+      member_2_percent: order.member_2_percent,
+
+      member_3_name: order.member_3_name,
+      member_3_percent: order.member_3_percent,
+
+      member_4_name: order.member_4_name,
+      member_4_percent: order.member_4_percent,
+
+      member_5_name: order.member_5_name,
+      member_5_percent: order.member_5_percent,
+    });
+
+    doc.render();
+
+    // ---------------------------
+    // 6. Generate DOCX
+    // ---------------------------
+    const buffer = doc.getZip().generate({
+      type: "nodebuffer",
+      compression: "DEFLATE",
+    });
+
+    // ---------------------------
+    // 7. Upload to Supabase Storage
+    // ---------------------------
+    const fileName = `${order_id}-operating-agreement.docx`;
+    const storagePath = `documents/${fileName}`;
+
+    const { error: uploadError } = await supabase.storage
+      .from("documents")
+      .upload(storagePath, buffer, {
+        contentType:
+          "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        upsert: true,
+      });
+
+    if (uploadError) {
+      return res.status(500).json({ error: "Storage upload failed" });
+    }
+
+    // ---------------------------
+    // 8. Update order status
+    // ---------------------------
+    await supabase
+      .from("document_requests")
+      .update({
+        order_status: "generated",
+        document_path: storagePath,
+      })
+      .eq("order_id", order_id);
+
+    // ---------------------------
+    // 9. Send file to browser
+    // ---------------------------
+    res.setHeader(
+      "Content-Disposition",
+      `attachment; filename="${fileName}"`
+    );
+    res.setHeader(
+      "Content-Type",
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+    );
+
+    return res.send(buffer);
+  } catch (err) {
+    console.error("API ERROR:", err);
+    return res.status(500).json({ error: "Internal server error" });
+  }
+}
     const content = fs.readFileSync(templatePath, "binary");
     const zip = new PizZip(content);
 
