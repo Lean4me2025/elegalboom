@@ -38,7 +38,6 @@
       align-items: start;
     }
 
-    /* LEFT COLUMN */
     .tiers {
       display: flex;
       flex-direction: column;
@@ -81,7 +80,6 @@
       line-height: 1.4;
     }
 
-    /* RIGHT COLUMN */
     .preview-panel {
       background: #ffffff;
       border-radius: 12px;
@@ -96,17 +94,16 @@
       margin-bottom: 12px;
     }
 
-    .preview-box {
-      border: 1px dashed #d1d5db;
-      border-radius: 10px;
-      height: 360px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #9ca3af;
-      font-size: 14px;
-      text-align: center;
-      padding: 20px;
+    .preview-box img {
+      max-width: 100%;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,.15);
+    }
+
+    .preview-note {
+      margin-top: 12px;
+      font-size: 13px;
+      color: #6b7280;
     }
 
     footer {
@@ -136,29 +133,33 @@
 
 <div class="catalog-grid">
 
-  <!-- LEFT: TIERS + DOCUMENTS -->
+  <!-- LEFT COLUMN -->
   <div class="tiers">
 
     <!-- TIER 1 -->
     <div class="tier">
       <h2>Tier 1 — $39</h2>
 
-      <div class="doc" onclick="selectDoc('Tier 1','Non-Disclosure Agreement (NDA)',39,link.tier1)">
+      <div class="doc" data-doc="Non-Disclosure Agreement (NDA)"
+        onclick="selectDoc('Tier 1','Non-Disclosure Agreement (NDA)',39,link.tier1)">
         <strong>Non-Disclosure Agreement (NDA)</strong>
         <small>Protect confidential information shared between parties.</small>
       </div>
 
-      <div class="doc" onclick="selectDoc('Tier 1','Promissory Note',39,link.tier1)">
+      <div class="doc" data-doc="Promissory Note"
+        onclick="selectDoc('Tier 1','Promissory Note',39,link.tier1)">
         <strong>Promissory Note</strong>
         <small>Formal agreement outlining repayment of a loan.</small>
       </div>
 
-      <div class="doc" onclick="selectDoc('Tier 1','Demand Letter',39,link.tier1)">
+      <div class="doc" data-doc="Demand Letter"
+        onclick="selectDoc('Tier 1','Demand Letter',39,link.tier1)">
         <strong>Demand Letter</strong>
         <small>Formal request for payment or action before legal escalation.</small>
       </div>
 
-      <div class="doc" onclick="selectDoc('Tier 1','Cease and Desist Letter',39,link.tier1)">
+      <div class="doc" data-doc="Cease and Desist Letter"
+        onclick="selectDoc('Tier 1','Cease and Desist Letter',39,link.tier1)">
         <strong>Cease and Desist Letter</strong>
         <small>Notice demanding unlawful or harmful behavior stop immediately.</small>
       </div>
@@ -168,22 +169,26 @@
     <div class="tier">
       <h2>Tier 2 — $59</h2>
 
-      <div class="doc" onclick="selectDoc('Tier 2','Independent Contractor Agreement',59,link.tier2)">
+      <div class="doc" data-doc="Independent Contractor Agreement"
+        onclick="selectDoc('Tier 2','Independent Contractor Agreement',59,link.tier2)">
         <strong>Independent Contractor Agreement</strong>
         <small>Defines scope, payment, and obligations for contractors.</small>
       </div>
 
-      <div class="doc" onclick="selectDoc('Tier 2','Service Agreement',59,link.tier2)">
+      <div class="doc" data-doc="Service Agreement"
+        onclick="selectDoc('Tier 2','Service Agreement',59,link.tier2)">
         <strong>Service Agreement</strong>
         <small>Outlines services, timelines, and responsibilities.</small>
       </div>
 
-      <div class="doc" onclick="selectDoc('Tier 2','Partnership Agreement',59,link.tier2)">
+      <div class="doc" data-doc="Partnership Agreement"
+        onclick="selectDoc('Tier 2','Partnership Agreement',59,link.tier2)">
         <strong>Partnership Agreement</strong>
         <small>Establishes roles, profit sharing, and authority between partners.</small>
       </div>
 
-      <div class="doc" onclick="selectDoc('Tier 2','Consulting Agreement',59,link.tier2)">
+      <div class="doc" data-doc="Consulting Agreement"
+        onclick="selectDoc('Tier 2','Consulting Agreement',59,link.tier2)">
         <strong>Consulting Agreement</strong>
         <small>Defines advisory services, fees, and deliverables.</small>
       </div>
@@ -193,22 +198,26 @@
     <div class="tier">
       <h2>Tier 3 — $99</h2>
 
-      <div class="doc" onclick="selectDoc('Tier 3','Operating Agreement (LLC)',99,link.tier3)">
+      <div class="doc" data-doc="Operating Agreement (LLC)"
+        onclick="selectDoc('Tier 3','Operating Agreement (LLC)',99,link.tier3)">
         <strong>Operating Agreement (LLC)</strong>
         <small>Defines ownership, governance, and management structure.</small>
       </div>
 
-      <div class="doc" onclick="selectDoc('Tier 3','Multi-Member LLC Agreement',99,link.tier3)">
+      <div class="doc" data-doc="Multi-Member LLC Agreement"
+        onclick="selectDoc('Tier 3','Multi-Member LLC Agreement',99,link.tier3)">
         <strong>Multi-Member LLC Agreement</strong>
         <small>Governs relationships among multiple LLC owners.</small>
       </div>
 
-      <div class="doc" onclick="selectDoc('Tier 3','Shareholder Agreement',99,link.tier3)">
+      <div class="doc" data-doc="Shareholder Agreement"
+        onclick="selectDoc('Tier 3','Shareholder Agreement',99,link.tier3)">
         <strong>Shareholder Agreement</strong>
         <small>Outlines shareholder rights, voting, and ownership transfer.</small>
       </div>
 
-      <div class="doc" onclick="selectDoc('Tier 3','Buy-Sell Agreement',99,link.tier3)">
+      <div class="doc" data-doc="Buy-Sell Agreement"
+        onclick="selectDoc('Tier 3','Buy-Sell Agreement',99,link.tier3)">
         <strong>Buy-Sell Agreement</strong>
         <small>Controls ownership transitions due to exit, death, or sale.</small>
       </div>
@@ -218,22 +227,26 @@
     <div class="tier">
       <h2>Tier 4 — $149 Entrepreneur Level</h2>
 
-      <div class="doc" onclick="selectDoc('Tier 4','Entrepreneur Custom Legal Document',149,link.tier4)">
+      <div class="doc" data-doc="Entrepreneur Custom Legal Document"
+        onclick="selectDoc('Tier 4','Entrepreneur Custom Legal Document',149,link.tier4)">
         <strong>Entrepreneur Custom Legal Document</strong>
         <small>Advanced, founder-focused agreement tailored to your situation.</small>
       </div>
 
-      <div class="doc" onclick="selectDoc('Tier 4','Founder Agreement',149,link.tier4)">
+      <div class="doc" data-doc="Founder Agreement"
+        onclick="selectDoc('Tier 4','Founder Agreement',149,link.tier4)">
         <strong>Founder Agreement</strong>
         <small>Defines equity, roles, vesting, and founder responsibilities.</small>
       </div>
 
-      <div class="doc" onclick="selectDoc('Tier 4','Investor Readiness Agreement',149,link.tier4)">
+      <div class="doc" data-doc="Investor Readiness Agreement"
+        onclick="selectDoc('Tier 4','Investor Readiness Agreement',149,link.tier4)">
         <strong>Investor Readiness Agreement</strong>
         <small>Prepares structure and protections before fundraising.</small>
       </div>
 
-      <div class="doc" onclick="selectDoc('Tier 4','IP Assignment Agreement',149,link.tier4)">
+      <div class="doc" data-doc="IP Assignment Agreement"
+        onclick="selectDoc('Tier 4','IP Assignment Agreement',149,link.tier4)">
         <strong>IP Assignment Agreement</strong>
         <small>Ensures intellectual property ownership is properly assigned.</small>
       </div>
@@ -241,12 +254,14 @@
 
   </div>
 
-  <!-- RIGHT: PREVIEW PANEL -->
+  <!-- RIGHT COLUMN -->
   <div class="preview-panel">
     <h3>Document Preview</h3>
     <div class="preview-box">
-      Document thumbnails will appear here.<br>
-      This preview helps you understand the format and professionalism of our documents.
+      <img id="docPreview" src="images/docs/default.png" alt="Document preview">
+      <div class="preview-note">
+        Sample formatting preview. Final documents are customized to your information.
+      </div>
     </div>
   </div>
 
@@ -263,6 +278,36 @@
     tier3: "https://pay.elegalboom.org/71ca7144-e537-4fbd-823d-c10",
     tier4: "https://pay.elegalboom.org/55c7cd3d-1048-4b8c-aadb-843"
   };
+
+  const previewMap = {
+    "Non-Disclosure Agreement (NDA)": "images/docs/nda.png",
+    "Promissory Note": "images/docs/promissory-note.png",
+    "Demand Letter": "images/docs/demand-letter.png",
+    "Cease and Desist Letter": "images/docs/cease-desist.png",
+    "Independent Contractor Agreement": "images/docs/independent-contractor.png",
+    "Service Agreement": "images/docs/service-agreement.png",
+    "Partnership Agreement": "images/docs/partnership-agreement.png",
+    "Consulting Agreement": "images/docs/consulting-agreement.png",
+    "Operating Agreement (LLC)": "images/docs/operating-agreement.png",
+    "Multi-Member LLC Agreement": "images/docs/multi-member-llc.png",
+    "Shareholder Agreement": "images/docs/shareholder-agreement.png",
+    "Buy-Sell Agreement": "images/docs/buy-sell.png",
+    "Entrepreneur Custom Legal Document": "images/docs/entrepreneur-custom.png",
+    "Founder Agreement": "images/docs/founder-agreement.png",
+    "Investor Readiness Agreement": "images/docs/investor-readiness.png",
+    "IP Assignment Agreement": "images/docs/ip-assignment.png"
+  };
+
+  const previewImg = document.getElementById("docPreview");
+
+  document.querySelectorAll(".doc").forEach(doc => {
+    doc.addEventListener("mouseenter", () => {
+      const key = doc.getAttribute("data-doc");
+      if (previewMap[key]) {
+        previewImg.src = previewMap[key];
+      }
+    });
+  });
 
   function selectDoc(tier, documentName, price, payLink) {
     const orderContext = { tier, document: documentName, price, payLink };
