@@ -213,11 +213,14 @@ header nav a:hover {
     }
 }
 .preview-box {
-  height: 500px; /* Adjust this value to whatever height looks best */
+  height: 500px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .preview-box img {
   width: 100%;
-  height: auto;
+  height: 100%;
   object-fit: contain;
 }
