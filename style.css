@@ -212,3 +212,12 @@ header nav a:hover {
         padding-right: 5vw;
     }
 }
+.preview-box {
+  height: 500px; /* Adjust this value to whatever height looks best */
+}
+
+.preview-box img {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+}
