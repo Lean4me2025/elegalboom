@@ -87,7 +87,7 @@
         <span id="totalPrice">—</span>
       </div>
 
-      <button id="payBtn">Proceed to Secure Payment</button>
+      <button id="payBtn" disabled>Proceed to Secure Payment</button>
 
       <div class="back">
         <a href="/catalog.html">← Back to Catalog</a>
@@ -96,38 +96,82 @@
   </div>
 
   <script>
-    /* ---------- ORDER ID FROM URL ---------- */
+    /**********************************************************
+     * PAY LINK AUTHORITY (SINGLE SOURCE OF TRUTH)
+     **********************************************************/
+    const PAY_LINKS = {
+      "Tier 1": {
+        price: 39,
+        url: "https://pay.elegalboom.org/e4b79a60-0fd7-431c-8bfc-ee0"
+      },
+      "Tier 2": {
+        price: 59,
+        url: "https://pay.elegalboom.org/qeda586f-65f5-4bf0-98f3-7a2"
+      },
+      "Tier 3": {
+        price: 99,
+        url: "https://pay.elegalboom.org/71ca7144-e537-4fbd-823d-c10"
+      },
+      "Tier 4": {
+        price: 149,
+        url: "https://pay.elegalboom.org/55c7cd3d-1048-4b8c-aadb-843"
+      }
+    };
+
+    /**********************************************************
+     * ORDER ID (REQUIRED)
+     **********************************************************/
     const params = new URLSearchParams(window.location.search);
     const orderId = params.get("order_id");
 
     if (!orderId) {
-      alert("Missing order ID.");
+      alert("Missing order ID. Returning to catalog.");
       window.location.href = "/catalog.html";
+      throw new Error("Missing order_id");
     }
 
     document.getElementById("orderId").innerText = orderId;
 
-    /* ---------- ORDER CONTEXT FROM CATALOG ---------- */
+    /**********************************************************
+     * ORDER CONTEXT (REQUIRED)
+     **********************************************************/
     const stored = localStorage.getItem("orderContext");
     if (!stored) {
-      alert("Missing order details. Please return to the catalog.");
+      alert("Order context missing. Please start again.");
       window.location.href = "/catalog.html";
+      throw new Error("Missing orderContext");
     }
 
-    const orderContext = JSON.parse(stored);
+    let orderContext;
+    try {
+      orderContext = JSON.parse(stored);
+    } catch {
+      alert("Order data corrupted. Please start again.");
+      window.location.href = "/catalog.html";
+      throw new Error("Invalid JSON");
+    }
 
-    const {
-      document: documentName,
-      tier,
-      price,
-      payLink
-    } = orderContext;
+    const { document, tier } = orderContext;
 
-    document.getElementById("documentName").innerText = documentName;
+    if (!document || !tier || !PAY_LINKS[tier]) {
+      alert("Invalid order details. Please start again.");
+      window.location.href = "/catalog.html";
+      throw new Error("Invalid order data");
+    }
+
+    const { price, url: payLink } = PAY_LINKS[tier];
+
+    /**********************************************************
+     * RENDER (SAFE STATE)
+     **********************************************************/
+    document.getElementById("documentName").innerText = document;
     document.getElementById("tierName").innerText = tier;
     document.getElementById("totalPrice").innerText = `$${price}.00`;
 
-    document.getElementById("payBtn").addEventListener("click", () => {
+    const payBtn = document.getElementById("payBtn");
+    payBtn.disabled = false;
+
+    payBtn.addEventListener("click", () => {
       window.location.href = payLink;
     });
   </script>
