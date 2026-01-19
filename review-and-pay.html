@@ -50,6 +50,10 @@
       font-size: 18px;
       cursor: pointer;
     }
+    button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
     .back {
       margin-top: 15px;
       text-align: center;
@@ -96,75 +100,50 @@
   </div>
 
   <script>
-    /**********************************************************
-     * PAY LINK AUTHORITY (SINGLE SOURCE OF TRUTH)
-     **********************************************************/
-    const PAY_LINKS = {
-      "Tier 1": {
-        price: 39,
-        url: "https://pay.elegalboom.org/e4b79a60-0fd7-431c-8bfc-ee0"
-      },
-      "Tier 2": {
-        price: 59,
-        url: "https://pay.elegalboom.org/qeda586f-65f5-4bf0-98f3-7a2"
-      },
-      "Tier 3": {
-        price: 99,
-        url: "https://pay.elegalboom.org/71ca7144-e537-4fbd-823d-c10"
-      },
-      "Tier 4": {
-        price: 149,
-        url: "https://pay.elegalboom.org/55c7cd3d-1048-4b8c-aadb-843"
-      }
-    };
-
-    /**********************************************************
-     * ORDER ID (REQUIRED)
-     **********************************************************/
+    /* ---------- ORDER ID FROM URL ---------- */
     const params = new URLSearchParams(window.location.search);
     const orderId = params.get("order_id");
 
     if (!orderId) {
-      alert("Missing order ID. Returning to catalog.");
+      alert("Missing order ID.");
       window.location.href = "/catalog.html";
-      throw new Error("Missing order_id");
+      throw new Error("Order ID missing");
     }
 
     document.getElementById("orderId").innerText = orderId;
 
-    /**********************************************************
-     * ORDER CONTEXT (REQUIRED)
-     **********************************************************/
+    /* ---------- ORDER CONTEXT ---------- */
     const stored = localStorage.getItem("orderContext");
     if (!stored) {
-      alert("Order context missing. Please start again.");
+      alert("Missing order details. Please return to the catalog.");
       window.location.href = "/catalog.html";
-      throw new Error("Missing orderContext");
+      throw new Error("orderContext missing");
     }
 
     let orderContext;
     try {
       orderContext = JSON.parse(stored);
-    } catch {
-      alert("Order data corrupted. Please start again.");
+    } catch (e) {
+      alert("Corrupt order data. Please start again.");
       window.location.href = "/catalog.html";
-      throw new Error("Invalid JSON");
+      throw e;
     }
 
-    const { document, tier } = orderContext;
+    const {
+      documentName,
+      tier,
+      price,
+      payLink
+    } = orderContext;
 
-    if (!document || !tier || !PAY_LINKS[tier]) {
-      alert("Invalid order details. Please start again.");
+    if (!documentName || !tier || !price || !payLink) {
+      alert("Invalid order data. Please restart.");
       window.location.href = "/catalog.html";
-      throw new Error("Invalid order data");
+      throw new Error("Invalid orderContext structure");
     }
 
-    const { price, url: payLink } = PAY_LINKS[tier];
-
-    /**********************************************************
-     * RENDER (SAFE STATE)
-     **********************************************************/
-    document.getElementById("documentName").innerText = document;
+    /* ---------- RENDER ---------- */
+    document.getElementById("documentName").innerText = documentName;
     document.getElementById("tierName").innerText = tier;
     document.getElementById("totalPrice").innerText = `$${price}.00`;
 
