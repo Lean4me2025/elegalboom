@@ -82,32 +82,76 @@
     </div>
   </div>
 
+  <!-- SUPABASE -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
   <script>
-    /* ---------- ORDER ID ---------- */
+    /* ================================
+       CONFIG
+    ================================= */
+    const SUPABASE_URL = "YOUR_SUPABASE_URL";
+    const SUPABASE_ANON_KEY = "YOUR_SUPABASE_ANON_KEY";
+
+    const supabase = supabaseJs.createClient(
+      SUPABASE_URL,
+      SUPABASE_ANON_KEY
+    );
+
+    /* ================================
+       READ ORDER ID FROM URL
+    ================================= */
     const params = new URLSearchParams(window.location.search);
     const orderId = params.get("order_id");
-    if (orderId) {
-      document.getElementById("orderId").innerText = orderId;
+
+    if (!orderId) {
+      alert("Missing order ID.");
+      throw new Error("order_id not present in URL");
     }
 
-    /* ---------- ORDER CONTEXT (OPTIONAL, NOT BLOCKING) ---------- */
+    document.getElementById("orderId").innerText = orderId;
+
     let payLink = null;
 
-    const stored = localStorage.getItem("orderContext");
-    if (stored) {
-      try {
-        const ctx = JSON.parse(stored);
+    /* ================================
+       LOAD ORDER FROM DATABASE
+    ================================= */
+    async function loadOrder(orderId) {
+      const { data, error } = await supabase
+        .from("pweb_orders")
+        .select("document_type, tier, price, pay_link")
+        .eq("order_id", orderId)
+        .single();
 
-        if (ctx.documentName) {
-          document.getElementById("documentName").innerText = ctx.documentName;
-        }
-        if (ctx.tier) {
-          document.getElementById("tierName").innerText = ctx.tier;
-        }
-        if (ctx.price) {
-          document.getElementById("totalPrice").innerText = `$${ctx.price}.00`;
-        }
-        if (ctx.payLink) {
-          payLink = ctx.payLink;
-        }
-      } catch (e
+      if (error || !data) {
+        alert("Order not found or incomplete.");
+        console.error(error);
+        return;
+      }
+
+      document.getElementById("documentName").innerText =
+        data.document_type ?? "—";
+
+      document.getElementById("tierName").innerText =
+        data.tier ?? "—";
+
+      document.getElementById("totalPrice").innerText =
+        data.price ? `$${data.price}.00` : "—";
+
+      payLink = data.pay_link;
+    }
+
+    loadOrder(orderId);
+
+    /* ================================
+       PAYMENT HANDOFF
+    ================================= */
+    document.getElementById("payBtn").addEventListener("click", () => {
+      if (!payLink) {
+        alert("Payment link is not available yet.");
+        return;
+      }
+      window.location.href = payLink;
+    });
+  </script>
+</body>
+</html>
