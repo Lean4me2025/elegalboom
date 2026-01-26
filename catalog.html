@@ -1,62 +1,83 @@
-/* =========================================================
-   Catalog / Tier Page – Document Selection Plumbing
-   ONE FILE – NO IMPORTS – NO UI CHANGES
-   ========================================================= */
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Catalog / Tier Selection</title>
+</head>
 
-/*
-  Canonical document registry
-  Numeric code = execution signal
-  Name = internal identity (not displayed)
-*/
-const DOCUMENTS = {
-  1: { name: 'llc_operating_agreement' },
-  2: { name: 'promissory_note' },
-  3: { name: 'nda' },
-  4: { name: 'consulting_agreement' }
-};
+<body>
 
-// Holds the selected document code
-let selectedDocCode = null;
+  <!-- 
+    YOUR EXISTING CATALOG UI GOES HERE 
+    (cards, buttons, tiers, layout — unchanged)
+  -->
 
-/*
-  Call this from your EXISTING UI selection logic.
-  Example:
-    selectDoc(1)
-    selectDoc(2)
-*/
-window.selectDoc = function (docCode) {
-  if (!DOCUMENTS[docCode]) {
-    console.error('Invalid document code selected:', docCode);
-    return;
-  }
-  selectedDocCode = docCode;
-};
+  <!-- Example buttons ONLY if you need them -->
+  <!--
+  <button onclick="selectDoc(1)">LLC Operating Agreement</button>
+  <button onclick="selectDoc(2)">Promissory Note</button>
+  <button onclick="selectDoc(3)">NDA</button>
+  <button onclick="selectDoc(4)">Consulting Agreement</button>
+  -->
 
-/*
-  Continue button handler
-  Stores document selection and moves to Intake
-*/
-document.addEventListener('DOMContentLoaded', () => {
-  const continueBtn = document.getElementById('continueBtn');
+  <button id="continueBtn">Continue</button>
 
-  if (!continueBtn) {
-    console.error('Continue button not found on catalog page');
-    return;
-  }
+  <!-- =======================
+       CATALOG LOGIC (SAFE)
+       ======================= -->
+  <script>
+    /* =========================================
+       Catalog / Tier Page – Document Plumbing
+       ONE FILE – SAFE – NO UI CHANGES
+       ========================================= */
 
-  continueBtn.addEventListener('click', () => {
-    if (selectedDocCode === null) {
-      alert('Please select a document to continue.');
-      return;
-    }
+    // Canonical document registry
+    const DOCUMENTS = {
+      1: { name: 'llc_operating_agreement' },
+      2: { name: 'promissory_note' },
+      3: { name: 'nda' },
+      4: { name: 'consulting_agreement' }
+    };
 
-    const doc = DOCUMENTS[selectedDocCode];
+    // Holds selected document code
+    let selectedDocCode = null;
 
-    // Store ONLY what Intake needs
-    sessionStorage.setItem('doc_code', String(selectedDocCode));
-    sessionStorage.setItem('doc_name', doc.name);
+    // Called by your existing UI selection logic
+    window.selectDoc = function (docCode) {
+      if (!DOCUMENTS[docCode]) {
+        console.error('Invalid document code:', docCode);
+        return;
+      }
+      selectedDocCode = docCode;
+      console.log('Document selected:', docCode, DOCUMENTS[docCode].name);
+    };
 
-    // Move forward – NO order, NO backend, NO tier, NO price
-    window.location.href = '/intake.html';
-  });
-});
+    // Continue button behavior
+    document.addEventListener('DOMContentLoaded', function () {
+      const continueBtn = document.getElementById('continueBtn');
+
+      if (!continueBtn) {
+        console.error('Continue button not found');
+        return;
+      }
+
+      continueBtn.addEventListener('click', function () {
+        if (selectedDocCode === null) {
+          alert('Please select a document to continue.');
+          return;
+        }
+
+        const doc = DOCUMENTS[selectedDocCode];
+
+        // Store ONLY what intake needs
+        sessionStorage.setItem('doc_code', String(selectedDocCode));
+        sessionStorage.setItem('doc_name', doc.name);
+
+        // Move forward cleanly
+        window.location.href = 'intake.html';
+      });
+    });
+  </script>
+
+</body>
+</html>
