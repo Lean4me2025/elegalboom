@@ -74,7 +74,7 @@
         <span id="totalPrice">—</span>
       </div>
 
-      <button id="payBtn">Proceed to Secure Payment</button>
+      <button id="payBtn">Proceed</button>
 
       <div class="back">
         <a href="/catalog.html">← Back to Catalog</a>
@@ -85,7 +85,10 @@
   <!-- SUPABASE -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-  <script>
+  <!-- DRG -->
+  <script type="module">
+    import { DOCUMENT_REQUIREMENTS } from "./documentSchemas.js";
+
     /* ================================
        CONFIG
     ================================= */
@@ -111,6 +114,7 @@
     document.getElementById("orderId").innerText = orderId;
 
     let payLink = null;
+    let documentKey = null;
 
     /* ================================
        LOAD ORDER FROM DATABASE
@@ -128,6 +132,8 @@
         return;
       }
 
+      documentKey = data.document_type;
+
       document.getElementById("documentName").innerText =
         data.document_type ?? "—";
 
@@ -143,13 +149,34 @@
     loadOrder(orderId);
 
     /* ================================
-       PAYMENT HANDOFF
+       DRG ROUTING (FULL PAGE LOADS)
     ================================= */
     document.getElementById("payBtn").addEventListener("click", () => {
+      if (!documentKey) {
+        alert("Document type not loaded yet.");
+        return;
+      }
+
+      const requires = DOCUMENT_REQUIREMENTS[documentKey]?.requires || [];
+
+      // Financial add-on intake
+      if (requires.includes("financial")) {
+        window.location.href = `/intake-financial.html?order_id=${orderId}`;
+        return;
+      }
+
+      // Entity / governance add-on intake
+      if (requires.includes("entity")) {
+        window.location.href = `/intake-entity.html?order_id=${orderId}`;
+        return;
+      }
+
+      // Base-intake-only documents → proceed to payment
       if (!payLink) {
         alert("Payment link is not available yet.");
         return;
       }
+
       window.location.href = payLink;
     });
   </script>
