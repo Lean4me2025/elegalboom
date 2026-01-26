@@ -1,110 +1,127 @@
 <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Select Your Legal Document</title>
 
-      font-size: 13px;
-      color: #6b7280;
+  <style>
+    body {
+      font-family: Georgia, serif;
+      background: #f7f7f7;
+      margin: 0;
+      padding: 40px;
+      color: #333;
     }
 
-    footer {
-      text-align: center;
-      font-size: 13px;
-      color: #6b7280;
-      margin-top: 50px;
+    h1 {
+      margin-bottom: 5px;
     }
 
-    @media (max-width: 900px) {
-      .catalog-grid {
-        grid-template-columns: 1fr;
-      }
-      .preview-panel {
-        position: static;
-      }
+    .subtitle {
+      margin-bottom: 30px;
+      color: #555;
+    }
+
+    .catalog-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+    }
+
+    .doc-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .doc-item {
+      padding: 15px;
+      border: 1px solid #ccc;
+      background: #fff;
+      cursor: pointer;
+    }
+
+    .doc-item.selected {
+      border-color: #333;
+      background: #eef2f7;
+    }
+
+    .preview {
+      border: 1px solid #ccc;
+      background: #fff;
+      padding: 20px;
+      min-height: 300px;
+    }
+
+    .continue-btn {
+      margin-top: 30px;
+      padding: 12px 24px;
+      font-size: 16px;
+      cursor: pointer;
     }
   </style>
 </head>
 
 <body>
 
-<h1>Select Your Legal Document</h1>
-<div class="subtitle">
-  Documents are grouped by tier. Click a document to continue to intake.
-</div>
-
-<div class="catalog-grid">
-
-  <div class="tiers">
-    <!-- CONTENT UNCHANGED -->
-    <!-- (tiers omitted here for brevity — keep exactly as you pasted) -->
+  <h1>Select Your Legal Document</h1>
+  <div class="subtitle">
+    Documents are grouped by type. Click a document to continue to intake.
   </div>
 
-  <div class="preview-panel">
-    <h3>Document Preview</h3>
-    <div class="preview-box">
-      <img id="docPreview" src="images/docs/nda.png" alt="Document preview">
-      <div class="preview-note">
-        Sample formatting preview. Final documents are customized to your information.
-      </div>
+  <div class="catalog-grid">
+
+    <!-- DOCUMENT LIST -->
+    <div class="doc-list">
+      <div class="doc-item" onclick="selectDoc(1, this)">LLC Operating Agreement</div>
+      <div class="doc-item" onclick="selectDoc(2, this)">Promissory Note</div>
+      <div class="doc-item" onclick="selectDoc(3, this)">Non-Disclosure Agreement</div>
+      <div class="doc-item" onclick="selectDoc(4, this)">Consulting Agreement</div>
     </div>
+
+    <!-- PREVIEW PANEL -->
+    <div class="preview" id="preview">
+      Select a document to see a preview.
+    </div>
+
   </div>
 
-</div>
+  <button class="continue-btn" onclick="continueToIntake()">Continue</button>
 
-<footer>
-  Questions? Email <a href="mailto:support@e-legalboom.com">support@e-legalboom.com</a>
-</footer>
-
-<script>
-  /* =========================================
-     DRG — DECLARE & ROUTE (V1, LOCAL)
-  ========================================= */
-
-  const DRG = {
-    "Non-Disclosure Agreement (NDA)": { intake: "base" },
-    "Demand Letter": { intake: "base" },
-    "Cease and Desist Letter": { intake: "base" },
-
-    "Promissory Note": { intake: "financial" },
-
-    "Independent Contractor Agreement": { intake: "base" },
-    "Service Agreement": { intake: "base" },
-    "Consulting Agreement": { intake: "base" },
-
-    "Partnership Agreement": { intake: "entity" },
-    "Operating Agreement (LLC)": { intake: "entity" },
-    "Multi-Member LLC Agreement": { intake: "entity" },
-    "Shareholder Agreement": { intake: "entity" },
-    "Buy-Sell Agreement": { intake: "entity" },
-
-    "IP Assignment Agreement": { intake: "entity" },
-    "Founder Agreement": { intake: "entity" },
-    "Investor Readiness Agreement": { intake: "entity" },
-
-    "Entrepreneur Custom Legal Document": { intake: "entity" }
-  };
-
-  const intakeRoutes = {
-    base: "intake.html",
-    entity: "intake-entity.html",
-    financial: "intake-financial.html"
-  };
-
-  function selectDoc(tier, documentName, price, payLink) {
-    const requirement = DRG[documentName] || { intake: "base" };
-    const intakePage = intakeRoutes[requirement.intake];
-
-    const orderContext = {
-      tier,
-      document: documentName,
-      price,
-      payLink,
-      intakeType: requirement.intake
+  <script>
+    const DOCUMENTS = {
+      1: { name: 'llc_operating_agreement', preview: 'LLC Operating Agreement Preview' },
+      2: { name: 'promissory_note', preview: 'Promissory Note Preview' },
+      3: { name: 'nda', preview: 'Non-Disclosure Agreement Preview' },
+      4: { name: 'consulting_agreement', preview: 'Consulting Agreement Preview' }
     };
 
-    localStorage.setItem("orderContext", JSON.stringify(orderContext));
-    window.location.href = intakePage;
-  }
-</script>
+    let selectedDocCode = null;
+
+    function selectDoc(code, el) {
+      selectedDocCode = code;
+
+      document.querySelectorAll('.doc-item').forEach(d =>
+        d.classList.remove('selected')
+      );
+      el.classList.add('selected');
+
+      document.getElementById('preview').innerText =
+        DOCUMENTS[code].preview;
+    }
+
+    function continueToIntake() {
+      if (!selectedDocCode) {
+        alert('Please select a document first.');
+        return;
+      }
+
+      sessionStorage.setItem('doc_code', String(selectedDocCode));
+      sessionStorage.setItem('doc_name', DOCUMENTS[selectedDocCode].name);
+
+      window.location.href = 'intake.html';
+    }
+  </script>
 
 </body>
 </html>
-
-Use Control + Shift + m to toggle the tab key moving focus. Alternatively, use esc then tab to move to the next interactive element on the page.
