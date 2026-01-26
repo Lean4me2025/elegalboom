@@ -1,210 +1,62 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <title>E-LegalBoom | Document Catalog</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+/* =========================================================
+   Catalog / Tier Page – Document Selection Plumbing
+   ONE FILE – NO IMPORTS – NO UI CHANGES
+   ========================================================= */
 
-  <style>
-    * {
-      box-sizing: border-box;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    }
+/*
+  Canonical document registry
+  Numeric code = execution signal
+  Name = internal identity (not displayed)
+*/
+const DOCUMENTS = {
+  1: { name: 'llc_operating_agreement' },
+  2: { name: 'promissory_note' },
+  3: { name: 'nda' },
+  4: { name: 'consulting_agreement' }
+};
 
-    body {
-      background: #f3f4f8;
-      margin: 0;
-      padding: 40px 20px;
-      color: #111827;
-    }
+// Holds the selected document code
+let selectedDocCode = null;
 
-    h1 {
-      text-align: center;
-      margin-bottom: 6px;
-    }
-
-    .subtitle {
-      text-align: center;
-      color: #6b7280;
-      margin-bottom: 40px;
-    }
-
-    .catalog-grid {
-      max-width: 1200px;
-      margin: auto;
-      display: grid;
-      grid-template-columns: 1.1fr 0.9fr;
-      gap: 30px;
-      align-items: start;
-    }
-
-    .tiers {
-      display: flex;
-      flex-direction: column;
-      gap: 24px;
-    }
-
-    .tier {
-      background: #ffffff;
-      border-radius: 12px;
-      padding: 22px;
-      box-shadow: 0 8px 20px rgba(0,0,0,.06);
-    }
-
-    .tier h2 {
-      margin-top: 0;
-      margin-bottom: 14px;
-    }
-
-    .doc {
-      border: 1px solid #e5e7eb;
-      border-radius: 8px;
-      padding: 14px;
-      margin-bottom: 10px;
-      cursor: pointer;
-      transition: background .15s, border-color .15s;
-    }
-
-    .doc:hover {
-      background: #eef6ff;
-      border-color: #3b82f6;
-    }
-
-    .doc strong {
-      display: block;
-      margin-bottom: 4px;
-    }
-
-    .doc small {
-      color: #6b7280;
-      line-height: 1.4;
-    }
-
-    .preview-panel {
-      background: #ffffff;
-      border-radius: 12px;
-      padding: 24px;
-      box-shadow: 0 8px 20px rgba(0,0,0,.06);
-      position: sticky;
-      top: 20px;
-    }
-
-    .preview-panel h3 {
-      margin-top: 0;
-      margin-bottom: 12px;
-    }
-
-    .preview-box img {
-      max-width: 100%;
-      border-radius: 8px;
-      box-shadow: 0 4px 12px rgba(0,0,0,.15);
-    }
-
-    .preview-note {
-      margin-top: 12px;
-      font-size: 13px;
-      color: #6b7280;
-    }
-
-    footer {
-      text-align: center;
-      font-size: 13px;
-      color: #6b7280;
-      margin-top: 50px;
-    }
-
-    @media (max-width: 900px) {
-      .catalog-grid {
-        grid-template-columns: 1fr;
-      }
-      .preview-panel {
-        position: static;
-      }
-    }
-  </style>
-</head>
-
-<body>
-
-<h1>Select Your Legal Document</h1>
-<div class="subtitle">
-  Documents are grouped by tier. Click a document to continue to intake.
-</div>
-
-<div class="catalog-grid">
-
-  <div class="tiers">
-    <!-- CONTENT UNCHANGED -->
-    <!-- (tiers omitted here for brevity — keep exactly as you pasted) -->
-  </div>
-
-  <div class="preview-panel">
-    <h3>Document Preview</h3>
-    <div class="preview-box">
-      <img id="docPreview" src="images/docs/nda.png" alt="Document preview">
-      <div class="preview-note">
-        Sample formatting preview. Final documents are customized to your information.
-      </div>
-    </div>
-  </div>
-
-</div>
-
-<footer>
-  Questions? Email <a href="mailto:support@e-legalboom.com">support@e-legalboom.com</a>
-</footer>
-
-<script>
-  /* =========================================
-     DRG — DECLARE & ROUTE (V1, LOCAL)
-  ========================================= */
-
-  const DRG = {
-    "Non-Disclosure Agreement (NDA)": { intake: "base" },
-    "Demand Letter": { intake: "base" },
-    "Cease and Desist Letter": { intake: "base" },
-
-    "Promissory Note": { intake: "financial" },
-
-    "Independent Contractor Agreement": { intake: "base" },
-    "Service Agreement": { intake: "base" },
-    "Consulting Agreement": { intake: "base" },
-
-    "Partnership Agreement": { intake: "entity" },
-    "Operating Agreement (LLC)": { intake: "entity" },
-    "Multi-Member LLC Agreement": { intake: "entity" },
-    "Shareholder Agreement": { intake: "entity" },
-    "Buy-Sell Agreement": { intake: "entity" },
-
-    "IP Assignment Agreement": { intake: "entity" },
-    "Founder Agreement": { intake: "entity" },
-    "Investor Readiness Agreement": { intake: "entity" },
-
-    "Entrepreneur Custom Legal Document": { intake: "entity" }
-  };
-
-  const intakeRoutes = {
-    base: "intake.html",
-    entity: "intake-entity.html",
-    financial: "intake-financial.html"
-  };
-
-  function selectDoc(tier, documentName, price, payLink) {
-    const requirement = DRG[documentName] || { intake: "base" };
-    const intakePage = intakeRoutes[requirement.intake];
-
-    const orderContext = {
-      tier,
-      document: documentName,
-      price,
-      payLink,
-      intakeType: requirement.intake
-    };
-
-    localStorage.setItem("orderContext", JSON.stringify(orderContext));
-    window.location.href = intakePage;
+/*
+  Call this from your EXISTING UI selection logic.
+  Example:
+    selectDoc(1)
+    selectDoc(2)
+*/
+window.selectDoc = function (docCode) {
+  if (!DOCUMENTS[docCode]) {
+    console.error('Invalid document code selected:', docCode);
+    return;
   }
-</script>
+  selectedDocCode = docCode;
+};
 
-</body>
-</html>
+/*
+  Continue button handler
+  Stores document selection and moves to Intake
+*/
+document.addEventListener('DOMContentLoaded', () => {
+  const continueBtn = document.getElementById('continueBtn');
+
+  if (!continueBtn) {
+    console.error('Continue button not found on catalog page');
+    return;
+  }
+
+  continueBtn.addEventListener('click', () => {
+    if (selectedDocCode === null) {
+      alert('Please select a document to continue.');
+      return;
+    }
+
+    const doc = DOCUMENTS[selectedDocCode];
+
+    // Store ONLY what Intake needs
+    sessionStorage.setItem('doc_code', String(selectedDocCode));
+    sessionStorage.setItem('doc_name', doc.name);
+
+    // Move forward – NO order, NO backend, NO tier, NO price
+    window.location.href = '/intake.html';
+  });
+});
