@@ -3,52 +3,39 @@
 <head>
 <meta charset="UTF-8" />
 <title>Select Your Legal Document</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
 <style>
 body {
   font-family: Georgia, serif;
-  background: #f5f6f8;
   margin: 0;
-  padding: 40px;
-  color: #222;
+  padding: 24px;
+  background: #f6f6f6;
 }
 
 h1 {
-  text-align: center;
   margin-bottom: 6px;
 }
 
 .subtitle {
-  text-align: center;
+  margin-bottom: 20px;
   color: #555;
-  margin-bottom: 30px;
 }
 
-/* PAGE LAYOUT */
+/* MAIN LAYOUT */
 .catalog-layout {
-  display: grid;
-  grid-template-columns: 1.3fr 1fr;
-  gap: 24px;
-  align-items: start;
+  max-width: 1100px;
+  margin: auto;
 }
 
-/* LEFT SIDE */
-.catalog-list {
-  background: #ffffff;
-  border-radius: 8px;
-  padding: 20px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
-}
-
-/* 2x2 TIER GRID */
+/* TIER GRID */
 .tier-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 20px;
+  gap: 18px;
 }
 
 .tier {
+  background: #fff;
   border: 1px solid #ddd;
   border-radius: 6px;
   padding: 12px;
@@ -57,8 +44,8 @@ h1 {
 .tier h2 {
   margin-top: 0;
   font-size: 1.05rem;
-  border-bottom: 1px solid #ddd;
-  padding-bottom: 4px;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 6px;
 }
 
 /* DOCUMENT ROW */
@@ -66,71 +53,72 @@ h1 {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 8px;
-  margin-top: 6px;
+  margin: 8px 0;
+  padding: 6px;
   border-radius: 4px;
   cursor: pointer;
 }
 
 .doc-row:hover {
-  background: #f1f4ff;
+  background: #f2f4ff;
 }
 
 .doc-row.selected {
-  background: #dbe7ff;
+  background: #dbe4ff;
   border: 1px solid #4a6cf7;
 }
 
 .doc-name {
-  font-weight: 600;
+  font-weight: 500;
 }
 
 .doc-price {
-  font-size: 0.9rem;
+  color: #444;
   margin-left: 6px;
 }
 
 .doc-actions button {
   font-size: 0.75rem;
   padding: 4px 8px;
-  cursor: pointer;
 }
 
-/* RIGHT SIDE */
-.preview-panel {
-  background: #ffffff;
-  border-radius: 8px;
-  padding: 16px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
-  max-height: 420px;
-  overflow-y: auto;
-}
-
-.preview-panel h2 {
-  margin-top: 0;
-}
-
-.sample-note {
-  font-size: 0.85rem;
-  color: #666;
-  margin-bottom: 10px;
-}
-
-iframe {
-  width: 100%;
-  height: 260px;
-  border: none;
-}
-
-/* CONTINUE */
+/* ACTIONS */
 .actions {
-  margin-top: 20px;
+  margin-top: 24px;
   text-align: right;
 }
 
 .actions button {
-  padding: 10px 20px;
+  padding: 10px 18px;
   font-size: 1rem;
+}
+
+/* MODAL */
+.modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-content {
+  background: #fff;
+  max-width: 600px;
+  width: 90%;
+  padding: 16px;
+  border-radius: 6px;
+}
+
+.modal h3 {
+  margin-top: 0;
+}
+
+.close-btn {
+  float: right;
+  cursor: pointer;
+  font-size: 1.2rem;
 }
 </style>
 </head>
@@ -138,150 +126,148 @@ iframe {
 <body>
 
 <h1>Select Your Legal Document</h1>
-<div class="subtitle">Review a sample and choose the document you want prepared.</div>
+<div class="subtitle">
+Choose the document you want prepared. Preview a sample if you wish.
+</div>
 
 <div class="catalog-layout">
 
-  <!-- LEFT -->
-  <div class="catalog-list">
-    <div class="tier-grid">
+  <div class="tier-grid">
 
-      <!-- TIER 1 -->
-      <div class="tier">
-        <h2>Tier 1</h2>
+    <!-- TIER 1 -->
+    <div class="tier">
+      <h2>Tier 1</h2>
 
-        <div class="doc-row" data-doc="nda" data-tier="T1" data-price="39" data-preview="/samples/nda.html">
-          <div>
-            <span class="doc-name">Non-Disclosure Agreement</span>
-            <span class="doc-price">$39</span>
-          </div>
-          <div class="doc-actions">
-            <button onclick="previewDoc(event,this)">Preview</button>
-          </div>
+      <div class="doc-row" data-doc="nda" data-tier="T1" data-price="39">
+        <div>
+          <span class="doc-name">Non-Disclosure Agreement</span>
+          <span class="doc-price">$39</span>
         </div>
-
-        <div class="doc-row" data-doc="service" data-tier="T1" data-price="39" data-preview="/samples/service.html">
-          <div>
-            <span class="doc-name">Service Agreement</span>
-            <span class="doc-price">$39</span>
-          </div>
-          <div class="doc-actions">
-            <button onclick="previewDoc(event,this)">Preview</button>
-          </div>
+        <div class="doc-actions">
+          <button onclick="openPreview(event,'NDA')">Preview</button>
         </div>
       </div>
 
-      <!-- TIER 2 -->
-      <div class="tier">
-        <h2>Tier 2</h2>
-
-        <div class="doc-row" data-doc="contractor" data-tier="T2" data-price="59" data-preview="/samples/contractor.html">
-          <div>
-            <span class="doc-name">Independent Contractor Agreement</span>
-            <span class="doc-price">$59</span>
-          </div>
-          <div class="doc-actions">
-            <button onclick="previewDoc(event,this)">Preview</button>
-          </div>
+      <div class="doc-row" data-doc="service" data-tier="T1" data-price="39">
+        <div>
+          <span class="doc-name">Service Agreement</span>
+          <span class="doc-price">$39</span>
         </div>
-
-        <div class="doc-row" data-doc="partnership" data-tier="T2" data-price="59" data-preview="/samples/partnership.html">
-          <div>
-            <span class="doc-name">Partnership Agreement</span>
-            <span class="doc-price">$59</span>
-          </div>
-          <div class="doc-actions">
-            <button onclick="previewDoc(event,this)">Preview</button>
-          </div>
+        <div class="doc-actions">
+          <button onclick="openPreview(event,'Service Agreement')">Preview</button>
         </div>
       </div>
-
-      <!-- TIER 3 -->
-      <div class="tier">
-        <h2>Tier 3</h2>
-
-        <div class="doc-row" data-doc="llc_single" data-tier="T3" data-price="99" data-preview="/samples/singlemember.html">
-          <div>
-            <span class="doc-name">Single-Member LLC</span>
-            <span class="doc-price">$99</span>
-          </div>
-          <div class="doc-actions">
-            <button onclick="previewDoc(event,this)">Preview</button>
-          </div>
-        </div>
-
-        <div class="doc-row" data-doc="llc_two" data-tier="T3" data-price="99" data-preview="/samples/twomember.html">
-          <div>
-            <span class="doc-name">Two-Member LLC</span>
-            <span class="doc-price">$99</span>
-          </div>
-          <div class="doc-actions">
-            <button onclick="previewDoc(event,this)">Preview</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- TIER 4 -->
-      <div class="tier">
-        <h2>Tier 4</h2>
-
-        <div class="doc-row" data-doc="launch_kit" data-tier="T4" data-price="149" data-preview="/samples/launchkit.html">
-          <div>
-            <span class="doc-name">Business Launch Kit</span>
-            <span class="doc-price">$149</span>
-          </div>
-          <div class="doc-actions">
-            <button onclick="previewDoc(event,this)">Preview</button>
-          </div>
-        </div>
-      </div>
-
     </div>
+
+    <!-- TIER 2 -->
+    <div class="tier">
+      <h2>Tier 2</h2>
+
+      <div class="doc-row" data-doc="contractor" data-tier="T2" data-price="59">
+        <div>
+          <span class="doc-name">Independent Contractor Agreement</span>
+          <span class="doc-price">$59</span>
+        </div>
+        <div class="doc-actions">
+          <button onclick="openPreview(event,'Independent Contractor')">Preview</button>
+        </div>
+      </div>
+
+      <div class="doc-row" data-doc="partnership" data-tier="T2" data-price="59">
+        <div>
+          <span class="doc-name">Partnership Agreement</span>
+          <span class="doc-price">$59</span>
+        </div>
+        <div class="doc-actions">
+          <button onclick="openPreview(event,'Partnership Agreement')">Preview</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- TIER 3 -->
+    <div class="tier">
+      <h2>Tier 3</h2>
+
+      <div class="doc-row" data-doc="llc_single" data-tier="T3" data-price="99">
+        <div>
+          <span class="doc-name">Single-Member LLC</span>
+          <span class="doc-price">$99</span>
+        </div>
+        <div class="doc-actions">
+          <button onclick="openPreview(event,'Single-Member LLC')">Preview</button>
+        </div>
+      </div>
+
+      <div class="doc-row" data-doc="llc_multi" data-tier="T3" data-price="99">
+        <div>
+          <span class="doc-name">Two-Member LLC</span>
+          <span class="doc-price">$99</span>
+        </div>
+        <div class="doc-actions">
+          <button onclick="openPreview(event,'Two-Member LLC')">Preview</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- TIER 4 -->
+    <div class="tier">
+      <h2>Tier 4</h2>
+
+      <div class="doc-row" data-doc="launch_kit" data-tier="T4" data-price="149">
+        <div>
+          <span class="doc-name">Business Launch Kit</span>
+          <span class="doc-price">$149</span>
+        </div>
+        <div class="doc-actions">
+          <button onclick="openPreview(event,'Business Launch Kit')">Preview</button>
+        </div>
+      </div>
+    </div>
+
   </div>
 
-  <!-- RIGHT -->
-  <div class="preview-panel">
-    <h2 id="previewTitle">Document Preview</h2>
-    <div class="sample-note">
-      Sample content only — your final document will be customized based on your intake answers.
-    </div>
-    <iframe id="previewFrame"></iframe>
-
-    <div class="actions">
-      <button id="continueBtn" disabled onclick="goToIntake()">Continue to Intake</button>
-    </div>
+  <div class="actions">
+    <button id="continueBtn" disabled onclick="goToIntake()">Continue to Intake</button>
   </div>
 
 </div>
 
+<!-- PREVIEW MODAL -->
+<div class="modal" id="previewModal">
+  <div class="modal-content">
+    <span class="close-btn" onclick="closePreview()">&times;</span>
+    <h3 id="previewTitle"></h3>
+    <p>
+      This is a sample preview only.  
+      Your final document will be customized based on your intake answers.
+    </p>
+  </div>
+</div>
+
 <script>
-let selectedDoc = null;
+let selected = null;
 
 document.querySelectorAll('.doc-row').forEach(row => {
   row.addEventListener('click', () => {
     document.querySelectorAll('.doc-row').forEach(r => r.classList.remove('selected'));
     row.classList.add('selected');
-
-    selectedDoc = {
-      doc: row.dataset.doc,
-      tier: row.dataset.tier,
-      price: row.dataset.price
-    };
-
+    selected = row.dataset;
     document.getElementById('continueBtn').disabled = false;
   });
 });
 
-function previewDoc(e, btn) {
+function openPreview(e, title) {
   e.stopPropagation();
-  const row = btn.closest('.doc-row');
-  document.getElementById('previewTitle').innerText =
-    row.querySelector('.doc-name').innerText;
-  document.getElementById('previewFrame').src = row.dataset.preview;
+  document.getElementById('previewTitle').innerText = title;
+  document.getElementById('previewModal').style.display = 'flex';
+}
+
+function closePreview() {
+  document.getElementById('previewModal').style.display = 'none';
 }
 
 function goToIntake() {
-  const params = new URLSearchParams(selectedDoc).toString();
+  const params = new URLSearchParams(selected).toString();
   window.location.href = `/intake.html?${params}`;
 }
 </script>
