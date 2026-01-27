@@ -2,317 +2,251 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<title>Select Your Legal Document</title>
+<title>Select Your Legal Document | E-LegalBoom</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
 <style>
+:root {
+  --primary: #1f4fd8;
+  --primary-soft: #eef3ff;
+  --border: #dcdfe6;
+  --text-main: #1a1a1a;
+  --text-muted: #666;
+  --bg-light: #f7f9fc;
+}
+
 body {
-  font-family: Georgia, "Times New Roman", serif;
-  background: #f6f7f9;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+  background: var(--bg-light);
+  color: var(--text-main);
   margin: 0;
-  padding: 0;
-  color: #222;
+  padding: 40px 20px;
+}
+
+.catalog-container {
+  max-width: 1100px;
+  margin: 0 auto;
 }
 
 h1 {
-  text-align: center;
-  margin: 30px 0 6px;
+  font-size: 30px;
+  margin-bottom: 8px;
 }
 
 .subtitle {
-  text-align: center;
-  color: #555;
-  margin-bottom: 30px;
+  color: var(--text-muted);
+  font-size: 16px;
+  margin-bottom: 32px;
 }
 
-.catalog {
-  max-width: 1200px;
-  margin: auto;
-  padding: 20px;
-}
-
-/* ===== TIER GRID ===== */
 .tier-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 20px;
+  gap: 24px;
 }
 
-.tier {
-  background: #ffffff;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  padding: 16px;
+.tier-card {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 22px;
 }
 
-.tier h2 {
-  margin-top: 0;
-  font-size: 1.1rem;
-  border-bottom: 1px solid #eee;
-  padding-bottom: 6px;
+.tier-title {
+  font-size: 20px;
+  margin-bottom: 4px;
 }
 
-/* ===== DOCUMENT ROW ===== */
-.doc-row {
+.tier-help {
+  font-size: 14px;
+  color: var(--text-muted);
+  margin-bottom: 18px;
+}
+
+.doc-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px;
-  margin-top: 8px;
-  border-radius: 6px;
+  padding: 14px 12px;
+  border-radius: 8px;
   cursor: pointer;
+  border: 1px solid transparent;
+  margin-bottom: 8px;
 }
 
-.doc-row:hover {
-  background: #f1f4ff;
+.doc-item:hover {
+  background: var(--primary-soft);
 }
 
-.doc-row.selected {
-  background: #e6edff;
-  border: 1px solid #4a6cf7;
+.doc-item.selected {
+  border: 1px solid var(--primary);
+  background: var(--primary-soft);
+}
+
+.doc-info {
+  display: flex;
+  flex-direction: column;
 }
 
 .doc-name {
+  font-size: 16px;
   font-weight: 600;
 }
 
+.doc-desc {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
 .doc-price {
-  margin-left: 6px;
-  color: #444;
+  font-weight: 600;
 }
 
-.doc-actions button {
-  font-size: 0.75rem;
-  padding: 4px 8px;
-  cursor: pointer;
-}
-
-/* ===== ACTION BAR ===== */
 .actions {
-  margin-top: 30px;
+  margin-top: 32px;
   text-align: right;
 }
 
-.actions button {
-  padding: 12px 22px;
-  font-size: 1rem;
-  border-radius: 6px;
+button {
+  background: var(--primary);
+  color: white;
   border: none;
-  cursor: pointer;
-}
-
-.actions button:disabled {
-  background: #ccc;
-  cursor: not-allowed;
-}
-
-.actions button.primary {
-  background: #4a6cf7;
-  color: #fff;
-}
-
-/* ===== MODAL PREVIEW ===== */
-.modal {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.6);
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-}
-
-.modal-content {
-  background: #fff;
-  max-width: 600px;
-  width: 90%;
   border-radius: 8px;
-  padding: 20px;
-}
-
-.modal-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.modal-header h3 {
-  margin: 0;
-}
-
-.close-btn {
+  padding: 14px 22px;
+  font-size: 16px;
   cursor: pointer;
-  font-size: 1.4rem;
 }
 
-.modal-body {
-  margin-top: 12px;
-  font-size: 0.95rem;
-  color: #444;
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 </style>
 </head>
 
 <body>
 
-<h1>Select Your Legal Document</h1>
-<div class="subtitle">
-Choose the document you want prepared. Preview is optional.
-</div>
+<div class="catalog-container">
 
-<div class="catalog">
+  <h1>Select Your Legal Document</h1>
+  <div class="subtitle">
+    Choose the document you want prepared. Clear pricing. Guided selection. No surprises.
+  </div>
 
   <div class="tier-grid">
 
-    <!-- ===== TIER 1 ===== -->
-    <div class="tier">
-      <h2>Tier 1 – Core Documents</h2>
+    <!-- TIER 1 -->
+    <div class="tier-card">
+      <div class="tier-title">Tier 1 — Core Documents</div>
+      <div class="tier-help">Everyday agreements for common legal needs.</div>
 
-      <div class="doc-row" data-doc="nda" data-tier="T1" data-price="39">
-        <div>
-          <span class="doc-name">Non-Disclosure Agreement</span>
-          <span class="doc-price">$39</span>
+      <div class="doc-item" data-doc="nda" data-tier="1">
+        <div class="doc-info">
+          <div class="doc-name">Non-Disclosure Agreement</div>
+          <div class="doc-desc">Protects confidential information</div>
         </div>
-        <div class="doc-actions">
-          <button onclick="openPreview(event,'Non-Disclosure Agreement')">Preview</button>
-        </div>
+        <div class="doc-price">$39</div>
       </div>
 
-      <div class="doc-row" data-doc="service_agreement" data-tier="T1" data-price="39">
-        <div>
-          <span class="doc-name">Service Agreement</span>
-          <span class="doc-price">$39</span>
+      <div class="doc-item" data-doc="service_agreement" data-tier="1">
+        <div class="doc-info">
+          <div class="doc-name">Service Agreement</div>
+          <div class="doc-desc">Defines services, scope, and payment</div>
         </div>
-        <div class="doc-actions">
-          <button onclick="openPreview(event,'Service Agreement')">Preview</button>
-        </div>
+        <div class="doc-price">$39</div>
       </div>
 
-      <div class="doc-row" data-doc="promissory_note" data-tier="T1" data-price="39">
-        <div>
-          <span class="doc-name">Promissory Note</span>
-          <span class="doc-price">$39</span>
+      <div class="doc-item" data-doc="promissory_note" data-tier="1">
+        <div class="doc-info">
+          <div class="doc-name">Promissory Note</div>
+          <div class="doc-desc">Formalizes loan repayment terms</div>
         </div>
-        <div class="doc-actions">
-          <button onclick="openPreview(event,'Promissory Note')">Preview</button>
-        </div>
+        <div class="doc-price">$39</div>
       </div>
     </div>
 
-    <!-- ===== TIER 2 ===== -->
-    <div class="tier">
-      <h2>Tier 2 – Business Foundations</h2>
+    <!-- TIER 2 -->
+    <div class="tier-card">
+      <div class="tier-title">Tier 2 — Business Foundations</div>
+      <div class="tier-help">Documents for working relationships and partnerships.</div>
 
-      <div class="doc-row" data-doc="independent_contractor" data-tier="T2" data-price="59">
-        <div>
-          <span class="doc-name">Independent Contractor Agreement</span>
-          <span class="doc-price">$59</span>
+      <div class="doc-item" data-doc="independent_contractor" data-tier="2">
+        <div class="doc-info">
+          <div class="doc-name">Independent Contractor Agreement</div>
+          <div class="doc-desc">Defines contractor relationship and terms</div>
         </div>
-        <div class="doc-actions">
-          <button onclick="openPreview(event,'Independent Contractor Agreement')">Preview</button>
-        </div>
+        <div class="doc-price">$59</div>
       </div>
 
-      <div class="doc-row" data-doc="partnership_agreement" data-tier="T2" data-price="59">
-        <div>
-          <span class="doc-name">Partnership Agreement</span>
-          <span class="doc-price">$59</span>
+      <div class="doc-item" data-doc="partnership_agreement" data-tier="2">
+        <div class="doc-info">
+          <div class="doc-name">Partnership Agreement</div>
+          <div class="doc-desc">Establishes partner roles and responsibilities</div>
         </div>
-        <div class="doc-actions">
-          <button onclick="openPreview(event,'Partnership Agreement')">Preview</button>
-        </div>
+        <div class="doc-price">$59</div>
       </div>
     </div>
 
-    <!-- ===== TIER 3 ===== -->
-    <div class="tier">
-      <h2>Tier 3 – Entity Formation</h2>
+    <!-- TIER 3 -->
+    <div class="tier-card">
+      <div class="tier-title">Tier 3 — Entity Formation</div>
+      <div class="tier-help">Formal operating agreements for LLCs.</div>
 
-      <div class="doc-row" data-doc="single_member_llc" data-tier="T3" data-price="99">
-        <div>
-          <span class="doc-name">Single-Member LLC Operating Agreement</span>
-          <span class="doc-price">$99</span>
+      <div class="doc-item" data-doc="single_member_llc" data-tier="3">
+        <div class="doc-info">
+          <div class="doc-name">Single-Member LLC Operating Agreement</div>
+          <div class="doc-desc">Establishes ownership and operations</div>
         </div>
-        <div class="doc-actions">
-          <button onclick="openPreview(event,'Single-Member LLC Operating Agreement')">Preview</button>
-        </div>
+        <div class="doc-price">$99</div>
       </div>
 
-      <div class="doc-row" data-doc="two_member_llc" data-tier="T3" data-price="99">
-        <div>
-          <span class="doc-name">Two-Member LLC Operating Agreement</span>
-          <span class="doc-price">$99</span>
+      <div class="doc-item" data-doc="two_member_llc" data-tier="3">
+        <div class="doc-info">
+          <div class="doc-name">Two-Member LLC Operating Agreement</div>
+          <div class="doc-desc">Defines ownership, voting, and profit sharing</div>
         </div>
-        <div class="doc-actions">
-          <button onclick="openPreview(event,'Two-Member LLC Operating Agreement')">Preview</button>
-        </div>
+        <div class="doc-price">$99</div>
       </div>
     </div>
 
-    <!-- ===== TIER 4 ===== -->
-    <div class="tier">
-      <h2>Tier 4 – Business Launch Kit</h2>
+    <!-- TIER 4 -->
+    <div class="tier-card">
+      <div class="tier-title">Tier 4 — Business Launch Kit</div>
+      <div class="tier-help">Everything you need to get started, bundled.</div>
 
-      <div class="doc-row" data-doc="business_launch_kit" data-tier="T4" data-price="149">
-        <div>
-          <span class="doc-name">Business Launch Kit</span>
-          <span class="doc-price">$149</span>
+      <div class="doc-item" data-doc="business_launch_kit" data-tier="4">
+        <div class="doc-info">
+          <div class="doc-name">Business Launch Kit</div>
+          <div class="doc-desc">Core formation + foundational documents</div>
         </div>
-        <div class="doc-actions">
-          <button onclick="openPreview(event,'Business Launch Kit')">Preview</button>
-        </div>
+        <div class="doc-price">$149</div>
       </div>
     </div>
 
   </div>
 
   <div class="actions">
-    <button id="continueBtn" class="primary" disabled onclick="goToIntake()">
-      Continue to Intake
-    </button>
+    <button id="continueBtn" disabled onclick="goToIntake()">Continue to Intake</button>
   </div>
 
-</div>
-
-<!-- ===== PREVIEW MODAL ===== -->
-<div class="modal" id="previewModal">
-  <div class="modal-content">
-    <div class="modal-header">
-      <h3 id="previewTitle"></h3>
-      <span class="close-btn" onclick="closePreview()">×</span>
-    </div>
-    <div class="modal-body">
-      This is a sample preview only.  
-      Your final document(s) will be customized and prepared based on the information you provide during intake.
-    </div>
-  </div>
 </div>
 
 <script>
-let selected = null;
+let selectedDoc = null;
 
-document.querySelectorAll('.doc-row').forEach(row => {
-  row.addEventListener('click', () => {
-    document.querySelectorAll('.doc-row').forEach(r => r.classList.remove('selected'));
-    row.classList.add('selected');
-    selected = row.dataset;
+document.querySelectorAll('.doc-item').forEach(item => {
+  item.addEventListener('click', () => {
+    document.querySelectorAll('.doc-item').forEach(d => d.classList.remove('selected'));
+    item.classList.add('selected');
+    selectedDoc = item.dataset.doc;
     document.getElementById('continueBtn').disabled = false;
   });
 });
 
-function openPreview(e, title) {
-  e.stopPropagation();
-  document.getElementById('previewTitle').innerText = title;
-  document.getElementById('previewModal').style.display = 'flex';
-}
-
-function closePreview() {
-  document.getElementById('previewModal').style.display = 'none';
-}
-
 function goToIntake() {
-  const params = new URLSearchParams(selected).toString();
-  window.location.href = `/intake.html?${params}`;
+  if (!selectedDoc) return;
+  window.location.href = `intake.html?document=${selectedDoc}`;
 }
 </script>
 
