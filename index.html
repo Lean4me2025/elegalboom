@@ -1,222 +1,251 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<title>Welcome | E-LegalBoom</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8" />
+  <title>Welcome to E-LegalBoom</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-<style>
-:root {
-  --brand-blue: #2f5bea;
-  --brand-blue-soft: #eef3ff;
-  --border: #d8dbea;
-  --text-main: #1a1a1a;
-  --text-muted: #5f6368;
-  --bg: #f6f8fc;
-}
+  <style>
+    :root {
+      --brand-blue: #2f6fed;
+      --soft-blue: #eef4ff;
+      --border-gray: #dcdfe6;
+      --text-dark: #1f2937;
+      --text-muted: #6b7280;
+    }
 
-body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
-  background: var(--bg);
-  margin: 0;
-  padding: 40px 20px;
-  color: var(--text-main);
-}
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+      color: var(--text-dark);
+      background: #f7f9fc;
+    }
 
-.container {
-  max-width: 1100px;
-  margin: 0 auto;
-}
+    .page {
+      max-width: 1200px;
+      margin: 40px auto;
+      padding: 0 20px;
+    }
 
-h1 {
-  font-size: 34px;
-  margin-bottom: 10px;
-}
+    h1 {
+      font-size: 36px;
+      margin-bottom: 8px;
+    }
 
-.subtitle {
-  font-size: 17px;
-  color: var(--text-muted);
-  margin-bottom: 30px;
-}
+    .subtitle {
+      font-size: 18px;
+      color: var(--text-muted);
+      max-width: 720px;
+      line-height: 1.5;
+    }
 
-.layout {
-  display: grid;
-  grid-template-columns: 1.2fr 0.8fr;
-  gap: 30px;
-}
+    .main-grid {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 32px;
+      margin-top: 40px;
+    }
 
-.card {
-  background: #fff;
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 24px;
-}
+    .card {
+      background: white;
+      border-radius: 10px;
+      border: 1px solid var(--border-gray);
+      padding: 28px;
+    }
 
-.flow-list {
-  margin: 0;
-  padding-left: 18px;
-  color: var(--text-muted);
-}
+    .how-it-works h2 {
+      font-size: 22px;
+      margin-bottom: 16px;
+    }
 
-.flow-list li {
-  margin-bottom: 10px;
-}
+    .steps {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 28px 0;
+    }
 
-.preview-box {
-  background: var(--brand-blue-soft);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 16px;
-  text-align: center;
-}
+    .steps li {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 14px;
+      font-size: 16px;
+      line-height: 1.5;
+    }
 
-.preview-title {
-  font-weight: 600;
-  margin-bottom: 10px;
-}
+    .step-num {
+      background: var(--brand-blue);
+      color: white;
+      font-weight: 600;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
 
-.preview-thumb {
-  background: #fff;
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  padding: 14px;
-  font-size: 13px;
-  color: var(--text-muted);
-  cursor: pointer;
-}
+    .cta {
+      margin-top: 10px;
+    }
 
-.preview-caption {
-  font-size: 13px;
-  color: var(--text-muted);
-  margin-top: 10px;
-}
+    .cta a {
+      display: inline-block;
+      background: var(--brand-blue);
+      color: white;
+      padding: 14px 26px;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      text-decoration: none;
+    }
 
-.actions {
-  margin-top: 30px;
-  text-align: right;
-}
+    .cta a:hover {
+      background: #245dd8;
+    }
 
-button {
-  background: var(--brand-blue);
-  color: white;
-  border: none;
-  border-radius: 8px;
-  padding: 14px 26px;
-  font-size: 16px;
-  cursor: pointer;
-}
+    /* Document Preview */
 
-/* MODAL */
-.modal {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.6);
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-}
+    .preview-header {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
 
-.modal-content {
-  background: white;
-  max-width: 700px;
-  width: 90%;
-  border-radius: 12px;
-  padding: 24px;
-}
+    .preview-sub {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+    }
 
-.modal-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
+    .document-frame {
+      background: #ffffff;
+      border: 1px solid var(--border-gray);
+      border-radius: 6px;
+      padding: 24px;
+      font-family: "Times New Roman", Times, serif;
+      font-size: 14px;
+      line-height: 1.6;
+      color: #111;
+      box-shadow: inset 0 0 0 1px #eee;
+    }
 
-.close {
-  font-size: 22px;
-  cursor: pointer;
-}
+    .doc-title {
+      text-align: center;
+      font-weight: bold;
+      font-size: 18px;
+      margin-bottom: 18px;
+      text-transform: uppercase;
+    }
 
-.modal-body {
-  margin-top: 16px;
-  font-size: 14px;
-  color: var(--text-muted);
-}
-</style>
+    .doc-section {
+      margin-bottom: 14px;
+    }
+
+    .doc-section strong {
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .doc-footer {
+      margin-top: 24px;
+      font-size: 13px;
+      color: #444;
+    }
+
+    @media (max-width: 900px) {
+      .main-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
 </head>
 
 <body>
+  <div class="page">
 
-<div class="container">
+    <h1>Welcome to E-LegalBoom</h1>
+    <div class="subtitle">
+      We produce professional legal documents, prepared clearly and efficiently —
+      and offer them at transparent, affordable prices so you can move forward
+      with confidence.
+    </div>
 
-  <h1>Welcome to E-LegalBoom</h1>
-  <div class="subtitle">
-    Professional legal documents, prepared clearly and efficiently.
-  </div>
+    <div class="main-grid">
 
-  <div class="layout">
+      <!-- LEFT: HOW IT WORKS -->
+      <div class="card how-it-works">
+        <h2>How it works</h2>
 
-    <!-- LEFT: EXPLANATION -->
-    <div class="card">
-      <h3>How it works</h3>
-      <ul class="flow-list">
-        <li>Browse our document catalog</li>
-        <li>Select the document that fits your situation</li>
-        <li>Complete a guided intake so we can tailor it</li>
-        <li>Review, pay, and receive your prepared document</li>
-      </ul>
+        <ul class="steps">
+          <li>
+            <div class="step-num">1</div>
+            <div>Browse our document catalog</div>
+          </li>
+          <li>
+            <div class="step-num">2</div>
+            <div>Select the document that fits your legal need</div>
+          </li>
+          <li>
+            <div class="step-num">3</div>
+            <div>Complete a self-guided intake so we can tailor it to your situation</div>
+          </li>
+          <li>
+            <div class="step-num">4</div>
+            <div>Review, pay, and receive your prepared document by email</div>
+          </li>
+        </ul>
 
-      <div class="actions">
-        <button onclick="goToCatalog()">Browse the Document Catalog</button>
+        <div class="cta">
+          <a href="/catalog.html">Browse the Document Catalog</a>
+        </div>
       </div>
-    </div>
 
-    <!-- RIGHT: PREVIEW -->
-    <div class="preview-box">
-      <div class="preview-title">Sample Document Preview</div>
+      <!-- RIGHT: DOCUMENT SPECIMEN -->
+      <div class="card">
+        <div class="preview-header">Example Legal Document</div>
+        <div class="preview-sub">Non-Disclosure Agreement (sample format)</div>
 
-      <div class="preview-thumb" onclick="openPreview()">
-        Example: Non-Disclosure Agreement (NDA)<br />
-        <em>Click to enlarge</em>
+        <div class="document-frame">
+          <div class="doc-title">Non-Disclosure Agreement</div>
+
+          <div class="doc-section">
+            This Non-Disclosure Agreement (“Agreement”) is entered into as of
+            the Effective Date by and between the Disclosing Party and the
+            Receiving Party.
+          </div>
+
+          <div class="doc-section">
+            <strong>1. Confidential Information</strong>
+            Confidential Information includes all non-public business,
+            technical, or financial information disclosed in connection
+            with discussions between the parties.
+          </div>
+
+          <div class="doc-section">
+            <strong>2. Obligations</strong>
+            The Receiving Party agrees to maintain the confidentiality of
+            the information and not disclose it to any third party without
+            prior written consent.
+          </div>
+
+          <div class="doc-section">
+            <strong>3. Term</strong>
+            This Agreement shall remain in effect for a period specified
+            in the final executed document.
+          </div>
+
+          <div class="doc-footer">
+            This is a sample document only. All documents are customized based
+            on the information you provide during intake.
+          </div>
+        </div>
       </div>
 
-      <div class="preview-caption">
-        This is an example of a finished document.  
-        All documents are customized based on your intake.
-      </div>
-    </div>
-
-  </div>
-
-</div>
-
-<!-- MODAL -->
-<div class="modal" id="previewModal">
-  <div class="modal-content">
-    <div class="modal-header">
-      <strong>Non-Disclosure Agreement (Sample)</strong>
-      <span class="close" onclick="closePreview()">×</span>
-    </div>
-    <div class="modal-body">
-      This is a representative example for preview purposes only.
-      Your final document will be prepared and customized based on
-      the information you provide during intake.
     </div>
   </div>
-</div>
-
-<script>
-function goToCatalog() {
-  window.location.href = "catalog.html";
-}
-
-function openPreview() {
-  document.getElementById("previewModal").style.display = "flex";
-}
-
-function closePreview() {
-  document.getElementById("previewModal").style.display = "none";
-}
-</script>
-
 </body>
 </html>
