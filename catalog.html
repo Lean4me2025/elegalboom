@@ -8,15 +8,15 @@
   <style>
     body {
       font-family: Georgia, "Times New Roman", serif;
+      background: #f6f7f9;
       margin: 0;
       padding: 40px;
-      background: #f6f7f9;
       color: #222;
     }
 
     h1 {
       text-align: center;
-      margin-bottom: 10px;
+      margin-bottom: 8px;
     }
 
     .subtitle {
@@ -25,44 +25,53 @@
       margin-bottom: 40px;
     }
 
+    .tier {
+      max-width: 1200px;
+      margin: 0 auto 60px auto;
+    }
+
+    .tier h2 {
+      margin-bottom: 6px;
+    }
+
+    .tier-desc {
+      font-size: 14px;
+      color: #666;
+      margin-bottom: 18px;
+    }
+
     .catalog-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
       gap: 28px;
-      max-width: 1200px;
-      margin: 0 auto;
     }
 
     .doc-card {
       background: #fff;
       border-radius: 8px;
-      padding: 20px;
+      padding: 18px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.08);
       display: flex;
       flex-direction: column;
     }
 
-    /* 🔒 PREVIEW CONTAINER — THIS IS THE KEY */
+    /* 🔒 uniform preview container */
     .preview-box {
-      width: 100%;
-      height: 220px;              /* uniform height */
+      height: 220px;
       border: 1px solid #ddd;
       border-radius: 4px;
       overflow: hidden;
-      margin-bottom: 16px;
       background: #fafafa;
+      margin-bottom: 14px;
     }
 
-    .preview-box iframe,
-    .preview-box img {
+    .preview-box iframe {
       width: 100%;
       height: 100%;
       border: none;
-      object-fit: cover;          /* forces uniform scaling */
     }
 
     .doc-title {
-      font-size: 18px;
       font-weight: bold;
       margin-bottom: 6px;
     }
@@ -70,13 +79,13 @@
     .doc-desc {
       font-size: 14px;
       color: #555;
-      margin-bottom: 10px;
+      margin-bottom: 8px;
     }
 
     .doc-meta {
       font-size: 13px;
       color: #666;
-      margin-bottom: 16px;
+      margin-bottom: 14px;
     }
 
     .select-btn {
@@ -88,7 +97,6 @@
       border-radius: 6px;
       cursor: pointer;
       font-size: 14px;
-      transition: background 0.2s ease;
     }
 
     .select-btn:hover {
@@ -99,104 +107,141 @@
       text-align: center;
       font-size: 13px;
       color: #777;
-      margin-top: 60px;
+      margin-top: 80px;
     }
   </style>
 </head>
 
 <body>
 
-  <h1>Select Your Legal Document</h1>
-  <p class="subtitle">
-    Review a sample and choose the document you want prepared.
-  </p>
+<h1>Select Your Legal Document</h1>
+<p class="subtitle">
+  Review a sample and choose the document you want prepared.
+</p>
+
+<!-- ===================== TIER 1 ===================== -->
+<div class="tier">
+  <h2>Tier 1 – Core Legal Documents</h2>
+  <p class="tier-desc">Foundational agreements for everyday legal protection.</p>
 
   <div class="catalog-grid">
-
-    <!-- NDA -->
     <div class="doc-card">
-      <div class="preview-box">
-        <iframe src="/previews/nda-preview.pdf"></iframe>
-      </div>
-
+      <div class="preview-box"><iframe src="/samples/nda.html"></iframe></div>
       <div class="doc-title">Non-Disclosure Agreement (NDA)</div>
-      <div class="doc-desc">
-        Protect confidential information shared between parties.
-      </div>
-      <div class="doc-meta">
-        Tier: T1 · Price: $39
-      </div>
-
+      <div class="doc-desc">Protect confidential information.</div>
+      <div class="doc-meta">$39</div>
       <button class="select-btn"
-        onclick="selectProduct('non_disclosure_agreement', 'T1', 39)">
-        Select This Document
-      </button>
+        onclick="selectProduct('nda','T1',39)">Select</button>
     </div>
 
-    <!-- PROMISSORY NOTE -->
     <div class="doc-card">
-      <div class="preview-box">
-        <iframe src="/previews/promissory-note-preview.pdf"></iframe>
-      </div>
+      <div class="preview-box"><iframe src="/samples/service.html"></iframe></div>
+      <div class="doc-title">Service Agreement</div>
+      <div class="doc-desc">Define services, scope, and payment.</div>
+      <div class="doc-meta">$39</div>
+      <button class="select-btn"
+        onclick="selectProduct('service_agreement','T1',39)">Select</button>
+    </div>
 
+    <div class="doc-card">
+      <div class="preview-box"><iframe src="/samples/promissory.html"></iframe></div>
       <div class="doc-title">Promissory Note</div>
-      <div class="doc-desc">
-        Formalize repayment terms for a personal or business loan.
-      </div>
-      <div class="doc-meta">
-        Tier: T2 · Price: $59
-      </div>
-
+      <div class="doc-desc">Formal loan repayment terms.</div>
+      <div class="doc-meta">$39</div>
       <button class="select-btn"
-        onclick="selectProduct('promissory_note', 'T2', 59)">
-        Select This Document
-      </button>
+        onclick="selectProduct('promissory_note','T1',39)">Select</button>
     </div>
-
-    <!-- INDEPENDENT CONTRACTOR -->
-    <div class="doc-card">
-      <div class="preview-box">
-        <iframe src="/previews/contractor-preview.pdf"></iframe>
-      </div>
-
-      <div class="doc-title">Independent Contractor Agreement</div>
-      <div class="doc-desc">
-        Define scope, compensation, and ownership for contractors.
-      </div>
-      <div class="doc-meta">
-        Tier: T3 · Price: $99
-      </div>
-
-      <button class="select-btn"
-        onclick="selectProduct('independent_contractor_agreement', 'T3', 99)">
-        Select This Document
-      </button>
-    </div>
-
   </div>
+</div>
 
-  <footer>
-    © 2026 E-LegalBoom · Secure Legal Automation
-  </footer>
+<!-- ===================== TIER 2 ===================== -->
+<div class="tier">
+  <h2>Tier 2 – Business Foundations</h2>
+  <p class="tier-desc">Documents for working relationships and partnerships.</p>
 
-  <script>
-    function selectProduct(docType, tier, price) {
-      const payload = {
+  <div class="catalog-grid">
+    <div class="doc-card">
+      <div class="preview-box"><iframe src="/samples/contractor.html"></iframe></div>
+      <div class="doc-title">Independent Contractor Agreement</div>
+      <div class="doc-desc">Define contractor roles and ownership.</div>
+      <div class="doc-meta">$59</div>
+      <button class="select-btn"
+        onclick="selectProduct('contractor','T2',59)">Select</button>
+    </div>
+
+    <div class="doc-card">
+      <div class="preview-box"><iframe src="/samples/partnership.html"></iframe></div>
+      <div class="doc-title">Partnership Agreement</div>
+      <div class="doc-desc">Establish partner roles and equity.</div>
+      <div class="doc-meta">$59</div>
+      <button class="select-btn"
+        onclick="selectProduct('partnership','T2',59)">Select</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== TIER 3 ===================== -->
+<div class="tier">
+  <h2>Tier 3 – Entity Formation</h2>
+  <p class="tier-desc">LLC operating agreements.</p>
+
+  <div class="catalog-grid">
+    <div class="doc-card">
+      <div class="preview-box"><iframe src="/samples/singlemember.html"></iframe></div>
+      <div class="doc-title">Single-Member LLC Operating Agreement</div>
+      <div class="doc-meta">$99</div>
+      <button class="select-btn"
+        onclick="selectProduct('single_member_llc','T3',99)">Select</button>
+    </div>
+
+    <div class="doc-card">
+      <div class="preview-box"><iframe src="/samples/twomember.html"></iframe></div>
+      <div class="doc-title">Two-Member LLC Operating Agreement</div>
+      <div class="doc-meta">$99</div>
+      <button class="select-btn"
+        onclick="selectProduct('two_member_llc','T3',99)">Select</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== TIER 4 ===================== -->
+<div class="tier">
+  <h2>Tier 4 – Launch Kits</h2>
+  <p class="tier-desc">Bundled documents for new businesses.</p>
+
+  <div class="catalog-grid">
+    <div class="doc-card">
+      <div class="preview-box"><iframe src="/samples/launchkit.html"></iframe></div>
+      <div class="doc-title">Business Launch Kit</div>
+      <div class="doc-desc">Multiple foundational documents in one package.</div>
+      <div class="doc-meta">$149</div>
+      <button class="select-btn"
+        onclick="selectProduct('launch_kit','T4',149)">Select</button>
+    </div>
+  </div>
+</div>
+
+<footer>
+  © 2026 E-LegalBoom · Secure Legal Automation
+</footer>
+
+<script>
+  function selectProduct(docType, tier, price) {
+    localStorage.setItem(
+      "elg_selected_product",
+      JSON.stringify({
         doc_type: docType,
         tier: tier,
         price: price,
         source: "catalog",
         selected_at: new Date().toISOString()
-      };
+      })
+    );
 
-      localStorage.setItem(
-        "elg_selected_product",
-        JSON.stringify(payload)
-      );
-
-      window.location.href = "/review.html";
-    }
-  </script>
+    // Canonical next step
+    window.location.href = "/intake.html";
+  }
+</script>
 
 </body>
 </html>
