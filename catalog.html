@@ -1,340 +1,109 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <title>E-LegalBoom | Document Catalog</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-  <style>
-    body {
-      font-family: Georgia, "Times New Roman", serif;
-      background: #f6f7f9;
-      margin: 0;
-      padding: 32px;
-      color: #222;
-    }
-
-    h1 {
-      text-align: center;
-      margin-bottom: 6px;
-    }
-
-    .subtitle {
-      text-align: center;
-      color: #555;
-      margin-bottom: 30px;
-    }
-
-    .catalog-layout {
-      max-width: 1200px;
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: 1fr 1.2fr;
-      gap: 28px;
-    }
-
-    /* LEFT: DOCUMENT LIST */
-    .doc-list {
-      background: #fff;
-      border-radius: 8px;
-      padding: 20px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-    }
-
-    .tier {
-      margin-bottom: 24px;
-    }
-
-    .tier h2 {
-      font-size: 18px;
-      margin-bottom: 10px;
-      border-bottom: 1px solid #ddd;
-      padding-bottom: 6px;
-    }
-
-    .doc-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 10px;
-      padding: 10px;
-      border-radius: 6px;
-      border: 1px solid #ddd;
-      cursor: pointer;
-      background: #fafafa;
-    }
-
-    .doc-row.selected {
-      border-color: #0b3a66;
-      background: #eef3f8;
-    }
-
-    .doc-name {
-      font-weight: bold;
-    }
-
-    .doc-price {
-      font-size: 14px;
-      color: #555;
-      margin-left: 10px;
-    }
-
-    .doc-actions button {
-      margin-left: 6px;
-      padding: 6px 10px;
-      font-size: 13px;
-      cursor: pointer;
-    }
-
-    /* RIGHT: PREVIEW */
-    .preview-panel {
-      background: #fff;
-      border-radius: 8px;
-      padding: 16px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-      display: flex;
-      flex-direction: column;
-    }
-
-    .preview-title {
-      font-weight: bold;
-      margin-bottom: 8px;
-    }
-
-    .preview-box {
-      flex: 1;
-      border: 1px solid #ddd;
-      border-radius: 4px;
-      overflow: hidden;
-      background: #fafafa;
-    }
-
-    .preview-box iframe {
-      width: 100%;
-      height: 100%;
-      border: none;
-    }
-
-    .preview-placeholder {
-      color: #777;
-      font-style: italic;
-      padding: 20px;
-    }
-
-    /* BOTTOM ACTION */
-    .continue-bar {
-      max-width: 1200px;
-      margin: 30px auto 0 auto;
-      text-align: right;
-    }
-
-    .continue-bar button {
-      padding: 14px 24px;
-      font-size: 16px;
-      background: #0b3a66;
-      color: #fff;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-
-    .continue-bar button:disabled {
-      background: #999;
-      cursor: not-allowed;
-    }
-
-    footer {
-      text-align: center;
-      font-size: 13px;
-      color: #777;
-      margin-top: 60px;
-    }
-  </style>
-</head>
-
-<body>
-
-<h1>Select Your Legal Document</h1>
-<p class="subtitle">
-  Choose the document you want prepared. Preview a sample if you wish.
-</p>
-
 <div class="catalog-layout">
 
-  <!-- LEFT: DOCUMENT LIST -->
-  <div class="doc-list">
+  <!-- LEFT: 2x2 TIER GRID -->
+  <div class="catalog-list">
+    <div class="tier-grid">
 
-    <div class="tier">
-      <h2>Tier 1</h2>
+      <!-- Tier 1 -->
+      <div class="tier">
+        <h2>Tier 1</h2>
 
-      <div class="doc-row"
-           data-doc="nda"
-           data-tier="T1"
-           data-price="39"
-           data-preview="/samples/nda.html">
-        <div>
-          <span class="doc-name">Non-Disclosure Agreement</span>
-          <span class="doc-price">$39</span>
+        <div class="doc-row" data-doc="nda" data-tier="T1" data-price="39" data-preview="/samples/nda.html" onclick="selectDoc(this)">
+          <div>
+            <span class="doc-name">Non-Disclosure Agreement</span>
+            <span class="doc-price">$39</span>
+          </div>
+          <div class="doc-actions">
+            <button onclick="previewDoc(event,this)">Preview</button>
+          </div>
         </div>
-        <div class="doc-actions">
-          <button onclick="showPreview(event)">Preview</button>
+
+        <div class="doc-row" data-doc="service" data-tier="T1" data-price="39" data-preview="/samples/service.html" onclick="selectDoc(this)">
+          <div>
+            <span class="doc-name">Service Agreement</span>
+            <span class="doc-price">$39</span>
+          </div>
+          <div class="doc-actions">
+            <button onclick="previewDoc(event,this)">Preview</button>
+          </div>
         </div>
       </div>
 
-      <div class="doc-row"
-           data-doc="service_agreement"
-           data-tier="T1"
-           data-price="39"
-           data-preview="/samples/service.html">
-        <div>
-          <span class="doc-name">Service Agreement</span>
-          <span class="doc-price">$39</span>
+      <!-- Tier 2 -->
+      <div class="tier">
+        <h2>Tier 2</h2>
+
+        <div class="doc-row" data-doc="contractor" data-tier="T2" data-price="59" data-preview="/samples/contractor.html" onclick="selectDoc(this)">
+          <div>
+            <span class="doc-name">Independent Contractor Agreement</span>
+            <span class="doc-price">$59</span>
+          </div>
+          <div class="doc-actions">
+            <button onclick="previewDoc(event,this)">Preview</button>
+          </div>
         </div>
-        <div class="doc-actions">
-          <button onclick="showPreview(event)">Preview</button>
+
+        <div class="doc-row" data-doc="partnership" data-tier="T2" data-price="59" data-preview="/samples/partnership.html" onclick="selectDoc(this)">
+          <div>
+            <span class="doc-name">Partnership Agreement</span>
+            <span class="doc-price">$59</span>
+          </div>
+          <div class="doc-actions">
+            <button onclick="previewDoc(event,this)">Preview</button>
+          </div>
         </div>
       </div>
 
-      <div class="doc-row"
-           data-doc="promissory_note"
-           data-tier="T1"
-           data-price="39"
-           data-preview="/samples/promissory.html">
-        <div>
-          <span class="doc-name">Promissory Note</span>
-          <span class="doc-price">$39</span>
+      <!-- Tier 3 -->
+      <div class="tier">
+        <h2>Tier 3</h2>
+
+        <div class="doc-row" data-doc="llc_single" data-tier="T3" data-price="99" data-preview="/samples/singlemember.html" onclick="selectDoc(this)">
+          <div>
+            <span class="doc-name">Single-Member LLC</span>
+            <span class="doc-price">$99</span>
+          </div>
+          <div class="doc-actions">
+            <button onclick="previewDoc(event,this)">Preview</button>
+          </div>
         </div>
-        <div class="doc-actions">
-          <button onclick="showPreview(event)">Preview</button>
+
+        <div class="doc-row" data-doc="llc_two" data-tier="T3" data-price="99" data-preview="/samples/twomember.html" onclick="selectDoc(this)">
+          <div>
+            <span class="doc-name">Two-Member LLC</span>
+            <span class="doc-price">$99</span>
+          </div>
+          <div class="doc-actions">
+            <button onclick="previewDoc(event,this)">Preview</button>
+          </div>
         </div>
       </div>
+
+      <!-- Tier 4 -->
+      <div class="tier">
+        <h2>Tier 4</h2>
+
+        <div class="doc-row" data-doc="launch_kit" data-tier="T4" data-price="149" data-preview="/samples/launchkit.html" onclick="selectDoc(this)">
+          <div>
+            <span class="doc-name">Business Launch Kit</span>
+            <span class="doc-price">$149</span>
+          </div>
+          <div class="doc-actions">
+            <button onclick="previewDoc(event,this)">Preview</button>
+          </div>
+        </div>
+      </div>
+
     </div>
-
-    <div class="tier">
-      <h2>Tier 2</h2>
-
-      <div class="doc-row"
-           data-doc="contractor"
-           data-tier="T2"
-           data-price="59"
-           data-preview="/samples/contractor.html">
-        <div>
-          <span class="doc-name">Independent Contractor Agreement</span>
-          <span class="doc-price">$59</span>
-        </div>
-        <div class="doc-actions">
-          <button onclick="showPreview(event)">Preview</button>
-        </div>
-      </div>
-
-      <div class="doc-row"
-           data-doc="partnership"
-           data-tier="T2"
-           data-price="59"
-           data-preview="/samples/partnership.html">
-        <div>
-          <span class="doc-name">Partnership Agreement</span>
-          <span class="doc-price">$59</span>
-        </div>
-        <div class="doc-actions">
-          <button onclick="showPreview(event)">Preview</button>
-        </div>
-      </div>
-    </div>
-
-    <div class="tier">
-      <h2>Tier 3</h2>
-
-      <div class="doc-row"
-           data-doc="single_member_llc"
-           data-tier="T3"
-           data-price="99"
-           data-preview="/samples/singlemember.html">
-        <div>
-          <span class="doc-name">Single-Member LLC Operating Agreement</span>
-          <span class="doc-price">$99</span>
-        </div>
-        <div class="doc-actions">
-          <button onclick="showPreview(event)">Preview</button>
-        </div>
-      </div>
-
-      <div class="doc-row"
-           data-doc="two_member_llc"
-           data-tier="T3"
-           data-price="99"
-           data-preview="/samples/twomember.html">
-        <div>
-          <span class="doc-name">Two-Member LLC Operating Agreement</span>
-          <span class="doc-price">$99</span>
-        </div>
-        <div class="doc-actions">
-          <button onclick="showPreview(event)">Preview</button>
-        </div>
-      </div>
-    </div>
-
   </div>
 
   <!-- RIGHT: PREVIEW -->
   <div class="preview-panel">
-    <div class="preview-title">Document Preview</div>
-    <div class="preview-box" id="previewBox">
-      <div class="preview-placeholder">
-        Select a document or click “Preview” to view a sample.
-      </div>
-    </div>
+    <h2 id="previewTitle">Document Preview</h2>
+    <p class="sample-note">
+      Sample content only — your final document will be customized based on your intake answers.
+    </p>
+    <iframe id="previewFrame" style="width:100%; height:280px; border:none;"></iframe>
   </div>
 
 </div>
-
-<div class="continue-bar">
-  <button id="continueBtn" disabled onclick="continueToIntake()">
-    Continue to Intake
-  </button>
-</div>
-
-<footer>
-  © 2026 E-LegalBoom · Secure Legal Automation
-</footer>
-
-<script>
-  let selectedDoc = null;
-
-  document.querySelectorAll(".doc-row").forEach(row => {
-    row.addEventListener("click", () => {
-      document.querySelectorAll(".doc-row").forEach(r => r.classList.remove("selected"));
-      row.classList.add("selected");
-
-      selectedDoc = {
-        doc_type: row.dataset.doc,
-        tier: row.dataset.tier,
-        price: Number(row.dataset.price),
-        preview: row.dataset.preview
-      };
-
-      document.getElementById("continueBtn").disabled = false;
-    });
-  });
-
-  function showPreview(event) {
-    event.stopPropagation();
-    const row = event.target.closest(".doc-row");
-    document.getElementById("previewBox").innerHTML =
-      `<iframe src="${row.dataset.preview}"></iframe>`;
-  }
-
-  function continueToIntake() {
-    if (!selectedDoc) return;
-
-    localStorage.setItem(
-      "elg_selected_product",
-      JSON.stringify(selectedDoc)
-    );
-
-    window.location.href = "/intake.html";
-  }
-</script>
-
-</body>
-</html>
