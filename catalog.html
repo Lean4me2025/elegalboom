@@ -1,254 +1,213 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<title>Select Your Legal Document | E-LegalBoom</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8" />
+  <title>E-LegalBoom | Document Catalog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #f6f7f9;
+      margin: 0;
+      padding: 24px;
+      color: #222;
+    }
 
-<style>
-:root {
-  --primary: #1f4fd8;
-  --primary-soft: #eef3ff;
-  --border: #dcdfe6;
-  --text-main: #1a1a1a;
-  --text-muted: #666;
-  --bg-light: #f7f9fc;
-}
+    h1 {
+      margin-bottom: 8px;
+    }
 
-body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
-  background: var(--bg-light);
-  color: var(--text-main);
-  margin: 0;
-  padding: 40px 20px;
-}
+    .subtitle {
+      color: #555;
+      margin-bottom: 32px;
+    }
 
-.catalog-container {
-  max-width: 1100px;
-  margin: 0 auto;
-}
+    .tier {
+      margin-bottom: 48px;
+    }
 
-h1 {
-  font-size: 30px;
-  margin-bottom: 8px;
-}
+    .tier-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 16px;
+    }
 
-.subtitle {
-  color: var(--text-muted);
-  font-size: 16px;
-  margin-bottom: 32px;
-}
+    .tier-title {
+      font-size: 1.4rem;
+      font-weight: 600;
+    }
 
-.tier-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 24px;
-}
+    .tier-price {
+      font-size: 1.1rem;
+      color: #0a6cff;
+      font-weight: 500;
+    }
 
-.tier-card {
-  background: white;
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 22px;
-}
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+    }
 
-.tier-title {
-  font-size: 20px;
-  margin-bottom: 4px;
-}
+    .card {
+      background: #fff;
+      border-radius: 10px;
+      padding: 16px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
 
-.tier-help {
-  font-size: 14px;
-  color: var(--text-muted);
-  margin-bottom: 18px;
-}
+    .card h3 {
+      margin: 0 0 8px 0;
+      font-size: 1.05rem;
+    }
 
-.doc-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 14px 12px;
-  border-radius: 8px;
-  cursor: pointer;
-  border: 1px solid transparent;
-  margin-bottom: 8px;
-}
+    .card p {
+      font-size: 0.9rem;
+      color: #555;
+      margin-bottom: 16px;
+    }
 
-.doc-item:hover {
-  background: var(--primary-soft);
-}
+    .card button {
+      align-self: flex-start;
+      background: #0a6cff;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      padding: 8px 14px;
+      cursor: pointer;
+      font-size: 0.85rem;
+    }
 
-.doc-item.selected {
-  border: 1px solid var(--primary);
-  background: var(--primary-soft);
-}
-
-.doc-info {
-  display: flex;
-  flex-direction: column;
-}
-
-.doc-name {
-  font-size: 16px;
-  font-weight: 600;
-}
-
-.doc-desc {
-  font-size: 13px;
-  color: var(--text-muted);
-  margin-top: 2px;
-}
-
-.doc-price {
-  font-weight: 600;
-}
-
-.actions {
-  margin-top: 32px;
-  text-align: right;
-}
-
-button {
-  background: var(--primary);
-  color: white;
-  border: none;
-  border-radius: 8px;
-  padding: 14px 22px;
-  font-size: 16px;
-  cursor: pointer;
-}
-
-button:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-</style>
+    .card button:hover {
+      background: #084fb8;
+    }
+  </style>
 </head>
 
 <body>
 
-<div class="catalog-container">
-
-  <h1>Select Your Legal Document</h1>
+  <h1>Legal Document Catalog</h1>
   <div class="subtitle">
-    Choose the document you want prepared. Clear pricing. Guided selection. No surprises.
+    Clear documents, priced by complexity — not confusion.
   </div>
 
-  <div class="tier-grid">
-
-    <!-- TIER 1 -->
-    <div class="tier-card">
-      <div class="tier-title">Tier 1 — Core Documents</div>
-      <div class="tier-help">Everyday agreements for common legal needs.</div>
-
-      <div class="doc-item" data-doc="nda" data-tier="1">
-        <div class="doc-info">
-          <div class="doc-name">Non-Disclosure Agreement</div>
-          <div class="doc-desc">Protects confidential information</div>
-        </div>
-        <div class="doc-price">$39</div>
-      </div>
-
-      <div class="doc-item" data-doc="service_agreement" data-tier="1">
-        <div class="doc-info">
-          <div class="doc-name">Service Agreement</div>
-          <div class="doc-desc">Defines services, scope, and payment</div>
-        </div>
-        <div class="doc-price">$39</div>
-      </div>
-
-      <div class="doc-item" data-doc="promissory_note" data-tier="1">
-        <div class="doc-info">
-          <div class="doc-name">Promissory Note</div>
-          <div class="doc-desc">Formalizes loan repayment terms</div>
-        </div>
-        <div class="doc-price">$39</div>
-      </div>
+  <!-- TIER 1 -->
+  <section class="tier">
+    <div class="tier-header">
+      <div class="tier-title">Tier 1 — Foundational</div>
+      <div class="tier-price">$39</div>
     </div>
 
-    <!-- TIER 2 -->
-    <div class="tier-card">
-      <div class="tier-title">Tier 2 — Business Foundations</div>
-      <div class="tier-help">Documents for working relationships and partnerships.</div>
-
-      <div class="doc-item" data-doc="independent_contractor" data-tier="2">
-        <div class="doc-info">
-          <div class="doc-name">Independent Contractor Agreement</div>
-          <div class="doc-desc">Defines contractor relationship and terms</div>
-        </div>
-        <div class="doc-price">$59</div>
+    <div class="grid">
+      <div class="card">
+        <h3>Non-Disclosure Agreement (NDA)</h3>
+        <p>Protects what you share before it’s shared with the wrong person.</p>
+        <button onclick="selectDoc('nda_t1', 1)">Select</button>
       </div>
 
-      <div class="doc-item" data-doc="partnership_agreement" data-tier="2">
-        <div class="doc-info">
-          <div class="doc-name">Partnership Agreement</div>
-          <div class="doc-desc">Establishes partner roles and responsibilities</div>
-        </div>
-        <div class="doc-price">$59</div>
+      <div class="card">
+        <h3>Bill of Sale</h3>
+        <p>Prevents future disputes over who owns what after money changes hands.</p>
+        <button onclick="selectDoc('bill_of_sale_t1', 1)">Select</button>
+      </div>
+
+      <div class="card">
+        <h3>Cease & Desist Letter</h3>
+        <p>Creates a formal stop sign before problems escalate.</p>
+        <button onclick="selectDoc('cease_and_desist_letter_t1', 1)">Select</button>
       </div>
     </div>
+  </section>
 
-    <!-- TIER 3 -->
-    <div class="tier-card">
-      <div class="tier-title">Tier 3 — Entity Formation</div>
-      <div class="tier-help">Formal operating agreements for LLCs.</div>
-
-      <div class="doc-item" data-doc="single_member_llc" data-tier="3">
-        <div class="doc-info">
-          <div class="doc-name">Single-Member LLC Operating Agreement</div>
-          <div class="doc-desc">Establishes ownership and operations</div>
-        </div>
-        <div class="doc-price">$99</div>
-      </div>
-
-      <div class="doc-item" data-doc="two_member_llc" data-tier="3">
-        <div class="doc-info">
-          <div class="doc-name">Two-Member LLC Operating Agreement</div>
-          <div class="doc-desc">Defines ownership, voting, and profit sharing</div>
-        </div>
-        <div class="doc-price">$99</div>
-      </div>
+  <!-- TIER 2 -->
+  <section class="tier">
+    <div class="tier-header">
+      <div class="tier-title">Tier 2 — Standard Business</div>
+      <div class="tier-price">$59</div>
     </div>
 
-    <!-- TIER 4 -->
-    <div class="tier-card">
-      <div class="tier-title">Tier 4 — Business Launch Kit</div>
-      <div class="tier-help">Everything you need to get started, bundled.</div>
+    <div class="grid">
+      <div class="card">
+        <h3>Consulting Agreement</h3>
+        <p>Defines scope, compensation, and payment terms so expertise and money are aligned from the start.</p>
+        <button onclick="selectDoc('consulting_agreement_t2', 2)">Select</button>
+      </div>
 
-      <div class="doc-item" data-doc="business_launch_kit" data-tier="4">
-        <div class="doc-info">
-          <div class="doc-name">Business Launch Kit</div>
-          <div class="doc-desc">Core formation + foundational documents</div>
-        </div>
-        <div class="doc-price">$149</div>
+      <div class="card">
+        <h3>Service Agreement</h3>
+        <p>Defines services, fees, and expectations so both work and payment stay aligned.</p>
+        <button onclick="selectDoc('service_agreement_t2', 2)">Select</button>
+      </div>
+
+      <div class="card">
+        <h3>Payment Plan Agreement</h3>
+        <p>Creates structure and accountability when payments stretch over time.</p>
+        <button onclick="selectDoc('payment_plan_agreement_t2', 2)">Select</button>
       </div>
     </div>
+  </section>
 
-  </div>
+  <!-- TIER 3 -->
+  <section class="tier">
+    <div class="tier-header">
+      <div class="tier-title">Tier 3 — Professional / Structural</div>
+      <div class="tier-price">$99</div>
+    </div>
 
-  <div class="actions">
-    <button id="continueBtn" disabled onclick="goToIntake()">Continue to Intake</button>
-  </div>
+    <div class="grid">
+      <div class="card">
+        <h3>Residential Lease Agreement</h3>
+        <p>Governs where you live, your obligations, and your peace of mind for months or years.</p>
+        <button onclick="selectDoc('residential_lease_agreement_t3', 3)">Select</button>
+      </div>
 
-</div>
+      <div class="card">
+        <h3>Operating Agreement (LLC)</h3>
+        <p>Controls ownership, decision-making, and what happens when circumstances change.</p>
+        <button onclick="selectDoc('operating_agreement_llc_t3', 3)">Select</button>
+      </div>
 
-<script>
-let selectedDoc = null;
+      <div class="card">
+        <h3>Loan Agreement</h3>
+        <p>Defines repayment terms and obligations when money is formally borrowed.</p>
+        <button onclick="selectDoc('loan_agreement_t3', 3)">Select</button>
+      </div>
+    </div>
+  </section>
 
-document.querySelectorAll('.doc-item').forEach(item => {
-  item.addEventListener('click', () => {
-    document.querySelectorAll('.doc-item').forEach(d => d.classList.remove('selected'));
-    item.classList.add('selected');
-    selectedDoc = item.dataset.doc;
-    document.getElementById('continueBtn').disabled = false;
-  });
-});
+  <!-- TIER 4 -->
+  <section class="tier">
+    <div class="tier-header">
+      <div class="tier-title">Tier 4 — Bundles</div>
+      <div class="tier-price">$149</div>
+    </div>
 
-function goToIntake() {
-  if (!selectedDoc) return;
-  window.location.href = `intake.html?document=${selectedDoc}`;
-}
-</script>
+    <div class="grid">
+      <div class="card">
+        <h3>Entrepreneur Starter Bundle</h3>
+        <p>Builds a solid legal foundation so you can focus on growing the business.</p>
+        <button onclick="selectDoc('entrepreneur_starter_bundle_t4', 4)">Select</button>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    function selectDoc(documentId, tier) {
+      const selection = {
+        document_id: documentId,
+        tier: tier
+      };
+
+      console.log('Selected:', selection);
+
+      // NEXT STEP:
+      // window.location.href = `/intake.html?doc=${documentId}&tier=${tier}`;
+    }
+  </script>
 
 </body>
 </html>
