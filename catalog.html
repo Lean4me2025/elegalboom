@@ -6,208 +6,258 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
     body {
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-      background: #f6f7f9;
+      font-family: Arial, sans-serif;
+      background: #0b1c2d;
+      color: #f5f7fa;
       margin: 0;
+      padding: 0;
+    }
+
+    header {
+      background: #102a43;
       padding: 24px;
-      color: #222;
+      text-align: center;
     }
 
-    h1 {
-      margin-bottom: 8px;
+    header h1 {
+      margin: 0;
+      font-size: 28px;
+      color: #ffffff;
     }
 
-    .subtitle {
-      color: #555;
-      margin-bottom: 32px;
+    header p {
+      margin-top: 8px;
+      color: #cbd5e0;
+    }
+
+    .container {
+      padding: 24px;
+      max-width: 1200px;
+      margin: auto;
     }
 
     .tier {
-      margin-bottom: 48px;
+      margin-bottom: 40px;
     }
 
-    .tier-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: baseline;
+    .tier h2 {
+      border-bottom: 2px solid #1f3b5b;
+      padding-bottom: 8px;
       margin-bottom: 16px;
-    }
-
-    .tier-title {
-      font-size: 1.4rem;
-      font-weight: 600;
-    }
-
-    .tier-price {
-      font-size: 1.1rem;
-      color: #0a6cff;
-      font-weight: 500;
+      color: #e2e8f0;
     }
 
     .grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
       gap: 16px;
     }
 
     .card {
-      background: #fff;
-      border-radius: 10px;
+      background: #142f4c;
+      border-radius: 8px;
       padding: 16px;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.25);
       display: flex;
       flex-direction: column;
       justify-content: space-between;
     }
 
     .card h3 {
-      margin: 0 0 8px 0;
-      font-size: 1.05rem;
+      margin-top: 0;
+      margin-bottom: 8px;
+      font-size: 18px;
+      color: #ffffff;
     }
 
     .card p {
-      font-size: 0.9rem;
-      color: #555;
-      margin-bottom: 16px;
+      font-size: 14px;
+      color: #cbd5e0;
+      flex-grow: 1;
     }
 
     .card button {
-      align-self: flex-start;
-      background: #0a6cff;
-      color: white;
+      margin-top: 12px;
+      padding: 10px;
+      background: #2b6cb0;
       border: none;
-      border-radius: 6px;
-      padding: 8px 14px;
+      color: #ffffff;
+      font-size: 14px;
+      border-radius: 4px;
       cursor: pointer;
-      font-size: 0.85rem;
     }
 
     .card button:hover {
-      background: #084fb8;
+      background: #3182ce;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      color: #a0aec0;
+      font-size: 13px;
     }
   </style>
 </head>
 
 <body>
 
-  <h1>Legal Document Catalog</h1>
-  <div class="subtitle">
-    Clear documents, priced by complexity — not confusion.
-  </div>
+<header>
+  <h1>E-LegalBoom Document Catalog</h1>
+  <p>Select a document. Intake will know exactly who you are.</p>
+</header>
 
+<div class="container">
+
+  <!-- ========================= -->
   <!-- TIER 1 -->
+  <!-- ========================= -->
   <section class="tier">
-    <div class="tier-header">
-      <div class="tier-title">Tier 1 — Foundational</div>
-      <div class="tier-price">$39</div>
-    </div>
-
+    <h2>Tier 1 — Core Personal & Business</h2>
     <div class="grid">
+
+      <div class="card">
+        <h3>Promissory Note</h3>
+        <p>Formal promise to repay money under defined terms.</p>
+        <button onclick="startIntake('promissory_note','tier1')">Start</button>
+      </div>
+
       <div class="card">
         <h3>Non-Disclosure Agreement (NDA)</h3>
-        <p>Protects what you share before it’s shared with the wrong person.</p>
-        <button onclick="selectDoc('nda_t1', 1)">Select</button>
+        <p>Protect confidential information between parties.</p>
+        <button onclick="startIntake('nda','tier1')">Start</button>
+      </div>
+
+      <div class="card">
+        <h3>Independent Contractor Agreement</h3>
+        <p>Define contractor relationship, scope, and compensation.</p>
+        <button onclick="startIntake('independent_contractor_agreement','tier1')">Start</button>
       </div>
 
       <div class="card">
         <h3>Bill of Sale</h3>
-        <p>Prevents future disputes over who owns what after money changes hands.</p>
-        <button onclick="selectDoc('bill_of_sale_t1', 1)">Select</button>
+        <p>Record transfer of ownership of goods or property.</p>
+        <button onclick="startIntake('bill_of_sale','tier1')">Start</button>
       </div>
 
-      <div class="card">
-        <h3>Cease & Desist Letter</h3>
-        <p>Creates a formal stop sign before problems escalate.</p>
-        <button onclick="selectDoc('cease_and_desist_letter_t1', 1)">Select</button>
-      </div>
     </div>
   </section>
 
+  <!-- ========================= -->
   <!-- TIER 2 -->
+  <!-- ========================= -->
   <section class="tier">
-    <div class="tier-header">
-      <div class="tier-title">Tier 2 — Standard Business</div>
-      <div class="tier-price">$59</div>
-    </div>
-
+    <h2>Tier 2 — Business Formation & Operations</h2>
     <div class="grid">
+
       <div class="card">
-        <h3>Consulting Agreement</h3>
-        <p>Defines scope, compensation, and payment terms so expertise and money are aligned from the start.</p>
-        <button onclick="selectDoc('consulting_agreement_t2', 2)">Select</button>
+        <h3>Operating Agreement (LLC)</h3>
+        <p>Define ownership, management, and rules for an LLC.</p>
+        <button onclick="startIntake('operating_agreement_llc','tier2')">Start</button>
+      </div>
+
+      <div class="card">
+        <h3>Partnership Agreement</h3>
+        <p>Establish rights and duties among business partners.</p>
+        <button onclick="startIntake('partnership_agreement','tier2')">Start</button>
+      </div>
+
+      <div class="card">
+        <h3>Business Loan Agreement</h3>
+        <p>Formalize lending terms between business entities.</p>
+        <button onclick="startIntake('business_loan_agreement','tier2')">Start</button>
       </div>
 
       <div class="card">
         <h3>Service Agreement</h3>
-        <p>Defines services, fees, and expectations so both work and payment stay aligned.</p>
-        <button onclick="selectDoc('service_agreement_t2', 2)">Select</button>
+        <p>Define services, deliverables, and payment terms.</p>
+        <button onclick="startIntake('service_agreement','tier2')">Start</button>
       </div>
 
-      <div class="card">
-        <h3>Payment Plan Agreement</h3>
-        <p>Creates structure and accountability when payments stretch over time.</p>
-        <button onclick="selectDoc('payment_plan_agreement_t2', 2)">Select</button>
-      </div>
     </div>
   </section>
 
+  <!-- ========================= -->
   <!-- TIER 3 -->
+  <!-- ========================= -->
   <section class="tier">
-    <div class="tier-header">
-      <div class="tier-title">Tier 3 — Professional / Structural</div>
-      <div class="tier-price">$99</div>
-    </div>
-
+    <h2>Tier 3 — Employment, Real Estate & Advanced</h2>
     <div class="grid">
+
       <div class="card">
-        <h3>Residential Lease Agreement</h3>
-        <p>Governs where you live, your obligations, and your peace of mind for months or years.</p>
-        <button onclick="selectDoc('residential_lease_agreement_t3', 3)">Select</button>
+        <h3>Employment Agreement</h3>
+        <p>Outline terms of employment, duties, and compensation.</p>
+        <button onclick="startIntake('employment_agreement','tier3')">Start</button>
       </div>
 
       <div class="card">
-        <h3>Operating Agreement (LLC)</h3>
-        <p>Controls ownership, decision-making, and what happens when circumstances change.</p>
-        <button onclick="selectDoc('operating_agreement_llc_t3', 3)">Select</button>
+        <h3>Lease Agreement (Residential)</h3>
+        <p>Residential lease between landlord and tenant.</p>
+        <button onclick="startIntake('residential_lease_agreement','tier3')">Start</button>
       </div>
 
       <div class="card">
-        <h3>Loan Agreement</h3>
-        <p>Defines repayment terms and obligations when money is formally borrowed.</p>
-        <button onclick="selectDoc('loan_agreement_t3', 3)">Select</button>
+        <h3>Commercial Lease Agreement</h3>
+        <p>Lease terms for commercial property use.</p>
+        <button onclick="startIntake('commercial_lease_agreement','tier3')">Start</button>
       </div>
+
+      <div class="card">
+        <h3>Non-Compete Agreement</h3>
+        <p>Restrict competitive activity post-engagement.</p>
+        <button onclick="startIntake('non_compete_agreement','tier3')">Start</button>
+      </div>
+
     </div>
   </section>
 
+  <!-- ========================= -->
   <!-- TIER 4 -->
+  <!-- ========================= -->
   <section class="tier">
-    <div class="tier-header">
-      <div class="tier-title">Tier 4 — Bundles</div>
-      <div class="tier-price">$149</div>
-    </div>
-
+    <h2>Tier 4 — Estate & Advanced Planning</h2>
     <div class="grid">
+
       <div class="card">
-        <h3>Entrepreneur Starter Bundle</h3>
-        <p>Builds a solid legal foundation so you can focus on growing the business.</p>
-        <button onclick="selectDoc('entrepreneur_starter_bundle_t4', 4)">Select</button>
+        <h3>Last Will & Testament</h3>
+        <p>Distribute assets and appoint executors.</p>
+        <button onclick="startIntake('last_will_and_testament','tier4')">Start</button>
       </div>
+
+      <div class="card">
+        <h3>Power of Attorney</h3>
+        <p>Authorize another to act on your behalf.</p>
+        <button onclick="startIntake('power_of_attorney','tier4')">Start</button>
+      </div>
+
+      <div class="card">
+        <h3>Living Trust</h3>
+        <p>Manage assets during life and after death.</p>
+        <button onclick="startIntake('living_trust','tier4')">Start</button>
+      </div>
+
+      <div class="card">
+        <h3>Advance Healthcare Directive</h3>
+        <p>Specify medical wishes and decision makers.</p>
+        <button onclick="startIntake('advance_healthcare_directive','tier4')">Start</button>
+      </div>
+
     </div>
   </section>
 
-  <script>
-    function selectDoc(documentId, tier) {
-      const selection = {
-        document_id: documentId,
-        tier: tier
-      };
+</div>
 
-      console.log('Selected:', selection);
+<footer>
+  © E-LegalBoom — Version 1
+</footer>
 
-      // NEXT STEP:
-      // window.location.href = `/intake.html?doc=${documentId}&tier=${tier}`;
-    }
-  </script>
+<script>
+  function startIntake(documentType, tier) {
+    // Main pipe: explicit identity at the door
+    const intakeUrl = `/intake.html?document_type=${encodeURIComponent(documentType)}&tier=${encodeURIComponent(tier)}`;
+    window.location.href = intakeUrl;
+  }
+</script>
 
 </body>
 </html>
