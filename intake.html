@@ -2,160 +2,155 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>E-LegalBoom Client Intake</title>
-
-  <!-- Backend Client (vendor-agnostic use) -->
-  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+  <title>E-LegalBoom | Intake</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <style>
-    body { font-family: Arial, sans-serif; padding: 20px; }
-    h1, h2 { margin-top: 30px; }
-    label { display: block; margin-top: 12px; }
-    input, select, textarea { width: 100%; padding: 6px; }
-    button { margin-top: 20px; padding: 10px 20px; }
+    body {
+      font-family: Georgia, serif;
+      background: #f6f6f7;
+      padding: 40px;
+    }
+    .wrapper {
+      max-width: 720px;
+      margin: auto;
+    }
+    .card {
+      background: #ffffff;
+      border-radius: 6px;
+      padding: 35px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+    }
+    label {
+      display: block;
+      margin-top: 18px;
+      font-weight: bold;
+    }
+    input {
+      width: 100%;
+      padding: 12px;
+      margin-top: 6px;
+      font-size: 16px;
+    }
+    button {
+      margin-top: 30px;
+      width: 100%;
+      padding: 16px;
+      font-size: 18px;
+      cursor: pointer;
+    }
   </style>
 </head>
+
 <body>
+  <div class="wrapper">
+    <div class="card">
+      <h1>Document Intake</h1>
 
-<h1>E-LegalBoom Client Intake</h1>
+      <form id="intakeForm">
+        <label>First Name</label>
+        <input id="firstName" required />
 
-<form id="intakeForm">
+        <label>Last Name</label>
+        <input id="lastName" required />
 
-  <!-- CLIENT -->
-  <h2>Client Information</h2>
-  <label>First Name <input name="client_first_name" required></label>
-  <label>Last Name <input name="client_last_name" required></label>
-  <label>Email <input name="client_email" type="email" required></label>
-  <label>Phone <input name="client_phone"></label>
-  <label>Business Name <input name="client_business_name"></label>
+        <label>Email</label>
+        <input id="email" type="email" required />
 
-  <!-- ADDRESS -->
-  <h2>Address</h2>
-  <label>Street <input name="client_street"></label>
-  <label>City <input name="client_city"></label>
+        <button type="submit">Continue</button>
+      </form>
+    </div>
+  </div>
 
-  <label>State
-    <select name="client_state" required>
-      <option value="">Select State</option>
-      <option>AL</option><option>AK</option><option>AZ</option><option>AR</option>
-      <option>CA</option><option>CO</option><option>CT</option><option>DE</option>
-      <option>FL</option><option>GA</option><option>HI</option><option>ID</option>
-      <option>IL</option><option>IN</option><option>IA</option><option>KS</option>
-      <option>KY</option><option>LA</option><option>ME</option><option>MD</option>
-      <option>MA</option><option>MI</option><option>MN</option><option>MS</option>
-      <option>MO</option><option>MT</option><option>NE</option><option>NV</option>
-      <option>NH</option><option>NJ</option><option>NM</option><option>NY</option>
-      <option>NC</option><option>ND</option><option>OH</option><option>OK</option>
-      <option>OR</option><option>PA</option><option>RI</option><option>SC</option>
-      <option>SD</option><option>TN</option><option>TX</option><option>UT</option>
-      <option>VT</option><option>VA</option><option>WA</option><option>WV</option>
-      <option>WI</option><option>WY</option>
-    </select>
-  </label>
+  <!-- SUPABASE -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-  <label>ZIP <input name="client_zip"></label>
-  <label>Country <input name="client_country" value="USA"></label>
+  <script type="module">
+    /* ================================
+       CONFIG
+    ================================= */
+    const SUPABASE_URL = "https://vvjbjfltqsivvxxifnvi.supabase.co";
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ2amJqZmx0cXNpdnZ4eGlmbnZpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc5NzYzNTAsImV4cCI6MjA3MzU1MjM1MH0.F4zzcpCHl9v-Rnj0wgKJ5zBf1HteVyXelMLQDDEN28Q";
 
-  <!-- DOCUMENT -->
-  <h2>Document Details</h2>
-  <label>Governing State
-  <select name="governing_state" required>
-    <option value="">Select State</option>
-    <option>AL</option><option>AK</option><option>AZ</option><option>AR</option>
-    <option>CA</option><option>CO</option><option>CT</option><option>DE</option>
-    <option>FL</option><option>GA</option><option>HI</option><option>ID</option>
-    <option>IL</option><option>IN</option><option>IA</option><option>KS</option>
-    <option>KY</option><option>LA</option><option>ME</option><option>MD</option>
-    <option>MA</option><option>MI</option><option>MN</option><option>MS</option>
-    <option>MO</option><option>MT</option><option>NE</option><option>NV</option>
-    <option>NH</option><option>NJ</option><option>NM</option><option>NY</option>
-    <option>NC</option><option>ND</option><option>OH</option><option>OK</option>
-    <option>OR</option><option>PA</option><option>RI</option><option>SC</option>
-    <option>SD</option><option>TN</option><option>TX</option><option>UT</option>
-    <option>VT</option><option>VA</option><option>WA</option><option>WV</option>
-    <option>WI</option><option>WY</option>
-  </select>
-</label>
-  <label>Preferred Deadline <input name="preferred_deadline" type="date"></label>
-  <label>Urgency <input name="urgency"></label>
-  <label>Details <textarea name="details"></textarea></label>
-  <label>File Option <input name="file_option"></label>
+    const supabase = supabaseJs.createClient(
+      SUPABASE_URL,
+      SUPABASE_ANON_KEY
+    );
 
-  <!-- PARTIES -->
-  <h2>Parties</h2>
+    /* ================================
+       READ DOCUMENT TYPE FROM URL
+    ================================= */
+    const params = new URLSearchParams(window.location.search);
+    const docType = params.get("document_type");
 
-  <label>Party 1 Name <input name="party1_name"></label>
-  <label>Party 1 Role <input name="party1_role"></label>
-  <label>Party 1 Email <input name="party1_email"></label>
-
-  <label>Party 2 Name <input name="party2_name"></label>
-  <label>Party 2 Role <input name="party2_role"></label>
-  <label>Party 2 Email <input name="party2_email"></label>
-
-  <label>Party 3 Name <input name="party3_name"></label>
-  <label>Party 3 Role <input name="party3_role"></label>
-  <label>Party 3 Email <input name="party3_email"></label>
-
-  <label>Party 4 Name <input name="party4_name"></label>
-  <label>Party 4 Role <input name="party4_role"></label>
-  <label>Party 4 Email <input name="party4_email"></label>
-
-  <!-- INTERNAL -->
-  <h2>Internal</h2>
-  <label>Order Status <input name="order_status" value="pending"></label>
-  <label>Notes <textarea name="notes"></textarea></label>
-
-  <button type="submit">Submit Intake</button>
-</form>
-
-<script>
-  /* ============================================================
-     CONFIG — PSEUDONAME (NO VENDOR COUPLING)
-     ============================================================ */
-
-  const ORDER_DB_URL = "https://vvjbjfltqsivvxxifnvi.supabase.co";
-  const ORDER_DB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ2amJqZmx0cXNpdnZ4eGlmbnZpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc5NzYzNTAsImV4cCI6MjA3MzU1MjM1MH0.F4zzcpCHl9v-Rnj0wgKJ5zBf1HteVyXelMLQDDEN28Q";
-
-  const orderDB = supabase.createClient(ORDER_DB_URL, ORDER_DB_KEY);
-
-  /* ============================================================
-     ORDER ID GENERATION (AUTHORITATIVE)
-     ============================================================ */
-
-  function generateOrderId() {
-    const d = new Date().toISOString().slice(0,10).replace(/-/g,'');
-    const r = Math.floor(1000 + Math.random() * 9000);
-    return `ELB-${d}-${r}`;
-  }
-
-  /* ============================================================
-     SUBMIT HANDLER
-     ============================================================ */
-
-  document.getElementById("intakeForm").addEventListener("submit", async (e) => {
-    e.preventDefault();
-
-    const formData = new FormData(e.target);
-    const payload = Object.fromEntries(formData.entries());
-
-    // Canonical identifiers
-    payload.request_uuid = crypto.randomUUID();
-    payload.order_id = generateOrderId();
-
-    const { error } = await orderDB
-      .from("pweb_orders")
-      .insert([payload]);
-
-    if (error) {
-      console.error(error);
-      alert("ERROR submitting intake: " + error.message);
-      return;
+    if (!docType) {
+      alert("Missing document type.");
+      throw new Error("document_type not present");
     }
 
-    // 🚀 FLOW CONTINUES HERE
-    window.location.href = `/review-and-pay.html?order_id=${payload.order_id}`;
-  });
-</script>
+    /* ================================
+       DOCUMENT → TIER / PRICE MAP
+       (V1 authoritative pricing)
+    ================================= */
+    const DOCUMENT_PRICING = {
+      power_of_attorney: { tier: "tier4", price: 149 },
+      living_trust:       { tier: "tier4", price: 199 },
+      nda:                { tier: "tier1", price: 39 },
+      operating_agreement:{ tier: "tier3", price: 99 },
+      bill_of_sale:       { tier: "tier2", price: 59 }
+      // add as needed
+    };
 
+    const pricing = DOCUMENT_PRICING[docType];
+
+    if (!pricing) {
+      alert("Document pricing not configured.");
+      throw new Error(`No pricing for ${docType}`);
+    }
+
+    /* ================================
+       ORDER ID GENERATOR
+    ================================= */
+    function generateOrderId() {
+      const d = new Date();
+      const y = d.getFullYear();
+      const m = String(d.getMonth() + 1).padStart(2, "0");
+      const day = String(d.getDate()).padStart(2, "0");
+      const rand = Math.floor(Math.random() * 900 + 100);
+      return `ELB-${y}${m}${day}-${rand}`;
+    }
+
+    /* ================================
+       FORM SUBMIT
+    ================================= */
+    document.getElementById("intakeForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const orderId = generateOrderId();
+
+      const payload = {
+        order_id: orderId,
+        doc_type: docType,
+        tier: pricing.tier,
+        price: pricing.price,
+        client_first_name: document.getElementById("firstName").value,
+        client_last_name: document.getElementById("lastName").value,
+        client_email: document.getElementById("email").value,
+        order_status: "intake_started"
+      };
+
+      const { error } = await supabase
+        .from("pweb_orders")
+        .insert(payload);
+
+      if (error) {
+        console.error(error);
+        alert("Failed to create order.");
+        return;
+      }
+
+      window.location.href = `/review-and-pay.html?order_id=${orderId}`;
+    });
+  </script>
 </body>
 </html>
