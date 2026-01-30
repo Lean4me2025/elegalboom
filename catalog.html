@@ -15,7 +15,7 @@
 
     h1 {
       text-align: center;
-      margin: 24px 0 8px 0;
+      margin: 24px 0 6px 0;
       font-size: 28px;
     }
 
@@ -30,32 +30,35 @@
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 16px;
-      padding: 0 16px 40px 16px;
       max-width: 1600px;
       margin: 0 auto;
+      padding: 0 16px 40px 16px;
     }
 
     .tier-column {
       border: 1px solid #d1d5db;
       border-radius: 6px;
-      padding: 14px;
+      padding: 12px;
       display: flex;
       flex-direction: column;
     }
 
     .tier-header {
+      background: #2563eb;
+      color: #ffffff;
       font-weight: bold;
-      font-size: 16px;
+      font-size: 15px;
+      padding: 10px;
+      border-radius: 4px;
+      text-align: center;
       margin-bottom: 12px;
-      border-bottom: 2px solid #e5e7eb;
-      padding-bottom: 6px;
     }
 
     .doc-item {
-      margin-bottom: 12px;
-      padding: 10px;
       border: 1px solid #e5e7eb;
       border-radius: 4px;
+      padding: 10px;
+      margin-bottom: 10px;
     }
 
     .doc-item label {
@@ -73,13 +76,11 @@
 
     .tier-action {
       margin-top: auto;
-      text-align: center;
     }
 
     .select-btn {
-      margin-top: 12px;
-      padding: 10px;
       width: 100%;
+      padding: 10px;
       font-size: 14px;
       font-weight: bold;
       border: none;
@@ -110,7 +111,9 @@
 
   <!-- Tier 1 -->
   <div class="tier-column">
-    <div class="tier-header">Tier 1 — Core Personal & Business<br>$39 per document</div>
+    <div class="tier-header">
+      Tier 1 — Core Personal & Business<br>$39 per document
+    </div>
 
     <div class="doc-item">
       <input type="radio" name="tier1" value="PROMISSORY_NOTE">
@@ -126,130 +129,4 @@
 
     <div class="doc-item">
       <input type="radio" name="tier1" value="INDEPENDENT_CONTRACTOR_AGREEMENT">
-      <label>Independent Contractor Agreement</label>
-      <div class="doc-help">Defines scope, payment, and liability for contractors.</div>
-    </div>
-
-    <div class="doc-item">
-      <input type="radio" name="tier1" value="BILL_OF_SALE">
-      <label>Bill of Sale</label>
-      <div class="doc-help">Documents transfer of ownership of personal property.</div>
-    </div>
-
-    <div class="tier-action">
-      <button class="select-btn" onclick="selectDoc('Tier 1', 39, 'tier1')">Continue</button>
-    </div>
-  </div>
-
-  <!-- Tier 2 -->
-  <div class="tier-column">
-    <div class="tier-header">Tier 2 — Business Formation & Operations<br>$59 per document</div>
-
-    <div class="doc-item">
-      <input type="radio" name="tier2" value="OPERATING_AGREEMENT_LLC">
-      <label>Operating Agreement (LLC)</label>
-      <div class="doc-help">Defines ownership, management, and rules for an LLC.</div>
-    </div>
-
-    <div class="doc-item">
-      <input type="radio" name="tier2" value="PARTNERSHIP_AGREEMENT">
-      <label>Partnership Agreement</label>
-      <div class="doc-help">Outlines rights and obligations between partners.</div>
-    </div>
-
-    <div class="doc-item">
-      <input type="radio" name="tier2" value="BUSINESS_LOAN_AGREEMENT">
-      <label>Business Loan Agreement</label>
-      <div class="doc-help">Formalizes lending terms between businesses.</div>
-    </div>
-
-    <div class="doc-item">
-      <input type="radio" name="tier2" value="SERVICE_AGREEMENT">
-      <label>Service Agreement</label>
-      <div class="doc-help">Defines services, deliverables, and payment terms.</div>
-    </div>
-
-    <div class="tier-action">
-      <button class="select-btn" onclick="selectDoc('Tier 2', 59, 'tier2')">Continue</button>
-    </div>
-  </div>
-
-  <!-- Tier 3 -->
-  <div class="tier-column">
-    <div class="tier-header">Tier 3 — Employment, Real Estate & Advanced<br>$99 per document</div>
-
-    <div class="doc-item">
-      <input type="radio" name="tier3" value="EMPLOYMENT_AGREEMENT">
-      <label>Employment Agreement</label>
-      <div class="doc-help">Outlines terms of employment and compensation.</div>
-    </div>
-
-    <div class="doc-item">
-      <input type="radio" name="tier3" value="RESIDENTIAL_LEASE">
-      <label>Residential Lease Agreement</label>
-      <div class="doc-help">Governs rental terms between landlord and tenant.</div>
-    </div>
-
-    <div class="doc-item">
-      <input type="radio" name="tier3" value="COMMERCIAL_LEASE">
-      <label>Commercial Lease Agreement</label>
-      <div class="doc-help">Lease terms for commercial property use.</div>
-    </div>
-
-    <div class="doc-item">
-      <input type="radio" name="tier3" value="NON_COMPETE_AGREEMENT">
-      <label>Non-Compete Agreement</label>
-      <div class="doc-help">Restricts competitive activity after engagement.</div>
-    </div>
-
-    <div class="tier-action">
-      <button class="select-btn" onclick="selectDoc('Tier 3', 99, 'tier3')">Continue</button>
-    </div>
-  </div>
-
-  <!-- Tier 4 -->
-  <div class="tier-column">
-    <div class="tier-header">Tier 4 — Entrepreneur Bundle<br>$149 flat</div>
-
-    <div class="doc-item">
-      <input type="radio" name="tier4" value="ENTREPRENEUR_BUNDLE">
-      <label>Entrepreneur Starter Bundle</label>
-      <div class="doc-help">
-        Complete business protection bundle covering formation, operations,
-        employment, and core agreements.
-      </div>
-    </div>
-
-    <div class="tier-action">
-      <button class="select-btn" onclick="selectDoc('Tier 4', 149, 'tier4')">Continue</button>
-    </div>
-  </div>
-
-</div>
-
-<script>
-  function generateOrderId() {
-    return 'ORD-' + Date.now();
-  }
-
-  function selectDoc(tier, price, groupName) {
-    const selected = document.querySelector(`input[name="${groupName}"]:checked`);
-    if (!selected) {
-      alert('Please select a document.');
-      return;
-    }
-
-    const session = {
-      order_id: generateOrderId(),
-      tier: tier,
-      doc_type: selected.value,
-      price: price
-    };
-
-    sessionStorage.setItem('order_session', JSON.stringify(session));
-    window.location.href = 'intake.html';
-  }
-</script>
-
-</body>
-</html>
+      <label>Independent Contractor Agreement</
