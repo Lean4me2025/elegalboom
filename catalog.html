@@ -8,7 +8,6 @@
   <style>
     body {
       margin: 0;
-      padding: 0;
       font-family: Arial, sans-serif;
       background: #ffffff;
       color: #111827;
@@ -16,75 +15,81 @@
 
     h1 {
       text-align: center;
-      margin: 30px 0;
+      margin: 30px 0 10px 0;
+      font-size: 28px;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: #4b5563;
+      margin-bottom: 25px;
+      font-size: 14px;
     }
 
     .catalog-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 16px;
-      padding: 20px;
       max-width: 1400px;
       margin: 0 auto;
+      padding: 0 16px 40px 16px;
     }
 
     .tier-column {
-      background: #ffffff;
       border: 1px solid #d1d5db;
       border-radius: 6px;
       padding: 16px;
       display: flex;
       flex-direction: column;
+      background: #ffffff;
     }
 
     .tier-title {
-      font-size: 1.2rem;
+      font-size: 18px;
       font-weight: bold;
       margin-bottom: 6px;
     }
 
     .tier-desc {
-      font-size: 0.9rem;
-      margin-bottom: 12px;
+      font-size: 13px;
       color: #374151;
+      margin-bottom: 12px;
     }
 
     .doc-list {
       flex-grow: 1;
-      margin-bottom: 16px;
-    }
-
-    .doc-list ul {
       padding-left: 18px;
-      margin: 0;
+      margin: 0 0 16px 0;
+      font-size: 13px;
     }
 
     .doc-list li {
       margin-bottom: 6px;
-      font-size: 0.9rem;
     }
 
     .price {
-      font-size: 1.1rem;
       font-weight: bold;
+      font-size: 16px;
       margin-bottom: 12px;
     }
 
     .select-btn {
       padding: 10px;
-      background: #2563eb;
-      color: #ffffff;
+      font-size: 14px;
+      font-weight: bold;
       border: none;
       border-radius: 4px;
+      background: #2563eb;
+      color: #ffffff;
       cursor: pointer;
-      font-size: 0.95rem;
+      width: 100%;
     }
 
     .select-btn:hover {
       background: #1d4ed8;
     }
 
-    @media (max-width: 900px) {
+    @media (max-width: 1000px) {
       .catalog-grid {
         grid-template-columns: 1fr;
       }
@@ -95,5 +100,92 @@
 <body>
 
 <h1>Document Catalog</h1>
+<div class="subtitle">Select a tier to continue to intake</div>
 
-<div class
+<div class="catalog-grid">
+
+  <!-- Tier 1 -->
+  <div class="tier-column">
+    <div class="tier-title">Tier 1 — Essentials</div>
+    <div class="tier-desc">Basic foundational legal protection.</div>
+    <ul class="doc-list">
+      <li>Single legal document</li>
+      <li>Standard formatting</li>
+      <li>Email delivery</li>
+    </ul>
+    <div class="price">$39</div>
+    <button class="select-btn"
+      onclick="selectTier('Tier 1', 'SINGLE_DOC', 39)">
+      Select Tier 1
+    </button>
+  </div>
+
+  <!-- Tier 2 -->
+  <div class="tier-column">
+    <div class="tier-title">Tier 2 — Core Protection</div>
+    <div class="tier-desc">Expanded coverage with added protection.</div>
+    <ul class="doc-list">
+      <li>Everything in Tier 1</li>
+      <li>Enhanced legal language</li>
+      <li>Priority handling</li>
+    </ul>
+    <div class="price">$59</div>
+    <button class="select-btn"
+      onclick="selectTier('Tier 2', 'SINGLE_DOC', 59)">
+      Select Tier 2
+    </button>
+  </div>
+
+  <!-- Tier 3 -->
+  <div class="tier-column">
+    <div class="tier-title">Tier 3 — Business Ready</div>
+    <div class="tier-desc">Business-grade preparation and review.</div>
+    <ul class="doc-list">
+      <li>Everything in Tier 2</li>
+      <li>Business-focused terms</li>
+      <li>Additional review step</li>
+    </ul>
+    <div class="price">$99</div>
+    <button class="select-btn"
+      onclick="selectTier('Tier 3', 'SINGLE_DOC', 99)">
+      Select Tier 3
+    </button>
+  </div>
+
+  <!-- Tier 4 -->
+  <div class="tier-column">
+    <div class="tier-title">Tier 4 — Entrepreneur Bundle</div>
+    <div class="tier-desc">Comprehensive bundle for entrepreneurs.</div>
+    <ul class="doc-list">
+      <li>Multiple documents</li>
+      <li>Best overall value</li>
+      <li>Full coverage package</li>
+    </ul>
+    <div class="price">$149</div>
+    <button class="select-btn"
+      onclick="selectTier('Tier 4', 'BUNDLE', 149)">
+      Select Tier 4
+    </button>
+  </div>
+
+</div>
+
+<script>
+  function generateOrderId() {
+    return 'ORD-' + Date.now();
+  }
+
+  function selectTier(tier, docType, price) {
+    const session = {
+      order_id: generateOrderId(),
+      tier: tier,
+      doc_type: docType,
+      price: price
+    };
+    sessionStorage.setItem('order_session', JSON.stringify(session));
+    window.location.href = 'intake.html';
+  }
+</script>
+
+</body>
+</html>
