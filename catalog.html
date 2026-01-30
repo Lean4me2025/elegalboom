@@ -3,261 +3,63 @@
 <head>
   <meta charset="UTF-8" />
   <title>E-LegalBoom | Document Catalog</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #0b1c2d;
-      color: #f5f7fa;
-      margin: 0;
-      padding: 0;
-    }
-
-    header {
-      background: #102a43;
-      padding: 24px;
-      text-align: center;
-    }
-
-    header h1 {
-      margin: 0;
-      font-size: 28px;
-      color: #ffffff;
-    }
-
-    header p {
-      margin-top: 8px;
-      color: #cbd5e0;
-    }
-
-    .container {
-      padding: 24px;
-      max-width: 1200px;
-      margin: auto;
-    }
-
-    .tier {
-      margin-bottom: 40px;
-    }
-
-    .tier h2 {
-      border-bottom: 2px solid #1f3b5b;
-      padding-bottom: 8px;
-      margin-bottom: 16px;
-      color: #e2e8f0;
-    }
-
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-      gap: 16px;
-    }
-
-    .card {
-      background: #142f4c;
-      border-radius: 8px;
-      padding: 16px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.25);
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
-
-    .card h3 {
-      margin-top: 0;
-      margin-bottom: 8px;
-      font-size: 18px;
-      color: #ffffff;
-    }
-
-    .card p {
-      font-size: 14px;
-      color: #cbd5e0;
-      flex-grow: 1;
-    }
-
-    .card button {
-      margin-top: 12px;
-      padding: 10px;
-      background: #2b6cb0;
-      border: none;
-      color: #ffffff;
-      font-size: 14px;
-      border-radius: 4px;
-      cursor: pointer;
-    }
-
-    .card button:hover {
-      background: #3182ce;
-    }
-
-    footer {
-      text-align: center;
-      padding: 20px;
-      color: #a0aec0;
-      font-size: 13px;
-    }
-  </style>
+  <link rel="stylesheet" href="style.css" />
 </head>
-
 <body>
-
-<header>
-  <h1>E-LegalBoom Document Catalog</h1>
-  <p>Select a document. Intake will know exactly who you are.</p>
-</header>
 
 <div class="container">
 
-  <!-- ========================= -->
+  <h1 class="page-title">E-LegalBoom Document Catalog</h1>
+  <p class="page-subtitle">
+    Select a document. Intake will know exactly who you are.
+  </p>
+
   <!-- TIER 1 -->
-  <!-- ========================= -->
-  <section class="tier">
-    <h2>Tier 1 — Core Personal & Business-$39 per document</h2>
-    <div class="grid">
+  <section class="tier-section">
+    <div class="tier-header">
+      Tier 1 — Core Personal & Business · <strong>$39 per document</strong>
+    </div>
 
-      <div class="card">
-        <h3>Promissory Note</h3>
-        <p>Formal promise to repay money under defined terms.</p>
-        <button onclick="startIntake('promissory_note','tier1')">Start</button>
+    <div class="doc-grid">
+      <div class="doc-card">
+        <div class="doc-title">Promissory Note</div>
+        <div class="doc-desc">Formal promise to repay money under defined terms.</div>
+        <a class="button-primary"
+           href="intake.html?doc_type=promissory_note&tier=tier1&price=39">
+           Start
+        </a>
       </div>
 
-      <div class="card">
-        <h3>Non-Disclosure Agreement (NDA)</h3>
-        <p>Protect confidential information between parties.</p>
-        <button onclick="startIntake('nda','tier1')">Start</button>
+      <div class="doc-card">
+        <div class="doc-title">Non-Disclosure Agreement (NDA)</div>
+        <div class="doc-desc">Protect confidential information between parties.</div>
+        <a class="button-primary"
+           href="intake.html?doc_type=nda&tier=tier1&price=39">
+           Start
+        </a>
       </div>
-
-      <div class="card">
-        <h3>Independent Contractor Agreement</h3>
-        <p>Define contractor relationship, scope, and compensation.</p>
-        <button onclick="startIntake('independent_contractor_agreement','tier1')">Start</button>
-      </div>
-
-      <div class="card">
-        <h3>Bill of Sale</h3>
-        <p>Record transfer of ownership of goods or property.</p>
-        <button onclick="startIntake('bill_of_sale','tier1')">Start</button>
-      </div>
-
     </div>
   </section>
 
-  <!-- ========================= -->
   <!-- TIER 2 -->
-  <!-- ========================= -->
-  <section class="tier">
-    <h2>Tier 2 — Business Formation & Operations $59 per document</h2>
-    <div class="grid">
-
-      <div class="card">
-        <h3>Operating Agreement (LLC)</h3>
-        <p>Define ownership, management, and rules for an LLC.</p>
-        <button onclick="startIntake('operating_agreement_llc','tier2')">Start</button>
-      </div>
-
-      <div class="card">
-        <h3>Partnership Agreement</h3>
-        <p>Establish rights and duties among business partners.</p>
-        <button onclick="startIntake('partnership_agreement','tier2')">Start</button>
-      </div>
-
-      <div class="card">
-        <h3>Business Loan Agreement</h3>
-        <p>Formalize lending terms between business entities.</p>
-        <button onclick="startIntake('business_loan_agreement','tier2')">Start</button>
-      </div>
-
-      <div class="card">
-        <h3>Service Agreement</h3>
-        <p>Define services, deliverables, and payment terms.</p>
-        <button onclick="startIntake('service_agreement','tier2')">Start</button>
-      </div>
-
+  <section class="tier-section">
+    <div class="tier-header">
+      Tier 2 — Business Formation & Operations · <strong>$59 per document</strong>
     </div>
-  </section>
 
-  <!-- ========================= -->
-  <!-- TIER 3 -->
-  <!-- ========================= -->
-  <section class="tier">
-    <h2>Tier 3 — Employment, Real Estate & Advanced $99 per document</h2>
-    <div class="grid">
-
-      <div class="card">
-        <h3>Employment Agreement</h3>
-        <p>Outline terms of employment, duties, and compensation.</p>
-        <button onclick="startIntake('employment_agreement','tier3')">Start</button>
+    <div class="doc-grid">
+      <div class="doc-card">
+        <div class="doc-title">Operating Agreement (LLC)</div>
+        <div class="doc-desc">Define ownership, management, and rules for an LLC.</div>
+        <a class="button-primary"
+           href="intake.html?doc_type=operating_agreement_llc&tier=tier2&price=59">
+           Start
+        </a>
       </div>
-
-      <div class="card">
-        <h3>Lease Agreement (Residential)</h3>
-        <p>Residential lease between landlord and tenant.</p>
-        <button onclick="startIntake('residential_lease_agreement','tier3')">Start</button>
-      </div>
-
-      <div class="card">
-        <h3>Commercial Lease Agreement</h3>
-        <p>Lease terms for commercial property use.</p>
-        <button onclick="startIntake('commercial_lease_agreement','tier3')">Start</button>
-      </div>
-
-      <div class="card">
-        <h3>Non-Compete Agreement</h3>
-        <p>Restrict competitive activity post-engagement.</p>
-        <button onclick="startIntake('non_compete_agreement','tier3')">Start</button>
-      </div>
-
-    </div>
-  </section>
-
-  <!-- ========================= -->
-  <!-- TIER 4 -->
-  <!-- ========================= -->
-  <section class="tier">
-    <h2>Tier 4 — Estate & Advanced Planning $149 per Bundle</h2>
-    <div class="grid">
-
-      <div class="card">
-        <h3>Last Will & Testament</h3>
-        <p>Distribute assets and appoint executors.</p>
-        <button onclick="startIntake('last_will_and_testament','tier4')">Start</button>
-      </div>
-
-      <div class="card">
-        <h3>Power of Attorney</h3>
-        <p>Authorize another to act on your behalf.</p>
-        <button onclick="startIntake('power_of_attorney','tier4')">Start</button>
-      </div>
-
-      <div class="card">
-        <h3>Living Trust</h3>
-        <p>Manage assets during life and after death.</p>
-        <button onclick="startIntake('living_trust','tier4')">Start</button>
-      </div>
-
-      <div class="card">
-        <h3>Advance Healthcare Directive</h3>
-        <p>Specify medical wishes and decision makers.</p>
-        <button onclick="startIntake('advance_healthcare_directive','tier4')">Start</button>
-      </div>
-
     </div>
   </section>
 
 </div>
-
-<footer>
-  © E-LegalBoom — Version 1
-</footer>
-
-<script>
-  function startIntake(documentType, tier) {
-    // Main pipe: explicit identity at the door
-    const intakeUrl = `/intake.html?document_type=${encodeURIComponent(documentType)}&tier=${encodeURIComponent(tier)}`;
-    window.location.href = intakeUrl;
-  }
-</script>
 
 </body>
 </html>
