@@ -23,12 +23,12 @@
     }
     label {
       display: block;
-      margin-top: 18px;
+      margin-top: 20px;
       font-weight: bold;
     }
     input {
       width: 100%;
-      padding: 10px;
+      padding: 12px;
       margin-top: 6px;
       font-size: 16px;
     }
@@ -48,97 +48,104 @@
       <h1>Document Intake</h1>
 
       <form id="intakeForm">
-        <label>First Name
-          <input id="first_name" required />
-        </label>
+        <label>First Name</label>
+        <input id="firstName" required />
 
-        <label>Last Name
-          <input id="last_name" required />
-        </label>
+        <label>Last Name</label>
+        <input id="lastName" required />
 
-        <label>Email
-          <input id="email" type="email" required />
-        </label>
+        <label>Email</label>
+        <input id="email" type="email" required />
 
         <button type="submit">Continue</button>
       </form>
     </div>
   </div>
 
-  <!-- SUPABASE CDN (UMD) -->
+  <!-- SUPABASE -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <script>
-    /*************************
-     CONFIG
-    *************************/
+    /* ================================
+       CONFIG
+    ================================= */
     const SUPABASE_URL = "https://vvjbjfltqsivvxxifnvi.supabase.co";
     const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ2amJqZmx0cXNpdnZ4eGlmbnZpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc5NzYzNTAsImV4cCI6MjA3MzU1MjM1MH0.F4zzcpCHl9v-Rnj0wgKJ5zBf1HteVyXelMLQDDEN28Q";
 
-    const client = supabase.createClient(
+    const supabase = supabase.createClient(
       SUPABASE_URL,
       SUPABASE_ANON_KEY
     );
 
-    /*************************
-     READ DOCUMENT TYPE
-     (NO VALIDATION)
-    *************************/
+    /* ================================
+       READ DOCUMENT TYPE (NO VALIDATION)
+    ================================= */
     const params = new URLSearchParams(window.location.search);
     const docType = params.get("document_type");
 
     if (!docType) {
-      alert("Missing document type. Please start from the catalog.");
-      throw new Error("document_type missing");
+      alert("Document type missing.");
+      throw new Error("document_type not provided");
     }
 
-    /*************************
-     V1 AUTHORITATIVE PRICING
-    *************************/
-    const PRICING = {
-      power_of_attorney: { tier: "tier4", price: 149 },
-      living_trust: { tier: "tier4", price: 199 },
-      nda: { tier: "tier1", price: 39 },
-      residential_lease_agreement: { tier: "tier2", price: 79 }
+    /* ================================
+       AUTHORITATIVE PRICING MAP
+       (ONE PLACE, ONE TRUTH)
+    ================================= */
+    const DOCUMENT_PRICING = {
+      nda:                     { tier: "tier1", price: 39 },
+      promissory_note:         { tier: "tier1", price: 39 },
+      independent_contractor:  { tier: "tier1", price: 39 },
+      bill_of_sale:            { tier: "tier1", price: 39 },
+
+      operating_agreement:     { tier: "tier2", price: 79 },
+      partnership_agreement:   { tier: "tier2", price: 79 },
+      business_loan_agreement: { tier: "tier2", price: 79 },
+      service_agreement:       { tier: "tier2", price: 79 },
+
+      employment_agreement:    { tier: "tier3", price: 119 },
+      residential_lease:       { tier: "tier3", price: 119 },
+      commercial_lease:        { tier: "tier3", price: 149 },
+      non_compete:             { tier: "tier3", price: 119 },
+
+      power_of_attorney:       { tier: "tier4", price: 149 },
+      living_trust:            { tier: "tier4", price: 199 }
     };
 
-    const pricing = PRICING[docType] || {
-      tier: "tier1",
-      price: 49
-    };
+    const pricing = DOCUMENT_PRICING[docType];
 
-    /*************************
-     SUBMIT INTAKE (ONE TIME)
-    *************************/
-    document
-      .getElementById("intakeForm")
-      .addEventListener("submit", async (e) => {
-        e.preventDefault();
+    if (!pricing) {
+      alert("Pricing not configured for this document.");
+      throw new Error("Missing pricing map for " + docType);
+    }
 
-        const orderId = `ELB-${Date.now()}`;
+    /* ================================
+       SUBMIT INTAKE
+    ================================= */
+    document.getElementById("intakeForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
 
-        const payload = {
+      const orderId = "ELB-" + Date.now();
+
+      const { error } = await supabase
+        .from("pweb_orders")
+        .insert({
           order_id: orderId,
           doc_type: docType,
           tier: pricing.tier,
           price: pricing.price,
-          order_status: "intake_complete"
-        };
+          order_status: "intake_completed"
+        });
 
-        const { error } = await client
-          .from("pweb_orders")
-          .insert(payload);
+      if (error) {
+        alert("Failed to create order.");
+        console.error(error);
+        return;
+      }
 
-        if (error) {
-          console.error(error);
-          alert("Failed to create order.");
-          return;
-        }
-
-        // SINGLE EXIT POINT
-        window.location.href =
-          `/review-and-pay.html?order_id=${orderId}`;
-      });
+      window.location.href =
+        `/review-and-pay.html?order_id=${orderId}`;
+    });
   </script>
 </body>
 </html>
