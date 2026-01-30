@@ -15,7 +15,7 @@
 
     h1 {
       text-align: center;
-      margin: 30px 0 10px 0;
+      margin: 30px 0 8px 0;
       font-size: 28px;
     }
 
@@ -41,39 +41,33 @@
       padding: 16px;
       display: flex;
       flex-direction: column;
-      background: #ffffff;
     }
 
-    .tier-title {
-      font-size: 18px;
+    .tier-header {
+      font-size: 15px;
       font-weight: bold;
-      margin-bottom: 6px;
-    }
-
-    .tier-desc {
-      font-size: 13px;
-      color: #374151;
       margin-bottom: 12px;
     }
 
-    .doc-list {
-      flex-grow: 1;
-      padding-left: 18px;
-      margin: 0 0 16px 0;
-      font-size: 13px;
-    }
-
-    .doc-list li {
-      margin-bottom: 6px;
-    }
-
-    .price {
-      font-weight: bold;
-      font-size: 16px;
+    .doc-item {
       margin-bottom: 12px;
+    }
+
+    .doc-item label {
+      font-weight: bold;
+      font-size: 13px;
+      cursor: pointer;
+    }
+
+    .doc-help {
+      font-size: 12px;
+      color: #4b5563;
+      margin-left: 20px;
+      margin-top: 2px;
     }
 
     .select-btn {
+      margin-top: auto;
       padding: 10px;
       font-size: 14px;
       font-weight: bold;
@@ -100,70 +94,88 @@
 <body>
 
 <h1>Document Catalog</h1>
-<div class="subtitle">Select a tier to continue to intake</div>
+<div class="subtitle">Select a document and tier to continue</div>
 
 <div class="catalog-grid">
 
   <!-- Tier 1 -->
   <div class="tier-column">
-    <div class="tier-title">Tier 1 — Essentials</div>
-    <div class="tier-desc">Basic foundational legal protection.</div>
-    <ul class="doc-list">
-      <li>Single legal document</li>
-      <li>Standard formatting</li>
-      <li>Email delivery</li>
-    </ul>
-    <div class="price">$39</div>
+    <div class="tier-header">Tier 1 — Essentials, $39 per document</div>
+
+    <div class="doc-item">
+      <input type="radio" name="tier1_doc" value="BILL_OF_SALE">
+      <label>Bill of Sale</label>
+      <div class="doc-help">Used to formally transfer ownership of personal property.</div>
+    </div>
+
+    <div class="doc-item">
+      <input type="radio" name="tier1_doc" value="PROMISSORY_NOTE">
+      <label>Promissory Note</label>
+      <div class="doc-help">Establishes repayment terms for a personal loan.</div>
+    </div>
+
     <button class="select-btn"
-      onclick="selectTier('Tier 1', 'SINGLE_DOC', 39)">
+      onclick="selectTier('Tier 1', 39, 'tier1_doc')">
       Select Tier 1
     </button>
   </div>
 
   <!-- Tier 2 -->
   <div class="tier-column">
-    <div class="tier-title">Tier 2 — Core Protection</div>
-    <div class="tier-desc">Expanded coverage with added protection.</div>
-    <ul class="doc-list">
-      <li>Everything in Tier 1</li>
-      <li>Enhanced legal language</li>
-      <li>Priority handling</li>
-    </ul>
-    <div class="price">$59</div>
+    <div class="tier-header">Tier 2 — Core Protection, $59 per document</div>
+
+    <div class="doc-item">
+      <input type="radio" name="tier2_doc" value="NON_DISCLOSURE_AGREEMENT">
+      <label>Non-Disclosure Agreement</label>
+      <div class="doc-help">Protects confidential business or personal information.</div>
+    </div>
+
+    <div class="doc-item">
+      <input type="radio" name="tier2_doc" value="INDEPENDENT_CONTRACTOR">
+      <label>Independent Contractor Agreement</label>
+      <div class="doc-help">Defines scope, payment, and liability for contractors.</div>
+    </div>
+
     <button class="select-btn"
-      onclick="selectTier('Tier 2', 'SINGLE_DOC', 59)">
+      onclick="selectTier('Tier 2', 59, 'tier2_doc')">
       Select Tier 2
     </button>
   </div>
 
   <!-- Tier 3 -->
   <div class="tier-column">
-    <div class="tier-title">Tier 3 — Business Ready</div>
-    <div class="tier-desc">Business-grade preparation and review.</div>
-    <ul class="doc-list">
-      <li>Everything in Tier 2</li>
-      <li>Business-focused terms</li>
-      <li>Additional review step</li>
-    </ul>
-    <div class="price">$99</div>
+    <div class="tier-header">Tier 3 — Business Ready, $99 per document</div>
+
+    <div class="doc-item">
+      <input type="radio" name="tier3_doc" value="OPERATING_AGREEMENT">
+      <label>LLC Operating Agreement</label>
+      <div class="doc-help">Defines ownership, control, and rules for an LLC.</div>
+    </div>
+
+    <div class="doc-item">
+      <input type="radio" name="tier3_doc" value="PARTNERSHIP_AGREEMENT">
+      <label>Partnership Agreement</label>
+      <div class="doc-help">Outlines responsibilities and profit sharing between partners.</div>
+    </div>
+
     <button class="select-btn"
-      onclick="selectTier('Tier 3', 'SINGLE_DOC', 99)">
+      onclick="selectTier('Tier 3', 99, 'tier3_doc')">
       Select Tier 3
     </button>
   </div>
 
   <!-- Tier 4 -->
   <div class="tier-column">
-    <div class="tier-title">Tier 4 — Entrepreneur Bundle</div>
-    <div class="tier-desc">Comprehensive bundle for entrepreneurs.</div>
-    <ul class="doc-list">
-      <li>Multiple documents</li>
-      <li>Best overall value</li>
-      <li>Full coverage package</li>
-    </ul>
-    <div class="price">$149</div>
+    <div class="tier-header">Tier 4 — Entrepreneur Bundle, $149 per document</div>
+
+    <div class="doc-item">
+      <input type="radio" name="tier4_doc" value="ENTREPRENEUR_BUNDLE">
+      <label>Entrepreneur Starter Bundle</label>
+      <div class="doc-help">A bundled set covering formation, protection, and operations.</div>
+    </div>
+
     <button class="select-btn"
-      onclick="selectTier('Tier 4', 'BUNDLE', 149)">
+      onclick="selectTier('Tier 4', 149, 'tier4_doc')">
       Select Tier 4
     </button>
   </div>
@@ -175,13 +187,20 @@
     return 'ORD-' + Date.now();
   }
 
-  function selectTier(tier, docType, price) {
+  function selectTier(tier, price, radioName) {
+    const selected = document.querySelector(`input[name="${radioName}"]:checked`);
+    if (!selected) {
+      alert('Please select a document before continuing.');
+      return;
+    }
+
     const session = {
       order_id: generateOrderId(),
       tier: tier,
-      doc_type: docType,
+      doc_type: selected.value,
       price: price
     };
+
     sessionStorage.setItem('order_session', JSON.stringify(session));
     window.location.href = 'intake.html';
   }
