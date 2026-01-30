@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>E-LegalBoom | Intake</title>
+  <title>E-LegalBoom | Document Intake</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <style>
@@ -21,19 +21,16 @@
       padding: 35px;
       box-shadow: 0 8px 24px rgba(0,0,0,0.08);
     }
-    label {
-      display: block;
-      margin-top: 18px;
-      font-weight: bold;
+    h1 {
+      margin-bottom: 20px;
     }
     input {
       width: 100%;
-      padding: 12px;
-      margin-top: 6px;
+      padding: 14px;
+      margin-bottom: 14px;
       font-size: 16px;
     }
     button {
-      margin-top: 30px;
       width: 100%;
       padding: 16px;
       font-size: 18px;
@@ -47,105 +44,92 @@
     <div class="card">
       <h1>Document Intake</h1>
 
-      <form id="intakeForm">
-        <label>First Name</label>
-        <input id="firstName" required />
+      <input id="firstName" placeholder="First Name" required />
+      <input id="lastName" placeholder="Last Name" required />
+      <input id="email" type="email" placeholder="Email" required />
 
-        <label>Last Name</label>
-        <input id="lastName" required />
-
-        <label>Email</label>
-        <input id="email" type="email" required />
-
-        <button type="submit">Continue</button>
-      </form>
+      <button id="submitBtn">Continue</button>
     </div>
   </div>
 
-  <!-- SUPABASE -->
+  <!-- SUPABASE V2 CDN -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-  <script type="module">
+  <script>
     /* ================================
        CONFIG
-    ================================= */
-    const SUPABASE_URL = "https://vvjbjfltqsivvxxifnvi.supabase.co";
-    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ2amJqZmx0cXNpdnZ4eGlmbnZpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc5NzYzNTAsImV4cCI6MjA3MzU1MjM1MH0.F4zzcpCHl9v-Rnj0wgKJ5zBf1HteVyXelMLQDDEN28Q";
+    ================================ */
+    const SUPABASE_URL = "YOUR_SUPABASE_URL";
+    const SUPABASE_ANON_KEY = "YOUR_SUPABASE_ANON_KEY";
 
-    const supabase = supabaseJs.createClient(
+    const sb = supabase.createClient(
       SUPABASE_URL,
       SUPABASE_ANON_KEY
     );
 
     /* ================================
        READ DOCUMENT TYPE FROM URL
-    ================================= */
+    ================================ */
     const params = new URLSearchParams(window.location.search);
     const docType = params.get("document_type");
 
     if (!docType) {
       alert("Missing document type.");
-      throw new Error("document_type not present");
+      throw new Error("document_type missing");
     }
 
     /* ================================
-       DOCUMENT → TIER / PRICE MAP
-       (V1 authoritative pricing)
-    ================================= */
+       AUTHORITATIVE V1 PRICING MAP
+    ================================ */
     const DOCUMENT_PRICING = {
       power_of_attorney: { tier: "tier4", price: 149 },
-      living_trust:       { tier: "tier4", price: 199 },
-      nda:                { tier: "tier1", price: 39 },
-      operating_agreement:{ tier: "tier3", price: 99 },
-      bill_of_sale:       { tier: "tier2", price: 59 }
-      // add as needed
+      living_trust: { tier: "tier4", price: 199 },
+      nda: { tier: "tier1", price: 39 },
+      promissory_note: { tier: "tier2", price: 79 }
+      // add more docs here as needed
     };
 
     const pricing = DOCUMENT_PRICING[docType];
 
     if (!pricing) {
-      alert("Document pricing not configured.");
-      throw new Error(`No pricing for ${docType}`);
+      alert("Unknown document type.");
+      throw new Error("No pricing defined for " + docType);
     }
 
     /* ================================
-       ORDER ID GENERATOR
-    ================================= */
-    function generateOrderId() {
-      const d = new Date();
-      const y = d.getFullYear();
-      const m = String(d.getMonth() + 1).padStart(2, "0");
-      const day = String(d.getDate()).padStart(2, "0");
-      const rand = Math.floor(Math.random() * 900 + 100);
-      return `ELB-${y}${m}${day}-${rand}`;
-    }
+       SUBMIT HANDLER
+    ================================ */
+    document.getElementById("submitBtn").addEventListener("click", async () => {
 
-    /* ================================
-       FORM SUBMIT
-    ================================= */
-    document.getElementById("intakeForm").addEventListener("submit", async (e) => {
-      e.preventDefault();
+      const firstName = document.getElementById("firstName").value.trim();
+      const lastName = document.getElementById("lastName").value.trim();
+      const email = document.getElementById("email").value.trim();
 
-      const orderId = generateOrderId();
+      if (!firstName || !lastName || !email) {
+        alert("Please complete all fields.");
+        return;
+      }
+
+      const orderId = `ELB-${Date.now()}`;
 
       const payload = {
         order_id: orderId,
         doc_type: docType,
         tier: pricing.tier,
         price: pricing.price,
-        client_first_name: document.getElementById("firstName").value,
-        client_last_name: document.getElementById("lastName").value,
-        client_email: document.getElementById("email").value,
-        order_status: "intake_started"
+        order_status: "intake_completed",
+        client_first_name: firstName,
+        client_last_name: lastName,
+        client_email: email
       };
 
-      const { error } = await supabase
+      const { error } = await sb
         .from("pweb_orders")
-        .insert(payload);
+        .upsert(payload);
 
       if (error) {
         console.error(error);
-        alert("Failed to create order.");
+        alert("Failed to save order.");
         return;
       }
 
