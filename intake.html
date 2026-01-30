@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>E-LegalBoom | Intake</title>
+  <title>E-LegalBoom | Document Intake</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <style>
@@ -21,13 +21,19 @@
       padding: 35px;
       box-shadow: 0 8px 24px rgba(0,0,0,0.08);
     }
+    label {
+      display: block;
+      margin-top: 18px;
+      font-weight: bold;
+    }
     input {
       width: 100%;
-      padding: 14px;
-      margin-bottom: 14px;
+      padding: 12px;
       font-size: 16px;
+      margin-top: 6px;
     }
     button {
+      margin-top: 30px;
       width: 100%;
       padding: 16px;
       font-size: 18px;
@@ -37,96 +43,102 @@
 </head>
 
 <body>
-<div class="wrapper">
-  <div class="card">
-    <h1>Document Intake</h1>
+  <div class="wrapper">
+    <div class="card">
+      <h1>Document Intake</h1>
 
-    <input id="firstName" placeholder="First Name" required />
-    <input id="lastName" placeholder="Last Name" required />
-    <input id="email" type="email" placeholder="Email" required />
+      <form id="intakeForm">
+        <label>First Name</label>
+        <input name="first_name" required />
 
-    <button id="submitBtn">Continue</button>
+        <label>Last Name</label>
+        <input name="last_name" required />
+
+        <label>Email</label>
+        <input name="email" type="email" required />
+
+        <button type="submit">Continue</button>
+      </form>
+    </div>
   </div>
-</div>
 
-<!-- SUPABASE V2 -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <!-- Supabase (GLOBAL, NOT MODULE) -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-<script>
-/* ================================
-   CONFIG
-================================ */
-const SUPABASE_URL = "https://vvjbjfltqsivvxxifnvi.supabase.co";
-const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ2amJqZmx0cXNpdnZ4eGlmbnZpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc5NzYzNTAsImV4cCI6MjA3MzU1MjM1MH0.F4zzcpCHl9v-Rnj0wgKJ5zBf1HteVyXelMLQDDEN28Q";
+  <script>
+    /* ================================
+       CONFIG
+    ================================= */
+    const SUPABASE_URL = "https://vvjbjfltqsivvxxifnvi.supabase.co";
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ2amJqZmx0cXNpdnZ4eGlmbnZpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc5NzYzNTAsImV4cCI6MjA3MzU1MjM1MH0.F4zzcpCHl9v-Rnj0wgKJ5zBf1HteVyXelMLQDDEN28Q";
 
-const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    const supabase = supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_ANON_KEY
+    );
 
-/* ================================
-   READ DOCUMENT TYPE (NO VALIDATION)
-================================ */
-const params = new URLSearchParams(window.location.search);
-const docType = params.get("document_type") || "unspecified";
+    /* ================================
+       READ DOCUMENT TYPE
+       (NO VALIDATION)
+    ================================= */
+    const params = new URLSearchParams(window.location.search);
+    const documentType = params.get("document_type");
 
-/* ================================
-   TIER → PRICE LOGIC
-   (Derived, never blocking)
-================================ */
-function deriveTier(docType) {
-  if (docType.includes("lease")) return "tier2";
-  if (docType.includes("trust")) return "tier4";
-  if (docType.includes("power")) return "tier4";
-  if (docType.includes("nda")) return "tier1";
-  return "tier2"; // default
-}
+    if (!documentType) {
+      alert("Document type missing.");
+      throw new Error("document_type not provided");
+    }
 
-function priceFromTier(tier) {
-  const map = {
-    tier1: 39,
-    tier2: 79,
-    tier3: 99,
-    tier4: 149
-  };
-  return map[tier] || 0;
-}
+    /* ================================
+       V1 PRICING MAP (AUTHORITATIVE)
+    ================================= */
+    const DOCUMENT_PRICING = {
+      power_of_attorney: { tier: "tier4", price: 149 },
+      living_trust:       { tier: "tier4", price: 199 },
+      nda:                { tier: "tier1", price: 39 },
+      residential_lease_agreement: { tier: "tier2", price: 59 }
+      // add freely — NO other code changes needed
+    };
 
-/* ================================
-   SUBMIT HANDLER
-================================ */
-document.getElementById("submitBtn").addEventListener("click", async () => {
-  const firstName = document.getElementById("firstName").value.trim();
-  const lastName = document.getElementById("lastName").value.trim();
-  const email = document.getElementById("email").value.trim();
+    const pricing = DOCUMENT_PRICING[documentType] || {
+      tier: "tier1",
+      price: 39
+    };
 
-  if (!firstName || !lastName || !email) {
-    alert("Please complete all fields.");
-    return;
-  }
+    /* ================================
+       FORM SUBMIT
+    ================================= */
+    document.getElementById("intakeForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
 
-  const tier = deriveTier(docType);
-  const price = priceFromTier(tier);
-  const orderId = `ELB-${Date.now()}`;
+      const form = e.target;
 
-  const payload = {
-    order_id: orderId,
-    doc_type: docType,
-    tier: tier,
-    price: price,
-    client_first_name: firstName,
-    client_last_name: lastName,
-    client_email: email,
-    order_status: "intake_completed"
-  };
+      const orderId = "ELB-" + Date.now();
 
-  const { error } = await sb.from("pweb_orders").insert(payload);
+      const payload = {
+        order_id: orderId,
+        doc_type: documentType,
+        tier: pricing.tier,
+        price: pricing.price,
+        client_first_name: form.first_name.value,
+        client_last_name: form.last_name.value,
+        client_email: form.email.value,
+        order_status: "intake_complete"
+      };
 
-  if (error) {
-    console.error(error);
-    alert("Failed to save order.");
-    return;
-  }
+      const { error } = await supabase
+        .from("pweb_orders")
+        .insert(payload);
 
-  window.location.href = `/review-and-pay.html?order_id=${orderId}`;
-});
-</script>
+      if (error) {
+        alert("Failed to save order.");
+        console.error(error);
+        return;
+      }
+
+      window.location.href =
+        `/review-and-pay.html?order_id=${orderId}`;
+    });
+  </script>
 </body>
 </html>
