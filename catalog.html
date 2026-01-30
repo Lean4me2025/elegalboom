@@ -15,65 +15,71 @@
 
     h1 {
       text-align: center;
-      margin: 28px 0 10px 0;
+      margin: 24px 0 8px 0;
       font-size: 28px;
     }
 
     .subtitle {
       text-align: center;
-      color: #4b5563;
-      margin-bottom: 30px;
       font-size: 14px;
+      color: #4b5563;
+      margin-bottom: 20px;
     }
 
-    .tier {
-      max-width: 1100px;
-      margin: 0 auto 40px auto;
-      padding: 0 20px;
-    }
-
-    .tier-header {
-      font-size: 18px;
-      font-weight: bold;
-      border-bottom: 2px solid #e5e7eb;
-      padding-bottom: 6px;
-      margin-bottom: 18px;
-    }
-
-    .doc-list {
+    .tier-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      grid-template-columns: repeat(4, 1fr);
       gap: 16px;
+      padding: 0 16px 40px 16px;
+      max-width: 1600px;
+      margin: 0 auto;
     }
 
-    .doc-item {
+    .tier-column {
       border: 1px solid #d1d5db;
       border-radius: 6px;
       padding: 14px;
-      background: #ffffff;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .tier-header {
+      font-weight: bold;
+      font-size: 16px;
+      margin-bottom: 12px;
+      border-bottom: 2px solid #e5e7eb;
+      padding-bottom: 6px;
+    }
+
+    .doc-item {
+      margin-bottom: 12px;
+      padding: 10px;
+      border: 1px solid #e5e7eb;
+      border-radius: 4px;
     }
 
     .doc-item label {
       font-weight: bold;
-      font-size: 14px;
+      font-size: 13px;
       cursor: pointer;
     }
 
     .doc-help {
       font-size: 12px;
       color: #4b5563;
-      margin-top: 6px;
+      margin-top: 4px;
       margin-left: 20px;
-      line-height: 1.4;
     }
 
     .tier-action {
-      margin-top: 20px;
-      text-align: right;
+      margin-top: auto;
+      text-align: center;
     }
 
     .select-btn {
-      padding: 10px 18px;
+      margin-top: 12px;
+      padding: 10px;
+      width: 100%;
       font-size: 14px;
       font-weight: bold;
       border: none;
@@ -86,6 +92,12 @@
     .select-btn:hover {
       background: #1d4ed8;
     }
+
+    @media (max-width: 1200px) {
+      .tier-grid {
+        grid-template-columns: 1fr;
+      }
+    }
   </style>
 </head>
 
@@ -94,140 +106,136 @@
 <h1>Document Catalog</h1>
 <div class="subtitle">Select a document to continue to intake</div>
 
-<!-- ================= Tier 1 ================= -->
-<section class="tier">
-  <div class="tier-header">Tier 1 — Core Personal & Business, $39 per document</div>
+<div class="tier-grid">
 
-  <div class="doc-list">
+  <!-- Tier 1 -->
+  <div class="tier-column">
+    <div class="tier-header">Tier 1 — Core Personal & Business<br>$39 per document</div>
+
     <div class="doc-item">
-      <input type="radio" name="tier1_doc" value="PROMISSORY_NOTE">
+      <input type="radio" name="tier1" value="PROMISSORY_NOTE">
       <label>Promissory Note</label>
       <div class="doc-help">Formal promise to repay money under defined terms.</div>
     </div>
 
     <div class="doc-item">
-      <input type="radio" name="tier1_doc" value="NON_DISCLOSURE_AGREEMENT">
+      <input type="radio" name="tier1" value="NON_DISCLOSURE_AGREEMENT">
       <label>Non-Disclosure Agreement (NDA)</label>
-      <div class="doc-help">Protects confidential information shared between parties.</div>
+      <div class="doc-help">Protects confidential information between parties.</div>
     </div>
 
     <div class="doc-item">
-      <input type="radio" name="tier1_doc" value="INDEPENDENT_CONTRACTOR_AGREEMENT">
+      <input type="radio" name="tier1" value="INDEPENDENT_CONTRACTOR_AGREEMENT">
       <label>Independent Contractor Agreement</label>
       <div class="doc-help">Defines scope, payment, and liability for contractors.</div>
     </div>
 
     <div class="doc-item">
-      <input type="radio" name="tier1_doc" value="BILL_OF_SALE">
+      <input type="radio" name="tier1" value="BILL_OF_SALE">
       <label>Bill of Sale</label>
       <div class="doc-help">Documents transfer of ownership of personal property.</div>
     </div>
+
+    <div class="tier-action">
+      <button class="select-btn" onclick="selectDoc('Tier 1', 39, 'tier1')">Continue</button>
+    </div>
   </div>
 
-  <div class="tier-action">
-    <button class="select-btn" onclick="selectDoc('Tier 1', 39, 'tier1_doc')">Continue</button>
-  </div>
-</section>
+  <!-- Tier 2 -->
+  <div class="tier-column">
+    <div class="tier-header">Tier 2 — Business Formation & Operations<br>$59 per document</div>
 
-<!-- ================= Tier 2 ================= -->
-<section class="tier">
-  <div class="tier-header">Tier 2 — Business Formation & Operations, $59 per document</div>
-
-  <div class="doc-list">
     <div class="doc-item">
-      <input type="radio" name="tier2_doc" value="OPERATING_AGREEMENT_LLC">
+      <input type="radio" name="tier2" value="OPERATING_AGREEMENT_LLC">
       <label>Operating Agreement (LLC)</label>
       <div class="doc-help">Defines ownership, management, and rules for an LLC.</div>
     </div>
 
     <div class="doc-item">
-      <input type="radio" name="tier2_doc" value="PARTNERSHIP_AGREEMENT">
+      <input type="radio" name="tier2" value="PARTNERSHIP_AGREEMENT">
       <label>Partnership Agreement</label>
       <div class="doc-help">Outlines rights and obligations between partners.</div>
     </div>
 
     <div class="doc-item">
-      <input type="radio" name="tier2_doc" value="BUSINESS_LOAN_AGREEMENT">
+      <input type="radio" name="tier2" value="BUSINESS_LOAN_AGREEMENT">
       <label>Business Loan Agreement</label>
-      <div class="doc-help">Formalizes lending terms between business entities.</div>
+      <div class="doc-help">Formalizes lending terms between businesses.</div>
     </div>
 
     <div class="doc-item">
-      <input type="radio" name="tier2_doc" value="SERVICE_AGREEMENT">
+      <input type="radio" name="tier2" value="SERVICE_AGREEMENT">
       <label>Service Agreement</label>
       <div class="doc-help">Defines services, deliverables, and payment terms.</div>
     </div>
+
+    <div class="tier-action">
+      <button class="select-btn" onclick="selectDoc('Tier 2', 59, 'tier2')">Continue</button>
+    </div>
   </div>
 
-  <div class="tier-action">
-    <button class="select-btn" onclick="selectDoc('Tier 2', 59, 'tier2_doc')">Continue</button>
-  </div>
-</section>
+  <!-- Tier 3 -->
+  <div class="tier-column">
+    <div class="tier-header">Tier 3 — Employment, Real Estate & Advanced<br>$99 per document</div>
 
-<!-- ================= Tier 3 ================= -->
-<section class="tier">
-  <div class="tier-header">Tier 3 — Employment, Real Estate & Advanced, $99 per document</div>
-
-  <div class="doc-list">
     <div class="doc-item">
-      <input type="radio" name="tier3_doc" value="EMPLOYMENT_AGREEMENT">
+      <input type="radio" name="tier3" value="EMPLOYMENT_AGREEMENT">
       <label>Employment Agreement</label>
       <div class="doc-help">Outlines terms of employment and compensation.</div>
     </div>
 
     <div class="doc-item">
-      <input type="radio" name="tier3_doc" value="RESIDENTIAL_LEASE">
+      <input type="radio" name="tier3" value="RESIDENTIAL_LEASE">
       <label>Residential Lease Agreement</label>
       <div class="doc-help">Governs rental terms between landlord and tenant.</div>
     </div>
 
     <div class="doc-item">
-      <input type="radio" name="tier3_doc" value="COMMERCIAL_LEASE">
+      <input type="radio" name="tier3" value="COMMERCIAL_LEASE">
       <label>Commercial Lease Agreement</label>
       <div class="doc-help">Lease terms for commercial property use.</div>
     </div>
 
     <div class="doc-item">
-      <input type="radio" name="tier3_doc" value="NON_COMPETE_AGREEMENT">
+      <input type="radio" name="tier3" value="NON_COMPETE_AGREEMENT">
       <label>Non-Compete Agreement</label>
       <div class="doc-help">Restricts competitive activity after engagement.</div>
     </div>
-  </div>
 
-  <div class="tier-action">
-    <button class="select-btn" onclick="selectDoc('Tier 3', 99, 'tier3_doc')">Continue</button>
-  </div>
-</section>
-
-<!-- ================= Tier 4 ================= -->
-<section class="tier">
-  <div class="tier-header">Tier 4 — Entrepreneur Bundle, $149 flat</div>
-
-  <div class="doc-list">
-    <div class="doc-item">
-      <input type="radio" name="tier4_doc" value="ENTREPRENEUR_BUNDLE">
-      <label>Entrepreneur Starter Bundle</label>
-      <div class="doc-help">
-        Complete business protection bundle including formation, operations,
-        employment, and core agreements.
-      </div>
+    <div class="tier-action">
+      <button class="select-btn" onclick="selectDoc('Tier 3', 99, 'tier3')">Continue</button>
     </div>
   </div>
 
-  <div class="tier-action">
-    <button class="select-btn" onclick="selectDoc('Tier 4', 149, 'tier4_doc')">Continue</button>
+  <!-- Tier 4 -->
+  <div class="tier-column">
+    <div class="tier-header">Tier 4 — Entrepreneur Bundle<br>$149 flat</div>
+
+    <div class="doc-item">
+      <input type="radio" name="tier4" value="ENTREPRENEUR_BUNDLE">
+      <label>Entrepreneur Starter Bundle</label>
+      <div class="doc-help">
+        Complete business protection bundle covering formation, operations,
+        employment, and core agreements.
+      </div>
+    </div>
+
+    <div class="tier-action">
+      <button class="select-btn" onclick="selectDoc('Tier 4', 149, 'tier4')">Continue</button>
+    </div>
   </div>
-</section>
+
+</div>
 
 <script>
   function generateOrderId() {
     return 'ORD-' + Date.now();
   }
 
-  function selectDoc(tier, price, radioName) {
-    const selected = document.querySelector(`input[name="${radioName}"]:checked`);
+  function selectDoc(tier, price, groupName) {
+    const selected = document.querySelector(`input[name="${groupName}"]:checked`);
     if (!selected) {
-      alert('Please select a document before continuing.');
+      alert('Please select a document.');
       return;
     }
 
