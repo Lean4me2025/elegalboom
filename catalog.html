@@ -10,152 +10,90 @@
       margin: 0;
       padding: 0;
       font-family: Arial, sans-serif;
-      background: #0f172a;
-      color: #e5e7eb;
-    }
-
-    .container {
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 40px 20px;
+      background: #ffffff;
+      color: #111827;
     }
 
     h1 {
       text-align: center;
-      margin-bottom: 40px;
+      margin: 30px 0;
     }
 
-    .tier-card {
-      background: #111827;
-      border: 1px solid #1f2933;
-      border-radius: 10px;
-      padding: 24px;
-      margin-bottom: 24px;
+    .catalog-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      padding: 20px;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .tier-column {
+      background: #ffffff;
+      border: 1px solid #d1d5db;
+      border-radius: 6px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
     }
 
     .tier-title {
-      font-size: 1.4rem;
-      margin-bottom: 8px;
-      color: #93c5fd;
-    }
-
-    .tier-price {
       font-size: 1.2rem;
-      margin-bottom: 16px;
-      color: #22c55e;
-    }
-
-    ul {
-      margin: 0 0 20px 20px;
-    }
-
-    li {
+      font-weight: bold;
       margin-bottom: 6px;
     }
 
+    .tier-desc {
+      font-size: 0.9rem;
+      margin-bottom: 12px;
+      color: #374151;
+    }
+
+    .doc-list {
+      flex-grow: 1;
+      margin-bottom: 16px;
+    }
+
+    .doc-list ul {
+      padding-left: 18px;
+      margin: 0;
+    }
+
+    .doc-list li {
+      margin-bottom: 6px;
+      font-size: 0.9rem;
+    }
+
+    .price {
+      font-size: 1.1rem;
+      font-weight: bold;
+      margin-bottom: 12px;
+    }
+
     .select-btn {
-      display: inline-block;
-      padding: 12px 24px;
+      padding: 10px;
       background: #2563eb;
       color: #ffffff;
       border: none;
-      border-radius: 6px;
-      font-size: 1rem;
+      border-radius: 4px;
       cursor: pointer;
+      font-size: 0.95rem;
     }
 
     .select-btn:hover {
       background: #1d4ed8;
     }
 
-    .tier-4 {
-      border: 2px solid #22c55e;
+    @media (max-width: 900px) {
+      .catalog-grid {
+        grid-template-columns: 1fr;
+      }
     }
   </style>
 </head>
 
 <body>
-  <div class="container">
-    <h1>Document Catalog</h1>
 
-    <!-- Tier 1 -->
-    <div class="tier-card">
-      <div class="tier-title">Tier 1 — Essentials</div>
-      <div class="tier-price">$39</div>
-      <ul>
-        <li>Single foundational legal document</li>
-        <li>Fast turnaround</li>
-        <li>Email delivery</li>
-      </ul>
-      <button class="select-btn"
-        onclick="selectTier('Tier 1', 'SINGLE_DOC', 39)">
-        Select Tier 1
-      </button>
-    </div>
+<h1>Document Catalog</h1>
 
-    <!-- Tier 2 -->
-    <div class="tier-card">
-      <div class="tier-title">Tier 2 — Core Protection</div>
-      <div class="tier-price">$59</div>
-      <ul>
-        <li>Expanded legal coverage</li>
-        <li>Improved protection scope</li>
-        <li>Email delivery</li>
-      </ul>
-      <button class="select-btn"
-        onclick="selectTier('Tier 2', 'SINGLE_DOC', 59)">
-        Select Tier 2
-      </button>
-    </div>
-
-    <!-- Tier 3 -->
-    <div class="tier-card">
-      <div class="tier-title">Tier 3 — Business Ready</div>
-      <div class="tier-price">$99</div>
-      <ul>
-        <li>Advanced document preparation</li>
-        <li>Business-focused language</li>
-        <li>Priority handling</li>
-      </ul>
-      <button class="select-btn"
-        onclick="selectTier('Tier 3', 'SINGLE_DOC', 99)">
-        Select Tier 3
-      </button>
-    </div>
-
-    <!-- Tier 4 -->
-    <div class="tier-card tier-4">
-      <div class="tier-title">Tier 4 — Entrepreneur Bundle</div>
-      <div class="tier-price">$149</div>
-      <ul>
-        <li>Multi-document bundle</li>
-        <li>Best overall value</li>
-        <li>Business-grade protection</li>
-      </ul>
-      <button class="select-btn"
-        onclick="selectTier('Tier 4', 'BUNDLE', 149)">
-        Select Tier 4
-      </button>
-    </div>
-
-  </div>
-
-  <script>
-    function generateOrderId() {
-      return 'ORD-' + Date.now();
-    }
-
-    function selectTier(tier, docType, price) {
-      const session = {
-        order_id: generateOrderId(),
-        tier: tier,
-        doc_type: docType,
-        price: price
-      };
-
-      sessionStorage.setItem('order_session', JSON.stringify(session));
-      window.location.href = 'intake.html';
-    }
-  </script>
-</body>
-</html>
+<div class
