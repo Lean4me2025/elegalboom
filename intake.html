@@ -2,152 +2,222 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Document Intake</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>E-LegalBoom | Document Intake</title>
+  <link rel="stylesheet" href="style.css" />
   <style>
-    body { font-family: Arial, sans-serif; background:#f4f6f8; margin:0; }
-    .wrap { max-width: 960px; margin: 24px auto; background:#fff; padding:24px; border-radius:8px; }
-    h1 { margin-bottom: 6px; }
-    .summary { background:#eef2ff; padding:12px; border-radius:6px; margin-bottom:20px; }
-    .grid { display:grid; grid-template-columns: repeat(2,1fr); gap:12px; }
-    .field { display:flex; flex-direction:column; }
-    label { font-weight:bold; font-size:13px; margin-bottom:4px; }
-    input, textarea, select {
-      padding:8px; border:1px solid #ccc; border-radius:4px; font-size:14px;
-    }
-    textarea { resize:vertical; min-height:80px; }
-    .section { margin-top:20px; }
-    .btn {
-      margin-top:24px;
-      width:100%;
-      padding:14px;
-      background:#1e40af;
-      color:#fff;
-      font-size:16px;
-      border:none;
-      border-radius:6px;
-      cursor:pointer;
-    }
-    .btn:disabled { background:#9ca3af; }
+    body { font-family: Arial, sans-serif; background:#f5f6f8; }
+    .container { max-width: 900px; margin: 40px auto; background:#fff; padding:30px; border-radius:6px; }
+    h1 { margin-bottom: 10px; }
+    .status { color:#b00020; margin-bottom:15px; }
+    .summary { background:#f0f2f6; padding:15px; margin-bottom:20px; border-radius:4px; }
+    .field { margin-bottom:14px; }
+    label { display:block; font-weight:bold; margin-bottom:4px; }
+    input { width:100%; padding:8px; }
+    .btn { margin-top:20px; padding:12px 18px; font-size:16px; }
+    .btn:disabled { opacity:.5; }
   </style>
 </head>
+
 <body>
+<div class="container">
 
-<div class="wrap">
   <h1>Document Intake</h1>
+
+  <!-- Status -->
+  <div id="status" class="status"></div>
+
+  <!-- Order Summary -->
   <div class="summary">
-    <div><strong>Document:</strong> <span id="docName"></span></div>
-    <div><strong>Tier:</strong> <span id="tier"></span></div>
-    <div><strong>Price:</strong> $<span id="price"></span></div>
+    <p><strong>Document:</strong> <span id="docName"></span></p>
+    <p><strong>Tier:</strong> <span id="tier"></span></p>
+    <p><strong>Price:</strong> $<span id="price"></span></p>
   </div>
 
-  <!-- CORE FIELDS -->
-  <div class="section">
-    <h2>Client Information</h2>
-    <div class="grid">
-      <div class="field"><label>First Name</label><input required name="client_first_name"></div>
-      <div class="field"><label>Last Name</label><input required name="client_last_name"></div>
-      <div class="field"><label>Email</label><input type="email" required name="client_email"></div>
-      <div class="field"><label>Phone</label><input required name="client_phone"></div>
-      <div class="field"><label>Street Address</label><input required name="address_line1"></div>
-      <div class="field"><label>City</label><input required name="city"></div>
-      <div class="field"><label>State</label><input required name="state"></div>
-      <div class="field"><label>ZIP</label><input required name="zip"></div>
-      <div class="field"><label>Governing State</label><input required name="governing_state"></div>
-      <div class="field"><label>Effective Date</label><input type="date" required name="effective_date"></div>
-    </div>
-  </div>
+  <!-- Intake Form -->
+  <form id="intakeForm"></form>
 
-  <!-- DOCUMENT FLEX -->
-  <div class="section">
-    <h2>Document Details</h2>
-    <div class="grid" id="flexFields"></div>
-  </div>
+  <button id="continueBtn" class="btn" disabled>
+    Continue to Review & Pay
+  </button>
 
-  <button class="btn" id="continueBtn" disabled>Continue to Review</button>
 </div>
 
 <script>
-/* ========= SAFE SESSION READ (BACKWARD COMPATIBLE) ========= */
+/* ======================================================
+   SAFE SESSION READ — NO REDIRECTS
+====================================================== */
 
-// Read whatever the catalog already provides
 const order =
-  JSON.parse(sessionStorage.getItem("order")) ||
-  {
-    document_name: sessionStorage.getItem("document_type"),
+  JSON.parse(sessionStorage.getItem("order")) || {
+    document_name: sessionStorage.getItem("document_name"),
     tier: sessionStorage.getItem("tier"),
     price: sessionStorage.getItem("price")
   };
 
+const status = document.getElementById("status");
+
 if (!order || !order.document_name) {
-  console.warn("No document found in session, redirecting.");
-  window.location.replace("catalog.html");
+  status.textContent =
+    "No document selected yet. Please return to the catalog and choose a document.";
 }
 
-docName.textContent = order.document_name;
-tier.textContent = order.tier || "";
-price.textContent = order.price || "";
+/* ======================================================
+   DISPLAY SUMMARY (PASSIVE)
+====================================================== */
 
-/* ========= DOCUMENT FLEX MAP ========= */
+document.getElementById("docName").textContent = order.document_name || "";
+document.getElementById("tier").textContent = order.tier || "";
+document.getElementById("price").textContent = order.price || "";
 
-const FLEX = {
-  "Promissory Note": [
-    field("lender_name","Lender Name"),
-    field("borrower_name","Borrower Name"),
-    field("loan_amount","Loan Amount","number"),
-    field("interest_rate","Interest Rate (%)","number")
-  ],
-  "Non-Disclosure Agreement": [
-    field("disclosing_party","Disclosing Party"),
-    field("receiving_party","Receiving Party"),
-    field("term_months","Term (months)","number")
-  ],
-  "Employment Agreement": [
-    field("employer_name","Employer Name"),
-    field("employee_name","Employee Name"),
-    field("position","Position"),
-    field("salary","Salary","number")
-  ]
-  // other docs already analyzed can be added here
-};
+/* ======================================================
+   FIELD FACTORY
+====================================================== */
 
-function field(name,label,type="text") {
+function field(name, label, type = "text") {
   return { name, label, type };
 }
 
-const flexWrap = document.getElementById("flexFields");
-(FLEX[order.document_name] || []).forEach(f => {
-  const d = document.createElement("div");
-  d.className = "field";
-  const l = document.createElement("label");
-  l.textContent = f.label;
-  const i = document.createElement("input");
-  i.name = f.name;
-  i.type = f.type;
-  i.required = true;
-  d.appendChild(l);
-  d.appendChild(i);
-  flexWrap.appendChild(d);
+/* ======================================================
+   DOCUMENT FLEX MAP (CATALOG-LOCKED)
+====================================================== */
+
+const FLEX = {
+
+  "Promissory Note": [
+    field("lender_name", "Lender Name"),
+    field("borrower_name", "Borrower Name"),
+    field("loan_amount", "Loan Amount", "number"),
+    field("interest_rate", "Interest Rate (%)", "number"),
+    field("repayment_date", "Repayment Date", "date")
+  ],
+
+  "Non-Disclosure Agreement": [
+    field("disclosing_party", "Disclosing Party"),
+    field("receiving_party", "Receiving Party"),
+    field("effective_date", "Effective Date", "date")
+  ],
+
+  "Independent Contractor Agreement": [
+    field("company_name", "Company Name"),
+    field("contractor_name", "Contractor Name"),
+    field("scope_of_work", "Scope of Work"),
+    field("payment_terms", "Payment Terms")
+  ],
+
+  "Bill of Sale": [
+    field("seller_name", "Seller Name"),
+    field("buyer_name", "Buyer Name"),
+    field("item_description", "Item Description"),
+    field("sale_price", "Sale Price", "number")
+  ],
+
+  "Operating Agreement (LLC)": [
+    field("llc_name", "LLC Name"),
+    field("state", "State of Formation"),
+    field("member_names", "Member Names"),
+    field("effective_date", "Effective Date", "date")
+  ],
+
+  "Partnership Agreement": [
+    field("business_name", "Business Name"),
+    field("partner_names", "Partner Names"),
+    field("profit_split", "Profit Split")
+  ],
+
+  "Business Loan Agreement": [
+    field("lender_name", "Lender Name"),
+    field("borrower_name", "Borrower Name"),
+    field("loan_amount", "Loan Amount", "number"),
+    field("interest_rate", "Interest Rate (%)", "number")
+  ],
+
+  "Service Agreement": [
+    field("service_provider", "Service Provider"),
+    field("client_name", "Client Name"),
+    field("services", "Services Provided"),
+    field("payment_terms", "Payment Terms")
+  ],
+
+  "Employment Agreement": [
+    field("employer_name", "Employer Name"),
+    field("employee_name", "Employee Name"),
+    field("position", "Position"),
+    field("salary", "Salary", "number")
+  ],
+
+  "Residential Lease Agreement": [
+    field("landlord_name", "Landlord Name"),
+    field("tenant_name", "Tenant Name"),
+    field("property_address", "Property Address"),
+    field("monthly_rent", "Monthly Rent", "number")
+  ],
+
+  "Commercial Lease Agreement": [
+    field("landlord_name", "Landlord Name"),
+    field("tenant_name", "Tenant Name"),
+    field("property_address", "Property Address"),
+    field("lease_term", "Lease Term")
+  ],
+
+  "Non-Compete Agreement": [
+    field("employee_name", "Employee Name"),
+    field("company_name", "Company Name"),
+    field("restriction_period", "Restriction Period")
+  ]
+};
+
+/* ======================================================
+   RENDER FORM
+====================================================== */
+
+const form = document.getElementById("intakeForm");
+const continueBtn = document.getElementById("continueBtn");
+
+const fields = FLEX[order.document_name] || [];
+
+fields.forEach(f => {
+  const wrap = document.createElement("div");
+  wrap.className = "field";
+
+  const label = document.createElement("label");
+  label.textContent = f.label;
+
+  const input = document.createElement("input");
+  input.type = f.type;
+  input.name = f.name;
+  input.required = true;
+
+  wrap.appendChild(label);
+  wrap.appendChild(input);
+  form.appendChild(wrap);
 });
 
-/* ========= VALIDATION ========= */
+/* ======================================================
+   VALIDATION
+====================================================== */
 
-const btn = document.getElementById("continueBtn");
-
-document.addEventListener("input", () => {
-  const required = document.querySelectorAll("[required]");
-  btn.disabled = ![...required].every(el => el.value.trim());
+form.addEventListener("input", () => {
+  const required = [...form.querySelectorAll("input[required]")];
+  continueBtn.disabled = !required.every(i => i.value.trim() !== "");
 });
 
-/* ========= SUBMIT ========= */
+/* ======================================================
+   SUBMIT → REVIEW & PAY
+====================================================== */
 
-btn.onclick = () => {
-  const data = {};
-  document.querySelectorAll("input").forEach(i => data[i.name] = i.value);
-  data.document_name = order.document_name;
-  data.tier = order.tier;
-  data.price = order.price;
-  sessionStorage.setItem("intake", JSON.stringify(data));
+continueBtn.onclick = () => {
+  const intake = {};
+
+  form.querySelectorAll("input").forEach(i => {
+    intake[i.name] = i.value;
+  });
+
+  intake.document_name = order.document_name;
+  intake.tier = order.tier;
+  intake.price = order.price;
+
+  sessionStorage.setItem("intake", JSON.stringify(intake));
+
   window.location.href = "reviewandpay.html";
 };
 </script>
