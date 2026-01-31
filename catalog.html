@@ -33,7 +33,7 @@ h1 {
   gap: 12px;
   max-width: 1400px;
   margin: 0 auto;
-  padding: 0 12px 40px 12px;
+  padding: 0 12px 24px 12px;
 }
 
 /* ===== TIER COLUMN ===== */
@@ -96,6 +96,34 @@ h1 {
 .select-btn:hover {
   background: #1d4ed8;
 }
+
+/* ===== VISIBLE DEBUG PANEL (NO DEVTOOLS NEEDED) ===== */
+.debug-wrap {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 12px 40px 12px;
+}
+
+.debug-panel {
+  border: 2px solid #2563eb;
+  background: #f5faff;
+  border-radius: 6px;
+  padding: 12px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-size: 12px;
+}
+
+.debug-panel strong {
+  display: inline-block;
+  margin-bottom: 6px;
+}
+
+.debug-row {
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  gap: 8px;
+  margin: 4px 0;
+}
 </style>
 </head>
 
@@ -113,31 +141,30 @@ h1 {
   </div>
 
   <div class="doc-item">
-    <input type="radio" name="tier1" value="PROMISSORY_NOTE">
-    <label>Promissory Note</label>
+    <input type="radio" name="doc_type" value="PROMISSORY_NOTE" data-tier="Tier 1" data-price="39" id="t1_pn">
+    <label for="t1_pn">Promissory Note</label>
     <div class="doc-help">Formal promise to repay money under defined terms.</div>
   </div>
 
   <div class="doc-item">
-    <input type="radio" name="tier1" value="NON_DISCLOSURE_AGREEMENT">
-    <label>Non-Disclosure Agreement (NDA)</label>
+    <input type="radio" name="doc_type" value="NON_DISCLOSURE_AGREEMENT" data-tier="Tier 1" data-price="39" id="t1_nda">
+    <label for="t1_nda">Non-Disclosure Agreement (NDA)</label>
     <div class="doc-help">Protects confidential information between parties.</div>
   </div>
 
   <div class="doc-item">
-    <input type="radio" name="tier1" value="INDEPENDENT_CONTRACTOR_AGREEMENT">
-    <label>Independent Contractor Agreement</label>
+    <input type="radio" name="doc_type" value="INDEPENDENT_CONTRACTOR_AGREEMENT" data-tier="Tier 1" data-price="39" id="t1_ica">
+    <label for="t1_ica">Independent Contractor Agreement</label>
     <div class="doc-help">Defines scope, payment, and liability for contractors.</div>
   </div>
 
   <div class="doc-item">
-    <input type="radio" name="tier1" value="BILL_OF_SALE">
-    <label>Bill of Sale</label>
+    <input type="radio" name="doc_type" value="BILL_OF_SALE" data-tier="Tier 1" data-price="39" id="t1_bos">
+    <label for="t1_bos">Bill of Sale</label>
     <div class="doc-help">Documents transfer of ownership of personal property.</div>
   </div>
 
-  <button class="select-btn"
-    onclick="goToIntake('Tier 1',39,'tier1')">
+  <button class="select-btn" onclick="goToIntake('Tier 1', 39)">
     Continue
   </button>
 </div>
@@ -149,31 +176,30 @@ h1 {
   </div>
 
   <div class="doc-item">
-    <input type="radio" name="tier2" value="OPERATING_AGREEMENT_LLC">
-    <label>Operating Agreement (LLC)</label>
+    <input type="radio" name="doc_type" value="OPERATING_AGREEMENT_LLC" data-tier="Tier 2" data-price="59" id="t2_oa">
+    <label for="t2_oa">Operating Agreement (LLC)</label>
     <div class="doc-help">Defines ownership, management, and rules for an LLC.</div>
   </div>
 
   <div class="doc-item">
-    <input type="radio" name="tier2" value="PARTNERSHIP_AGREEMENT">
-    <label>Partnership Agreement</label>
+    <input type="radio" name="doc_type" value="PARTNERSHIP_AGREEMENT" data-tier="Tier 2" data-price="59" id="t2_pa">
+    <label for="t2_pa">Partnership Agreement</label>
     <div class="doc-help">Outlines rights and obligations between partners.</div>
   </div>
 
   <div class="doc-item">
-    <input type="radio" name="tier2" value="BUSINESS_LOAN_AGREEMENT">
-    <label>Business Loan Agreement</label>
+    <input type="radio" name="doc_type" value="BUSINESS_LOAN_AGREEMENT" data-tier="Tier 2" data-price="59" id="t2_bla">
+    <label for="t2_bla">Business Loan Agreement</label>
     <div class="doc-help">Formalizes lending terms between businesses.</div>
   </div>
 
   <div class="doc-item">
-    <input type="radio" name="tier2" value="SERVICE_AGREEMENT">
-    <label>Service Agreement</label>
+    <input type="radio" name="doc_type" value="SERVICE_AGREEMENT" data-tier="Tier 2" data-price="59" id="t2_sa">
+    <label for="t2_sa">Service Agreement</label>
     <div class="doc-help">Defines services, deliverables, and payment terms.</div>
   </div>
 
-  <button class="select-btn"
-    onclick="goToIntake('Tier 2',59,'tier2')">
+  <button class="select-btn" onclick="goToIntake('Tier 2', 59)">
     Continue
   </button>
 </div>
@@ -185,31 +211,30 @@ h1 {
   </div>
 
   <div class="doc-item">
-    <input type="radio" name="tier3" value="EMPLOYMENT_AGREEMENT">
-    <label>Employment Agreement</label>
+    <input type="radio" name="doc_type" value="EMPLOYMENT_AGREEMENT" data-tier="Tier 3" data-price="99" id="t3_ea">
+    <label for="t3_ea">Employment Agreement</label>
     <div class="doc-help">Outlines terms of employment and compensation.</div>
   </div>
 
   <div class="doc-item">
-    <input type="radio" name="tier3" value="RESIDENTIAL_LEASE">
-    <label>Residential Lease Agreement</label>
+    <input type="radio" name="doc_type" value="RESIDENTIAL_LEASE" data-tier="Tier 3" data-price="99" id="t3_rl">
+    <label for="t3_rl">Residential Lease Agreement</label>
     <div class="doc-help">Governs rental terms between landlord and tenant.</div>
   </div>
 
   <div class="doc-item">
-    <input type="radio" name="tier3" value="COMMERCIAL_LEASE">
-    <label>Commercial Lease Agreement</label>
+    <input type="radio" name="doc_type" value="COMMERCIAL_LEASE" data-tier="Tier 3" data-price="99" id="t3_cl">
+    <label for="t3_cl">Commercial Lease Agreement</label>
     <div class="doc-help">Lease terms for commercial property use.</div>
   </div>
 
   <div class="doc-item">
-    <input type="radio" name="tier3" value="NON_COMPETE_AGREEMENT">
-    <label>Non-Compete Agreement</label>
+    <input type="radio" name="doc_type" value="NON_COMPETE_AGREEMENT" data-tier="Tier 3" data-price="99" id="t3_nca">
+    <label for="t3_nca">Non-Compete Agreement</label>
     <div class="doc-help">Restricts competitive activity after engagement.</div>
   </div>
 
-  <button class="select-btn"
-    onclick="goToIntake('Tier 3',99,'tier3')">
+  <button class="select-btn" onclick="goToIntake('Tier 3', 99)">
     Continue
   </button>
 </div>
@@ -221,43 +246,94 @@ h1 {
   </div>
 
   <div class="doc-item">
-    <input type="radio" name="tier4" value="ENTREPRENEUR_BUNDLE">
-    <label>Entrepreneur Starter Bundle</label>
+    <input type="radio" name="doc_type" value="ENTREPRENEUR_BUNDLE" data-tier="Tier 4" data-price="149" id="t4_bundle">
+    <label for="t4_bundle">Entrepreneur Starter Bundle</label>
     <div class="doc-help">
       Complete business protection bundle covering formation,
       operations, employment, and core agreements.
     </div>
   </div>
 
-  <button class="select-btn"
-    onclick="goToIntake('Tier 4',149,'tier4')">
+  <button class="select-btn" onclick="goToIntake('Tier 4', 149)">
     Continue
   </button>
 </div>
 
 </div>
 
+<!-- ===== Visible confirmation (no DevTools needed) ===== -->
+<div class="debug-wrap">
+  <div class="debug-panel">
+    <strong>Catalog Selection Status (Visible)</strong>
+    <div class="debug-row"><div>doc_type</div><div id="dbgDoc">—</div></div>
+    <div class="debug-row"><div>tier</div><div id="dbgTier">—</div></div>
+    <div class="debug-row"><div>price</div><div id="dbgPrice">—</div></div>
+  </div>
+</div>
+
 <script>
-function goToIntake(tier, price, groupName) {
-  const selected = document.querySelector(
-    `input[name="${groupName}"]:checked`
-  );
+/**
+ * Single source of truth: ONE radio group across the entire catalog.
+ * Canonical URL params: doc_type, tier, price.
+ * No storage. No timing. No guards-on-load.
+ */
+
+function getSelectedDoc() {
+  return document.querySelector('input[name="doc_type"]:checked');
+}
+
+function updateDebugPanel() {
+  const selected = getSelectedDoc();
+  if (!selected) {
+    document.getElementById("dbgDoc").textContent = "—";
+    document.getElementById("dbgTier").textContent = "—";
+    document.getElementById("dbgPrice").textContent = "—";
+    return;
+  }
+  document.getElementById("dbgDoc").textContent = selected.value;
+  document.getElementById("dbgTier").textContent = selected.dataset.tier || "";
+  document.getElementById("dbgPrice").textContent = selected.dataset.price || "";
+}
+
+document.querySelectorAll('input[name="doc_type"]').forEach(r => {
+  r.addEventListener("change", updateDebugPanel);
+});
+
+function goToIntake(expectedTier, expectedPrice) {
+  const selected = getSelectedDoc();
 
   if (!selected) {
     alert("Please select a document to continue.");
     return;
   }
 
-  const order = {
-    order_id: "ORD-" + Date.now(),
-    tier: tier,
-    doc_type: selected.value,
-    price: price
-  };
+  const selectedTier = selected.dataset.tier || "";
+  const selectedPrice = Number(selected.dataset.price || "0");
 
-  sessionStorage.setItem("order_session", JSON.stringify(order));
-  window.location.href = "intake.html";
+  // Enforce: the Continue button must match the tier column
+  if (selectedTier !== expectedTier || selectedPrice !== Number(expectedPrice)) {
+    alert(
+      `Please select a document in ${expectedTier} ($${expectedPrice}) before continuing.\n\n` +
+      `Currently selected:\n` +
+      `doc_type: ${selected.value}\n` +
+      `tier: ${selectedTier}\n` +
+      `price: $${selectedPrice}`
+    );
+    return;
+  }
+
+  // URL handoff (canonical keys)
+  const params = new URLSearchParams({
+    doc_type: selected.value,
+    tier: selectedTier,
+    price: String(selectedPrice)
+  });
+
+  window.location.href = "intake.html?" + params.toString();
 }
+
+// Initialize debug panel
+updateDebugPanel();
 </script>
 
 </body>
