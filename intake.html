@@ -1,236 +1,227 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>E-LegalBoom | Document Intake</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<style>
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background: #ffffff;
-  color: #111827;
-}
-
-h1 {
-  text-align: center;
-  margin: 24px 0 6px 0;
-  font-size: 26px;
-}
-
-.subtitle {
-  text-align: center;
-  font-size: 14px;
-  color: #4b5563;
-  margin-bottom: 20px;
-}
-
-.container {
-  max-width: 900px;
-  margin: 0 auto;
-  padding: 0 16px 40px 16px;
-}
-
-.section {
-  margin-bottom: 28px;
-}
-
-.section-title {
-  font-weight: bold;
-  margin-bottom: 10px;
-  border-bottom: 2px solid #e5e7eb;
-  padding-bottom: 4px;
-}
-
-.field-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 12px;
-}
-
-.field {
-  display: flex;
-  flex-direction: column;
-}
-
-.field label {
-  font-size: 13px;
-  margin-bottom: 4px;
-  font-weight: bold;
-}
-
-.field input,
-.field textarea,
-.field select {
-  padding: 8px;
-  font-size: 14px;
-  border: 1px solid #d1d5db;
-  border-radius: 4px;
-}
-
-.field textarea {
-  resize: vertical;
-  min-height: 80px;
-}
-
-.summary-box {
-  background: #f3f4f6;
-  border: 1px solid #d1d5db;
-  border-radius: 6px;
-  padding: 12px;
-  font-size: 14px;
-}
-
-.submit-btn {
-  margin-top: 20px;
-  width: 100%;
-  padding: 12px;
-  font-size: 16px;
-  font-weight: bold;
-  border: none;
-  border-radius: 4px;
-  background: #2563eb;
-  color: #ffffff;
-  cursor: pointer;
-}
-
-.submit-btn:hover {
-  background: #1d4ed8;
-}
-</style>
+  <meta charset="UTF-8" />
+  <title>Document Intake</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    body { font-family: Arial, sans-serif; background:#f5f7fa; margin:0; }
+    .wrap { max-width: 980px; margin: 24px auto 48px; background:#fff; border-radius:8px; padding:24px; box-shadow:0 2px 10px rgba(0,0,0,.08); }
+    h1 { margin:0 0 8px; }
+    .sub { color:#4b5563; margin-bottom:16px; }
+    .grid { display:grid; grid-template-columns: repeat(2, 1fr); gap:12px; }
+    .field { display:flex; flex-direction:column; }
+    .field label { font-size:13px; font-weight:bold; margin-bottom:4px; }
+    .field input, .field select, .field textarea {
+      padding:8px; font-size:14px; border:1px solid #d1d5db; border-radius:4px;
+    }
+    .field textarea { min-height:80px; resize:vertical; }
+    .section { margin-top:20px; }
+    .section h2 { font-size:18px; border-bottom:2px solid #e5e7eb; padding-bottom:6px; margin-bottom:12px; }
+    .summary { background:#f3f4f6; border:1px solid #d1d5db; border-radius:6px; padding:12px; }
+    .summary div { margin-bottom:6px; }
+    .pill { display:inline-block; background:#2563eb; color:#fff; padding:4px 8px; border-radius:999px; font-size:12px; }
+    .actions { margin-top:24px; }
+    .btn { width:100%; padding:14px; font-size:16px; font-weight:bold; border:none; border-radius:6px; background:#1e40af; color:#fff; cursor:pointer; }
+    .btn:disabled { background:#9ca3af; cursor:not-allowed; }
+    .note { font-size:12px; color:#6b7280; margin-top:6px; }
+    .hidden { display:none; }
+  </style>
 </head>
-
 <body>
+  <div class="wrap">
+    <h1>Document Intake</h1>
+    <div class="sub">We’ll collect exactly what’s required to prepare your document.</div>
 
-<h1>Document Intake</h1>
-<div class="subtitle">Provide the information needed to prepare your document</div>
-
-<div class="container">
-
-<form id="intakeForm">
-
-  <!-- ===== ORDER SUMMARY ===== -->
-  <div class="section">
-    <div class="section-title">Order Summary</div>
-    <div class="summary-box">
-      <div><strong>Document:</strong> <span id="summary_doc_type"></span></div>
-      <div><strong>Tier:</strong> <span id="summary_tier"></span></div>
-      <div><strong>Price:</strong> $<span id="summary_price"></span></div>
-    </div>
-  </div>
-
-  <!-- ===== CLIENT INFO ===== -->
-  <div class="section">
-    <div class="section-title">Client Information</div>
-    <div class="field-grid">
-      <div class="field">
-        <label>First Name</label>
-        <input type="text" name="client_first_name" required>
-      </div>
-
-      <div class="field">
-        <label>Last Name</label>
-        <input type="text" name="client_last_name" required>
-      </div>
-
-      <div class="field">
-        <label>Email</label>
-        <input type="email" name="client_email" required>
-      </div>
-
-      <div class="field">
-        <label>Phone</label>
-        <input type="tel" name="client_phone" required>
+    <!-- ORDER SUMMARY -->
+    <div class="section">
+      <h2>Order Summary</h2>
+      <div class="summary">
+        <div><strong>Document:</strong> <span id="sumDoc">—</span></div>
+        <div><strong>Tier:</strong> <span id="sumTier">—</span></div>
+        <div><strong>Price:</strong> $<span id="sumPrice">—</span></div>
       </div>
     </div>
-  </div>
 
-  <!-- ===== ADDRESS ===== -->
-  <div class="section">
-    <div class="section-title">Address</div>
-    <div class="field-grid">
-      <div class="field">
-        <label>Street Address</label>
-        <input type="text" name="client_address_line1" required>
-      </div>
+    <!-- CORE (≈90%) -->
+    <div class="section">
+      <h2>Core Information <span class="pill">Required</span></h2>
 
-      <div class="field">
-        <label>City</label>
-        <input type="text" name="client_city" required>
-      </div>
+      <div class="grid">
+        <!-- Client -->
+        <div class="field"><label>First Name</label><input name="client_first_name" required></div>
+        <div class="field"><label>Last Name</label><input name="client_last_name" required></div>
+        <div class="field"><label>Email</label><input type="email" name="client_email" required></div>
+        <div class="field"><label>Phone</label><input name="client_phone" required></div>
 
-      <div class="field">
-        <label>State</label>
-        <input type="text" name="client_state" required>
-      </div>
+        <!-- Address / Jurisdiction -->
+        <div class="field"><label>Street Address</label><input name="address_line1" required></div>
+        <div class="field"><label>City</label><input name="city" required></div>
+        <div class="field"><label>State</label><input name="state" required></div>
+        <div class="field"><label>ZIP</label><input name="zip" required></div>
 
-      <div class="field">
-        <label>ZIP Code</label>
-        <input type="text" name="client_zip" required>
+        <!-- Party Context -->
+        <div class="field">
+          <label>Party Type</label>
+          <select name="party_type" required>
+            <option value="">Select…</option>
+            <option value="individual">Individual</option>
+            <option value="entity">Business / Entity</option>
+          </select>
+        </div>
+        <div class="field"><label>Entity Name (if applicable)</label><input name="entity_name"></div>
+
+        <!-- Dates / Law -->
+        <div class="field"><label>Effective Date</label><input type="date" name="effective_date" required></div>
+        <div class="field"><label>Governing State</label><input name="governing_state" required></div>
       </div>
     </div>
-  </div>
 
-  <!-- ===== DOCUMENT NOTES ===== -->
-  <div class="section">
-    <div class="section-title">Document Details</div>
-    <div class="field">
-      <label>Notes / Details</label>
-      <textarea name="document_notes"
-        placeholder="Provide names, dates, amounts, or any details relevant to this document."></textarea>
+    <!-- FLEX (≈10%) -->
+    <div class="section">
+      <h2>Document-Specific Details</h2>
+      <div id="flex"></div>
+      <div class="note">These fields are required for the selected document.</div>
+    </div>
+
+    <!-- HIDDEN CONTEXT -->
+    <input type="hidden" name="doc_type" id="doc_type">
+    <input type="hidden" name="tier" id="tier">
+    <input type="hidden" name="price" id="price">
+    <input type="hidden" name="order_id" id="order_id">
+
+    <div class="actions">
+      <button class="btn" id="submitBtn" disabled>Continue to Review & Pay</button>
     </div>
   </div>
-
-  <!-- ===== HIDDEN CANONICAL FIELDS ===== -->
-  <input type="hidden" name="doc_type" id="doc_type">
-  <input type="hidden" name="tier" id="tier">
-  <input type="hidden" name="price" id="price">
-  <input type="hidden" name="order_id" id="order_id">
-
-  <button type="submit" class="submit-btn">
-    Continue to Review & Payment
-  </button>
-
-</form>
-
-</div>
 
 <script>
-/* ===== LOAD SESSION DATA ===== */
-const session = JSON.parse(sessionStorage.getItem("order_session"));
-
-if (!session || !session.doc_type || !session.tier || !session.price) {
-  alert("Your session has expired. Please select a document again.");
-  window.location.href = "catalog.html";
+/* ---------- ORDER CONTEXT ---------- */
+const ctx = JSON.parse(sessionStorage.getItem("order"));
+if (!ctx || !ctx.document_name || !ctx.tier || !ctx.price) {
+  alert("Session expired. Please reselect a document.");
+  location.href = "catalog.html";
 }
+sumDoc.textContent = ctx.document_name;
+sumTier.textContent = ctx.tier;
+sumPrice.textContent = ctx.price;
 
-/* ===== POPULATE SUMMARY ===== */
-document.getElementById("summary_doc_type").textContent = session.doc_type;
-document.getElementById("summary_tier").textContent = session.tier;
-document.getElementById("summary_price").textContent = session.price;
+doc_type.value = ctx.document_name;
+tier.value = ctx.tier;
+price.value = ctx.price;
+order_id.value = ctx.order_id || crypto.randomUUID();
 
-/* ===== SET HIDDEN FIELDS ===== */
-document.getElementById("doc_type").value = session.doc_type;
-document.getElementById("tier").value = session.tier;
-document.getElementById("price").value = session.price;
-document.getElementById("order_id").value = session.order_id;
+/* ---------- FLEX SCHEMA (CANONICAL) ---------- */
+const FLEX = {
+  "Promissory Note": [
+    f("lender_name","Lender Name"),
+    f("borrower_name","Borrower Name"),
+    f("loan_amount","Loan Amount","number"),
+    f("interest_rate","Interest Rate (%)","number"),
+    f("repayment_term","Repayment Term (months)","number")
+  ],
+  "Non-Disclosure Agreement (NDA)": [
+    f("disclosing_party","Disclosing Party"),
+    f("receiving_party","Receiving Party"),
+    f("nda_term","Term Length (months)","number")
+  ],
+  "Independent Contractor Agreement": [
+    f("contractor_name","Contractor Name"),
+    f("services_description","Services Description","textarea"),
+    f("compensation","Compensation")
+  ],
+  "Bill of Sale": [
+    f("seller_name","Seller Name"),
+    f("buyer_name","Buyer Name"),
+    f("item_description","Item Description","textarea"),
+    f("sale_amount","Sale Amount","number")
+  ],
+  "Operating Agreement (LLC)": [
+    f("llc_name","LLC Name"),
+    f("members","Members (names & %s)","textarea"),
+    f("manager_managed","Manager-Managed?","select",["Yes","No"])
+  ],
+  "Partnership Agreement": [
+    f("partners","Partners (names & %s)","textarea"),
+    f("profit_split","Profit Split","textarea")
+  ],
+  "Business Loan Agreement": [
+    f("lender_name","Lender Name"),
+    f("borrower_name","Borrower Name"),
+    f("loan_amount","Loan Amount","number"),
+    f("interest_rate","Interest Rate (%)","number"),
+    f("payment_frequency","Payment Frequency"),
+    f("secured","Secured Loan?","select",["Yes","No"])
+  ],
+  "Service Agreement": [
+    f("provider_name","Provider Name"),
+    f("client_name","Client Name"),
+    f("scope","Scope of Services","textarea"),
+    f("payment_terms","Payment Terms","textarea")
+  ],
+  "Employment Agreement": [
+    f("employer_name","Employer Name"),
+    f("employee_name","Employee Name"),
+    f("position","Position/Role"),
+    f("salary","Salary","number"),
+    f("start_date_emp","Start Date","date")
+  ],
+  "Residential Lease Agreement": [
+    f("landlord_name","Landlord Name"),
+    f("tenant_name","Tenant Name"),
+    f("property_address","Property Address"),
+    f("rent","Monthly Rent","number"),
+    f("lease_term","Lease Term (months)","number")
+  ],
+  "Commercial Lease Agreement": [
+    f("landlord_name","Landlord Name"),
+    f("tenant_name","Tenant Name"),
+    f("property_address","Property Address"),
+    f("rent","Monthly Rent","number"),
+    f("use","Permitted Use")
+  ],
+  "Non-Compete Agreement": [
+    f("restricted_party","Restricted Party"),
+    f("duration","Duration (months)","number"),
+    f("geography","Geographic Scope")
+  ]
+};
 
-/* ===== SUBMIT HANDLER ===== */
-document.getElementById("intakeForm").addEventListener("submit", function(e) {
-  e.preventDefault();
+function f(name,label,type="text",options=[]){ return {name,label,type,options}; }
 
-  const formData = new FormData(e.target);
-  const payload = Object.fromEntries(formData.entries());
-
-  console.log("INTAKE PAYLOAD:", payload);
-
-  /* NEXT STEP PLACEHOLDER */
-  // TODO: POST to Supabase / Edge Function
-  // For now:
-  window.location.href = "review-and-pay.html";
+/* ---------- RENDER FLEX ---------- */
+const flexWrap = document.getElementById("flex");
+const fields = FLEX[ctx.document_name] || [];
+fields.forEach(def => {
+  const d = document.createElement("div"); d.className="field";
+  const l = document.createElement("label"); l.textContent = def.label; d.appendChild(l);
+  let i;
+  if (def.type === "textarea") { i = document.createElement("textarea"); }
+  else if (def.type === "select") {
+    i = document.createElement("select");
+    const o0 = document.createElement("option"); o0.value=""; o0.textContent="Select…"; i.appendChild(o0);
+    def.options.forEach(v=>{ const o=document.createElement("option"); o.value=v; o.textContent=v; i.appendChild(o); });
+  }
+  else {
+    i = document.createElement("input"); i.type = def.type;
+  }
+  i.name = def.name; i.required = true; d.appendChild(i); flexWrap.appendChild(d);
 });
-</script>
 
+/* ---------- VALIDATION ---------- */
+const submitBtn = document.getElementById("submitBtn");
+document.addEventListener("input", () => {
+  const required = document.querySelectorAll("[required]");
+  submitBtn.disabled = ![...required].every(x => x.value && x.value.trim() !== "");
+});
+
+/* ---------- SUBMIT ---------- */
+submitBtn.onclick = () => {
+  const data = {};
+  document.querySelectorAll("input,select,textarea").forEach(el => data[el.name] = el.value);
+  sessionStorage.setItem("intake", JSON.stringify(data));
+  location.href = "reviewandpay.html";
+};
+</script>
 </body>
 </html>
