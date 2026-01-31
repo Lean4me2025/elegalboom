@@ -1,152 +1,154 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>E-LegalBoom | Review & Pay</title>
-  <link rel="stylesheet" href="style.css" />
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f5f6f8;
-    }
-    .container {
-      max-width: 900px;
-      margin: 40px auto;
-      background: #ffffff;
-      padding: 30px;
-      border-radius: 6px;
-    }
-    h1 {
-      margin-bottom: 20px;
-    }
-    .summary {
-      background: #eef2f8;
-      padding: 20px;
-      border-radius: 4px;
-      margin-bottom: 25px;
-    }
-    .summary p {
-      margin: 6px 0;
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-bottom: 25px;
-    }
-    th, td {
-      border-bottom: 1px solid #ddd;
-      padding: 10px;
-      text-align: left;
-    }
-    th {
-      background: #f0f2f6;
-    }
-    .total {
-      font-size: 18px;
-      font-weight: bold;
-      text-align: right;
-      margin-top: 10px;
-    }
-    .btn {
-      padding: 14px 20px;
-      font-size: 16px;
-    }
-  </style>
+<meta charset="UTF-8" />
+<title>E-LegalBoom | Review & Pay</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background: #ffffff;
+  color: #111827;
+  margin: 0;
+  padding: 20px;
+}
+
+h1 {
+  margin-bottom: 6px;
+}
+
+.notice {
+  font-size: 13px;
+  color: #374151;
+  margin-bottom: 20px;
+}
+
+.section {
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  padding: 16px;
+  margin-bottom: 20px;
+}
+
+.section h2 {
+  margin-top: 0;
+  font-size: 18px;
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.label {
+  font-weight: bold;
+}
+
+.value {
+  text-align: right;
+}
+
+.total {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+button {
+  background: #2563eb;
+  color: #ffffff;
+  border: none;
+  padding: 14px;
+  font-size: 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  width: 100%;
+}
+
+button:hover {
+  background: #1d4ed8;
+}
+</style>
 </head>
 
 <body>
-<div class="container">
 
-  <h1>Review Your Order</h1>
-
-  <!-- ORDER SUMMARY (ANCHOR DISPLAY) -->
-  <div class="summary">
-    <p><strong>Document Type:</strong> <span id="docType"></span></p>
-    <p><strong>Tier:</strong> <span id="tier"></span></p>
-    <p><strong>Price:</strong> $<span id="price"></span></p>
-  </div>
-
-  <!-- INTAKE DATA REVIEW -->
-  <table id="intakeTable">
-    <thead>
-      <tr>
-        <th>Field</th>
-        <th>Value</th>
-      </tr>
-    </thead>
-    <tbody></tbody>
-  </table>
-
-  <div class="total">
-    Total: $<span id="total"></span>
-  </div>
-
-  <button class="btn" id="payBtn">
-    Proceed to Payment
-  </button>
-
+<h1>Review Your Order</h1>
+<div class="notice">
+Please review the details below carefully. These terms will be used to generate your legal document.
 </div>
 
+<div id="reviewContainer"></div>
+
+<button onclick="confirmAndPay()">Confirm & Continue to Payment</button>
+
 <script>
-/* ======================================================
-   RECEIVE ORDER LINE (CANONICAL ONLY)
-====================================================== */
+/* ===================== LOAD PAYLOAD ===================== */
+const payloadRaw = sessionStorage.getItem("order_payload");
 
-// Intake is the creator of the order line.
-// Review & Pay ONLY receives and displays it.
+if (!payloadRaw) {
+  alert("Order data not found. Please restart from the catalog.");
+  window.location.href = "catalog.html";
+}
 
-const intake = JSON.parse(sessionStorage.getItem("intake")) || {};
+const payload = JSON.parse(payloadRaw);
 
-// Canonical fields
-const doc_type = intake.doc_type || "";
-const tier = intake.tier || "";
-const price = intake.price || "";
+/* ===================== RENDER REVIEW ===================== */
+const review = document.getElementById("reviewContainer");
 
-// Display anchored values
-document.getElementById("docType").textContent = doc_type;
-document.getElementById("tier").textContent = tier;
-document.getElementById("price").textContent = price;
-document.getElementById("total").textContent = price;
+review.innerHTML = `
+  <div class="section">
+    <h2>Order Summary</h2>
+    <div class="row"><div class="label">Order ID</div><div class="value">${payload.order_id}</div></div>
+    <div class="row"><div class="label">Document</div><div class="value">${payload.doc_type}</div></div>
+    <div class="row"><div class="label">Tier</div><div class="value">${payload.tier}</div></div>
+    <div class="row total"><div>Total</div><div>$${payload.price}</div></div>
+  </div>
 
-/* ======================================================
-   RENDER INTAKE DATA (DISPLAY-ONLY)
-====================================================== */
+  <div class="section">
+    <h2>Parties</h2>
+    <div class="row"><div class="label">Landlord</div><div class="value">${payload.landlord_legal_name} (${payload.landlord_entity_type})</div></div>
+    <div class="row"><div class="label">Tenant</div><div class="value">${payload.tenant_legal_name} (${payload.tenant_entity_type})</div></div>
+  </div>
 
-const tbody = document.querySelector("#intakeTable tbody");
+  <div class="section">
+    <h2>Premises & Use</h2>
+    <div class="row"><div class="label">Property</div><div class="value">${payload.property_address}</div></div>
+    <div class="row"><div class="label">Permitted Use</div><div class="value">${payload.permitted_use}</div></div>
+  </div>
 
-Object.keys(intake).forEach(key => {
-  if (["doc_type", "tier", "price"].includes(key)) return;
+  <div class="section">
+    <h2>Lease Term</h2>
+    <div class="row"><div class="label">Start Date</div><div class="value">${payload.lease_start_date}</div></div>
+    <div class="row"><div class="label">Term Length</div><div class="value">${payload.lease_term_months} months</div></div>
+  </div>
 
-  const tr = document.createElement("tr");
+  <div class="section">
+    <h2>Rent & Security</h2>
+    <div class="row"><div class="label">Monthly Rent</div><div class="value">$${payload.rent_amount}</div></div>
+    <div class="row"><div class="label">Security Deposit</div><div class="value">$${payload.security_deposit_amount}</div></div>
+  </div>
 
-  const tdKey = document.createElement("td");
-  tdKey.textContent = key.replace(/_/g, " ");
+  <div class="section">
+    <h2>Risk & Enforcement</h2>
+    <div class="row"><div class="label">Cure Period</div><div class="value">${payload.cure_period_days} days</div></div>
+    <div class="row"><div class="label">Attorney Fees</div><div class="value">${payload.attorney_fees_clause === "yes" ? "Recoverable" : "Not Recoverable"}</div></div>
+  </div>
 
-  const tdVal = document.createElement("td");
-  tdVal.textContent = intake[key];
+  <div class="section">
+    <h2>Governing Law</h2>
+    <div class="row"><div class="label">State</div><div class="value">${payload.governing_state}</div></div>
+  </div>
+`;
 
-  tr.appendChild(tdKey);
-  tr.appendChild(tdVal);
-  tbody.appendChild(tr);
-});
-
-/* ======================================================
-   PAYMENT HANDOFF (PLACEHOLDER)
-====================================================== */
-
-document.getElementById("payBtn").onclick = () => {
-
-  const order_line = {
-    doc_type: doc_type,
-    tier: tier,
-    price: price,
-    intake_data: intake
-  };
-
-  console.log("FINAL ORDER LINE (CANONICAL):", order_line);
-
-  alert("Payment wiring will be connected next.");
-};
+/* ===================== CONTINUE ===================== */
+function confirmAndPay() {
+  // This is where Stripe / Pay link / webhook will attach
+  // For now, we just preserve payload and continue
+  sessionStorage.setItem("final_order", JSON.stringify(payload));
+  alert("Order confirmed. Payment integration is next.");
+}
 </script>
 
 </body>
