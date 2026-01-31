@@ -2,54 +2,48 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>E-LegalBoom | Review & Pay</title>
+  <title>E-LegalBoom | Document Intake</title>
   <link rel="stylesheet" href="style.css" />
   <style>
     body {
       font-family: Arial, sans-serif;
-      background: #f5f6f8;
+      background:#f5f6f8;
     }
     .container {
       max-width: 900px;
       margin: 40px auto;
-      background: #ffffff;
-      padding: 30px;
-      border-radius: 6px;
+      background:#ffffff;
+      padding:30px;
+      border-radius:6px;
     }
     h1 {
-      margin-bottom: 20px;
+      margin-bottom: 10px;
     }
     .summary {
-      background: #eef2f8;
-      padding: 20px;
-      border-radius: 4px;
-      margin-bottom: 25px;
+      background:#eef2f8;
+      padding:15px;
+      margin-bottom:20px;
+      border-radius:4px;
     }
-    .summary p {
-      margin: 6px 0;
+    .field {
+      margin-bottom:14px;
     }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-bottom: 25px;
+    label {
+      display:block;
+      font-weight:bold;
+      margin-bottom:4px;
     }
-    th, td {
-      border-bottom: 1px solid #ddd;
-      padding: 10px;
-      text-align: left;
-    }
-    th {
-      background: #f0f2f6;
-    }
-    .total {
-      font-size: 18px;
-      font-weight: bold;
-      text-align: right;
-      margin-top: 10px;
+    input {
+      width:100%;
+      padding:8px;
     }
     .btn {
-      padding: 14px 20px;
-      font-size: 16px;
+      margin-top:20px;
+      padding:12px 18px;
+      font-size:16px;
+    }
+    .btn:disabled {
+      opacity:0.5;
     }
   </style>
 </head>
@@ -57,95 +51,201 @@
 <body>
 <div class="container">
 
-  <h1>Review Your Order</h1>
+  <h1>Document Intake</h1>
 
-  <!-- ORDER SUMMARY (ANCHOR DISPLAY) -->
+  <!-- ANCHORED ORDER SUMMARY -->
   <div class="summary">
     <p><strong>Document Type:</strong> <span id="docType"></span></p>
     <p><strong>Tier:</strong> <span id="tier"></span></p>
     <p><strong>Price:</strong> $<span id="price"></span></p>
   </div>
 
-  <!-- INTAKE DATA REVIEW -->
-  <table id="intakeTable">
-    <thead>
-      <tr>
-        <th>Field</th>
-        <th>Value</th>
-      </tr>
-    </thead>
-    <tbody></tbody>
-  </table>
+  <!-- INTAKE FORM -->
+  <form id="intakeForm"></form>
 
-  <div class="total">
-    Total: $<span id="total"></span>
-  </div>
-
-  <button class="btn" id="payBtn">
-    Proceed to Payment
+  <button id="continueBtn" class="btn" disabled>
+    Continue to Review & Pay
   </button>
 
 </div>
 
 <script>
 /* ======================================================
-   RECEIVE ORDER LINE (CANONICAL ONLY)
+   RECEIVE INTENT (PASSIVE, NO GUARDS)
 ====================================================== */
 
-// Intake is the creator of the order line.
-// Review & Pay ONLY receives and displays it.
+// Canonical read ONLY
+const order =
+  JSON.parse(sessionStorage.getItem("order")) || {
+    doc_type: sessionStorage.getItem("doc_type"),
+    tier: sessionStorage.getItem("tier"),
+    price: sessionStorage.getItem("price")
+  };
 
-const intake = JSON.parse(sessionStorage.getItem("intake")) || {};
+// Anchor values immediately (visible = real)
+const doc_type = order.doc_type || "";
+const tier = order.tier || "";
+const price = order.price || "";
 
-// Canonical fields
-const doc_type = intake.doc_type || "";
-const tier = intake.tier || "";
-const price = intake.price || "";
-
-// Display anchored values
 document.getElementById("docType").textContent = doc_type;
 document.getElementById("tier").textContent = tier;
 document.getElementById("price").textContent = price;
-document.getElementById("total").textContent = price;
 
 /* ======================================================
-   RENDER INTAKE DATA (DISPLAY-ONLY)
+   FIELD FACTORY
 ====================================================== */
 
-const tbody = document.querySelector("#intakeTable tbody");
+function field(name, label, type = "text") {
+  return { name, label, type };
+}
 
-Object.keys(intake).forEach(key => {
-  if (["doc_type", "tier", "price"].includes(key)) return;
+/* ======================================================
+   DOCUMENT FLEX MAP (CATALOG-LOCKED)
+====================================================== */
 
-  const tr = document.createElement("tr");
+const FLEX = {
 
-  const tdKey = document.createElement("td");
-  tdKey.textContent = key.replace(/_/g, " ");
+  "Promissory Note": [
+    field("lender_name","Lender Name"),
+    field("borrower_name","Borrower Name"),
+    field("loan_amount","Loan Amount","number"),
+    field("interest_rate","Interest Rate (%)","number"),
+    field("repayment_date","Repayment Date","date")
+  ],
 
-  const tdVal = document.createElement("td");
-  tdVal.textContent = intake[key];
+  "Non-Disclosure Agreement": [
+    field("disclosing_party","Disclosing Party"),
+    field("receiving_party","Receiving Party"),
+    field("effective_date","Effective Date","date")
+  ],
 
-  tr.appendChild(tdKey);
-  tr.appendChild(tdVal);
-  tbody.appendChild(tr);
+  "Independent Contractor Agreement": [
+    field("company_name","Company Name"),
+    field("contractor_name","Contractor Name"),
+    field("scope_of_work","Scope of Work"),
+    field("payment_terms","Payment Terms")
+  ],
+
+  "Bill of Sale": [
+    field("seller_name","Seller Name"),
+    field("buyer_name","Buyer Name"),
+    field("item_description","Item Description"),
+    field("sale_price","Sale Price","number")
+  ],
+
+  "Operating Agreement (LLC)": [
+    field("llc_name","LLC Name"),
+    field("state","State of Formation"),
+    field("member_names","Member Names"),
+    field("effective_date","Effective Date","date")
+  ],
+
+  "Partnership Agreement": [
+    field("business_name","Business Name"),
+    field("partner_names","Partner Names"),
+    field("profit_split","Profit Split")
+  ],
+
+  "Business Loan Agreement": [
+    field("lender_name","Lender Name"),
+    field("borrower_name","Borrower Name"),
+    field("loan_amount","Loan Amount","number"),
+    field("interest_rate","Interest Rate (%)","number")
+  ],
+
+  "Service Agreement": [
+    field("service_provider","Service Provider"),
+    field("client_name","Client Name"),
+    field("services","Services Provided"),
+    field("payment_terms","Payment Terms")
+  ],
+
+  "Employment Agreement": [
+    field("employer_name","Employer Name"),
+    field("employee_name","Employee Name"),
+    field("position","Position"),
+    field("salary","Salary","number")
+  ],
+
+  "Residential Lease Agreement": [
+    field("landlord_name","Landlord Name"),
+    field("tenant_name","Tenant Name"),
+    field("property_address","Property Address"),
+    field("monthly_rent","Monthly Rent","number")
+  ],
+
+  "Commercial Lease Agreement": [
+    field("landlord_name","Landlord Name"),
+    field("tenant_name","Tenant Name"),
+    field("property_address","Property Address"),
+    field("lease_term","Lease Term")
+  ],
+
+  "Non-Compete Agreement": [
+    field("employee_name","Employee Name"),
+    field("company_name","Company Name"),
+    field("restriction_period","Restriction Period")
+  ]
+};
+
+/* ======================================================
+   RENDER FORM (RECEIVE-ONLY)
+====================================================== */
+
+const form = document.getElementById("intakeForm");
+const btn = document.getElementById("continueBtn");
+
+const fields = FLEX[doc_type] || [];
+
+fields.forEach(f => {
+  const wrap = document.createElement("div");
+  wrap.className = "field";
+
+  const label = document.createElement("label");
+  label.textContent = f.label;
+
+  const input = document.createElement("input");
+  input.type = f.type;
+  input.name = f.name;
+  input.required = true;
+
+  wrap.appendChild(label);
+  wrap.appendChild(input);
+  form.appendChild(wrap);
 });
 
 /* ======================================================
-   PAYMENT HANDOFF (PLACEHOLDER)
+   VALIDATION (LOCAL ONLY)
 ====================================================== */
 
-document.getElementById("payBtn").onclick = () => {
+form.addEventListener("input", () => {
+  const required = [...form.querySelectorAll("input[required]")];
+  btn.disabled = !required.every(i => i.value.trim() !== "");
+});
+
+/* ======================================================
+   BUILD ORDER LINE → REVIEW & PAY
+====================================================== */
+
+btn.onclick = () => {
+
+  const intake_data = {};
+
+  form.querySelectorAll("input").forEach(i => {
+    intake_data[i.name] = i.value;
+  });
 
   const order_line = {
     doc_type: doc_type,
     tier: tier,
     price: price,
-    intake_data: intake
+    intake_data: intake_data
   };
 
-  console.log("FINAL ORDER LINE (CANONICAL):", order_line);
+  // Persist ONE canonical payload
+  sessionStorage.setItem("intake", JSON.stringify(order_line));
 
-  alert("Payment wiring will be connected next.");
+  window.location.href = "review-and-pay.html";
 };
 </script>
 
