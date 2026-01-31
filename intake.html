@@ -3,69 +3,115 @@
 <head>
   <meta charset="UTF-8" />
   <title>E-LegalBoom | Document Intake</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
   <style>
     body {
+      margin: 0;
       font-family: Arial, sans-serif;
-      background: #f5f6f7;
-      padding: 40px;
+      background: #ffffff;
+      color: #111827;
     }
-    .card {
-      background: #fdecec;
+
+    h1 {
+      text-align: center;
+      margin: 30px 0 10px;
+      font-size: 28px;
+    }
+
+    .intake-box {
+      max-width: 800px;
+      margin: 20px auto;
       padding: 20px;
+      border: 1px solid #d1d5db;
       border-radius: 6px;
-      max-width: 700px;
+      background: #f9fafb;
     }
+
+    .row {
+      margin-bottom: 10px;
+      font-size: 15px;
+    }
+
     .label {
       font-weight: bold;
     }
-    .value {
-      margin-bottom: 10px;
-    }
-    button {
+
+    .actions {
       margin-top: 20px;
-      padding: 12px 20px;
-      font-size: 16px;
+      text-align: left;
+    }
+
+    .btn {
+      padding: 10px 16px;
+      font-size: 14px;
+      font-weight: bold;
+      border: none;
+      border-radius: 4px;
+      background: #2563eb;
+      color: #ffffff;
       cursor: pointer;
+    }
+
+    .btn:hover {
+      background: #1d4ed8;
     }
   </style>
 </head>
+
 <body>
 
 <h1>Document Intake</h1>
 
-<div class="card">
-  <div class="value"><span class="label">Document Type:</span> <span id="docType"></span></div>
-  <div class="value"><span class="label">Tier:</span> <span id="tier"></span></div>
-  <div class="value"><span class="label">Price:</span> $<span id="price"></span></div>
+<div class="intake-box">
+  <div class="row">
+    <span class="label">Document Type:</span>
+    <span id="docType"></span>
+  </div>
+  <div class="row">
+    <span class="label">Tier:</span>
+    <span id="tier"></span>
+  </div>
+  <div class="row">
+    <span class="label">Price:</span>
+    $<span id="price"></span>
+  </div>
+
+  <div class="actions">
+    <button class="btn" id="continueBtn">
+      Continue to Review & Pay
+    </button>
+  </div>
 </div>
 
-<button id="continueBtn">Continue to Review & Pay</button>
-
 <script>
-  // ==============================
-  // URL PARAM READER (AUTHORITATIVE)
-  // ==============================
+  // ===============================
+  // READ URL PARAMETERS (TRUSTED)
+  // ===============================
   const params = new URLSearchParams(window.location.search);
 
-  const doc_type = params.get("doc_type");
+  const docType = params.get("doc_type");
   const tier = params.get("tier");
   const price = params.get("price");
 
-  // Render immediately (no guards, no redirects)
-  document.getElementById("docType").textContent = doc_type || "";
+  // ===============================
+  // DISPLAY (NO GUARDS, NO REDIRECTS)
+  // ===============================
+  document.getElementById("docType").textContent = docType || "";
   document.getElementById("tier").textContent = tier || "";
   document.getElementById("price").textContent = price || "";
 
-  // ==============================
-  // CONTINUE
-  // ==============================
+  // ===============================
+  // CONTINUE → REVIEW & PAY
+  // ===============================
   document.getElementById("continueBtn").onclick = () => {
-    const query =
-      `doc_type=${encodeURIComponent(doc_type || "")}` +
+    const reviewUrl =
+      `review-and-pay.html` +
+      `?doc_type=${encodeURIComponent(docType || "")}` +
       `&tier=${encodeURIComponent(tier || "")}` +
       `&price=${encodeURIComponent(price || "")}`;
 
-    window.location.href = `review-and-pay.html?${query}`;
+    window.location.href = reviewUrl;
   };
 </script>
 
