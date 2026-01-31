@@ -1,118 +1,155 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>E-LegalBoom | Document Intake</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="UTF-8" />
+<title>E-LegalBoom | Document Intake</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #ffffff;
-      color: #111827;
-    }
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background: #ffffff;
+  color: #111827;
+  margin: 0;
+  padding: 24px;
+}
 
-    h1 {
-      text-align: center;
-      margin: 30px 0 10px;
-      font-size: 28px;
-    }
+h1 {
+  margin-bottom: 16px;
+}
 
-    .intake-box {
-      max-width: 800px;
-      margin: 20px auto;
-      padding: 20px;
-      border: 1px solid #d1d5db;
-      border-radius: 6px;
-      background: #f9fafb;
-    }
+.intake-summary {
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  padding: 16px;
+  border-radius: 6px;
+  margin-bottom: 24px;
+}
 
-    .row {
-      margin-bottom: 10px;
-      font-size: 15px;
-    }
+label {
+  display: block;
+  font-weight: bold;
+  margin-top: 14px;
+}
 
-    .label {
-      font-weight: bold;
-    }
+input, select {
+  width: 100%;
+  padding: 8px;
+  margin-top: 4px;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+}
 
-    .actions {
-      margin-top: 20px;
-      text-align: left;
-    }
+button {
+  margin-top: 24px;
+  padding: 12px;
+  font-size: 15px;
+  font-weight: bold;
+  background: #2563eb;
+  color: #ffffff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
 
-    .btn {
-      padding: 10px 16px;
-      font-size: 14px;
-      font-weight: bold;
-      border: none;
-      border-radius: 4px;
-      background: #2563eb;
-      color: #ffffff;
-      cursor: pointer;
-    }
-
-    .btn:hover {
-      background: #1d4ed8;
-    }
-  </style>
+button:hover {
+  background: #1d4ed8;
+}
+</style>
 </head>
 
 <body>
 
 <h1>Document Intake</h1>
 
-<div class="intake-box">
-  <div class="row">
-    <span class="label">Document Type:</span>
-    <span id="docType"></span>
-  </div>
-  <div class="row">
-    <span class="label">Tier:</span>
-    <span id="tier"></span>
-  </div>
-  <div class="row">
-    <span class="label">Price:</span>
-    $<span id="price"></span>
-  </div>
-
-  <div class="actions">
-    <button class="btn" id="continueBtn">
-      Continue to Review & Pay
-    </button>
-  </div>
+<div class="intake-summary">
+  <div><strong>Document Type:</strong> <span id="docType"></span></div>
+  <div><strong>Tier:</strong> <span id="tier"></span></div>
+  <div><strong>Price:</strong> $<span id="price"></span></div>
 </div>
 
+<form id="intakeForm"></form>
+
 <script>
-  // ===============================
-  // READ URL PARAMETERS (TRUSTED)
-  // ===============================
-  const params = new URLSearchParams(window.location.search);
+/* ===== URL PARAMS ===== */
+const params = new URLSearchParams(window.location.search);
+const doc_type = params.get("doc_type");
+const tier = params.get("tier");
+const price = params.get("price");
 
-  const docType = params.get("doc_type");
-  const tier = params.get("tier");
-  const price = params.get("price");
+/* ===== DISPLAY HEADER ===== */
+document.getElementById("docType").textContent = doc_type || "";
+document.getElementById("tier").textContent = tier || "";
+document.getElementById("price").textContent = price || "";
 
-  // ===============================
-  // DISPLAY (NO GUARDS, NO REDIRECTS)
-  // ===============================
-  document.getElementById("docType").textContent = docType || "";
-  document.getElementById("tier").textContent = tier || "";
-  document.getElementById("price").textContent = price || "";
+/* ===== FIELD FACTORY ===== */
+function field(name, label, type = "text") {
+  return `
+    <label>${label}
+      <input type="${type}" name="${name}" required />
+    </label>
+  `;
+}
 
-  // ===============================
-  // CONTINUE → REVIEW & PAY
-  // ===============================
-  document.getElementById("continueBtn").onclick = () => {
-    const reviewUrl =
-      `review-and-pay.html` +
-      `?doc_type=${encodeURIComponent(docType || "")}` +
-      `&tier=${encodeURIComponent(tier || "")}` +
-      `&price=${encodeURIComponent(price || "")}`;
+/* ===== DOCUMENT FIELD MAP ===== */
+const DOC_FIELDS = {
+  PROMISSORY_NOTE: [
+    field("lender_name", "Lender Name"),
+    field("borrower_name", "Borrower Name"),
+    field("loan_amount", "Loan Amount", "number"),
+    field("interest_rate", "Interest Rate (%)", "number")
+  ],
 
-    window.location.href = reviewUrl;
+  BUSINESS_LOAN_AGREEMENT: [
+    field("lender_name", "Lender Name"),
+    field("business_name", "Borrowing Business Name"),
+    field("loan_amount", "Loan Amount", "number"),
+    field("repayment_terms", "Repayment Terms")
+  ],
+
+  COMMERCIAL_LEASE: [
+    field("landlord_name", "Landlord Name"),
+    field("tenant_name", "Tenant Name"),
+    field("property_address", "Property Address"),
+    field("lease_term", "Lease Term (months)", "number")
+  ],
+
+  INDEPENDENT_CONTRACTOR_AGREEMENT: [
+    field("company_name", "Company Name"),
+    field("contractor_name", "Contractor Name"),
+    field("scope_of_work", "Scope of Work"),
+    field("payment_amount", "Payment Amount", "number")
+  ]
+};
+
+/* ===== RENDER FORM ===== */
+const form = document.getElementById("intakeForm");
+
+const fields = DOC_FIELDS[doc_type] || [
+  field("party_one", "Party One"),
+  field("party_two", "Party Two")
+];
+
+form.innerHTML = `
+  ${fields.join("")}
+  <button type="submit">Continue to Review & Pay</button>
+`;
+
+/* ===== SUBMIT ===== */
+form.addEventListener("submit", e => {
+  e.preventDefault();
+
+  const data = {
+    doc_type,
+    tier,
+    price
   };
+
+  new FormData(form).forEach((v, k) => data[k] = v);
+
+  sessionStorage.setItem("order_payload", JSON.stringify(data));
+  window.location.href = "review-and-pay.html";
+});
 </script>
 
 </body>
