@@ -3,261 +3,70 @@
 <head>
   <meta charset="UTF-8" />
   <title>E-LegalBoom | Document Intake</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="style.css" />
   <style>
     body {
       font-family: Arial, sans-serif;
-      background: #f5f6f8;
+      background: #f5f6f7;
+      padding: 40px;
     }
-    .container {
-      max-width: 900px;
-      margin: 40px auto;
-      background: #ffffff;
-      padding: 30px;
+    .card {
+      background: #fdecec;
+      padding: 20px;
       border-radius: 6px;
+      max-width: 700px;
     }
-    h1 {
+    .label {
+      font-weight: bold;
+    }
+    .value {
       margin-bottom: 10px;
     }
-    .summary {
-      background: #eef2f8;
-      padding: 15px;
-      margin-bottom: 20px;
-      border-radius: 4px;
-    }
-    .field {
-      margin-bottom: 14px;
-    }
-    label {
-      display: block;
-      font-weight: bold;
-      margin-bottom: 4px;
-    }
-    input {
-      width: 100%;
-      padding: 8px;
-    }
-    .btn {
+    button {
       margin-top: 20px;
-      padding: 12px 18px;
+      padding: 12px 20px;
       font-size: 16px;
-    }
-    .btn:disabled {
-      opacity: 0.5;
+      cursor: pointer;
     }
   </style>
 </head>
-
 <body>
-<div class="container">
 
-  <h1>Document Intake</h1>
+<h1>Document Intake</h1>
 
-  <!-- ANCHORED ORDER SUMMARY -->
-  <div class="summary">
-    <p><strong>Document Type:</strong> <span id="docType"></span></p>
-    <p><strong>Tier:</strong> <span id="tier"></span></p>
-    <p><strong>Price:</strong> $<span id="price"></span></p>
-  </div>
-
-  <!-- INTAKE FORM -->
-  <form id="intakeForm"></form>
-
-  <button id="continueBtn" class="btn" disabled>
-    Continue to Review & Pay
-  </button>
-
+<div class="card">
+  <div class="value"><span class="label">Document Type:</span> <span id="docType"></span></div>
+  <div class="value"><span class="label">Tier:</span> <span id="tier"></span></div>
+  <div class="value"><span class="label">Price:</span> $<span id="price"></span></div>
 </div>
 
+<button id="continueBtn">Continue to Review & Pay</button>
+
 <script>
-/* ======================================================
-   RECEIVE IDENTITY VIA URL (AUTHORITATIVE)
-====================================================== */
+  // ==============================
+  // URL PARAM READER (AUTHORITATIVE)
+  // ==============================
+  const params = new URLSearchParams(window.location.search);
 
-const params = new URLSearchParams(window.location.search);
+  const doc_type = params.get("doc_type");
+  const tier = params.get("tier");
+  const price = params.get("price");
 
-// Canonical identity (no aliases)
-const doc_type = params.get("doc_type") || "";
-const tier = params.get("tier") || "";
-const price = params.get("price") || "";
+  // Render immediately (no guards, no redirects)
+  document.getElementById("docType").textContent = doc_type || "";
+  document.getElementById("tier").textContent = tier || "";
+  document.getElementById("price").textContent = price || "";
 
-// Display immediately (visible = real)
-document.getElementById("docType").textContent = doc_type;
-document.getElementById("tier").textContent = tier;
-document.getElementById("price").textContent = price;
+  // ==============================
+  // CONTINUE
+  // ==============================
+  document.getElementById("continueBtn").onclick = () => {
+    const query =
+      `doc_type=${encodeURIComponent(doc_type || "")}` +
+      `&tier=${encodeURIComponent(tier || "")}` +
+      `&price=${encodeURIComponent(price || "")}`;
 
-/* ======================================================
-   FIELD FACTORY
-====================================================== */
-
-function field(name, label, type = "text") {
-  return { name, label, type };
-}
-
-/* ======================================================
-   DOCUMENT FLEX MAP (LOCKED TO CATALOG)
-====================================================== */
-
-const FLEX = {
-
-  "Promissory Note": [
-    field("lender_name","Lender Name"),
-    field("borrower_name","Borrower Name"),
-    field("loan_amount","Loan Amount","number"),
-    field("interest_rate","Interest Rate (%)","number"),
-    field("repayment_date","Repayment Date","date")
-  ],
-
-  "Non-Disclosure Agreement (NDA)": [
-    field("disclosing_party","Disclosing Party"),
-    field("receiving_party","Receiving Party"),
-    field("effective_date","Effective Date","date")
-  ],
-
-  "Independent Contractor Agreement": [
-    field("company_name","Company Name"),
-    field("contractor_name","Contractor Name"),
-    field("scope_of_work","Scope of Work"),
-    field("payment_terms","Payment Terms")
-  ],
-
-  "Bill of Sale": [
-    field("seller_name","Seller Name"),
-    field("buyer_name","Buyer Name"),
-    field("item_description","Item Description"),
-    field("sale_price","Sale Price","number")
-  ],
-
-  "Operating Agreement (LLC)": [
-    field("llc_name","LLC Name"),
-    field("state","State of Formation"),
-    field("member_names","Member Names"),
-    field("effective_date","Effective Date","date")
-  ],
-
-  "Partnership Agreement": [
-    field("business_name","Business Name"),
-    field("partner_names","Partner Names"),
-    field("profit_split","Profit Split")
-  ],
-
-  "Business Loan Agreement": [
-    field("lender_name","Lender Name"),
-    field("borrower_name","Borrower Name"),
-    field("loan_amount","Loan Amount","number"),
-    field("interest_rate","Interest Rate (%)","number")
-  ],
-
-  "Service Agreement": [
-    field("service_provider","Service Provider"),
-    field("client_name","Client Name"),
-    field("services","Services Provided"),
-    field("payment_terms","Payment Terms")
-  ],
-
-  "Employment Agreement": [
-    field("employer_name","Employer Name"),
-    field("employee_name","Employee Name"),
-    field("position","Position"),
-    field("salary","Salary","number")
-  ],
-
-  "Lease Agreement (Residential)": [
-    field("landlord_name","Landlord Name"),
-    field("tenant_name","Tenant Name"),
-    field("property_address","Property Address"),
-    field("monthly_rent","Monthly Rent","number")
-  ],
-
-  "Commercial Lease Agreement": [
-    field("landlord_name","Landlord Name"),
-    field("tenant_name","Tenant Name"),
-    field("property_address","Property Address"),
-    field("lease_term","Lease Term")
-  ],
-
-  "Non-Compete Agreement": [
-    field("employee_name","Employee Name"),
-    field("company_name","Company Name"),
-    field("restriction_period","Restriction Period")
-  ],
-
-  "Entrepreneur Starter Bundle": [
-    field("business_name","Business Name"),
-    field("state","State of Formation"),
-    field("owner_names","Owner / Member Names"),
-    field("email","Business Email"),
-    field("phone","Business Phone")
-  ]
-};
-
-/* ======================================================
-   RENDER FORM (PASSIVE — NO GUARDS)
-====================================================== */
-
-const form = document.getElementById("intakeForm");
-const btn = document.getElementById("continueBtn");
-
-const fields = FLEX[doc_type] || [];
-
-fields.forEach(f => {
-  const wrap = document.createElement("div");
-  wrap.className = "field";
-
-  const label = document.createElement("label");
-  label.textContent = f.label;
-
-  const input = document.createElement("input");
-  input.type = f.type;
-  input.name = f.name;
-  input.required = true;
-
-  wrap.appendChild(label);
-  wrap.appendChild(input);
-  form.appendChild(wrap);
-});
-
-/* ======================================================
-   VALIDATION (LOCAL ONLY)
-====================================================== */
-
-form.addEventListener("input", () => {
-  const required = [...form.querySelectorAll("input[required]")];
-  btn.disabled = !required.every(i => i.value.trim() !== "");
-});
-
-/* ======================================================
-   BUILD ORDER LINE → REVIEW & PAY
-====================================================== */
-
-btn.onclick = () => {
-
-  const intake_data = {};
-
-  form.querySelectorAll("input").forEach(i => {
-    intake_data[i.name] = i.value;
-  });
-
-  const order_line = {
-    doc_type: doc_type,
-    tier: tier,
-    price: price,
-    intake_data: intake_data
+    window.location.href = `review-and-pay.html?${query}`;
   };
-
-  // Optional persistence for review page convenience
-  sessionStorage.setItem("order_line", JSON.stringify(order_line));
-
-  // Carry forward deterministically
-  const nextParams = new URLSearchParams({
-    doc_type: doc_type,
-    tier: tier,
-    price: price
-  });
-
-  window.location.href = "review-and-pay.html?" + nextParams.toString();
-};
 </script>
 
 </body>
