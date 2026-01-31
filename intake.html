@@ -3,47 +3,48 @@
 <head>
   <meta charset="UTF-8" />
   <title>E-LegalBoom | Document Intake</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="style.css" />
   <style>
     body {
       font-family: Arial, sans-serif;
-      background:#f5f6f8;
+      background: #f5f6f8;
     }
     .container {
       max-width: 900px;
       margin: 40px auto;
-      background:#ffffff;
-      padding:30px;
-      border-radius:6px;
+      background: #ffffff;
+      padding: 30px;
+      border-radius: 6px;
     }
     h1 {
       margin-bottom: 10px;
     }
     .summary {
-      background:#eef2f8;
-      padding:15px;
-      margin-bottom:20px;
-      border-radius:4px;
+      background: #eef2f8;
+      padding: 15px;
+      margin-bottom: 20px;
+      border-radius: 4px;
     }
     .field {
-      margin-bottom:14px;
+      margin-bottom: 14px;
     }
     label {
-      display:block;
-      font-weight:bold;
-      margin-bottom:4px;
+      display: block;
+      font-weight: bold;
+      margin-bottom: 4px;
     }
     input {
-      width:100%;
-      padding:8px;
+      width: 100%;
+      padding: 8px;
     }
     .btn {
-      margin-top:20px;
-      padding:12px 18px;
-      font-size:16px;
+      margin-top: 20px;
+      padding: 12px 18px;
+      font-size: 16px;
     }
     .btn:disabled {
-      opacity:0.5;
+      opacity: 0.5;
     }
   </style>
 </head>
@@ -71,22 +72,17 @@
 
 <script>
 /* ======================================================
-   RECEIVE INTENT (PASSIVE, NO GUARDS)
+   RECEIVE IDENTITY VIA URL (AUTHORITATIVE)
 ====================================================== */
 
-// Canonical read ONLY
-const order =
-  JSON.parse(sessionStorage.getItem("order")) || {
-    doc_type: sessionStorage.getItem("doc_type"),
-    tier: sessionStorage.getItem("tier"),
-    price: sessionStorage.getItem("price")
-  };
+const params = new URLSearchParams(window.location.search);
 
-// Anchor values immediately (visible = real)
-const doc_type = order.doc_type || "";
-const tier = order.tier || "";
-const price = order.price || "";
+// Canonical identity (no aliases)
+const doc_type = params.get("doc_type") || "";
+const tier = params.get("tier") || "";
+const price = params.get("price") || "";
 
+// Display immediately (visible = real)
 document.getElementById("docType").textContent = doc_type;
 document.getElementById("tier").textContent = tier;
 document.getElementById("price").textContent = price;
@@ -100,7 +96,7 @@ function field(name, label, type = "text") {
 }
 
 /* ======================================================
-   DOCUMENT FLEX MAP (CATALOG-LOCKED)
+   DOCUMENT FLEX MAP (LOCKED TO CATALOG)
 ====================================================== */
 
 const FLEX = {
@@ -113,7 +109,7 @@ const FLEX = {
     field("repayment_date","Repayment Date","date")
   ],
 
-  "Non-Disclosure Agreement": [
+  "Non-Disclosure Agreement (NDA)": [
     field("disclosing_party","Disclosing Party"),
     field("receiving_party","Receiving Party"),
     field("effective_date","Effective Date","date")
@@ -167,7 +163,7 @@ const FLEX = {
     field("salary","Salary","number")
   ],
 
-  "Residential Lease Agreement": [
+  "Lease Agreement (Residential)": [
     field("landlord_name","Landlord Name"),
     field("tenant_name","Tenant Name"),
     field("property_address","Property Address"),
@@ -185,11 +181,19 @@ const FLEX = {
     field("employee_name","Employee Name"),
     field("company_name","Company Name"),
     field("restriction_period","Restriction Period")
+  ],
+
+  "Entrepreneur Starter Bundle": [
+    field("business_name","Business Name"),
+    field("state","State of Formation"),
+    field("owner_names","Owner / Member Names"),
+    field("email","Business Email"),
+    field("phone","Business Phone")
   ]
 };
 
 /* ======================================================
-   RENDER FORM (RECEIVE-ONLY)
+   RENDER FORM (PASSIVE — NO GUARDS)
 ====================================================== */
 
 const form = document.getElementById("intakeForm");
@@ -242,10 +246,17 @@ btn.onclick = () => {
     intake_data: intake_data
   };
 
-  // Persist ONE canonical payload
-  sessionStorage.setItem("intake", JSON.stringify(order_line));
+  // Optional persistence for review page convenience
+  sessionStorage.setItem("order_line", JSON.stringify(order_line));
 
-  window.location.href = "review-and-pay.html";
+  // Carry forward deterministically
+  const nextParams = new URLSearchParams({
+    doc_type: doc_type,
+    tier: tier,
+    price: price
+  });
+
+  window.location.href = "review-and-pay.html?" + nextParams.toString();
 };
 </script>
 
