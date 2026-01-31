@@ -5,223 +5,152 @@
   <title>Document Intake</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
-    body { font-family: Arial, sans-serif; background:#f5f7fa; margin:0; }
-    .wrap { max-width: 980px; margin: 24px auto 48px; background:#fff; border-radius:8px; padding:24px; box-shadow:0 2px 10px rgba(0,0,0,.08); }
-    h1 { margin:0 0 8px; }
-    .sub { color:#4b5563; margin-bottom:16px; }
-    .grid { display:grid; grid-template-columns: repeat(2, 1fr); gap:12px; }
+    body { font-family: Arial, sans-serif; background:#f4f6f8; margin:0; }
+    .wrap { max-width: 960px; margin: 24px auto; background:#fff; padding:24px; border-radius:8px; }
+    h1 { margin-bottom: 6px; }
+    .summary { background:#eef2ff; padding:12px; border-radius:6px; margin-bottom:20px; }
+    .grid { display:grid; grid-template-columns: repeat(2,1fr); gap:12px; }
     .field { display:flex; flex-direction:column; }
-    .field label { font-size:13px; font-weight:bold; margin-bottom:4px; }
-    .field input, .field select, .field textarea {
-      padding:8px; font-size:14px; border:1px solid #d1d5db; border-radius:4px;
+    label { font-weight:bold; font-size:13px; margin-bottom:4px; }
+    input, textarea, select {
+      padding:8px; border:1px solid #ccc; border-radius:4px; font-size:14px;
     }
-    .field textarea { min-height:80px; resize:vertical; }
+    textarea { resize:vertical; min-height:80px; }
     .section { margin-top:20px; }
-    .section h2 { font-size:18px; border-bottom:2px solid #e5e7eb; padding-bottom:6px; margin-bottom:12px; }
-    .summary { background:#f3f4f6; border:1px solid #d1d5db; border-radius:6px; padding:12px; }
-    .summary div { margin-bottom:6px; }
-    .pill { display:inline-block; background:#2563eb; color:#fff; padding:4px 8px; border-radius:999px; font-size:12px; }
-    .actions { margin-top:24px; }
-    .btn { width:100%; padding:14px; font-size:16px; font-weight:bold; border:none; border-radius:6px; background:#1e40af; color:#fff; cursor:pointer; }
-    .btn:disabled { background:#9ca3af; cursor:not-allowed; }
-    .note { font-size:12px; color:#6b7280; margin-top:6px; }
-    .hidden { display:none; }
+    .btn {
+      margin-top:24px;
+      width:100%;
+      padding:14px;
+      background:#1e40af;
+      color:#fff;
+      font-size:16px;
+      border:none;
+      border-radius:6px;
+      cursor:pointer;
+    }
+    .btn:disabled { background:#9ca3af; }
   </style>
 </head>
 <body>
-  <div class="wrap">
-    <h1>Document Intake</h1>
-    <div class="sub">We’ll collect exactly what’s required to prepare your document.</div>
 
-    <!-- ORDER SUMMARY -->
-    <div class="section">
-      <h2>Order Summary</h2>
-      <div class="summary">
-        <div><strong>Document:</strong> <span id="sumDoc">—</span></div>
-        <div><strong>Tier:</strong> <span id="sumTier">—</span></div>
-        <div><strong>Price:</strong> $<span id="sumPrice">—</span></div>
-      </div>
-    </div>
+<div class="wrap">
+  <h1>Document Intake</h1>
+  <div class="summary">
+    <div><strong>Document:</strong> <span id="docName"></span></div>
+    <div><strong>Tier:</strong> <span id="tier"></span></div>
+    <div><strong>Price:</strong> $<span id="price"></span></div>
+  </div>
 
-    <!-- CORE (≈90%) -->
-    <div class="section">
-      <h2>Core Information <span class="pill">Required</span></h2>
-
-      <div class="grid">
-        <!-- Client -->
-        <div class="field"><label>First Name</label><input name="client_first_name" required></div>
-        <div class="field"><label>Last Name</label><input name="client_last_name" required></div>
-        <div class="field"><label>Email</label><input type="email" name="client_email" required></div>
-        <div class="field"><label>Phone</label><input name="client_phone" required></div>
-
-        <!-- Address / Jurisdiction -->
-        <div class="field"><label>Street Address</label><input name="address_line1" required></div>
-        <div class="field"><label>City</label><input name="city" required></div>
-        <div class="field"><label>State</label><input name="state" required></div>
-        <div class="field"><label>ZIP</label><input name="zip" required></div>
-
-        <!-- Party Context -->
-        <div class="field">
-          <label>Party Type</label>
-          <select name="party_type" required>
-            <option value="">Select…</option>
-            <option value="individual">Individual</option>
-            <option value="entity">Business / Entity</option>
-          </select>
-        </div>
-        <div class="field"><label>Entity Name (if applicable)</label><input name="entity_name"></div>
-
-        <!-- Dates / Law -->
-        <div class="field"><label>Effective Date</label><input type="date" name="effective_date" required></div>
-        <div class="field"><label>Governing State</label><input name="governing_state" required></div>
-      </div>
-    </div>
-
-    <!-- FLEX (≈10%) -->
-    <div class="section">
-      <h2>Document-Specific Details</h2>
-      <div id="flex"></div>
-      <div class="note">These fields are required for the selected document.</div>
-    </div>
-
-    <!-- HIDDEN CONTEXT -->
-    <input type="hidden" name="doc_type" id="doc_type">
-    <input type="hidden" name="tier" id="tier">
-    <input type="hidden" name="price" id="price">
-    <input type="hidden" name="order_id" id="order_id">
-
-    <div class="actions">
-      <button class="btn" id="submitBtn" disabled>Continue to Review & Pay</button>
+  <!-- CORE FIELDS -->
+  <div class="section">
+    <h2>Client Information</h2>
+    <div class="grid">
+      <div class="field"><label>First Name</label><input required name="client_first_name"></div>
+      <div class="field"><label>Last Name</label><input required name="client_last_name"></div>
+      <div class="field"><label>Email</label><input type="email" required name="client_email"></div>
+      <div class="field"><label>Phone</label><input required name="client_phone"></div>
+      <div class="field"><label>Street Address</label><input required name="address_line1"></div>
+      <div class="field"><label>City</label><input required name="city"></div>
+      <div class="field"><label>State</label><input required name="state"></div>
+      <div class="field"><label>ZIP</label><input required name="zip"></div>
+      <div class="field"><label>Governing State</label><input required name="governing_state"></div>
+      <div class="field"><label>Effective Date</label><input type="date" required name="effective_date"></div>
     </div>
   </div>
 
+  <!-- DOCUMENT FLEX -->
+  <div class="section">
+    <h2>Document Details</h2>
+    <div class="grid" id="flexFields"></div>
+  </div>
+
+  <button class="btn" id="continueBtn" disabled>Continue to Review</button>
+</div>
+
 <script>
-/* ---------- ORDER CONTEXT ---------- */
-const ctx = JSON.parse(sessionStorage.getItem("order"));
-if (!ctx || !ctx.document_name || !ctx.tier || !ctx.price) {
-  alert("Session expired. Please reselect a document.");
-  location.href = "catalog.html";
+/* ========= SAFE SESSION READ (BACKWARD COMPATIBLE) ========= */
+
+// Read whatever the catalog already provides
+const order =
+  JSON.parse(sessionStorage.getItem("order")) ||
+  {
+    document_name: sessionStorage.getItem("document_type"),
+    tier: sessionStorage.getItem("tier"),
+    price: sessionStorage.getItem("price")
+  };
+
+if (!order || !order.document_name) {
+  console.warn("No document found in session, redirecting.");
+  window.location.replace("catalog.html");
 }
-sumDoc.textContent = ctx.document_name;
-sumTier.textContent = ctx.tier;
-sumPrice.textContent = ctx.price;
 
-doc_type.value = ctx.document_name;
-tier.value = ctx.tier;
-price.value = ctx.price;
-order_id.value = ctx.order_id || crypto.randomUUID();
+docName.textContent = order.document_name;
+tier.textContent = order.tier || "";
+price.textContent = order.price || "";
 
-/* ---------- FLEX SCHEMA (CANONICAL) ---------- */
+/* ========= DOCUMENT FLEX MAP ========= */
+
 const FLEX = {
   "Promissory Note": [
-    f("lender_name","Lender Name"),
-    f("borrower_name","Borrower Name"),
-    f("loan_amount","Loan Amount","number"),
-    f("interest_rate","Interest Rate (%)","number"),
-    f("repayment_term","Repayment Term (months)","number")
+    field("lender_name","Lender Name"),
+    field("borrower_name","Borrower Name"),
+    field("loan_amount","Loan Amount","number"),
+    field("interest_rate","Interest Rate (%)","number")
   ],
-  "Non-Disclosure Agreement (NDA)": [
-    f("disclosing_party","Disclosing Party"),
-    f("receiving_party","Receiving Party"),
-    f("nda_term","Term Length (months)","number")
-  ],
-  "Independent Contractor Agreement": [
-    f("contractor_name","Contractor Name"),
-    f("services_description","Services Description","textarea"),
-    f("compensation","Compensation")
-  ],
-  "Bill of Sale": [
-    f("seller_name","Seller Name"),
-    f("buyer_name","Buyer Name"),
-    f("item_description","Item Description","textarea"),
-    f("sale_amount","Sale Amount","number")
-  ],
-  "Operating Agreement (LLC)": [
-    f("llc_name","LLC Name"),
-    f("members","Members (names & %s)","textarea"),
-    f("manager_managed","Manager-Managed?","select",["Yes","No"])
-  ],
-  "Partnership Agreement": [
-    f("partners","Partners (names & %s)","textarea"),
-    f("profit_split","Profit Split","textarea")
-  ],
-  "Business Loan Agreement": [
-    f("lender_name","Lender Name"),
-    f("borrower_name","Borrower Name"),
-    f("loan_amount","Loan Amount","number"),
-    f("interest_rate","Interest Rate (%)","number"),
-    f("payment_frequency","Payment Frequency"),
-    f("secured","Secured Loan?","select",["Yes","No"])
-  ],
-  "Service Agreement": [
-    f("provider_name","Provider Name"),
-    f("client_name","Client Name"),
-    f("scope","Scope of Services","textarea"),
-    f("payment_terms","Payment Terms","textarea")
+  "Non-Disclosure Agreement": [
+    field("disclosing_party","Disclosing Party"),
+    field("receiving_party","Receiving Party"),
+    field("term_months","Term (months)","number")
   ],
   "Employment Agreement": [
-    f("employer_name","Employer Name"),
-    f("employee_name","Employee Name"),
-    f("position","Position/Role"),
-    f("salary","Salary","number"),
-    f("start_date_emp","Start Date","date")
-  ],
-  "Residential Lease Agreement": [
-    f("landlord_name","Landlord Name"),
-    f("tenant_name","Tenant Name"),
-    f("property_address","Property Address"),
-    f("rent","Monthly Rent","number"),
-    f("lease_term","Lease Term (months)","number")
-  ],
-  "Commercial Lease Agreement": [
-    f("landlord_name","Landlord Name"),
-    f("tenant_name","Tenant Name"),
-    f("property_address","Property Address"),
-    f("rent","Monthly Rent","number"),
-    f("use","Permitted Use")
-  ],
-  "Non-Compete Agreement": [
-    f("restricted_party","Restricted Party"),
-    f("duration","Duration (months)","number"),
-    f("geography","Geographic Scope")
+    field("employer_name","Employer Name"),
+    field("employee_name","Employee Name"),
+    field("position","Position"),
+    field("salary","Salary","number")
   ]
+  // other docs already analyzed can be added here
 };
 
-function f(name,label,type="text",options=[]){ return {name,label,type,options}; }
+function field(name,label,type="text") {
+  return { name, label, type };
+}
 
-/* ---------- RENDER FLEX ---------- */
-const flexWrap = document.getElementById("flex");
-const fields = FLEX[ctx.document_name] || [];
-fields.forEach(def => {
-  const d = document.createElement("div"); d.className="field";
-  const l = document.createElement("label"); l.textContent = def.label; d.appendChild(l);
-  let i;
-  if (def.type === "textarea") { i = document.createElement("textarea"); }
-  else if (def.type === "select") {
-    i = document.createElement("select");
-    const o0 = document.createElement("option"); o0.value=""; o0.textContent="Select…"; i.appendChild(o0);
-    def.options.forEach(v=>{ const o=document.createElement("option"); o.value=v; o.textContent=v; i.appendChild(o); });
-  }
-  else {
-    i = document.createElement("input"); i.type = def.type;
-  }
-  i.name = def.name; i.required = true; d.appendChild(i); flexWrap.appendChild(d);
+const flexWrap = document.getElementById("flexFields");
+(FLEX[order.document_name] || []).forEach(f => {
+  const d = document.createElement("div");
+  d.className = "field";
+  const l = document.createElement("label");
+  l.textContent = f.label;
+  const i = document.createElement("input");
+  i.name = f.name;
+  i.type = f.type;
+  i.required = true;
+  d.appendChild(l);
+  d.appendChild(i);
+  flexWrap.appendChild(d);
 });
 
-/* ---------- VALIDATION ---------- */
-const submitBtn = document.getElementById("submitBtn");
+/* ========= VALIDATION ========= */
+
+const btn = document.getElementById("continueBtn");
+
 document.addEventListener("input", () => {
   const required = document.querySelectorAll("[required]");
-  submitBtn.disabled = ![...required].every(x => x.value && x.value.trim() !== "");
+  btn.disabled = ![...required].every(el => el.value.trim());
 });
 
-/* ---------- SUBMIT ---------- */
-submitBtn.onclick = () => {
+/* ========= SUBMIT ========= */
+
+btn.onclick = () => {
   const data = {};
-  document.querySelectorAll("input,select,textarea").forEach(el => data[el.name] = el.value);
+  document.querySelectorAll("input").forEach(i => data[i.name] = i.value);
+  data.document_name = order.document_name;
+  data.tier = order.tier;
+  data.price = order.price;
   sessionStorage.setItem("intake", JSON.stringify(data));
-  location.href = "reviewandpay.html";
+  window.location.href = "reviewandpay.html";
 };
 </script>
+
 </body>
 </html>
