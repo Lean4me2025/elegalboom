@@ -2,223 +2,150 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>E-LegalBoom | Document Intake</title>
+  <title>E-LegalBoom | Review & Pay</title>
   <link rel="stylesheet" href="style.css" />
   <style>
-    body { font-family: Arial, sans-serif; background:#f5f6f8; }
-    .container { max-width: 900px; margin: 40px auto; background:#fff; padding:30px; border-radius:6px; }
-    h1 { margin-bottom: 10px; }
-    .status { color:#b00020; margin-bottom:15px; }
-    .summary { background:#f0f2f6; padding:15px; margin-bottom:20px; border-radius:4px; }
-    .field { margin-bottom:14px; }
-    label { display:block; font-weight:bold; margin-bottom:4px; }
-    input { width:100%; padding:8px; }
-    .btn { margin-top:20px; padding:12px 18px; font-size:16px; }
-    .btn:disabled { opacity:.5; }
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f6f8;
+    }
+    .container {
+      max-width: 900px;
+      margin: 40px auto;
+      background: #ffffff;
+      padding: 30px;
+      border-radius: 6px;
+    }
+    h1 {
+      margin-bottom: 20px;
+    }
+    .summary {
+      background: #eef2f8;
+      padding: 20px;
+      border-radius: 4px;
+      margin-bottom: 25px;
+    }
+    .summary p {
+      margin: 6px 0;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 25px;
+    }
+    th, td {
+      border-bottom: 1px solid #ddd;
+      padding: 10px;
+      text-align: left;
+    }
+    th {
+      background: #f0f2f6;
+    }
+    .total {
+      font-size: 18px;
+      font-weight: bold;
+      text-align: right;
+      margin-top: 10px;
+    }
+    .btn {
+      padding: 14px 20px;
+      font-size: 16px;
+    }
   </style>
 </head>
 
 <body>
 <div class="container">
 
-  <h1>Document Intake</h1>
+  <h1>Review Your Order</h1>
 
-  <!-- Status -->
-  <div id="status" class="status"></div>
-
-  <!-- Order Summary -->
+  <!-- ORDER SUMMARY (ANCHOR DISPLAY) -->
   <div class="summary">
-    <p><strong>Document:</strong> <span id="docName"></span></p>
+    <p><strong>Document Type:</strong> <span id="docType"></span></p>
     <p><strong>Tier:</strong> <span id="tier"></span></p>
     <p><strong>Price:</strong> $<span id="price"></span></p>
   </div>
 
-  <!-- Intake Form -->
-  <form id="intakeForm"></form>
+  <!-- INTAKE DATA REVIEW -->
+  <table id="intakeTable">
+    <thead>
+      <tr>
+        <th>Field</th>
+        <th>Value</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
 
-  <button id="continueBtn" class="btn" disabled>
-    Continue to Review & Pay
+  <div class="total">
+    Total: $<span id="total"></span>
+  </div>
+
+  <button class="btn" id="payBtn">
+    Proceed to Payment
   </button>
 
 </div>
 
 <script>
 /* ======================================================
-   SAFE SESSION READ — NO REDIRECTS
+   RECEIVE ORDER LINE (CANONICAL ONLY)
 ====================================================== */
 
-const order =
-  JSON.parse(sessionStorage.getItem("order")) || {
-    document_name: sessionStorage.getItem("document_name"),
-    tier: sessionStorage.getItem("tier"),
-    price: sessionStorage.getItem("price")
+// Intake is the creator of the order line.
+// Review & Pay ONLY receives and displays it.
+
+const intake = JSON.parse(sessionStorage.getItem("intake")) || {};
+
+// Canonical fields
+const doc_type = intake.doc_type || "";
+const tier = intake.tier || "";
+const price = intake.price || "";
+
+// Display anchored values
+document.getElementById("docType").textContent = doc_type;
+document.getElementById("tier").textContent = tier;
+document.getElementById("price").textContent = price;
+document.getElementById("total").textContent = price;
+
+/* ======================================================
+   RENDER INTAKE DATA (DISPLAY-ONLY)
+====================================================== */
+
+const tbody = document.querySelector("#intakeTable tbody");
+
+Object.keys(intake).forEach(key => {
+  if (["doc_type", "tier", "price"].includes(key)) return;
+
+  const tr = document.createElement("tr");
+
+  const tdKey = document.createElement("td");
+  tdKey.textContent = key.replace(/_/g, " ");
+
+  const tdVal = document.createElement("td");
+  tdVal.textContent = intake[key];
+
+  tr.appendChild(tdKey);
+  tr.appendChild(tdVal);
+  tbody.appendChild(tr);
+});
+
+/* ======================================================
+   PAYMENT HANDOFF (PLACEHOLDER)
+====================================================== */
+
+document.getElementById("payBtn").onclick = () => {
+
+  const order_line = {
+    doc_type: doc_type,
+    tier: tier,
+    price: price,
+    intake_data: intake
   };
 
-const status = document.getElementById("status");
+  console.log("FINAL ORDER LINE (CANONICAL):", order_line);
 
-if (!order || !order.document_name) {
-  status.textContent =
-    "No document selected yet. Please return to the catalog and choose a document.";
-}
-
-/* ======================================================
-   DISPLAY SUMMARY (PASSIVE)
-====================================================== */
-
-document.getElementById("docName").textContent = order.document_name || "";
-document.getElementById("tier").textContent = order.tier || "";
-document.getElementById("price").textContent = order.price || "";
-
-/* ======================================================
-   FIELD FACTORY
-====================================================== */
-
-function field(name, label, type = "text") {
-  return { name, label, type };
-}
-
-/* ======================================================
-   DOCUMENT FLEX MAP (CATALOG-LOCKED)
-====================================================== */
-
-const FLEX = {
-
-  "Promissory Note": [
-    field("lender_name", "Lender Name"),
-    field("borrower_name", "Borrower Name"),
-    field("loan_amount", "Loan Amount", "number"),
-    field("interest_rate", "Interest Rate (%)", "number"),
-    field("repayment_date", "Repayment Date", "date")
-  ],
-
-  "Non-Disclosure Agreement": [
-    field("disclosing_party", "Disclosing Party"),
-    field("receiving_party", "Receiving Party"),
-    field("effective_date", "Effective Date", "date")
-  ],
-
-  "Independent Contractor Agreement": [
-    field("company_name", "Company Name"),
-    field("contractor_name", "Contractor Name"),
-    field("scope_of_work", "Scope of Work"),
-    field("payment_terms", "Payment Terms")
-  ],
-
-  "Bill of Sale": [
-    field("seller_name", "Seller Name"),
-    field("buyer_name", "Buyer Name"),
-    field("item_description", "Item Description"),
-    field("sale_price", "Sale Price", "number")
-  ],
-
-  "Operating Agreement (LLC)": [
-    field("llc_name", "LLC Name"),
-    field("state", "State of Formation"),
-    field("member_names", "Member Names"),
-    field("effective_date", "Effective Date", "date")
-  ],
-
-  "Partnership Agreement": [
-    field("business_name", "Business Name"),
-    field("partner_names", "Partner Names"),
-    field("profit_split", "Profit Split")
-  ],
-
-  "Business Loan Agreement": [
-    field("lender_name", "Lender Name"),
-    field("borrower_name", "Borrower Name"),
-    field("loan_amount", "Loan Amount", "number"),
-    field("interest_rate", "Interest Rate (%)", "number")
-  ],
-
-  "Service Agreement": [
-    field("service_provider", "Service Provider"),
-    field("client_name", "Client Name"),
-    field("services", "Services Provided"),
-    field("payment_terms", "Payment Terms")
-  ],
-
-  "Employment Agreement": [
-    field("employer_name", "Employer Name"),
-    field("employee_name", "Employee Name"),
-    field("position", "Position"),
-    field("salary", "Salary", "number")
-  ],
-
-  "Residential Lease Agreement": [
-    field("landlord_name", "Landlord Name"),
-    field("tenant_name", "Tenant Name"),
-    field("property_address", "Property Address"),
-    field("monthly_rent", "Monthly Rent", "number")
-  ],
-
-  "Commercial Lease Agreement": [
-    field("landlord_name", "Landlord Name"),
-    field("tenant_name", "Tenant Name"),
-    field("property_address", "Property Address"),
-    field("lease_term", "Lease Term")
-  ],
-
-  "Non-Compete Agreement": [
-    field("employee_name", "Employee Name"),
-    field("company_name", "Company Name"),
-    field("restriction_period", "Restriction Period")
-  ]
-};
-
-/* ======================================================
-   RENDER FORM
-====================================================== */
-
-const form = document.getElementById("intakeForm");
-const continueBtn = document.getElementById("continueBtn");
-
-const fields = FLEX[order.document_name] || [];
-
-fields.forEach(f => {
-  const wrap = document.createElement("div");
-  wrap.className = "field";
-
-  const label = document.createElement("label");
-  label.textContent = f.label;
-
-  const input = document.createElement("input");
-  input.type = f.type;
-  input.name = f.name;
-  input.required = true;
-
-  wrap.appendChild(label);
-  wrap.appendChild(input);
-  form.appendChild(wrap);
-});
-
-/* ======================================================
-   VALIDATION
-====================================================== */
-
-form.addEventListener("input", () => {
-  const required = [...form.querySelectorAll("input[required]")];
-  continueBtn.disabled = !required.every(i => i.value.trim() !== "");
-});
-
-/* ======================================================
-   SUBMIT → REVIEW & PAY
-====================================================== */
-
-continueBtn.onclick = () => {
-  const intake = {};
-
-  form.querySelectorAll("input").forEach(i => {
-    intake[i.name] = i.value;
-  });
-
-  intake.document_name = order.document_name;
-  intake.tier = order.tier;
-  intake.price = order.price;
-
-  sessionStorage.setItem("intake", JSON.stringify(intake));
-
-  window.location.href = "reviewandpay.html";
+  alert("Payment wiring will be connected next.");
 };
 </script>
 
