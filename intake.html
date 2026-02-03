@@ -1,155 +1,179 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<title>E-LegalBoom | Document Intake</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-<style>
-body {
-  font-family: Arial, sans-serif;
-  background: #ffffff;
-  color: #111827;
-  margin: 0;
-  padding: 24px;
-}
-
-h1 {
-  margin-bottom: 16px;
-}
-
-.intake-summary {
-  background: #fef2f2;
-  border: 1px solid #fecaca;
-  padding: 16px;
-  border-radius: 6px;
-  margin-bottom: 24px;
-}
-
-label {
-  display: block;
-  font-weight: bold;
-  margin-top: 14px;
-}
-
-input, select {
-  width: 100%;
-  padding: 8px;
-  margin-top: 4px;
-  border: 1px solid #d1d5db;
-  border-radius: 4px;
-}
-
-button {
-  margin-top: 24px;
-  padding: 12px;
-  font-size: 15px;
-  font-weight: bold;
-  background: #2563eb;
-  color: #ffffff;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-}
-
-button:hover {
-  background: #1d4ed8;
-}
-</style>
+  <meta charset="UTF-8" />
+  <title>E-LegalBoom | Intake</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #0f172a;
+      color: #e5e7eb;
+      padding: 20px;
+    }
+    h1, h2 {
+      color: #38bdf8;
+    }
+    label {
+      display: block;
+      margin-top: 12px;
+    }
+    input, select {
+      width: 100%;
+      padding: 8px;
+      margin-top: 4px;
+    }
+    button {
+      margin-top: 20px;
+      padding: 12px;
+      width: 100%;
+      background: #38bdf8;
+      color: #020617;
+      border: none;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    .hidden {
+      display: none;
+    }
+    .section {
+      margin-top: 30px;
+      padding-top: 20px;
+      border-top: 1px solid #334155;
+    }
+  </style>
 </head>
 
 <body>
 
-<h1>Document Intake</h1>
+<h1>E-LegalBoom Intake</h1>
 
-<div class="intake-summary">
-  <div><strong>Document Type:</strong> <span id="docType"></span></div>
-  <div><strong>Tier:</strong> <span id="tier"></span></div>
-  <div><strong>Price:</strong> $<span id="price"></span></div>
+<!-- ================= ARM ================= -->
+<div class="section">
+  <h2>General Information</h2>
+
+  <label>Order ID
+    <input id="order_id" required />
+  </label>
+
+  <label>Tier
+    <select id="tier" required>
+      <option value="">Select Tier</option>
+      <option value="tier_1">Tier 1</option>
+      <option value="tier_2">Tier 2</option>
+      <option value="tier_3">Tier 3</option>
+      <option value="tier_4">Tier 4</option>
+    </select>
+  </label>
+
+  <label>Document Type
+    <select id="document_type" required onchange="loadHand()">
+      <option value="">Select Document</option>
+      <option value="nda">NDA</option>
+      <option value="llc_single_member">LLC – Single Member</option>
+    </select>
+  </label>
+
+  <label>Full Name
+    <input id="client_full_name" required />
+  </label>
+
+  <label>Email
+    <input id="client_email" type="email" required />
+  </label>
+
+  <label>Phone
+    <input id="client_phone" />
+  </label>
+
+  <label>Street Address
+    <input id="client_address" />
+  </label>
+
+  <label>City
+    <input id="client_city" />
+  </label>
+
+  <label>State
+    <input id="client_state" />
+  </label>
+
+  <label>ZIP
+    <input id="client_zip" />
+  </label>
 </div>
 
-<form id="intakeForm"></form>
+<!-- ================= HAND ================= -->
+<div id="hand_section" class="section hidden">
+  <h2>Document Details</h2>
+  <div id="hand_fields"></div>
+</div>
+
+<button onclick="submitIntake()">Submit Intake</button>
 
 <script>
-/* ===== URL PARAMS ===== */
-const params = new URLSearchParams(window.location.search);
-const doc_type = params.get("doc_type");
-const tier = params.get("tier");
-const price = params.get("price");
+  function loadHand() {
+    const docType = document.getElementById("document_type").value;
+    const hand = document.getElementById("hand_fields");
+    document.getElementById("hand_section").classList.remove("hidden");
+    hand.innerHTML = "";
 
-/* ===== DISPLAY HEADER ===== */
-document.getElementById("docType").textContent = doc_type || "";
-document.getElementById("tier").textContent = tier || "";
-document.getElementById("price").textContent = price || "";
+    if (docType === "nda") {
+      hand.innerHTML = `
+        <label>Disclosing Party Name
+          <input id="nda_disclosing_party" />
+        </label>
+        <label>Receiving Party Name
+          <input id="nda_receiving_party" />
+        </label>
+        <label>Confidential Term (months)
+          <input id="nda_term_months" type="number" />
+        </label>
+      `;
+    }
 
-/* ===== FIELD FACTORY ===== */
-function field(name, label, type = "text") {
-  return `
-    <label>${label}
-      <input type="${type}" name="${name}" required />
-    </label>
-  `;
-}
+    if (docType === "llc_single_member") {
+      hand.innerHTML = `
+        <label>LLC Name
+          <input id="llc_name" />
+        </label>
+        <label>State of Formation
+          <input id="llc_state" />
+        </label>
+        <label>Member Name
+          <input id="llc_member_name" />
+        </label>
+      `;
+    }
+  }
 
-/* ===== DOCUMENT FIELD MAP ===== */
-const DOC_FIELDS = {
-  PROMISSORY_NOTE: [
-    field("lender_name", "Lender Name"),
-    field("borrower_name", "Borrower Name"),
-    field("loan_amount", "Loan Amount", "number"),
-    field("interest_rate", "Interest Rate (%)", "number")
-  ],
+  function submitIntake() {
+    const payload = {
+      // ARM
+      order_id: document.getElementById("order_id").value,
+      tier: document.getElementById("tier").value,
+      document_type: document.getElementById("document_type").value,
+      client_full_name: document.getElementById("client_full_name").value,
+      client_email: document.getElementById("client_email").value,
+      client_phone: document.getElementById("client_phone").value,
+      client_address: document.getElementById("client_address").value,
+      client_city: document.getElementById("client_city").value,
+      client_state: document.getElementById("client_state").value,
+      client_zip: document.getElementById("client_zip").value,
 
-  BUSINESS_LOAN_AGREEMENT: [
-    field("lender_name", "Lender Name"),
-    field("business_name", "Borrowing Business Name"),
-    field("loan_amount", "Loan Amount", "number"),
-    field("repayment_terms", "Repayment Terms")
-  ],
+      // HAND (collected dynamically below)
+      hand: {}
+    };
 
-  COMMERCIAL_LEASE: [
-    field("landlord_name", "Landlord Name"),
-    field("tenant_name", "Tenant Name"),
-    field("property_address", "Property Address"),
-    field("lease_term", "Lease Term (months)", "number")
-  ],
+    document.querySelectorAll("#hand_fields input").forEach(input => {
+      payload.hand[input.id] = input.value;
+    });
 
-  INDEPENDENT_CONTRACTOR_AGREEMENT: [
-    field("company_name", "Company Name"),
-    field("contractor_name", "Contractor Name"),
-    field("scope_of_work", "Scope of Work"),
-    field("payment_amount", "Payment Amount", "number")
-  ]
-};
+    console.log("INTAKE PAYLOAD:", payload);
 
-/* ===== RENDER FORM ===== */
-const form = document.getElementById("intakeForm");
-
-const fields = DOC_FIELDS[doc_type] || [
-  field("party_one", "Party One"),
-  field("party_two", "Party Two")
-];
-
-form.innerHTML = `
-  ${fields.join("")}
-  <button type="submit">Continue to Review & Pay</button>
-`;
-
-/* ===== SUBMIT ===== */
-form.addEventListener("submit", e => {
-  e.preventDefault();
-
-  const data = {
-    doc_type,
-    tier,
-    price
-  };
-
-  new FormData(form).forEach((v, k) => data[k] = v);
-
-  sessionStorage.setItem("order_payload", JSON.stringify(data));
-  window.location.href = "review-and-pay.html";
-});
+    // TODO: POST to Supabase / Edge Function
+    // fetch('/intake-endpoint', { method:'POST', body: JSON.stringify(payload) })
+  }
 </script>
 
 </body>
