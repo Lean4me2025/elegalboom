@@ -1,155 +1,66 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<title>E-LegalBoom | Review & Pay</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8" />
+  <title>E-LegalBoom | Review</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-<style>
-body {
-  font-family: Arial, sans-serif;
-  background: #ffffff;
-  color: #111827;
-  margin: 0;
-  padding: 20px;
-}
-
-h1 {
-  margin-bottom: 6px;
-}
-
-.notice {
-  font-size: 13px;
-  color: #374151;
-  margin-bottom: 20px;
-}
-
-.section {
-  border: 1px solid #e5e7eb;
-  border-radius: 6px;
-  padding: 16px;
-  margin-bottom: 20px;
-}
-
-.section h2 {
-  margin-top: 0;
-  font-size: 18px;
-}
-
-.row {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 8px;
-}
-
-.label {
-  font-weight: bold;
-}
-
-.value {
-  text-align: right;
-}
-
-.total {
-  font-size: 18px;
-  font-weight: bold;
-}
-
-button {
-  background: #2563eb;
-  color: #ffffff;
-  border: none;
-  padding: 14px;
-  font-size: 16px;
-  border-radius: 6px;
-  cursor: pointer;
-  width: 100%;
-}
-
-button:hover {
-  background: #1d4ed8;
-}
-</style>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #0f172a;
+      color: #e5e7eb;
+      padding: 20px;
+    }
+    h1, h2 {
+      color: #38bdf8;
+    }
+    .section {
+      margin-top: 30px;
+      padding-top: 20px;
+      border-top: 1px solid #334155;
+    }
+    .row {
+      margin-bottom: 8px;
+    }
+    .label {
+      color: #94a3b8;
+      font-size: 14px;
+    }
+    .value {
+      font-size: 16px;
+    }
+    button {
+      margin-top: 30px;
+      padding: 14px;
+      width: 100%;
+      background: #38bdf8;
+      color: #020617;
+      border: none;
+      font-size: 16px;
+      cursor: pointer;
+    }
+  </style>
 </head>
 
 <body>
 
-<h1>Review Your Order</h1>
-<div class="notice">
-Please review the details below carefully. These terms will be used to generate your legal document.
+<h1>Review Your Information</h1>
+<p>Please confirm the details below before proceeding to payment.</p>
+
+<div id="arm_section" class="section">
+  <h2>Order Summary</h2>
 </div>
 
-<div id="reviewContainer"></div>
+<div id="hand_section" class="section">
+  <h2>Document Details</h2>
+</div>
 
-<button onclick="confirmAndPay()">Confirm & Continue to Payment</button>
+<button onclick="proceedToPay()">Proceed to Payment</button>
 
 <script>
-/* ===================== LOAD PAYLOAD ===================== */
-const payloadRaw = sessionStorage.getItem("order_payload");
+  /************************************************************
+   * REVIEW PAGE — READ-ONLY MIRROR
+   ************************************************************/
 
-if (!payloadRaw) {
-  alert("Order data not found. Please restart from the catalog.");
-  window.location.href = "catalog.html";
-}
-
-const payload = JSON.parse(payloadRaw);
-
-/* ===================== RENDER REVIEW ===================== */
-const review = document.getElementById("reviewContainer");
-
-review.innerHTML = `
-  <div class="section">
-    <h2>Order Summary</h2>
-    <div class="row"><div class="label">Order ID</div><div class="value">${payload.order_id}</div></div>
-    <div class="row"><div class="label">Document</div><div class="value">${payload.doc_type}</div></div>
-    <div class="row"><div class="label">Tier</div><div class="value">${payload.tier}</div></div>
-    <div class="row total"><div>Total</div><div>$${payload.price}</div></div>
-  </div>
-
-  <div class="section">
-    <h2>Parties</h2>
-    <div class="row"><div class="label">Landlord</div><div class="value">${payload.landlord_legal_name} (${payload.landlord_entity_type})</div></div>
-    <div class="row"><div class="label">Tenant</div><div class="value">${payload.tenant_legal_name} (${payload.tenant_entity_type})</div></div>
-  </div>
-
-  <div class="section">
-    <h2>Premises & Use</h2>
-    <div class="row"><div class="label">Property</div><div class="value">${payload.property_address}</div></div>
-    <div class="row"><div class="label">Permitted Use</div><div class="value">${payload.permitted_use}</div></div>
-  </div>
-
-  <div class="section">
-    <h2>Lease Term</h2>
-    <div class="row"><div class="label">Start Date</div><div class="value">${payload.lease_start_date}</div></div>
-    <div class="row"><div class="label">Term Length</div><div class="value">${payload.lease_term_months} months</div></div>
-  </div>
-
-  <div class="section">
-    <h2>Rent & Security</h2>
-    <div class="row"><div class="label">Monthly Rent</div><div class="value">$${payload.rent_amount}</div></div>
-    <div class="row"><div class="label">Security Deposit</div><div class="value">$${payload.security_deposit_amount}</div></div>
-  </div>
-
-  <div class="section">
-    <h2>Risk & Enforcement</h2>
-    <div class="row"><div class="label">Cure Period</div><div class="value">${payload.cure_period_days} days</div></div>
-    <div class="row"><div class="label">Attorney Fees</div><div class="value">${payload.attorney_fees_clause === "yes" ? "Recoverable" : "Not Recoverable"}</div></div>
-  </div>
-
-  <div class="section">
-    <h2>Governing Law</h2>
-    <div class="row"><div class="label">State</div><div class="value">${payload.governing_state}</div></div>
-  </div>
-`;
-
-/* ===================== CONTINUE ===================== */
-function confirmAndPay() {
-  // This is where Stripe / Pay link / webhook will attach
-  // For now, we just preserve payload and continue
-  sessionStorage.setItem("final_order", JSON.stringify(payload));
-  alert("Order confirmed. Payment integration is next.");
-}
-</script>
-
-</body>
-</html>
+  const intakeRaw
