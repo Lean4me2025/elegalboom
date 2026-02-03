@@ -1,118 +1,139 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
+<meta charset="UTF-8" />
 <title>E-LegalBoom | Document Catalog</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
 <style>
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background: #ffffff;
-  color: #111827;
-}
+  body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #ffffff;
+    color: #111827;
+  }
 
-h1 {
-  text-align: center;
-  margin: 24px 0 6px 0;
-  font-size: 28px;
-}
+  h1 {
+    text-align: center;
+    margin: 24px 0 6px 0;
+    font-size: 28px;
+  }
 
-.subtitle {
-  text-align: center;
-  font-size: 14px;
-  color: #4b5563;
-  margin-bottom: 18px;
-}
+  .subtitle {
+    text-align: center;
+    font-size: 14px;
+    color: #4b5563;
+    margin-bottom: 18px;
+  }
 
-.tier-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 12px;
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: 0 12px 24px 12px;
-}
+  /* ===== GRID ===== */
+  .tier-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 12px 24px 12px;
+  }
 
-.tier-column {
-  border: 1px solid #d1d5db;
-  border-radius: 6px;
-  padding: 10px;
-  background: #ffffff;
-  display: flex;
-  flex-direction: column;
-}
+  /* ===== TIER COLUMN ===== */
+  .tier-column {
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    padding: 10px;
+    background: #ffffff;
+    display: flex;
+    flex-direction: column;
+    min-height: 340px;
+  }
 
-.tier-header {
-  background: #2563eb;
-  color: #ffffff;
-  font-weight: bold;
-  font-size: 14px;
-  padding: 8px 10px;
-  margin-bottom: 10px;
-  border-radius: 4px;
-  text-align: center;
-}
+  /* ===== TIER HEADER ===== */
+  .tier-header {
+    background: #2563eb;
+    color: #ffffff;
+    font-weight: bold;
+    font-size: 14px;
+    padding: 8px 10px;
+    margin-bottom: 10px;
+    border-radius: 4px;
+    text-align: center;
+  }
 
-.doc-item {
-  border: 1px solid #e5e7eb;
-  border-radius: 4px;
-  padding: 8px;
-  margin-bottom: 8px;
-}
+  /* ===== DOCUMENT ITEMS ===== */
+  .doc-item {
+    border: 1px solid #e5e7eb;
+    border-radius: 4px;
+    padding: 8px;
+    margin-bottom: 8px;
+  }
 
-.doc-item label {
-  font-weight: bold;
-  font-size: 13px;
-  cursor: pointer;
-}
+  .doc-item label {
+    font-weight: bold;
+    font-size: 13px;
+    cursor: pointer;
+  }
 
-.doc-help {
-  font-size: 11px;
-  color: #4b5563;
-  margin-top: 4px;
-  margin-left: 18px;
-}
+  .doc-help {
+    font-size: 11px;
+    color: #4b5563;
+    margin-top: 4px;
+    margin-left: 18px;
+  }
 
-.select-btn {
-  margin-top: auto;
-  padding: 10px;
-  width: 100%;
-  font-size: 14px;
-  font-weight: bold;
-  border: none;
-  border-radius: 4px;
-  background: #2563eb;
-  color: #ffffff;
-  cursor: pointer;
-}
+  /* ===== CONTINUE BUTTON ===== */
+  .select-btn {
+    margin-top: auto;
+    padding: 10px;
+    width: 100%;
+    font-size: 14px;
+    font-weight: bold;
+    border: none;
+    border-radius: 4px;
+    background: #2563eb;
+    color: #ffffff;
+    cursor: pointer;
+  }
 
-.select-btn:hover {
-  background: #1d4ed8;
-}
+  .select-btn:hover {
+    background: #1d4ed8;
+  }
 
-.debug-wrap {
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: 0 12px 40px 12px;
-}
+  /* ===== VISIBLE DEBUG PANEL ===== */
+  .debug-wrap {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 12px 40px 12px;
+  }
 
-.debug-panel {
-  border: 2px solid #2563eb;
-  background: #f5faff;
-  border-radius: 6px;
-  padding: 12px;
-  font-family: monospace;
-  font-size: 12px;
-}
+  .debug-panel {
+    border: 2px solid #2563eb;
+    background: #f5faff;
+    border-radius: 6px;
+    padding: 12px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
+      "Courier New", monospace;
+    font-size: 12px;
+  }
 
-.debug-row {
-  display: grid;
-  grid-template-columns: 140px 1fr;
-  gap: 8px;
-  margin: 4px 0;
-}
+  .debug-panel strong {
+    display: inline-block;
+    margin-bottom: 6px;
+  }
+
+  .debug-row {
+    display: grid;
+    grid-template-columns: 140px 1fr;
+    gap: 8px;
+    margin: 4px 0;
+  }
+
+  @media (max-width: 1100px) {
+    .tier-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  @media (max-width: 640px) {
+    .tier-grid { grid-template-columns: 1fr; }
+  }
 </style>
 </head>
 
@@ -123,135 +144,34 @@ h1 {
 
 <div class="tier-grid">
 
-<!-- ===== TIER 1 ===== -->
-<div class="tier-column">
-  <div class="tier-header">Tier 1 — Core Personal & Business<br>$39 per document</div>
+  <!-- ===== TIER 1 ===== -->
+  <div class="tier-column">
+    <div class="tier-header">
+      Tier 1 — Core Personal &amp; Business<br>$39 per document
+    </div>
 
-  <div class="doc-item">
-    <input type="radio" name="doc_type" value="PROMISSORY_NOTE" data-tier="Tier 1" data-price="39">
-    <label>Promissory Note</label>
-  </div>
+    <div class="doc-item">
+      <input type="radio" name="doc_type" value="promissory_note" data-tier="tier_1" data-price="39" id="t1_pn">
+      <label for="t1_pn">Promissory Note</label>
+      <div class="doc-help">Formal promise to repay money under defined terms.</div>
+    </div>
 
-  <div class="doc-item">
-    <input type="radio" name="doc_type" value="NON_DISCLOSURE_AGREEMENT" data-tier="Tier 1" data-price="39">
-    <label>Non-Disclosure Agreement (NDA)</label>
-  </div>
+    <div class="doc-item">
+      <input type="radio" name="doc_type" value="non_disclosure_agreement" data-tier="tier_1" data-price="39" id="t1_nda">
+      <label for="t1_nda">Non-Disclosure Agreement (NDA)</label>
+      <div class="doc-help">Protects confidential information between parties.</div>
+    </div>
 
-  <button class="select-btn" onclick="goToIntake('Tier 1')">Continue</button>
-</div>
+    <div class="doc-item">
+      <input type="radio" name="doc_type" value="independent_contractor_agreement" data-tier="tier_1" data-price="39" id="t1_ica">
+      <label for="t1_ica">Independent Contractor Agreement</label>
+      <div class="doc-help">Defines scope, payment, and liability for contractors.</div>
+    </div>
 
-<!-- ===== TIER 2 ===== -->
-<div class="tier-column">
-  <div class="tier-header">Tier 2 — Business Formation & Operations<br>$59 per document</div>
+    <div class="doc-item">
+      <input type="radio" name="doc_type" value="bill_of_sale" data-tier="tier_1" data-price="39" id="t1_bos">
+      <label for="t1_bos">Bill of Sale</label>
+      <div class="doc-help">Documents transfer of ownership of personal property.</div>
+    </div>
 
-  <div class="doc-item">
-    <input type="radio" name="doc_type" value="OPERATING_AGREEMENT_LLC" data-tier="Tier 2" data-price="59">
-    <label>Operating Agreement (LLC)</label>
-  </div>
-
-  <div class="doc-item">
-    <input type="radio" name="doc_type" value="PARTNERSHIP_AGREEMENT" data-tier="Tier 2" data-price="59">
-    <label>Partnership Agreement</label>
-  </div>
-
-  <button class="select-btn" onclick="goToIntake('Tier 2')">Continue</button>
-</div>
-
-<!-- ===== TIER 3 ===== -->
-<div class="tier-column">
-  <div class="tier-header">Tier 3 — Employment & Real Estate<br>$99 per document</div>
-
-  <div class="doc-item">
-    <input type="radio" name="doc_type" value="EMPLOYMENT_AGREEMENT" data-tier="Tier 3" data-price="99">
-    <label>Employment Agreement</label>
-  </div>
-
-  <button class="select-btn" onclick="goToIntake('Tier 3')">Continue</button>
-</div>
-
-<!-- ===== TIER 4 ===== -->
-<div class="tier-column">
-  <div class="tier-header">Tier 4 — Entrepreneur Bundle<br>$149 flat</div>
-
-  <div class="doc-item">
-    <input type="radio" name="doc_type" value="ENTREPRENEUR_BUNDLE" data-tier="Tier 4" data-price="149">
-    <label>Entrepreneur Starter Bundle</label>
-  </div>
-
-  <button class="select-btn" onclick="goToIntake('Tier 4')">Continue</button>
-</div>
-
-</div>
-
-<div class="debug-wrap">
-  <div class="debug-panel">
-    <strong>Catalog Debug (Truth Panel)</strong>
-    <div class="debug-row"><div>order_id</div><div id="dbgOrder">—</div></div>
-    <div class="debug-row"><div>document_type</div><div id="dbgDoc">—</div></div>
-    <div class="debug-row"><div>tier</div><div id="dbgTier">—</div></div>
-    <div class="debug-row"><div>price</div><div id="dbgPrice">—</div></div>
-  </div>
-</div>
-
-<script>
-/* ========= CANONICAL TRANSLATION ========= */
-
-const DOC_CANONICAL = {
-  PROMISSORY_NOTE: "promissory_note",
-  NON_DISCLOSURE_AGREEMENT: "nda",
-  OPERATING_AGREEMENT_LLC: "operating_agreement_llc",
-  PARTNERSHIP_AGREEMENT: "partnership_agreement",
-  EMPLOYMENT_AGREEMENT: "employment_agreement",
-  ENTREPRENEUR_BUNDLE: "entrepreneur_bundle"
-};
-
-const TIER_CANONICAL = {
-  "Tier 1": "tier_1",
-  "Tier 2": "tier_2",
-  "Tier 3": "tier_3",
-  "Tier 4": "tier_4"
-};
-
-function generateOrderId() {
-  return `ELB-${new Date().getFullYear()}-${Math.floor(100000 + Math.random() * 900000)}`;
-}
-
-function getSelectedDoc() {
-  return document.querySelector('input[name="doc_type"]:checked');
-}
-
-function goToIntake(expectedTier) {
-  const selected = getSelectedDoc();
-  if (!selected) {
-    alert("Please select a document.");
-    return;
-  }
-
-  if (selected.dataset.tier !== expectedTier) {
-    alert("Please select a document from this tier.");
-    return;
-  }
-
-  const orderId = generateOrderId();
-  const canonicalDoc = DOC_CANONICAL[selected.value];
-  const canonicalTier = TIER_CANONICAL[selected.dataset.tier];
-  const price = selected.dataset.price;
-
-  document.getElementById("dbgOrder").textContent = orderId;
-  document.getElementById("dbgDoc").textContent = canonicalDoc;
-  document.getElementById("dbgTier").textContent = canonicalTier;
-  document.getElementById("dbgPrice").textContent = price;
-
-  const params = new URLSearchParams({
-    order_id: orderId,
-    document_type: canonicalDoc,
-    tier: canonicalTier,
-    price: price
-  });
-
-  window.location.href = "intake.html?" + params.toString();
-}
-</script>
-
-</body>
-</html>
+   
