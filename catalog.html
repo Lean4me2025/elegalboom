@@ -6,26 +6,113 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-/* (STYLES UNCHANGED — OMITTED FOR BREVITY) */
 body {
   margin: 0;
   font-family: Arial, sans-serif;
   background: #ffffff;
   color: #111827;
 }
-h1 { text-align: center; margin: 24px 0 6px 0; font-size: 28px; }
-.subtitle { text-align: center; font-size: 14px; color: #4b5563; margin-bottom: 18px; }
-.tier-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; max-width: 1400px; margin: 0 auto; padding: 0 12px 24px 12px; }
-.tier-column { border: 1px solid #d1d5db; border-radius: 6px; padding: 10px; background: #ffffff; display: flex; flex-direction: column; }
-.tier-header { background: #2563eb; color: #ffffff; font-weight: bold; font-size: 14px; padding: 8px 10px; margin-bottom: 10px; border-radius: 4px; text-align: center; }
-.doc-item { border: 1px solid #e5e7eb; border-radius: 4px; padding: 8px; margin-bottom: 8px; }
-.doc-item label { font-weight: bold; font-size: 13px; cursor: pointer; }
-.doc-help { font-size: 11px; color: #4b5563; margin-top: 4px; margin-left: 18px; }
-.select-btn { margin-top: auto; padding: 10px; width: 100%; font-size: 14px; font-weight: bold; border: none; border-radius: 4px; background: #2563eb; color: #ffffff; cursor: pointer; }
-.select-btn:hover { background: #1d4ed8; }
-.debug-wrap { max-width: 1400px; margin: 0 auto; padding: 0 12px 40px 12px; }
-.debug-panel { border: 2px solid #2563eb; background: #f5faff; border-radius: 6px; padding: 12px; font-family: monospace; font-size: 12px; }
-.debug-row { display: grid; grid-template-columns: 140px 1fr; gap: 8px; margin: 4px 0; }
+
+h1 {
+  text-align: center;
+  margin: 24px 0 6px 0;
+  font-size: 28px;
+}
+
+.subtitle {
+  text-align: center;
+  font-size: 14px;
+  color: #4b5563;
+  margin-bottom: 18px;
+}
+
+.tier-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 12px 24px 12px;
+}
+
+.tier-column {
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  padding: 10px;
+  background: #ffffff;
+  display: flex;
+  flex-direction: column;
+}
+
+.tier-header {
+  background: #2563eb;
+  color: #ffffff;
+  font-weight: bold;
+  font-size: 14px;
+  padding: 8px 10px;
+  margin-bottom: 10px;
+  border-radius: 4px;
+  text-align: center;
+}
+
+.doc-item {
+  border: 1px solid #e5e7eb;
+  border-radius: 4px;
+  padding: 8px;
+  margin-bottom: 8px;
+}
+
+.doc-item label {
+  font-weight: bold;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.doc-help {
+  font-size: 11px;
+  color: #4b5563;
+  margin-top: 4px;
+  margin-left: 18px;
+}
+
+.select-btn {
+  margin-top: auto;
+  padding: 10px;
+  width: 100%;
+  font-size: 14px;
+  font-weight: bold;
+  border: none;
+  border-radius: 4px;
+  background: #2563eb;
+  color: #ffffff;
+  cursor: pointer;
+}
+
+.select-btn:hover {
+  background: #1d4ed8;
+}
+
+.debug-wrap {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 12px 40px 12px;
+}
+
+.debug-panel {
+  border: 2px solid #2563eb;
+  background: #f5faff;
+  border-radius: 6px;
+  padding: 12px;
+  font-family: monospace;
+  font-size: 12px;
+}
+
+.debug-row {
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  gap: 8px;
+  margin: 4px 0;
+}
 </style>
 </head>
 
@@ -34,37 +121,87 @@ h1 { text-align: center; margin: 24px 0 6px 0; font-size: 28px; }
 <h1>Document Catalog</h1>
 <div class="subtitle">Select a document to continue to intake</div>
 
-<!-- (HTML BODY CONTENT UNCHANGED — YOUR ORIGINAL GRID GOES HERE EXACTLY AS PROVIDED) -->
-<!-- ⬆️ KEEP YOUR DOCUMENT GRID EXACTLY THE SAME ⬆️ -->
+<div class="tier-grid">
 
-<!-- ===== Visible confirmation ===== -->
+<!-- ===== TIER 1 ===== -->
+<div class="tier-column">
+  <div class="tier-header">Tier 1 — Core Personal & Business<br>$39 per document</div>
+
+  <div class="doc-item">
+    <input type="radio" name="doc_type" value="PROMISSORY_NOTE" data-tier="Tier 1" data-price="39">
+    <label>Promissory Note</label>
+  </div>
+
+  <div class="doc-item">
+    <input type="radio" name="doc_type" value="NON_DISCLOSURE_AGREEMENT" data-tier="Tier 1" data-price="39">
+    <label>Non-Disclosure Agreement (NDA)</label>
+  </div>
+
+  <button class="select-btn" onclick="goToIntake('Tier 1')">Continue</button>
+</div>
+
+<!-- ===== TIER 2 ===== -->
+<div class="tier-column">
+  <div class="tier-header">Tier 2 — Business Formation & Operations<br>$59 per document</div>
+
+  <div class="doc-item">
+    <input type="radio" name="doc_type" value="OPERATING_AGREEMENT_LLC" data-tier="Tier 2" data-price="59">
+    <label>Operating Agreement (LLC)</label>
+  </div>
+
+  <div class="doc-item">
+    <input type="radio" name="doc_type" value="PARTNERSHIP_AGREEMENT" data-tier="Tier 2" data-price="59">
+    <label>Partnership Agreement</label>
+  </div>
+
+  <button class="select-btn" onclick="goToIntake('Tier 2')">Continue</button>
+</div>
+
+<!-- ===== TIER 3 ===== -->
+<div class="tier-column">
+  <div class="tier-header">Tier 3 — Employment & Real Estate<br>$99 per document</div>
+
+  <div class="doc-item">
+    <input type="radio" name="doc_type" value="EMPLOYMENT_AGREEMENT" data-tier="Tier 3" data-price="99">
+    <label>Employment Agreement</label>
+  </div>
+
+  <button class="select-btn" onclick="goToIntake('Tier 3')">Continue</button>
+</div>
+
+<!-- ===== TIER 4 ===== -->
+<div class="tier-column">
+  <div class="tier-header">Tier 4 — Entrepreneur Bundle<br>$149 flat</div>
+
+  <div class="doc-item">
+    <input type="radio" name="doc_type" value="ENTREPRENEUR_BUNDLE" data-tier="Tier 4" data-price="149">
+    <label>Entrepreneur Starter Bundle</label>
+  </div>
+
+  <button class="select-btn" onclick="goToIntake('Tier 4')">Continue</button>
+</div>
+
+</div>
+
 <div class="debug-wrap">
   <div class="debug-panel">
-    <strong>Catalog Selection Status (Visible)</strong>
-    <div class="debug-row"><div>doc_type</div><div id="dbgDoc">—</div></div>
+    <strong>Catalog Debug (Truth Panel)</strong>
+    <div class="debug-row"><div>order_id</div><div id="dbgOrder">—</div></div>
+    <div class="debug-row"><div>document_type</div><div id="dbgDoc">—</div></div>
     <div class="debug-row"><div>tier</div><div id="dbgTier">—</div></div>
     <div class="debug-row"><div>price</div><div id="dbgPrice">—</div></div>
   </div>
 </div>
 
 <script>
-/************************************************************
- * CANONICAL TRANSLATION LAYER (THE ONLY ADDITION)
- ************************************************************/
+/* ========= CANONICAL TRANSLATION ========= */
 
 const DOC_CANONICAL = {
   PROMISSORY_NOTE: "promissory_note",
   NON_DISCLOSURE_AGREEMENT: "nda",
-  INDEPENDENT_CONTRACTOR_AGREEMENT: "independent_contractor_agreement",
-  BILL_OF_SALE: "bill_of_sale",
   OPERATING_AGREEMENT_LLC: "operating_agreement_llc",
   PARTNERSHIP_AGREEMENT: "partnership_agreement",
-  BUSINESS_LOAN_AGREEMENT: "business_loan_agreement",
-  SERVICE_AGREEMENT: "service_agreement",
   EMPLOYMENT_AGREEMENT: "employment_agreement",
-  RESIDENTIAL_LEASE: "residential_lease",
-  COMMERCIAL_LEASE: "commercial_lease",
-  NON_COMPETE_AGREEMENT: "non_compete_agreement",
   ENTREPRENEUR_BUNDLE: "entrepreneur_bundle"
 };
 
@@ -76,55 +213,34 @@ const TIER_CANONICAL = {
 };
 
 function generateOrderId() {
-  const y = new Date().getFullYear();
-  const r = Math.floor(100000 + Math.random() * 900000);
-  return `ELB-${y}-${r}`;
+  return `ELB-${new Date().getFullYear()}-${Math.floor(100000 + Math.random() * 900000)}`;
 }
-
-/************************************************************
- * EXISTING LOGIC — EXTENDED, NOT CHANGED
- ************************************************************/
 
 function getSelectedDoc() {
   return document.querySelector('input[name="doc_type"]:checked');
 }
 
-function updateDebugPanel() {
-  const selected = getSelectedDoc();
-  if (!selected) return;
-  document.getElementById("dbgDoc").textContent = selected.value;
-  document.getElementById("dbgTier").textContent = selected.dataset.tier;
-  document.getElementById("dbgPrice").textContent = selected.dataset.price;
-}
-
-document.querySelectorAll('input[name="doc_type"]').forEach(r => {
-  r.addEventListener("change", updateDebugPanel);
-});
-
-function goToIntake(expectedTier, expectedPrice) {
+function goToIntake(expectedTier) {
   const selected = getSelectedDoc();
   if (!selected) {
     alert("Please select a document.");
     return;
   }
 
-  const displayDoc = selected.value;
-  const displayTier = selected.dataset.tier;
+  if (selected.dataset.tier !== expectedTier) {
+    alert("Please select a document from this tier.");
+    return;
+  }
+
+  const orderId = generateOrderId();
+  const canonicalDoc = DOC_CANONICAL[selected.value];
+  const canonicalTier = TIER_CANONICAL[selected.dataset.tier];
   const price = selected.dataset.price;
 
-  if (displayTier !== expectedTier) {
-    alert("Please select a document in the correct tier.");
-    return;
-  }
-
-  const canonicalDoc = DOC_CANONICAL[displayDoc];
-  const canonicalTier = TIER_CANONICAL[displayTier];
-  const orderId = generateOrderId();
-
-  if (!canonicalDoc || !canonicalTier) {
-    alert("Catalog configuration error.");
-    return;
-  }
+  document.getElementById("dbgOrder").textContent = orderId;
+  document.getElementById("dbgDoc").textContent = canonicalDoc;
+  document.getElementById("dbgTier").textContent = canonicalTier;
+  document.getElementById("dbgPrice").textContent = price;
 
   const params = new URLSearchParams({
     order_id: orderId,
@@ -135,8 +251,6 @@ function goToIntake(expectedTier, expectedPrice) {
 
   window.location.href = "intake.html?" + params.toString();
 }
-
-updateDebugPanel();
 </script>
 
 </body>
