@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <title>E-LegalBoom | Intake</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -17,29 +18,31 @@
     label {
       display: block;
       margin-top: 12px;
+      font-size: 14px;
     }
     input, select {
       width: 100%;
       padding: 8px;
       margin-top: 4px;
     }
+    input[readonly], select[disabled] {
+      background: #1e293b;
+      color: #94a3b8;
+    }
+    .section {
+      margin-top: 28px;
+      padding-top: 20px;
+      border-top: 1px solid #334155;
+    }
     button {
-      margin-top: 20px;
-      padding: 12px;
+      margin-top: 30px;
+      padding: 14px;
       width: 100%;
       background: #38bdf8;
       color: #020617;
       border: none;
       font-size: 16px;
       cursor: pointer;
-    }
-    .hidden {
-      display: none;
-    }
-    .section {
-      margin-top: 30px;
-      padding-top: 20px;
-      border-top: 1px solid #334155;
     }
   </style>
 </head>
@@ -53,12 +56,11 @@
   <h2>General Information</h2>
 
   <label>Order ID
-    <input id="order_id" required />
+    <input id="order_id" readonly />
   </label>
 
   <label>Tier
-    <select id="tier" required>
-      <option value="">Select Tier</option>
+    <select id="tier" disabled>
       <option value="tier_1">Tier 1</option>
       <option value="tier_2">Tier 2</option>
       <option value="tier_3">Tier 3</option>
@@ -67,19 +69,17 @@
   </label>
 
   <label>Document Type
-    <select id="document_type" required onchange="loadHand()">
-      <option value="">Select Document</option>
-      <option value="nda">NDA</option>
-      <option value="llc_single_member">LLC – Single Member</option>
+    <select id="document_type" disabled>
+      <option value="operating_agreement_llc">Operating Agreement (LLC)</option>
     </select>
   </label>
 
   <label>Full Name
-    <input id="client_full_name" required />
+    <input id="client_full_name" />
   </label>
 
   <label>Email
-    <input id="client_email" type="email" required />
+    <input id="client_email" type="email" />
   </label>
 
   <label>Phone
@@ -104,55 +104,52 @@
 </div>
 
 <!-- ================= HAND ================= -->
-<div id="hand_section" class="section hidden">
+<div class="section">
   <h2>Document Details</h2>
-  <div id="hand_fields"></div>
+
+  <label>LLC Name
+    <input id="llc_name" />
+  </label>
+
+  <label>State of Formation
+    <input id="llc_state" />
+  </label>
+
+  <label>Member Name
+    <input id="llc_member_name" />
+  </label>
 </div>
 
 <button onclick="submitIntake()">Submit Intake</button>
 
 <script>
-  function loadHand() {
-    const docType = document.getElementById("document_type").value;
-    const hand = document.getElementById("hand_fields");
-    document.getElementById("hand_section").classList.remove("hidden");
-    hand.innerHTML = "";
+  /************************************************************
+   * HYDRATE ARM FROM URL
+   ************************************************************/
+  const params = new URLSearchParams(window.location.search);
 
-    if (docType === "nda") {
-      hand.innerHTML = `
-        <label>Disclosing Party Name
-          <input id="nda_disclosing_party" />
-        </label>
-        <label>Receiving Party Name
-          <input id="nda_receiving_party" />
-        </label>
-        <label>Confidential Term (months)
-          <input id="nda_term_months" type="number" />
-        </label>
-      `;
-    }
+  const orderId = params.get("order_id");
+  const tier = params.get("tier");
+  const documentType = params.get("document_type");
 
-    if (docType === "llc_single_member") {
-      hand.innerHTML = `
-        <label>LLC Name
-          <input id="llc_name" />
-        </label>
-        <label>State of Formation
-          <input id="llc_state" />
-        </label>
-        <label>Member Name
-          <input id="llc_member_name" />
-        </label>
-      `;
-    }
+  if (!orderId || !tier || !documentType) {
+    alert("Missing order information. Please return to the catalog.");
+    throw new Error("Missing canonical URL params");
   }
 
+  document.getElementById("order_id").value = orderId;
+  document.getElementById("tier").value = tier;
+  document.getElementById("document_type").value = documentType;
+
+  /************************************************************
+   * SUBMIT INTAKE → REVIEW
+   ************************************************************/
   function submitIntake() {
     const payload = {
-      // ARM
-      order_id: document.getElementById("order_id").value,
-      tier: document.getElementById("tier").value,
-      document_type: document.getElementById("document_type").value,
+      order_id: orderId,
+      tier: tier,
+      document_type: documentType,
+
       client_full_name: document.getElementById("client_full_name").value,
       client_email: document.getElementById("client_email").value,
       client_phone: document.getElementById("client_phone").value,
@@ -161,18 +158,15 @@
       client_state: document.getElementById("client_state").value,
       client_zip: document.getElementById("client_zip").value,
 
-      // HAND (collected dynamically below)
-      hand: {}
+      hand: {
+        llc_name: document.getElementById("llc_name").value,
+        llc_state: document.getElementById("llc_state").value,
+        llc_member_name: document.getElementById("llc_member_name").value
+      }
     };
 
-    document.querySelectorAll("#hand_fields input").forEach(input => {
-      payload.hand[input.id] = input.value;
-    });
-
-    console.log("INTAKE PAYLOAD:", payload);
-
-    // TODO: POST to Supabase / Edge Function
-    // fetch('/intake-endpoint', { method:'POST', body: JSON.stringify(payload) })
+    sessionStorage.setItem("intake_payload", JSON.stringify(payload));
+    window.location.href = "/review.html";
   }
 </script>
 
