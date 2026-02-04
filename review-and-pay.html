@@ -1,58 +1,57 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>E-LegalBoom Review & Pay</title>
 
 <style>
 body{
-font-family: Arial, sans-serif;
-background:#f5f7fa;
-margin:0;
-padding:0;
+    font-family: Arial, sans-serif;
+    background:#f4f6f8;
+    margin:0;
+    padding:0;
 }
 
 .container{
-max-width:900px;
-margin:40px auto;
-background:white;
-padding:30px;
-border-radius:12px;
-box-shadow:0 2px 10px rgba(0,0,0,.1);
+    max-width:600px;
+    margin:60px auto;
+    background:white;
+    padding:30px;
+    border-radius:8px;
+    box-shadow:0 4px 12px rgba(0,0,0,.1);
 }
 
-h1{
-color:#1e3a8a;
-margin-bottom:20px;
+h2{
+    color:#1a2a44;
 }
 
 .section{
-margin-bottom:25px;
+    margin-top:20px;
 }
 
 .row{
-margin-bottom:10px;
+    margin-bottom:10px;
 }
 
 .label{
-font-weight:bold;
-color:#333;
+    font-weight:bold;
 }
 
 button{
-width:100%;
-padding:15px;
-background:#2563eb;
-border:none;
-color:white;
-font-size:18px;
-border-radius:8px;
-cursor:pointer;
+    width:100%;
+    padding:15px;
+    margin-top:25px;
+    background:#2d6cdf;
+    color:white;
+    border:none;
+    font-size:18px;
+    border-radius:6px;
+    cursor:pointer;
 }
 
 button:hover{
-background:#1d4ed8;
+    background:#1c4fc2;
 }
 </style>
 </head>
@@ -60,34 +59,27 @@ background:#1d4ed8;
 <body>
 
 <div class="container">
+<h2>Review Your Information</h2>
 
-<h1>Review Your Information</h1>
+<div id="reviewDiv"></div>
 
-<div id="reviewData"></div>
-
-<button onclick="submitOrder()">Proceed To Payment</button>
-
+<button onclick="proceedToPayment()">Proceed To Payment</button>
 </div>
 
 <script type="module">
 
-import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm"
+/* ---------------- LOAD INTAKE ---------------- */
 
-const supabase = createClient(
-"https://vvjbjfltqsivvxxifnvi.supabase.co",
-"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ2amJqZmx0cXNpdnZ4eGlmbnZpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc5NzYzNTAsImV4cCI6MjA3MzU1MjM1MH0.F4zzcpCHl9v-Rnj0wgKJ5zBf1HteVyXelMLQDDEN28Q"
-)
-
-// ---------- Load Intake ----------
-const intake = JSON.parse(sessionStorage.getItem("intakeData"))
+const intake = JSON.parse(sessionStorage.getItem("intakeData"));
 
 if(!intake){
-alert("Missing intake data")
-window.location = "catalog.html"
+    alert("Missing intake data");
+    window.location = "catalog.html";
 }
 
-// ---------- Display Review ----------
-const reviewDiv = document.getElementById("reviewData")
+/* ---------------- DISPLAY REVIEW ---------------- */
+
+const reviewDiv = document.getElementById("reviewDiv");
 
 reviewDiv.innerHTML = `
 <div class="section">
@@ -99,77 +91,51 @@ reviewDiv.innerHTML = `
 
 <div class="section">
 <h3>Customer</h3>
-<div class="row">${intake.client_first_name} ${intake.client_last_name}</div>
+<div class="row">${intake.client_first} ${intake.client_last}</div>
 <div class="row">${intake.client_email}</div>
 <div class="row">${intake.client_phone}</div>
 </div>
-`
+`;
 
-// ---------- Payment Links ----------
-function getPaymentLink(tier){
+/* ---------------- PAYMENT LINK MAP ---------------- */
 
-const links = {
+function getPaymentLink(docType){
 
-"TIER_1":"https://pay.elegalboom.org/e4b79a60-0fd7-431c-8bfc-ae0",
-"TIER_2":"https://pay.elegalboom.org/aeda586f-65f5-4bf0-98f3-7a2",
-"TIER_3":"https://pay.elegalboom.org/71ca7144-e537-4fbd-823d-c10",
-"TIER_4":"https://pay.elegalboom.org/55c7cd3d-1048-4b8c-aadb-843"
+const paymentMap = {
 
+    /* Tier 1 */
+    "nda" :
+    "https://pay.elegalboom.org/e4b79a60-0fd7-431c-8bfc-ae0",
+
+    /* Tier 2 */
+    "business_loan_agreement" :
+    "https://pay.elegalboom.org/aeda586f-65f5-4bf0-9813-7a2",
+
+    /* Tier 3 */
+    "tier_three_documents" :
+    "https://pay.elegalboom.org/71ca7144-e537-4fbd-823d-c10",
+
+    /* Tier 4 */
+    "ENTREPRENEUR_BUNDLE" :
+    "https://pay.elegalboom.org/55c7cd3d-1048-4b8c-aadb-843"
+
+};
+
+return paymentMap[docType];
 }
 
-return links[tier]
+/* ---------------- PAYMENT REDIRECT ---------------- */
+
+window.proceedToPayment = function(){
+
+const payLink = getPaymentLink(intake.doc_type);
+
+if(!payLink){
+    alert("Payment link not found for: " + intake.doc_type);
+    return;
 }
 
-// ---------- Submit Order ----------
-window.submitOrder = async function(){
-
-const requestUUID = crypto.randomUUID()
-
-const orderPayload = {
-
-client_first_name: intake.client_first_name,
-client_last_name: intake.client_last_name,
-client_email: intake.client_email,
-client_phone: intake.client_phone,
-client_street: intake.client_street,
-client_city: intake.client_city,
-client_state: intake.client_state,
-client_zip: intake.client_zip,
-client_country: "USA",
-client_business_name: intake.client_business_name || null,
-
-tier: intake.tier,
-doc_type: intake.doc_type,
-price: intake.price,
-
-order_status: "intake_complete",
-payment_status: "pending",
-
-preferred_deadline: intake.date || null,
-governing_state: intake.governing_state || null,
-details: intake.details || null,
-
-request_uuid: requestUUID
-}
-
-// ---------- Insert Into Supabase ----------
-const { error } = await supabase
-.from("pweb_orders")
-.insert(orderPayload)
-
-if(error){
-
-console.error(error)
-alert("Database error. Please try again.")
-return
-
-}
-
-// ---------- Redirect To Payment ----------
-const payLink = getPaymentLink(intake.tier)
-
-window.location = payLink
-
+window.location.href = payLink;
 }
 
 </script>
