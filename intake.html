@@ -1,173 +1,181 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8" />
-  <title>E-LegalBoom | Intake</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="UTF-8">
+<title>E-LegalBoom Intake</title>
 
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #0f172a;
-      color: #e5e7eb;
-      padding: 20px;
-    }
-    h1, h2 {
-      color: #38bdf8;
-    }
-    label {
-      display: block;
-      margin-top: 12px;
-      font-size: 14px;
-    }
-    input, select {
-      width: 100%;
-      padding: 8px;
-      margin-top: 4px;
-    }
-    input[readonly], select[disabled] {
-      background: #1e293b;
-      color: #94a3b8;
-    }
-    .section {
-      margin-top: 28px;
-      padding-top: 20px;
-      border-top: 1px solid #334155;
-    }
-    button {
-      margin-top: 30px;
-      padding: 14px;
-      width: 100%;
-      background: #38bdf8;
-      color: #020617;
-      border: none;
-      font-size: 16px;
-      cursor: pointer;
-    }
-  </style>
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+
+<style>
+
+/* === BRAND TOKENS MATCHING CATALOG === */
+
+:root{
+  --primary:#0c2340;
+  --accent:#c99700;
+  --bg:#f5f7fa;
+  --card:#ffffff;
+  --text:#121826;
+  --border:#e5e7eb;
+}
+
+body{
+  font-family:Arial;
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+}
+
+header{
+  background:var(--primary);
+  color:white;
+  padding:18px;
+  text-align:center;
+  font-size:22px;
+  font-weight:bold;
+}
+
+/* ===== Card Layout ===== */
+
+.container{
+  max-width:800px;
+  margin:30px auto;
+  padding:20px;
+}
+
+.card{
+  background:var(--card);
+  border-radius:12px;
+  box-shadow:0 4px 12px rgba(0,0,0,.08);
+  border-top:6px solid var(--accent);
+  padding:25px;
+}
+
+h2{
+  margin-top:0;
+}
+
+/* ===== Inputs ===== */
+
+label{
+  display:block;
+  margin-top:15px;
+  font-weight:bold;
+}
+
+input{
+  width:100%;
+  padding:10px;
+  border:1px solid var(--border);
+  border-radius:6px;
+  margin-top:5px;
+}
+
+/* ===== Button ===== */
+
+button{
+  margin-top:25px;
+  padding:12px;
+  width:100%;
+  background:var(--primary);
+  color:white;
+  border:none;
+  border-radius:8px;
+  font-size:16px;
+  cursor:pointer;
+}
+
+button:hover{
+  opacity:.9;
+}
+
+</style>
 </head>
 
 <body>
 
-<h1>E-LegalBoom Intake</h1>
+<header>E-LegalBoom Intake</header>
 
-<!-- ================= ARM ================= -->
-<div class="section">
-  <h2>General Information</h2>
+<div class="container">
+<div class="card">
 
-  <label>Order ID
-    <input id="order_id" readonly />
-  </label>
+<h2>General Information</h2>
 
-  <label>Tier
-    <select id="tier" disabled>
-      <option value="tier_1">Tier 1</option>
-      <option value="tier_2">Tier 2</option>
-      <option value="tier_3">Tier 3</option>
-      <option value="tier_4">Tier 4</option>
-    </select>
-  </label>
+<form id="intakeForm">
 
-  <label>Document Type
-    <select id="document_type" disabled>
-      <option value="operating_agreement_llc">Operating Agreement (LLC)</option>
-    </select>
-  </label>
+<label>Tier</label>
+<input name="tier" readonly>
 
-  <label>Full Name
-    <input id="client_full_name" />
-  </label>
+<label>Document Type</label>
+<input name="doc_type" readonly>
 
-  <label>Email
-    <input id="client_email" type="email" />
-  </label>
+<label>Full Name</label>
+<input name="full_name" required>
 
-  <label>Phone
-    <input id="client_phone" />
-  </label>
+<label>Email</label>
+<input name="email" required>
 
-  <label>Street Address
-    <input id="client_address" />
-  </label>
+<label>Phone</label>
+<input name="phone">
 
-  <label>City
-    <input id="client_city" />
-  </label>
+<label>Street Address</label>
+<input name="street">
 
-  <label>State
-    <input id="client_state" />
-  </label>
+<label>City</label>
+<input name="city">
 
-  <label>ZIP
-    <input id="client_zip" />
-  </label>
+<label>State</label>
+<input name="state">
+
+<label>ZIP</label>
+<input name="zip">
+
+<button type="submit">Continue to Review</button>
+
+</form>
+
 </div>
-
-<!-- ================= HAND ================= -->
-<div class="section">
-  <h2>Document Details</h2>
-
-  <label>LLC Name
-    <input id="llc_name" />
-  </label>
-
-  <label>State of Formation
-    <input id="llc_state" />
-  </label>
-
-  <label>Member Name
-    <input id="llc_member_name" />
-  </label>
 </div>
-
-<button onclick="submitIntake()">Submit Intake</button>
 
 <script>
-  /************************************************************
-   * HYDRATE ARM FROM URL
-   ************************************************************/
-  const params = new URLSearchParams(window.location.search);
 
-  const orderId = params.get("order_id");
-  const tier = params.get("tier");
-  const documentType = params.get("document_type");
+/* === Load Order From Catalog === */
 
-  if (!orderId || !tier || !documentType) {
-    alert("Missing order information. Please return to the catalog.");
-    throw new Error("Missing canonical URL params");
+document.addEventListener("DOMContentLoaded", () => {
+
+  const storedOrder = sessionStorage.getItem("elegal_selected_order");
+
+  if (!storedOrder){
+    window.location.replace("catalog.html?v=3");
+    return;
   }
 
-  document.getElementById("order_id").value = orderId;
-  document.getElementById("tier").value = tier;
-  document.getElementById("document_type").value = documentType;
+  const order = JSON.parse(storedOrder);
 
-  /************************************************************
-   * SUBMIT INTAKE → REVIEW
-   ************************************************************/
-  function submitIntake() {
-    const payload = {
-      order_id: orderId,
-      tier: tier,
-      document_type: documentType,
+  document.querySelector("[name='tier']").value = order.tier;
+  document.querySelector("[name='doc_type']").value = order.doc_type;
 
-      client_full_name: document.getElementById("client_full_name").value,
-      client_email: document.getElementById("client_email").value,
-      client_phone: document.getElementById("client_phone").value,
-      client_address: document.getElementById("client_address").value,
-      client_city: document.getElementById("client_city").value,
-      client_state: document.getElementById("client_state").value,
-      client_zip: document.getElementById("client_zip").value,
+});
 
-      hand: {
-        llc_name: document.getElementById("llc_name").value,
-        llc_state: document.getElementById("llc_state").value,
-        llc_member_name: document.getElementById("llc_member_name").value
-      }
-    };
+/* === Submit Intake === */
 
-    sessionStorage.setItem("intake_payload", JSON.stringify(payload));
-    window.location.href = "/review.html";
-  }
+document.getElementById("intakeForm").addEventListener("submit", e => {
+
+  e.preventDefault();
+
+  const formData = Object.fromEntries(
+    new FormData(e.target).entries()
+  );
+
+  sessionStorage.setItem(
+    "elegal_intake_data",
+    JSON.stringify(formData)
+  );
+
+  window.location.href = "review.html?v=3";
+
+});
+
 </script>
 
 </body>
