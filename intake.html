@@ -28,9 +28,10 @@
 
 <script>
 
-const order = JSON.parse(sessionStorage.getItem("catalogOrder"))
+/* 🔒 Load Frozen Contract */
+const orderState = JSON.parse(sessionStorage.getItem("orderState"))
 
-if(!order){
+if(!orderState){
    alert("Missing order. Returning to catalog.")
    window.location = "catalog.html"
 }
@@ -40,15 +41,19 @@ document.getElementById("intakeForm").addEventListener("submit", e => {
    e.preventDefault()
 
    const formData = new FormData(e.target)
-   const intake = Object.fromEntries(formData.entries())
 
-   const payload = {
-      ...order,
-      ...intake,
-      order_status: "payment_pending"
+   /* 🔒 Merge Intake Into Contract */
+   for(const [key,value] of formData.entries()){
+      orderState[key] = value
    }
 
-   sessionStorage.setItem("intakeData", JSON.stringify(payload))
+   /* 🔒 Update Lifecycle */
+   orderState.order_status = "intake_complete"
+
+   /* 🔒 Save Updated Contract */
+   sessionStorage.setItem("orderState", JSON.stringify(orderState))
+
+   console.log("Intake Updated OrderState:", orderState)
 
    window.location = "review-and-pay.html"
 
