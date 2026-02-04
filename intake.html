@@ -5,14 +5,86 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>E-LegalBoom Intake</title>
 
-<script type="module">
-import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm"
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background:#f5f7fb;
+}
 
-/* ===== SUPABASE CONNECTION ===== */
-const supabase = createClient(
-  "YOUR_SUPABASE_URL_HERE",
-  "YOUR_SUPABASE_ANON_KEY_HERE"
-)
+.card {
+  width:420px;
+  margin:40px auto;
+  padding:25px;
+  background:white;
+  border-radius:8px;
+  box-shadow:0 2px 10px rgba(0,0,0,.1);
+}
+
+input, textarea {
+  width:100%;
+  padding:10px;
+  margin:8px 0 16px;
+  border:1px solid #ccc;
+  border-radius:4px;
+}
+
+button {
+  width:100%;
+  padding:12px;
+  background:#2c5cff;
+  color:white;
+  border:none;
+  border-radius:5px;
+  font-size:16px;
+  cursor:pointer;
+}
+
+button:hover {
+  background:#1b48e0;
+}
+</style>
+
+</head>
+<body>
+
+<div class="card">
+<h2>Client Intake</h2>
+
+<form id="intakeForm">
+
+<label>First Name</label>
+<input name="first_name" required>
+
+<label>Last Name</label>
+<input name="last_name" required>
+
+<label>Email</label>
+<input name="email" required>
+
+<label>Phone</label>
+<input name="phone" required>
+
+<label>Street Address</label>
+<input name="street">
+
+<label>City</label>
+<input name="city">
+
+<label>State</label>
+<input name="state">
+
+<label>Zip</label>
+<input name="zip">
+
+<label>Details / Requirements</label>
+<textarea name="details"></textarea>
+
+<button type="submit">Continue To Review</button>
+
+</form>
+</div>
+
+<script>
 
 /* ===== LOAD ORDER FROM CATALOG ===== */
 const order = JSON.parse(sessionStorage.getItem("catalogOrder"))
@@ -22,132 +94,32 @@ if(!order){
   window.location = "catalog.html"
 }
 
-/* ===== UNIVERSAL FORM SUBMIT ===== */
-document.addEventListener("DOMContentLoaded", () => {
+/* ===== FORM SUBMIT ===== */
+document.getElementById("intakeForm")
+.addEventListener("submit", function(e){
 
-  document.getElementById("intakeForm")
-    .addEventListener("submit", async function(e){
+  e.preventDefault()
 
-    e.preventDefault()
+  const formData = new FormData(this)
+  const intakeData = Object.fromEntries(formData.entries())
 
-    /* ----- Collect Form Data ----- */
-    const formData = new FormData(this)
-    const intakeData = Object.fromEntries(formData.entries())
+  /* ----- Merge Catalog + Intake ----- */
+  const payload = {
+    ...order,
+    ...intakeData,
+    request_uuid: crypto.randomUUID(),
+    status: "payment_pending"
+  }
 
-    /* ----- Merge Catalog Order ----- */
-    const payload = {
-      ...order,
-      ...intakeData,
-      request_uuid: crypto.randomUUID(),
-      status: "payment_pending"
-    }
+  /* ----- Store For Review Page ----- */
+  sessionStorage.setItem("intakeData", JSON.stringify(payload))
 
-    /* ----- Store Handshake For Review Page ----- */
-    sessionStorage.setItem("intakeData", JSON.stringify(payload))
-
-    /* ----- INSERT INTO DATABASE ----- */
-    const { error } = await supabase
-      .from("pweb_orders")
-      .insert(payload)
-
-    if(error){
-      console.error(error)
-      alert("Database error — please retry.")
-      return
-    }
-
-    /* ----- SEND TO REVIEW ----- */
-    window.location = "review-and-pay.html"
-
-  })
+  /* ----- Move To Review ----- */
+  window.location = "review-and-pay.html"
 
 })
+
 </script>
-
-<style>
-body{
-  font-family: Arial;
-  background:#f4f6f9;
-  margin:0;
-  padding:40px;
-}
-
-.container{
-  max-width:700px;
-  margin:auto;
-  background:white;
-  padding:30px;
-  border-radius:8px;
-  box-shadow:0 3px 8px rgba(0,0,0,0.15);
-}
-
-h1{
-  margin-top:0;
-}
-
-input, textarea, select{
-  width:100%;
-  padding:10px;
-  margin:8px 0 18px 0;
-  border:1px solid #ccc;
-  border-radius:4px;
-}
-
-button{
-  background:#2a5bd7;
-  color:white;
-  border:none;
-  padding:14px;
-  font-size:16px;
-  width:100%;
-  border-radius:6px;
-  cursor:pointer;
-}
-
-button:hover{
-  background:#1f48aa;
-}
-</style>
-</head>
-
-<body>
-
-<div class="container">
-<h1>Client Intake</h1>
-
-<form id="intakeForm">
-
-<label>First Name</label>
-<input name="client_first" required>
-
-<label>Last Name</label>
-<input name="client_last" required>
-
-<label>Email</label>
-<input name="client_email" type="email" required>
-
-<label>Phone</label>
-<input name="client_phone" required>
-
-<label>Street Address</label>
-<input name="client_address">
-
-<label>City</label>
-<input name="client_city">
-
-<label>State</label>
-<input name="client_state">
-
-<label>Zip</label>
-<input name="client_zip">
-
-<label>Details / Requirements</label>
-<textarea name="details"></textarea>
-
-<button type="submit">Continue To Review</button>
-
-</form>
-</div>
 
 </body>
 </html>
