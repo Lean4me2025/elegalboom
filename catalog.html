@@ -2,176 +2,265 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<title>E-LegalBoom | Document Catalog</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
+<title>E-LegalBoom | Document Catalog</title>
+
 <style>
-  body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background: #ffffff;
-    color: #111827;
-  }
 
-  h1 {
-    text-align: center;
-    margin: 24px 0 6px 0;
-    font-size: 28px;
-  }
+/* =========================
+   THEME TOKENS
+========================= */
 
-  .subtitle {
-    text-align: center;
-    font-size: 14px;
-    color: #4b5563;
-    margin-bottom: 18px;
-  }
+:root {
+  --primary: #0c2340;
+  --accent: #c99700;
+  --bg: #f5f7fa;
+  --card-bg: #ffffff;
+  --text: #1a1a1a;
+  --border: #e0e0e0;
+}
 
-  /* ===== GRID ===== */
-  .tier-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 12px;
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: 0 12px 24px 12px;
-  }
+/* =========================
+   GLOBAL
+========================= */
 
-  /* ===== TIER COLUMN ===== */
-  .tier-column {
-    border: 1px solid #d1d5db;
-    border-radius: 6px;
-    padding: 10px;
-    background: #ffffff;
-    display: flex;
-    flex-direction: column;
-    min-height: 340px;
-  }
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+}
 
-  /* ===== TIER HEADER ===== */
-  .tier-header {
-    background: #2563eb;
-    color: #ffffff;
-    font-weight: bold;
-    font-size: 14px;
-    padding: 8px 10px;
-    margin-bottom: 10px;
-    border-radius: 4px;
-    text-align: center;
-  }
+header {
+  background: var(--primary);
+  color: white;
+  padding: 18px;
+  text-align: center;
+  font-size: 24px;
+  font-weight: bold;
+}
 
-  /* ===== DOCUMENT ITEMS ===== */
-  .doc-item {
-    border: 1px solid #e5e7eb;
-    border-radius: 4px;
-    padding: 8px;
-    margin-bottom: 8px;
-  }
+.subtitle {
+  text-align: center;
+  padding: 10px;
+  font-size: 16px;
+  color: #444;
+}
 
-  .doc-item label {
-    font-weight: bold;
-    font-size: 13px;
-    cursor: pointer;
-  }
+.container {
+  max-width: 1200px;
+  margin: auto;
+  padding: 20px;
+}
 
-  .doc-help {
-    font-size: 11px;
-    color: #4b5563;
-    margin-top: 4px;
-    margin-left: 18px;
-  }
+/* =========================
+   TIER CARDS
+========================= */
 
-  /* ===== CONTINUE BUTTON ===== */
-  .select-btn {
-    margin-top: auto;
-    padding: 10px;
-    width: 100%;
-    font-size: 14px;
-    font-weight: bold;
-    border: none;
-    border-radius: 4px;
-    background: #2563eb;
-    color: #ffffff;
-    cursor: pointer;
-  }
+.tier {
+  background: var(--card-bg);
+  border-radius: 12px;
+  margin-bottom: 28px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+  border-top: 6px solid var(--accent);
+}
 
-  .select-btn:hover {
-    background: #1d4ed8;
-  }
+.tier-header {
+  padding: 18px;
+  border-bottom: 1px solid var(--border);
+}
 
-  /* ===== VISIBLE DEBUG PANEL ===== */
-  .debug-wrap {
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: 0 12px 40px 12px;
-  }
+.tier-title {
+  font-size: 22px;
+  font-weight: bold;
+}
 
-  .debug-panel {
-    border: 2px solid #2563eb;
-    background: #f5faff;
-    border-radius: 6px;
-    padding: 12px;
-    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
-      "Courier New", monospace;
-    font-size: 12px;
-  }
+.tier-price {
+  color: var(--accent);
+  font-size: 18px;
+  margin-top: 5px;
+}
 
-  .debug-panel strong {
-    display: inline-block;
-    margin-bottom: 6px;
-  }
+/* =========================
+   DOCUMENT LIST
+========================= */
 
-  .debug-row {
-    display: grid;
-    grid-template-columns: 140px 1fr;
-    gap: 8px;
-    margin: 4px 0;
-  }
+.doc-list {
+  padding: 20px;
+}
 
-  @media (max-width: 1100px) {
-    .tier-grid { grid-template-columns: repeat(2, 1fr); }
-  }
+.doc-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border);
+}
 
-  @media (max-width: 640px) {
-    .tier-grid { grid-template-columns: 1fr; }
-  }
+.doc-name {
+  font-weight: 600;
+}
+
+.select-btn {
+  background: var(--primary);
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.select-btn:hover {
+  background: #091a30;
+}
+
+footer {
+  text-align: center;
+  padding: 20px;
+  font-size: 14px;
+  color: #666;
+}
+
 </style>
 </head>
 
 <body>
 
-<h1>Document Catalog</h1>
-<div class="subtitle">Select a document to continue to intake</div>
+<header>
+E-LegalBoom Document Catalog
+</header>
 
-<div class="tier-grid">
+<div class="subtitle">
+Choose your document to begin secure preparation
+</div>
 
-  <!-- ===== TIER 1 ===== -->
-  <div class="tier-column">
-    <div class="tier-header">
-      Tier 1 — Core Personal &amp; Business<br>$39 per document
-    </div>
+<div class="container" id="catalogContainer">
+</div>
 
-    <div class="doc-item">
-      <input type="radio" name="doc_type" value="promissory_note" data-tier="tier_1" data-price="39" id="t1_pn">
-      <label for="t1_pn">Promissory Note</label>
-      <div class="doc-help">Formal promise to repay money under defined terms.</div>
-    </div>
+<footer>
+© E-LegalBoom | Professional Legal Document Preparation
+</footer>
 
-    <div class="doc-item">
-      <input type="radio" name="doc_type" value="non_disclosure_agreement" data-tier="tier_1" data-price="39" id="t1_nda">
-      <label for="t1_nda">Non-Disclosure Agreement (NDA)</label>
-      <div class="doc-help">Protects confidential information between parties.</div>
-    </div>
+<script>
 
-    <div class="doc-item">
-      <input type="radio" name="doc_type" value="independent_contractor_agreement" data-tier="tier_1" data-price="39" id="t1_ica">
-      <label for="t1_ica">Independent Contractor Agreement</label>
-      <div class="doc-help">Defines scope, payment, and liability for contractors.</div>
-    </div>
+/* ======================================
+   DOCUMENT CATALOG DATA
+   Canonical doc_type naming ONLY
+====================================== */
 
-    <div class="doc-item">
-      <input type="radio" name="doc_type" value="bill_of_sale" data-tier="tier_1" data-price="39" id="t1_bos">
-      <label for="t1_bos">Bill of Sale</label>
-      <div class="doc-help">Documents transfer of ownership of personal property.</div>
-    </div>
+const catalog = [
+  {
+    tier: "Tier 1 — Essentials",
+    price: 39,
+    documents: [
+      { name: "Promissory Note", doc_type: "promissory_note" },
+      { name: "Non-Disclosure Agreement (NDA)", doc_type: "nda" },
+      { name: "Bill of Sale", doc_type: "bill_of_sale" },
+      { name: "Independent Contractor Agreement", doc_type: "contractor_agreement" }
+    ]
+  },
+  {
+    tier: "Tier 2 — Business Foundation",
+    price: 59,
+    documents: [
+      { name: "Single Member LLC Operating Agreement", doc_type: "llc_single" },
+      { name: "Multi-Member LLC Operating Agreement", doc_type: "llc_multi" },
+      { name: "Partnership Agreement", doc_type: "partnership_agreement" },
+      { name: "Consulting Agreement", doc_type: "consulting_agreement" }
+    ]
+  },
+  {
+    tier: "Tier 3 — Advanced Control & Growth",
+    price: 99,
+    documents: [
+      { name: "Commercial Lease Agreement", doc_type: "commercial_lease" },
+      { name: "Intellectual Property Assignment", doc_type: "ip_assignment" },
+      { name: "Operating Agreement Amendment", doc_type: "llc_amendment" }
+    ]
+  },
+  {
+    tier: "Tier 4 — Entrepreneur Bundle",
+    price: 149,
+    documents: [
+      { name: "Entrepreneur Multi-Document Bundle", doc_type: "bundle_entrepreneur" }
+    ]
+  }
+];
 
-   
+
+/* ======================================
+   BUILD CATALOG UI
+====================================== */
+
+function buildCatalog() {
+
+  const container = document.getElementById("catalogContainer");
+
+  catalog.forEach(tier => {
+
+    const tierDiv = document.createElement("div");
+    tierDiv.className = "tier";
+
+    tierDiv.innerHTML = `
+      <div class="tier-header">
+        <div class="tier-title">${tier.tier}</div>
+        <div class="tier-price">$${tier.price}</div>
+      </div>
+      <div class="doc-list">
+      </div>
+    `;
+
+    const docList = tierDiv.querySelector(".doc-list");
+
+    tier.documents.forEach(doc => {
+
+      const docDiv = document.createElement("div");
+      docDiv.className = "doc-item";
+
+      docDiv.innerHTML = `
+        <div class="doc-name">${doc.name}</div>
+        <button class="select-btn"
+          onclick="selectDocument('${tier.tier}', ${tier.price}, '${doc.doc_type}', '${doc.name}')">
+          Start
+        </button>
+      `;
+
+      docList.appendChild(docDiv);
+    });
+
+    container.appendChild(tierDiv);
+  });
+
+}
+
+
+/* ======================================
+   DOCUMENT SELECTION HANDLER
+====================================== */
+
+function selectDocument(tier, price, docType, displayName) {
+
+  const orderData = {
+    tier: tier,
+    price: price,
+    doc_type: docType,
+    display_name: displayName
+  };
+
+  sessionStorage.setItem("orderData", JSON.stringify(orderData));
+
+  window.location.href = "intake.html";
+}
+
+
+/* ======================================
+   INIT
+====================================== */
+
+buildCatalog();
+
+</script>
+
+</body>
+</html>
