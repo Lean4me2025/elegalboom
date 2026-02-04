@@ -1,57 +1,40 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>E-LegalBoom Review & Pay</title>
 
 <style>
 body{
-    font-family: Arial, sans-serif;
-    background:#f4f6f8;
-    margin:0;
-    padding:0;
+  font-family: Arial, sans-serif;
+  background:#f4f6fb;
+  padding:40px;
 }
-
 .container{
-    max-width:600px;
-    margin:60px auto;
-    background:white;
-    padding:30px;
-    border-radius:8px;
-    box-shadow:0 4px 12px rgba(0,0,0,.1);
+  max-width:650px;
+  margin:auto;
+  background:white;
+  padding:30px;
+  border-radius:8px;
+  box-shadow:0 2px 8px rgba(0,0,0,.08);
 }
-
-h2{
-    color:#1a2a44;
+.summary{
+  line-height:1.6;
+  margin-bottom:25px;
 }
-
-.section{
-    margin-top:20px;
-}
-
-.row{
-    margin-bottom:10px;
-}
-
-.label{
-    font-weight:bold;
-}
-
 button{
-    width:100%;
-    padding:15px;
-    margin-top:25px;
-    background:#2d6cdf;
-    color:white;
-    border:none;
-    font-size:18px;
-    border-radius:6px;
-    cursor:pointer;
+  width:100%;
+  padding:14px;
+  font-size:16px;
+  background:#3d5afe;
+  color:white;
+  border:none;
+  border-radius:6px;
+  cursor:pointer;
 }
-
 button:hover{
-    background:#1c4fc2;
+  background:#2d46d8;
 }
 </style>
 </head>
@@ -61,82 +44,124 @@ button:hover{
 <div class="container">
 <h2>Review Your Information</h2>
 
-<div id="reviewDiv"></div>
+<div id="reviewSummary" class="summary"></div>
 
-<button onclick="proceedToPayment()">Proceed To Payment</button>
+<button id="payBtn">Proceed To Payment</button>
 </div>
 
 <script type="module">
 
-/* ---------------- LOAD INTAKE ---------------- */
+/* ===============================
+   Supabase Client
+=============================== */
+
+import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
+
+const supabase = createClient(
+  "https://vvjbjfltqsivvxxifnvi.supabase.co",
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ2amJqZmx0cXNpdnZ4eGlmbnZpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc5NzYzNTAsImV4cCI6MjA3MzU1MjM1MH0.F4zzcpCHl9v-Rnj0wgKJ5zBf1HteVyXelMLQDDEN28Q"
+);
+
+
+/* ===============================
+   Load Intake Data
+=============================== */
 
 const intake = JSON.parse(sessionStorage.getItem("intakeData"));
 
 if(!intake){
-    alert("Missing intake data");
-    window.location = "catalog.html";
+  alert("Missing intake data");
+  window.location.href = "catalog.html";
 }
 
-/* ---------------- DISPLAY REVIEW ---------------- */
 
-const reviewDiv = document.getElementById("reviewDiv");
+/* ===============================
+   Display Review Summary
+=============================== */
 
-reviewDiv.innerHTML = `
-<div class="section">
-<h3>Order Summary</h3>
-<div class="row"><span class="label">Tier:</span> ${intake.tier}</div>
-<div class="row"><span class="label">Document:</span> ${intake.doc_type}</div>
-<div class="row"><span class="label">Price:</span> $${intake.price}</div>
-</div>
+document.getElementById("reviewSummary").innerHTML = `
+<b>Order Summary</b><br>
+Tier: ${intake.tier}<br>
+Document: ${intake.doc_type}<br>
+Price: $${intake.price}<br><br>
 
-<div class="section">
-<h3>Customer</h3>
-<div class="row">${intake.client_first} ${intake.client_last}</div>
-<div class="row">${intake.client_email}</div>
-<div class="row">${intake.client_phone}</div>
-</div>
+<b>Customer</b><br>
+${intake.client_first} ${intake.client_last}<br>
+${intake.client_email}<br>
+${intake.client_phone || ""}
 `;
 
-/* ---------------- PAYMENT LINK MAP ---------------- */
 
-function getPaymentLink(docType){
+/* ===============================
+   Canonical Payment Resolver
+=============================== */
 
-const paymentMap = {
+function resolvePaymentLink(docType){
 
-    /* Tier 1 */
-    "nda" :
-    "https://pay.elegalboom.org/e4b79a60-0fd7-431c-8bfc-ae0",
+  const key = docType.trim().toUpperCase();
 
-    /* Tier 2 */
-    "business_loan_agreement" :
-    "https://pay.elegalboom.org/aeda586f-65f5-4bf0-9813-7a2",
+  const PAYMENT_LINKS = {
 
-    /* Tier 3 */
-    "tier_three_documents" :
-    "https://pay.elegalboom.org/71ca7144-e537-4fbd-823d-c10",
+    "ENTREPRENEUR_BUNDLE":
+      "https://pay.elegalboom.org/55c7cd3d-1048-4b8c-aadb-843",
 
-    /* Tier 4 */
-    "ENTREPRENEUR_BUNDLE" :
-    "https://pay.elegalboom.org/55c7cd3d-1048-4b8c-aadb-843"
+    "TIER_1":
+      "https://pay.elegalboom.org/e4b79a60-0fd7-431c-8bfc-ae0",
 
-};
+    "TIER_2":
+      "https://pay.elegalboom.org/aeda586f-65f5-4bf0-9813-7a2",
 
-return paymentMap[docType];
+    "TIER_3":
+      "https://pay.elegalboom.org/71ca7144-e537-4fbd-823d-c10"
+
+  };
+
+  return PAYMENT_LINKS[key];
 }
 
-/* ---------------- PAYMENT REDIRECT ---------------- */
 
-window.proceedToPayment = function(){
+/* ===============================
+   Payment Button Handler
+=============================== */
 
-const payLink = getPaymentLink(intake.doc_type);
+document.getElementById("payBtn").addEventListener("click", async ()=>{
 
-if(!payLink){
-    alert("Payment link not found for: " + intake.doc_type);
+  const payLink = resolvePaymentLink(intake.doc_type);
+
+  if(!payLink){
+    alert("Payment link not found for " + intake.doc_type);
     return;
-}
+  }
 
-window.location.href = payLink;
-}
+
+  /* ---------- Insert Order ---------- */
+
+  const { error } = await supabase
+    .from("pweb_orders")
+    .insert({
+      client_first: intake.client_first,
+      client_last: intake.client_last,
+      client_email: intake.client_email,
+      client_phone: intake.client_phone,
+      doc_type: intake.doc_type,
+      tier: intake.tier,
+      price: intake.price,
+      payment_status: "pending",
+      order_status: "intake_submitted"
+    });
+
+  if(error){
+    console.error(error);
+    alert("Database error");
+    return;
+  }
+
+
+  /* ---------- Redirect ---------- */
+
+  window.location.href = payLink;
+
+});
 
 </script>
 
