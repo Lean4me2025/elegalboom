@@ -5,318 +5,255 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>E-LegalBoom Intake</title>
 
-<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-
 <style>
-:root{
---primary:#0c2340;
---accent:#c99700;
---bg:#f5f7fa;
---card:#ffffff;
---border:#e5e7eb;
-}
-
 body{
+font-family: Arial, sans-serif;
+background:#f5f7fa;
 margin:0;
-font-family:Arial;
-background:var(--bg);
-}
-
-header{
-background:var(--primary);
-color:white;
-padding:18px;
-text-align:center;
-font-size:22px;
-font-weight:bold;
+padding:0;
 }
 
 .container{
-max-width:950px;
-margin:30px auto;
-padding:20px;
-}
-
-.card{
-background:var(--card);
+max-width:900px;
+margin:40px auto;
+background:white;
+padding:30px;
 border-radius:12px;
-border-top:6px solid var(--accent);
-padding:25px;
-box-shadow:0 4px 12px rgba(0,0,0,.08);
+box-shadow:0 2px 10px rgba(0,0,0,.1);
 }
 
-.section{
-margin-top:25px;
-font-size:18px;
-font-weight:bold;
-color:var(--primary);
+h1{
+color:#1e3a8a;
+margin-bottom:20px;
 }
 
 .grid{
 display:grid;
-grid-template-columns:repeat(12,1fr);
-gap:12px;
-margin-top:10px;
+grid-template-columns:1fr 1fr;
+gap:15px;
 }
 
-.col-12{grid-column:span 12;}
-.col-6{grid-column:span 6;}
-.col-4{grid-column:span 4;}
-
-label{
-display:block;
-font-weight:bold;
-font-size:12px;
-margin-top:10px;
+.full{
+grid-column:1 / -1;
 }
 
-input,textarea,select{
+input, select, textarea{
 width:100%;
 padding:10px;
-border:1px solid var(--border);
-border-radius:8px;
-margin-top:5px;
+border:1px solid #ccc;
+border-radius:6px;
 }
 
 button{
-margin-top:30px;
 width:100%;
-padding:14px;
-background:var(--primary);
+padding:15px;
+background:#2563eb;
 color:white;
 border:none;
-border-radius:10px;
+border-radius:8px;
 font-size:16px;
 cursor:pointer;
+margin-top:20px;
 }
 
-@media(max-width:720px){
-.col-6,.col-4{grid-column:span 12;}
+button:hover{
+background:#1d4ed8;
 }
 </style>
 </head>
 
 <body>
 
-<header>E-LegalBoom Intake</header>
-
 <div class="container">
-<div class="card">
+
+<h1>E-LegalBoom Intake</h1>
 
 <form id="intakeForm">
 
-<div class="section">Order</div>
-
+<!-- ORDER META -->
 <div class="grid">
-<div class="col-6">
+
+<div>
 <label>Tier</label>
-<input name="tier" readonly>
+<input name="tier" id="tier" readonly>
 </div>
 
-<div class="col-6">
+<div>
 <label>Document Type</label>
-<input name="doc_type" readonly>
-</div>
+<input name="doc_type" id="doc_type" readonly>
 </div>
 
-<div class="section">Customer</div>
+</div>
+
+<hr>
+
+<!-- CUSTOMER -->
+<h3>Customer</h3>
 
 <div class="grid">
-<div class="col-6">
+
+<div>
 <label>First Name *</label>
-<input name="first_name" required>
+<input name="client_first_name" required>
 </div>
 
-<div class="col-6">
+<div>
 <label>Last Name *</label>
-<input name="last_name" required>
+<input name="client_last_name" required>
 </div>
 
-<div class="col-6">
+<div>
 <label>Email *</label>
-<input name="email" required>
+<input name="client_email" required>
 </div>
 
-<div class="col-6">
+<div>
 <label>Phone</label>
-<input name="phone">
-</div>
-</div>
-
-<div class="section">Address</div>
-
-<div class="grid">
-<div class="col-12">
-<label>Street</label>
-<input name="street">
+<input name="client_phone">
 </div>
 
-<div class="col-4">
+<div class="full">
+<label>Street Address</label>
+<input name="client_street">
+</div>
+
+<div>
 <label>City</label>
-<input name="city">
+<input name="client_city">
 </div>
 
-<div class="col-4">
+<div>
 <label>State</label>
-<input name="state">
+<input name="client_state">
 </div>
 
-<div class="col-4">
+<div>
 <label>ZIP</label>
-<input name="zip">
-</div>
+<input name="client_zip">
 </div>
 
-<div class="section">Agreement Metadata</div>
+</div>
+
+<hr>
+
+<!-- AGREEMENT META -->
+<h3>Agreement Metadata</h3>
 
 <div class="grid">
-<div class="col-6">
+
+<div>
 <label>Effective Date</label>
-<input type="date" name="effective_date">
+<input name="date" type="date">
 </div>
 
-<div class="col-6">
+<div>
 <label>Governing State</label>
 <input name="governing_state">
 </div>
+
 </div>
 
-<div class="section">Document Details</div>
+<hr>
 
+<!-- DOCUMENT SPECIFIC -->
+<h3>Document Details</h3>
 <div id="docSpecificSection"></div>
 
 <button type="submit">Continue to Review & Pay</button>
 
 </form>
-
-</div>
 </div>
 
 <script>
-const orderRaw=sessionStorage.getItem("intakeData");
+
+// ---------- Load Catalog Order ----------
+const orderRaw = sessionStorage.getItem("elegal_selected_order")
 
 if(!orderRaw){
-window.location.replace("catalog.html?v=1");
+window.location = "catalog.html"
 }
 
-const order=JSON.parse(orderRaw);
+const order = JSON.parse(orderRaw)
 
-document.querySelector("[name='tier']").value=order.tier;
-document.querySelector("[name='doc_type']").value=order.doc_type;
+document.getElementById("tier").value = order.tier
+document.getElementById("doc_type").value = order.doc_type
 
-loadModule(order.doc_type);
+loadDocModule(order.doc_type)
 
-function loadModule(doc){
 
-const container=document.getElementById("docSpecificSection");
+// ---------- Dynamic Document Fields ----------
+function loadDocModule(doc){
+
+const container = document.getElementById("docSpecificSection")
 
 switch(doc){
 
 case "RESIDENTIAL_LEASE":
-container.innerHTML=`
+
+container.innerHTML = `
 <div class="grid">
-<div class="col-12">
+
+<div class="full">
 <label>Property Address *</label>
 <input name="lease_property" required>
 </div>
 
-<div class="col-4">
+<div>
 <label>Monthly Rent *</label>
 <input name="lease_rent" required>
 </div>
 
-<div class="col-4">
+<div>
 <label>Deposit</label>
 <input name="lease_deposit">
 </div>
 
-<div class="col-4">
+<div>
 <label>Rent Due Day</label>
 <input name="lease_due_day">
 </div>
 
-<div class="col-6">
+<div>
 <label>Lease Start *</label>
-<input type="date" name="lease_start" required>
+<input name="lease_start" type="date" required>
 </div>
 
-<div class="col-6">
+<div>
 <label>Lease End *</label>
-<input type="date" name="lease_end" required>
-</div>
-</div>`;
-break;
-
-case "NDA":
-container.innerHTML=`
-<div class="grid">
-<div class="col-6">
-<label>Disclosing Party *</label>
-<input name="nda_disclosing" required>
+<input name="lease_end" type="date" required>
 </div>
 
-<div class="col-6">
-<label>Receiving Party *</label>
-<input name="nda_receiving" required>
 </div>
-
-<div class="col-6">
-<label>Term Months *</label>
-<input name="nda_term" required>
-</div>
-</div>`;
-break;
-
-case "PROMISSORY_NOTE":
-container.innerHTML=`
-<div class="grid">
-<div class="col-6">
-<label>Borrower *</label>
-<input name="loan_borrower" required>
-</div>
-
-<div class="col-6">
-<label>Lender *</label>
-<input name="loan_lender" required>
-</div>
-
-<div class="col-4">
-<label>Loan Amount *</label>
-<input name="loan_amount" required>
-</div>
-
-<div class="col-4">
-<label>Interest Rate</label>
-<input name="loan_rate">
-</div>
-
-<div class="col-4">
-<label>Due Date *</label>
-<input type="date" name="loan_due" required>
-</div>
-</div>`;
-break;
+`
+break
 
 default:
-container.innerHTML=`
-<div class="grid">
-<div class="col-12">
-<label>Document Requirements *</label>
-<textarea name="doc_requirements" required></textarea>
-</div>
-</div>`;
-}
+container.innerHTML = `
+<textarea name="details" placeholder="Enter document requirements"></textarea>
+`
 }
 
-document.getElementById("intakeForm").addEventListener("submit",e=>{
-e.preventDefault();
+}
 
-const data=Object.fromEntries(new FormData(e.target));
 
-sessionStorage.setItem("elegal_intake_data",JSON.stringify(data));
+// ---------- UNIVERSAL FORM COLLECTOR ----------
+document.getElementById("intakeForm").addEventListener("submit", function(e){
 
-window.location.href="review-and-pay.html?v=1";
-});
+e.preventDefault()
+
+const formData = new FormData(this)
+const intakeData = Object.fromEntries(formData.entries())
+
+// attach price from catalog
+intakeData.price = order.price
+
+// Save handshake payload
+sessionStorage.setItem("intakeData", JSON.stringify(intakeData))
+
+window.location = "review-and-pay.html"
+
+})
+
 </script>
 
 </body>
