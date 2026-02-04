@@ -5,7 +5,6 @@
 <title>E-LegalBoom Catalog</title>
 
 <style>
-
 body{
   font-family:Arial;
   background:#f3f6fb;
@@ -81,7 +80,6 @@ button:hover{
   padding:10px;
   font-family:monospace;
 }
-
 </style>
 </head>
 
@@ -99,9 +97,13 @@ button:hover{
 
 <script>
 
-let selectedOrder=null;
+let selectedOrder = null;
 
-const tiers=[
+/* ===============================
+   TIER + DOCUMENT MASTER LIST
+================================ */
+
+const tiers = [
 {
 name:"Tier 1 — Core Personal & Business",
 price:39,
@@ -141,11 +143,16 @@ docs:[
 }
 ];
 
+
+/* ===============================
+   BUILD UI
+================================ */
+
 function buildCatalog(){
 
 const container=document.getElementById("catalog");
 
-tiers.forEach((tier,tIndex)=>{
+tiers.forEach(tier => {
 
 let card=document.createElement("div");
 card.className="tier-card";
@@ -156,9 +163,9 @@ ${tier.name}<br>$${tier.price} per document
 </div>
 `;
 
-tier.docs.forEach(doc=>{
+tier.docs.forEach(doc => {
 
-html+=`
+html += `
 <div class="doc-option"
 onclick="selectDoc('${tier.name}',${tier.price},'${doc.type}',this)">
 ${doc.label}
@@ -167,21 +174,26 @@ ${doc.label}
 
 });
 
-card.innerHTML=html;
+card.innerHTML = html;
 container.appendChild(card);
 
 });
 
 }
 
+
+/* ===============================
+   SELECTION LOGIC
+================================ */
+
 function selectDoc(tier,price,docType,element){
 
 document.querySelectorAll(".doc-option")
-.forEach(e=>e.classList.remove("selected"));
+.forEach(e => e.classList.remove("selected"));
 
 element.classList.add("selected");
 
-selectedOrder={
+selectedOrder = {
 tier:tier,
 price:price,
 doc_type:docType
@@ -190,6 +202,11 @@ doc_type:docType
 updateDebug();
 
 }
+
+
+/* ===============================
+   DEBUG DISPLAY
+================================ */
 
 function updateDebug(){
 
@@ -206,6 +223,12 @@ price: ${selectedOrder.price}
 
 }
 
+
+/* ===============================
+   CONTINUE → INTAKE
+   🔥 LOCKED CONTRACT STORAGE
+================================ */
+
 function continueToIntake(){
 
 if(!selectedOrder){
@@ -213,18 +236,21 @@ alert("Please select a document first.");
 return;
 }
 
-/* 🔥 clear old session keys */
+/* 🔥 CLEAR OLD SESSION */
 sessionStorage.clear();
 
-/* store clean order */
+/* 🔥 STORE USING LOCKED CONTRACT */
 sessionStorage.setItem(
-"elegal_selected_order",
+"orderState",
 JSON.stringify(selectedOrder)
 );
 
 window.location.href="intake.html";
 
 }
+
+
+/* =============================== */
 
 buildCatalog();
 
