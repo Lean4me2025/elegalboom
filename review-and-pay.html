@@ -1,121 +1,184 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta charset="UTF-8">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>E-LegalBoom Review & Pay</title>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
 <style>
-body { font-family: Arial; padding: 40px; }
-.card { max-width: 520px; border:1px solid #ccc; padding:20px; }
-button { background:#2a5bd7; color:white; border:none; padding:15px; width:100%; }
-</style>
-</head>
+body{
+  font-family: Arial, sans-serif;
+  background:#f5f7fb;
+  margin:0;
+  padding:0;
+}
 
+.container{
+  max-width:500px;
+  margin:60px auto;
+  background:white;
+  padding:30px;
+  border-radius:8px;
+  box-shadow:0 4px 12px rgba(0,0,0,0.1);
+}
+
+h2{
+  margin-top:0;
+}
+
+.summary{
+  margin-bottom:25px;
+  line-height:1.6;
+}
+
+button{
+  width:100%;
+  padding:14px;
+  font-size:16px;
+  background:#1e4ed8;
+  color:white;
+  border:none;
+  border-radius:6px;
+  cursor:pointer;
+}
+
+button:hover{
+  background:#153db0;
+}
+</style>
+
+</head>
 <body>
 
-<div class="card">
+<div class="container">
+
 <h2>Review Your Information</h2>
-<div id="review"></div>
+
+<div id="reviewBox" class="summary"></div>
+
 <button id="payBtn">Proceed To Payment</button>
+
 </div>
 
-<script>
 
-// --------------------
-// Supabase
-// --------------------
+<script type="module">
 
-const SUPABASE_URL = "https://vvbjflqsvvvxmfwi.supabase.co"
+/* ===============================
+   SUPABASE CONNECTION (ONLY PLACE)
+================================ */
+
+import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm"
+
+const SUPABASE_URL = "https://vvjbjfltqsivvxxifnvi.supabase.co"
 const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ2amJqZmx0cXNpdnZ4eGlmbnZpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc5NzYzNTAsImV4cCI6MjA3MzU1MjM1MH0.F4zzcpCHl9v-Rnj0wgKJ5zBf1HteVyXelMLQDDEN28Q"
 
-const supabase = window.supabase.createClient(
- SUPABASE_URL,
- SUPABASE_ANON_KEY
-)
+const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
 
 
-// --------------------
-// Load Intake
-// --------------------
+
+/* ===============================
+   LOAD HANDSHAKE FROM INTAKE
+================================ */
 
 const intake = JSON.parse(sessionStorage.getItem("intakeData"))
 
 if(!intake){
- alert("Missing intake data")
- window.location = "catalog.html"
+  alert("Missing intake data. Returning to intake.")
+  window.location = "intake.html"
 }
 
 
-// --------------------
-// Render Review
-// --------------------
 
-document.getElementById("review").innerHTML = `
-<p><b>Tier:</b> ${intake.tier}</p>
-<p><b>Document:</b> ${intake.doc_type}</p>
-<p><b>Price:</b> $${intake.price}</p>
-<p><b>Name:</b> ${intake.client_first} ${intake.client_last}</p>
-<p><b>Email:</b> ${intake.client_email}</p>
-<p><b>Phone:</b> ${intake.client_phone}</p>
+/* ===============================
+   SAFE DISPLAY HELPERS
+================================ */
+
+const safe = (v) =>
+  (v === undefined || v === null || v === "") ? "" : String(v)
+
+
+
+/* ===============================
+   DISPLAY REVIEW SUMMARY
+================================ */
+
+document.getElementById("reviewBox").innerHTML = `
+
+<strong>Tier:</strong> ${safe(intake.tier)} <br>
+<strong>Document:</strong> ${safe(intake.doc_type)} <br>
+<strong>Price:</strong> $${safe(intake.price)} <br><br>
+
+<strong>Customer</strong><br>
+${safe(intake.client_first_name)} ${safe(intake.client_last_name)}<br>
+${safe(intake.client_email)}<br>
+${safe(intake.client_phone)}
+
 `
 
 
-// --------------------
-// Payment Link Map
-// --------------------
+
+/* ===============================
+   TIER PAYMENT LINKS
+   (YOU CONTROL PAYMENT BY TIER)
+================================ */
 
 function getPaymentLink(tier){
 
-const map = {
+  const links = {
 
-"tier1":"https://pay.elegalboom.org/e4b79a60-0fd7-431c-8bfc-ae0",
+    "Tier 1 — Core Personal & Business":
+    "https://pay.elegalboom.org/e4b79a60-0fd7-431c-8b1c-ae0",
 
-"tier2":"https://pay.elegalboom.org/aeda586f-65f5-4bf0-9813-7a2",
+    "Tier 2 — Business Formation & Operations":
+    "https://pay.elegalboom.org/aeda586f-65f5-4bf0-9813-7a2",
 
-"tier3":"https://pay.elegalboom.org/71ca7144-e537-4fbd-823d-c10",
+    "Tier 3 — Employment, Real Estate & Advanced":
+    "https://pay.elegalboom.org/71ca7144-e537-4fbd-823d-c10",
 
-"tier4":"https://pay.elegalboom.org/55c7cd3d-1048-4b8c-aadb-843"
+    "Tier 4 — Entrepreneur Bundle":
+    "https://pay.elegalboom.org/55c7cd3d-1048-4b8c-aadb-843"
 
+  }
+
+  return links[tier]
 }
 
-return map[(tier || "").toLowerCase()]
-}
 
 
-// --------------------
-// Payment Button
-// --------------------
+/* ===============================
+   PAYMENT BUTTON LOGIC
+================================ */
 
 document.getElementById("payBtn").onclick = async () => {
 
-try {
+  const paymentLink = getPaymentLink(intake.tier)
 
-const { error } = await supabase
-.from("pweb_orders")
-.insert([intake])
+  if(!paymentLink){
+    alert("Payment link not found for selected tier.")
+    return
+  }
 
-if(error){
- console.error(error)
- alert("Database insert failed")
- return
-}
+  /* ===== INSERT ORDER INTO DB ===== */
 
-const link = getPaymentLink(intake.tier)
+  const payload = {
+    ...intake,
+    order_status: "payment_pending",
+    created_at: new Date().toISOString()
+  }
 
-if(!link){
- alert("Payment link missing for tier")
- return
-}
+  const { error } = await supabase
+    .from("pweb_orders")
+    .insert(payload)
 
-window.location = link
+  if(error){
+    console.error(error)
+    alert("Database error. Please retry.")
+    return
+  }
 
-}
-catch(e){
- console.error(e)
- alert("System error")
-}
+  /* ===== REDIRECT TO PAYMENT ===== */
+
+  window.location = paymentLink
 
 }
 
