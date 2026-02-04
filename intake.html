@@ -1,63 +1,111 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>E-LegalBoom Intake</title>
+
+<script type="module">
+import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm"
+
+/* ===== SUPABASE CONNECTION ===== */
+const supabase = createClient(
+  "YOUR_SUPABASE_URL_HERE",
+  "YOUR_SUPABASE_ANON_KEY_HERE"
+)
+
+/* ===== LOAD ORDER FROM CATALOG ===== */
+const order = JSON.parse(sessionStorage.getItem("catalogOrder"))
+
+if(!order){
+  alert("Order not found. Please start from catalog.")
+  window.location = "catalog.html"
+}
+
+/* ===== UNIVERSAL FORM SUBMIT ===== */
+document.addEventListener("DOMContentLoaded", () => {
+
+  document.getElementById("intakeForm")
+    .addEventListener("submit", async function(e){
+
+    e.preventDefault()
+
+    /* ----- Collect Form Data ----- */
+    const formData = new FormData(this)
+    const intakeData = Object.fromEntries(formData.entries())
+
+    /* ----- Merge Catalog Order ----- */
+    const payload = {
+      ...order,
+      ...intakeData,
+      request_uuid: crypto.randomUUID(),
+      status: "payment_pending"
+    }
+
+    /* ----- Store Handshake For Review Page ----- */
+    sessionStorage.setItem("intakeData", JSON.stringify(payload))
+
+    /* ----- INSERT INTO DATABASE ----- */
+    const { error } = await supabase
+      .from("pweb_orders")
+      .insert(payload)
+
+    if(error){
+      console.error(error)
+      alert("Database error — please retry.")
+      return
+    }
+
+    /* ----- SEND TO REVIEW ----- */
+    window.location = "review-and-pay.html"
+
+  })
+
+})
+</script>
 
 <style>
 body{
-font-family: Arial, sans-serif;
-background:#f5f7fa;
-margin:0;
-padding:0;
+  font-family: Arial;
+  background:#f4f6f9;
+  margin:0;
+  padding:40px;
 }
 
 .container{
-max-width:900px;
-margin:40px auto;
-background:white;
-padding:30px;
-border-radius:12px;
-box-shadow:0 2px 10px rgba(0,0,0,.1);
+  max-width:700px;
+  margin:auto;
+  background:white;
+  padding:30px;
+  border-radius:8px;
+  box-shadow:0 3px 8px rgba(0,0,0,0.15);
 }
 
 h1{
-color:#1e3a8a;
-margin-bottom:20px;
+  margin-top:0;
 }
 
-.grid{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:15px;
-}
-
-.full{
-grid-column:1 / -1;
-}
-
-input, select, textarea{
-width:100%;
-padding:10px;
-border:1px solid #ccc;
-border-radius:6px;
+input, textarea, select{
+  width:100%;
+  padding:10px;
+  margin:8px 0 18px 0;
+  border:1px solid #ccc;
+  border-radius:4px;
 }
 
 button{
-width:100%;
-padding:15px;
-background:#2563eb;
-color:white;
-border:none;
-border-radius:8px;
-font-size:16px;
-cursor:pointer;
-margin-top:20px;
+  background:#2a5bd7;
+  color:white;
+  border:none;
+  padding:14px;
+  font-size:16px;
+  width:100%;
+  border-radius:6px;
+  cursor:pointer;
 }
 
 button:hover{
-background:#1d4ed8;
+  background:#1f48aa;
 }
 </style>
 </head>
@@ -65,196 +113,41 @@ background:#1d4ed8;
 <body>
 
 <div class="container">
-
-<h1>E-LegalBoom Intake</h1>
+<h1>Client Intake</h1>
 
 <form id="intakeForm">
 
-<!-- ORDER META -->
-<div class="grid">
+<label>First Name</label>
+<input name="client_first" required>
 
-<div>
-<label>Tier</label>
-<input name="tier" id="tier" readonly>
-</div>
+<label>Last Name</label>
+<input name="client_last" required>
 
-<div>
-<label>Document Type</label>
-<input name="doc_type" id="doc_type" readonly>
-</div>
+<label>Email</label>
+<input name="client_email" type="email" required>
 
-</div>
-
-<hr>
-
-<!-- CUSTOMER -->
-<h3>Customer</h3>
-
-<div class="grid">
-
-<div>
-<label>First Name *</label>
-<input name="client_first_name" required>
-</div>
-
-<div>
-<label>Last Name *</label>
-<input name="client_last_name" required>
-</div>
-
-<div>
-<label>Email *</label>
-<input name="client_email" required>
-</div>
-
-<div>
 <label>Phone</label>
-<input name="client_phone">
-</div>
+<input name="client_phone" required>
 
-<div class="full">
 <label>Street Address</label>
-<input name="client_street">
-</div>
+<input name="client_address">
 
-<div>
 <label>City</label>
 <input name="client_city">
-</div>
 
-<div>
 <label>State</label>
 <input name="client_state">
-</div>
 
-<div>
-<label>ZIP</label>
+<label>Zip</label>
 <input name="client_zip">
-</div>
 
-</div>
+<label>Details / Requirements</label>
+<textarea name="details"></textarea>
 
-<hr>
-
-<!-- AGREEMENT META -->
-<h3>Agreement Metadata</h3>
-
-<div class="grid">
-
-<div>
-<label>Effective Date</label>
-<input name="date" type="date">
-</div>
-
-<div>
-<label>Governing State</label>
-<input name="governing_state">
-</div>
-
-</div>
-
-<hr>
-
-<!-- DOCUMENT SPECIFIC -->
-<h3>Document Details</h3>
-<div id="docSpecificSection"></div>
-
-<button type="submit">Continue to Review & Pay</button>
+<button type="submit">Continue To Review</button>
 
 </form>
 </div>
-
-<script>
-
-// ---------- Load Catalog Order ----------
-const orderRaw = sessionStorage.getItem("elegal_selected_order")
-
-if(!orderRaw){
-window.location = "catalog.html"
-}
-
-const order = JSON.parse(orderRaw)
-
-document.getElementById("tier").value = order.tier
-document.getElementById("doc_type").value = order.doc_type
-
-loadDocModule(order.doc_type)
-
-
-// ---------- Dynamic Document Fields ----------
-function loadDocModule(doc){
-
-const container = document.getElementById("docSpecificSection")
-
-switch(doc){
-
-case "RESIDENTIAL_LEASE":
-
-container.innerHTML = `
-<div class="grid">
-
-<div class="full">
-<label>Property Address *</label>
-<input name="lease_property" required>
-</div>
-
-<div>
-<label>Monthly Rent *</label>
-<input name="lease_rent" required>
-</div>
-
-<div>
-<label>Deposit</label>
-<input name="lease_deposit">
-</div>
-
-<div>
-<label>Rent Due Day</label>
-<input name="lease_due_day">
-</div>
-
-<div>
-<label>Lease Start *</label>
-<input name="lease_start" type="date" required>
-</div>
-
-<div>
-<label>Lease End *</label>
-<input name="lease_end" type="date" required>
-</div>
-
-</div>
-`
-break
-
-default:
-container.innerHTML = `
-<textarea name="details" placeholder="Enter document requirements"></textarea>
-`
-}
-
-}
-
-
-// ---------- UNIVERSAL FORM COLLECTOR ----------
-document.getElementById("intakeForm").addEventListener("submit", function(e){
-
-e.preventDefault()
-
-const formData = new FormData(this)
-const intakeData = Object.fromEntries(formData.entries())
-
-// attach price from catalog
-intakeData.price = order.price
-
-// Save handshake payload
-sessionStorage.setItem("intakeData", JSON.stringify(intakeData))
-
-window.location = "review-and-pay.html"
-
-})
-
-</script>
 
 </body>
 </html>
