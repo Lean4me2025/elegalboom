@@ -8,14 +8,11 @@
 
 <style>
 
-/* === BRAND TOKENS MATCHING CATALOG === */
-
 :root{
   --primary:#0c2340;
   --accent:#c99700;
   --bg:#f5f7fa;
   --card:#ffffff;
-  --text:#121826;
   --border:#e5e7eb;
 }
 
@@ -23,7 +20,6 @@ body{
   font-family:Arial;
   margin:0;
   background:var(--bg);
-  color:var(--text);
 }
 
 header{
@@ -35,10 +31,8 @@ header{
   font-weight:bold;
 }
 
-/* ===== Card Layout ===== */
-
 .container{
-  max-width:800px;
+  max-width:850px;
   margin:30px auto;
   padding:20px;
 }
@@ -50,12 +44,6 @@ header{
   border-top:6px solid var(--accent);
   padding:25px;
 }
-
-h2{
-  margin-top:0;
-}
-
-/* ===== Inputs ===== */
 
 label{
   display:block;
@@ -71,11 +59,15 @@ input{
   margin-top:5px;
 }
 
-/* ===== Button ===== */
+.section-title{
+  margin-top:25px;
+  font-size:18px;
+  font-weight:bold;
+}
 
 button{
-  margin-top:25px;
-  padding:12px;
+  margin-top:30px;
+  padding:14px;
   width:100%;
   background:var(--primary);
   color:white;
@@ -83,10 +75,6 @@ button{
   border-radius:8px;
   font-size:16px;
   cursor:pointer;
-}
-
-button:hover{
-  opacity:.9;
 }
 
 </style>
@@ -99,9 +87,9 @@ button:hover{
 <div class="container">
 <div class="card">
 
-<h2>General Information</h2>
-
 <form id="intakeForm">
+
+<div class="section-title">General Information</div>
 
 <label>Tier</label>
 <input name="tier" readonly>
@@ -130,6 +118,12 @@ button:hover{
 <label>ZIP</label>
 <input name="zip">
 
+
+<!-- ===== MODULE CONTAINER ===== -->
+
+<div id="docSpecificSection"></div>
+
+
 <button type="submit">Continue to Review</button>
 
 </form>
@@ -139,14 +133,16 @@ button:hover{
 
 <script>
 
-/* === Load Order From Catalog === */
+/* ================================
+   LOAD ORDER FROM CATALOG
+================================ */
 
 document.addEventListener("DOMContentLoaded", () => {
 
   const storedOrder = sessionStorage.getItem("elegal_selected_order");
 
   if (!storedOrder){
-    window.location.replace("catalog.html?v=3");
+    window.location.replace("catalog.html?v=4");
     return;
   }
 
@@ -155,9 +151,46 @@ document.addEventListener("DOMContentLoaded", () => {
   document.querySelector("[name='tier']").value = order.tier;
   document.querySelector("[name='doc_type']").value = order.doc_type;
 
+  loadDocumentModule(order.doc_type);
+
 });
 
-/* === Submit Intake === */
+
+/* ================================
+   MODULE LOADER (OPTION B CORE)
+================================ */
+
+function loadDocumentModule(docType){
+
+  const container = document.getElementById("docSpecificSection");
+
+  switch(docType){
+
+    case "RESIDENTIAL_LEASE":
+      container.innerHTML = `
+        <div class="section-title">Lease Details</div>
+
+        <label>Property Address</label>
+        <input name="lease_property">
+
+        <label>Monthly Rent</label>
+        <input name="lease_rent">
+
+        <label>Security Deposit</label>
+        <input name="lease_deposit">
+      `;
+      break;
+
+    default:
+      container.innerHTML = "";
+  }
+
+}
+
+
+/* ================================
+   SUBMIT INTAKE
+================================ */
 
 document.getElementById("intakeForm").addEventListener("submit", e => {
 
@@ -172,7 +205,7 @@ document.getElementById("intakeForm").addEventListener("submit", e => {
     JSON.stringify(formData)
   );
 
-  window.location.href = "review.html?v=3";
+  window.location.href = "review.html?v=4";
 
 });
 
