@@ -1,250 +1,125 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html>
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <meta name="theme-color" content="#008" />
-  <title>E-LegalBoom | Review & Pay</title>
-  <style>
-    :root{
-      --blue:#1f5fbf;
-      --bg:#f4f7ff;
-      --card:#ffffff;
-      --text:#1b1f2a;
-      --muted:#667085;
-      --border:#d7def0;
-    }
-    body{
-      margin:0;
-      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-    }
-    .wrap{
-      max-width: 880px;
-      margin: 34px auto;
-      padding: 0 16px;
-    }
-    .card{
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 22px 22px 18px;
-      box-shadow: 0 10px 30px rgba(16,24,40,.06);
-    }
-    h1{
-      margin: 0 0 14px;
-      font-size: 30px;
-      line-height: 1.2;
-      color: #1b2a5a;
-    }
-    .section-title{
-      margin: 18px 0 8px;
-      font-weight: 700;
-      color: #1b2a5a;
-    }
-    .row{
-      display:flex;
-      gap:16px;
-      flex-wrap:wrap;
-      margin: 4px 0;
-    }
-    .label{
-      min-width: 92px;
-      color: var(--muted);
-    }
-    .value{
-      font-weight: 600;
-    }
-    .divider{
-      height:1px;
-      background: var(--border);
-      margin: 16px 0;
-    }
-    .btn{
-      display:block;
-      width: 100%;
-      padding: 14px 18px;
-      border-radius: 10px;
-      border: none;
-      background: linear-gradient(180deg, #2a6fe3 0%, #1f5fbf 100%);
-      color: #fff;
-      font-size: 16px;
-      font-weight: 700;
-      cursor: pointer;
-      margin-top: 16px;
-    }
-    .btn:disabled{ opacity:.55; cursor:not-allowed; }
-    .hint{
-      margin-top: 10px;
-      color: var(--muted);
-      font-size: 13px;
-    }
-  </style>
+<meta charset="UTF-8">
+<title>E-LegalBoom Review & Pay</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+body { font-family: Arial; padding: 40px; }
+.card { max-width: 520px; border:1px solid #ccc; padding:20px; }
+button { background:#2a5bd7; color:white; border:none; padding:15px; width:100%; }
+</style>
 </head>
 
 <body>
-  <div class="wrap">
-    <div class="card">
-      <h1>Review Your Information</h1>
 
-      <div id="review"></div>
+<div class="card">
+<h2>Review Your Information</h2>
+<div id="review"></div>
+<button id="payBtn">Proceed To Payment</button>
+</div>
 
-      <button id="payBtn" class="btn">Proceed To Payment</button>
-      <div class="hint" id="hint"></div>
-    </div>
-  </div>
+<script>
 
-  <script type="module">
-    import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+// --------------------
+// Supabase
+// --------------------
 
-    // ------------------------------------------------------------
-    // 1) Supabase (KEEP yours - you said it's solid)
-    // ------------------------------------------------------------
-    const SUPABASE_URL = "https://vvjbjfltqsivvxxifnvi.supabase.co";
-    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ2amJqZmx0cXNpdnZ4eGlmbnZpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc5NzYzNTAsImV4cCI6MjA3MzU1MjM1MH0.F4zzcpCHl9v-Rnj0wgKJ5zBf1HteVyXelMLQDDEN28Q";
-    const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const SUPABASE_URL = "https://vvbjflqsvvvxmfwi.supabase.co"
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ2amJqZmx0cXNpdnZ4eGlmbnZpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc5NzYzNTAsImV4cCI6MjA3MzU1MjM1MH0.F4zzcpCHl9v-Rnj0wgKJ5zBf1HteVyXelMLQDDEN28Q"
 
-    // ------------------------------------------------------------
-    // 2) Load Session Storage (Order + Intake)
-    // ------------------------------------------------------------
-    const orderRaw  = sessionStorage.getItem("elegal_selected_order");
-    const intakeRaw = sessionStorage.getItem("elegal_intake");
+const supabase = window.supabase.createClient(
+ SUPABASE_URL,
+ SUPABASE_ANON_KEY
+)
 
-    if (!orderRaw)  { alert("Missing selected order. Returning to catalog."); window.location = "catalog.html"; }
-    if (!intakeRaw) { alert("Missing intake data. Returning to intake."); window.location = "intake.html"; }
 
-    const order  = JSON.parse(orderRaw);
-    const intake = JSON.parse(intakeRaw);
+// --------------------
+// Load Intake
+// --------------------
 
-    // ------------------------------------------------------------
-    // 3) Render Review
-    // ------------------------------------------------------------
-    const reviewDiv = document.getElementById("review");
-    const safe = (v) => (v === undefined || v === null || v === "") ? "" : String(v);
+const intake = JSON.parse(sessionStorage.getItem("intakeData"))
 
-    const tierText = safe(order.tier || intake.tier);
-    const docType  = safe(order.doc_type || intake.doc_type);
-    const price    = safe(order.price || intake.price);
+if(!intake){
+ alert("Missing intake data")
+ window.location = "catalog.html"
+}
 
-    const first = safe(intake.client_first || intake.first_name || intake.firstName);
-    const last  = safe(intake.client_last  || intake.last_name  || intake.lastName);
-    const email = safe(intake.client_email || intake.email);
-    const phone = safe(intake.client_phone || intake.phone);
 
-    reviewDiv.innerHTML = `
-      <div class="section-title">Order Summary</div>
-      <div class="row"><div class="label">Tier:</div><div class="value">${tierText}</div></div>
-      <div class="row"><div class="label">Document:</div><div class="value">${docType}</div></div>
-      <div class="row"><div class="label">Price:</div><div class="value">$${price}</div></div>
+// --------------------
+// Render Review
+// --------------------
 
-      <div class="divider"></div>
+document.getElementById("review").innerHTML = `
+<p><b>Tier:</b> ${intake.tier}</p>
+<p><b>Document:</b> ${intake.doc_type}</p>
+<p><b>Price:</b> $${intake.price}</p>
+<p><b>Name:</b> ${intake.client_first} ${intake.client_last}</p>
+<p><b>Email:</b> ${intake.client_email}</p>
+<p><b>Phone:</b> ${intake.client_phone}</p>
+`
 
-      <div class="section-title">Customer</div>
-      <div class="row"><div class="label">Name:</div><div class="value">${(first || last) ? `${first} ${last}`.trim() : "(name missing)"}</div></div>
-      <div class="row"><div class="label">Email:</div><div class="value">${email}</div></div>
-      <div class="row"><div class="label">Phone:</div><div class="value">${phone}</div></div>
-    `;
 
-    // ------------------------------------------------------------
-    // 4) Payment link resolver (TIER controls payment)
-    // ------------------------------------------------------------
-    function normalizeTier(tier) {
-      // Handles strings like:
-      // "Tier 2 — Business Formation & Operations"
-      // "Tier 2 - Business Formation & Operations"
-      // "tier2"
-      // "TIER 2"
-      // "Tier 4 — Entrepreneur Bundle"
-      const t = (tier || "").toString().trim().toLowerCase();
+// --------------------
+// Payment Link Map
+// --------------------
 
-      if (t.includes("tier 1") || t === "tier1" || t === "tier_1") return "TIER_1";
-      if (t.includes("tier 2") || t === "tier2" || t === "tier_2") return "TIER_2";
-      if (t.includes("tier 3") || t === "tier3" || t === "tier_3") return "TIER_3";
+function getPaymentLink(tier){
 
-      // Your tier 4 label appears as "Tier 4 — Entrepreneur Bundle"
-      if (t.includes("tier 4") || t.includes("entrepreneur") || t === "tier4" || t === "tier_4") return "TIER_4";
+const map = {
 
-      return "";
-    }
+"tier1":"https://pay.elegalboom.org/e4b79a60-0fd7-431c-8bfc-ae0",
 
-    function getPaymentLinkByTier(tierText) {
-      const key = normalizeTier(tierText);
+"tier2":"https://pay.elegalboom.org/aeda586f-65f5-4bf0-9813-7a2",
 
-      // These are the links you showed in your screenshot
-      const TIER_LINKS = {
-        TIER_1: "https://pay.elegalboom.org/e4b79a60-0fd7-431c-8b1c-ae0",
-        TIER_2: "https://pay.elegalboom.org/aeda586f-65f5-4bf0-9813-7a2",
-        TIER_3: "https://pay.elegalboom.org/71ca7144-e537-4fbd-823d-c10",
-        TIER_4: "https://pay.elegalboom.org/55c7cd3d-1048-4b8c-aadb-843" // Entrepreneur Starter Bundle / Tier 4
-      };
+"tier3":"https://pay.elegalboom.org/71ca7144-e537-4fbd-823d-c10",
 
-      return TIER_LINKS[key] || "";
-    }
+"tier4":"https://pay.elegalboom.org/55c7cd3d-1048-4b8c-aadb-843"
 
-    // ------------------------------------------------------------
-    // 5) Insert into Supabase and redirect
-    // ------------------------------------------------------------
-    const payBtn = document.getElementById("payBtn");
-    const hintEl = document.getElementById("hint");
+}
 
-    payBtn.addEventListener("click", async () => {
-      payBtn.disabled = true;
-      hintEl.textContent = "Saving order…";
+return map[(tier || "").toLowerCase()]
+}
 
-      // Build payload (keep it aligned to your pweb_orders columns)
-      // IMPORTANT: created_at should be handled by DB default. Don’t send it unless required.
-      const orderPayload = {
-        client_first: first || null,
-        client_last:  last  || null,
-        client_email: email || null,
-        client_phone: phone || null,
 
-        // Order fields
-        tier: tierText || null,
-        doc_type: docType || null,
-        price: price ? Number(price) : null,
+// --------------------
+// Payment Button
+// --------------------
 
-        // Optional: store full intake JSON if you have a jsonb column for it
-        // intake_json: intake,
+document.getElementById("payBtn").onclick = async () => {
 
-        // If you have request_uuid column and you generate one upstream, set it here
-        request_uuid: intake.request_uuid || intake.requestUUID || null,
-      };
+try {
 
-      try {
-        const { error } = await supabase
-          .from("pweb_orders")
-          .insert(orderPayload);
+const { error } = await supabase
+.from("pweb_orders")
+.insert([intake])
 
-        if (error) {
-          console.error("Supabase insert error:", error);
-          alert("Database error. Please try again.");
-          payBtn.disabled = false;
-          hintEl.textContent = "";
-          return;
-        }
+if(error){
+ console.error(error)
+ alert("Database insert failed")
+ return
+}
 
-        // Resolve payment by TIER (not doc)
-        const payLink = getPaymentLinkByTier(tierText);
+const link = getPaymentLink(intake.tier)
 
-        if (!payLink) {
-          alert(`Payment link not found for tier: ${tierText}`);
-          payBtn.disabled = false;
-          hintEl.textContent = "";
-          return;
-        }
+if(!link){
+ alert("Payment link missing for tier")
+ return
+}
 
-        hintEl.textContent = "Redirecting to payment…";
-        window.location.href = payLink;
+window.location = link
 
-      } catch (e) {
-        console.error("Unexpected error:", e);
-        alert("Unexpected error. Please try again.");
-        payBtn.disabled = false;
-        hintEl.textContent = "";
-      }
-    });
-  </script>
+}
+catch(e){
+ console.error(e)
+ alert("System error")
+}
+
+}
+
+</script>
+
 </body>
 </html>
