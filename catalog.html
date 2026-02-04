@@ -1,125 +1,85 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-<title>E-LegalBoom | Document Catalog</title>
+<meta charset="UTF-8">
+<title>E-LegalBoom Catalog</title>
 
 <style>
 
-/* =========================
-   THEME TOKENS
-========================= */
-
-:root {
-  --primary: #0c2340;
-  --accent: #c99700;
-  --bg: #f5f7fa;
-  --card-bg: #ffffff;
-  --text: #1a1a1a;
-  --border: #e0e0e0;
+body{
+  font-family:Arial;
+  background:#f3f6fb;
+  margin:0;
 }
 
-/* =========================
-   GLOBAL
-========================= */
-
-body {
-  margin: 0;
-  font-family: Arial, Helvetica, sans-serif;
-  background: var(--bg);
-  color: var(--text);
+h1{
+  text-align:center;
+  margin-top:20px;
 }
 
-header {
-  background: var(--primary);
-  color: white;
-  padding: 18px;
-  text-align: center;
-  font-size: 24px;
-  font-weight: bold;
+.catalog-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:20px;
+  padding:20px;
 }
 
-.subtitle {
-  text-align: center;
-  padding: 10px;
-  font-size: 16px;
-  color: #444;
+.tier-card{
+  background:white;
+  border-radius:10px;
+  padding:15px;
+  box-shadow:0 2px 8px rgba(0,0,0,.1);
+  display:flex;
+  flex-direction:column;
 }
 
-.container {
-  max-width: 1200px;
-  margin: auto;
-  padding: 20px;
+.tier-header{
+  background:#1e5bff;
+  color:white;
+  padding:10px;
+  border-radius:8px;
+  font-weight:bold;
+  text-align:center;
+  margin-bottom:10px;
 }
 
-/* =========================
-   TIER CARDS
-========================= */
-
-.tier {
-  background: var(--card-bg);
-  border-radius: 12px;
-  margin-bottom: 28px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
-  border-top: 6px solid var(--accent);
+.doc-option{
+  border:1px solid #ddd;
+  padding:8px;
+  margin-bottom:8px;
+  border-radius:6px;
+  cursor:pointer;
 }
 
-.tier-header {
-  padding: 18px;
-  border-bottom: 1px solid var(--border);
+.doc-option.selected{
+  border:2px solid #1e5bff;
+  background:#eef3ff;
 }
 
-.tier-title {
-  font-size: 22px;
-  font-weight: bold;
+.continue-bar{
+  text-align:center;
+  margin:20px;
 }
 
-.tier-price {
-  color: var(--accent);
-  font-size: 18px;
-  margin-top: 5px;
+button{
+  padding:12px 30px;
+  font-size:16px;
+  background:#1e5bff;
+  color:white;
+  border:none;
+  border-radius:8px;
+  cursor:pointer;
 }
 
-/* =========================
-   DOCUMENT LIST
-========================= */
-
-.doc-list {
-  padding: 20px;
+button:hover{
+  background:#1849cc;
 }
 
-.doc-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 12px 0;
-  border-bottom: 1px solid var(--border);
-}
-
-.doc-name {
-  font-weight: 600;
-}
-
-.select-btn {
-  background: var(--primary);
-  color: white;
-  border: none;
-  padding: 8px 14px;
-  border-radius: 6px;
-  cursor: pointer;
-}
-
-.select-btn:hover {
-  background: #091a30;
-}
-
-footer {
-  text-align: center;
-  padding: 20px;
-  font-size: 14px;
-  color: #666;
+.debug{
+  border:2px dashed #ccc;
+  margin:20px;
+  padding:10px;
+  font-family:monospace;
 }
 
 </style>
@@ -127,136 +87,144 @@ footer {
 
 <body>
 
-<header>
-E-LegalBoom Document Catalog
-</header>
+<h1>Document Catalog</h1>
 
-<div class="subtitle">
-Choose your document to begin secure preparation
+<div class="catalog-grid" id="catalog"></div>
+
+<div class="continue-bar">
+<button onclick="continueToIntake()">Continue</button>
 </div>
 
-<div class="container" id="catalogContainer">
-</div>
-
-<footer>
-© E-LegalBoom | Professional Legal Document Preparation
-</footer>
+<div class="debug" id="debug">No selection yet</div>
 
 <script>
 
-/* ======================================
-   DOCUMENT CATALOG DATA
-   Canonical doc_type naming ONLY
-====================================== */
+let selectedOrder=null;
 
-const catalog = [
-  {
-    tier: "Tier 1 — Essentials",
-    price: 39,
-    documents: [
-      { name: "Promissory Note", doc_type: "promissory_note" },
-      { name: "Non-Disclosure Agreement (NDA)", doc_type: "nda" },
-      { name: "Bill of Sale", doc_type: "bill_of_sale" },
-      { name: "Independent Contractor Agreement", doc_type: "contractor_agreement" }
-    ]
-  },
-  {
-    tier: "Tier 2 — Business Foundation",
-    price: 59,
-    documents: [
-      { name: "Single Member LLC Operating Agreement", doc_type: "llc_single" },
-      { name: "Multi-Member LLC Operating Agreement", doc_type: "llc_multi" },
-      { name: "Partnership Agreement", doc_type: "partnership_agreement" },
-      { name: "Consulting Agreement", doc_type: "consulting_agreement" }
-    ]
-  },
-  {
-    tier: "Tier 3 — Advanced Control & Growth",
-    price: 99,
-    documents: [
-      { name: "Commercial Lease Agreement", doc_type: "commercial_lease" },
-      { name: "Intellectual Property Assignment", doc_type: "ip_assignment" },
-      { name: "Operating Agreement Amendment", doc_type: "llc_amendment" }
-    ]
-  },
-  {
-    tier: "Tier 4 — Entrepreneur Bundle",
-    price: 149,
-    documents: [
-      { name: "Entrepreneur Multi-Document Bundle", doc_type: "bundle_entrepreneur" }
-    ]
-  }
+const tiers=[
+{
+name:"Tier 1 — Core Personal & Business",
+price:39,
+docs:[
+{label:"Promissory Note",type:"PROMISSORY_NOTE"},
+{label:"Non-Disclosure Agreement",type:"NDA"},
+{label:"Independent Contractor Agreement",type:"INDEPENDENT_CONTRACTOR"},
+{label:"Bill of Sale",type:"BILL_OF_SALE"}
+]
+},
+{
+name:"Tier 2 — Business Formation & Operations",
+price:59,
+docs:[
+{label:"Operating Agreement (LLC)",type:"LLC_OPERATING"},
+{label:"Partnership Agreement",type:"PARTNERSHIP"},
+{label:"Business Loan Agreement",type:"BUSINESS_LOAN"},
+{label:"Service Agreement",type:"SERVICE_AGREEMENT"}
+]
+},
+{
+name:"Tier 3 — Employment, Real Estate & Advanced",
+price:99,
+docs:[
+{label:"Employment Agreement",type:"EMPLOYMENT"},
+{label:"Residential Lease Agreement",type:"RESIDENTIAL_LEASE"},
+{label:"Commercial Lease Agreement",type:"COMMERCIAL_LEASE"},
+{label:"Non-Compete Agreement",type:"NON_COMPETE"}
+]
+},
+{
+name:"Tier 4 — Entrepreneur Bundle",
+price:149,
+docs:[
+{label:"Entrepreneur Starter Bundle",type:"ENTREPRENEUR_BUNDLE"}
+]
+}
 ];
 
+function buildCatalog(){
 
-/* ======================================
-   BUILD CATALOG UI
-====================================== */
+const container=document.getElementById("catalog");
 
-function buildCatalog() {
+tiers.forEach((tier,tIndex)=>{
 
-  const container = document.getElementById("catalogContainer");
+let card=document.createElement("div");
+card.className="tier-card";
 
-  catalog.forEach(tier => {
+let html=`
+<div class="tier-header">
+${tier.name}<br>$${tier.price} per document
+</div>
+`;
 
-    const tierDiv = document.createElement("div");
-    tierDiv.className = "tier";
+tier.docs.forEach(doc=>{
 
-    tierDiv.innerHTML = `
-      <div class="tier-header">
-        <div class="tier-title">${tier.tier}</div>
-        <div class="tier-price">$${tier.price}</div>
-      </div>
-      <div class="doc-list">
-      </div>
-    `;
+html+=`
+<div class="doc-option"
+onclick="selectDoc('${tier.name}',${tier.price},'${doc.type}',this)">
+${doc.label}
+</div>
+`;
 
-    const docList = tierDiv.querySelector(".doc-list");
+});
 
-    tier.documents.forEach(doc => {
+card.innerHTML=html;
+container.appendChild(card);
 
-      const docDiv = document.createElement("div");
-      docDiv.className = "doc-item";
-
-      docDiv.innerHTML = `
-        <div class="doc-name">${doc.name}</div>
-        <button class="select-btn"
-          onclick="selectDocument('${tier.tier}', ${tier.price}, '${doc.doc_type}', '${doc.name}')">
-          Start
-        </button>
-      `;
-
-      docList.appendChild(docDiv);
-    });
-
-    container.appendChild(tierDiv);
-  });
+});
 
 }
 
+function selectDoc(tier,price,docType,element){
 
-/* ======================================
-   DOCUMENT SELECTION HANDLER
-====================================== */
+document.querySelectorAll(".doc-option")
+.forEach(e=>e.classList.remove("selected"));
 
-function selectDocument(tier, price, docType, displayName) {
+element.classList.add("selected");
 
-  const orderData = {
-    tier: tier,
-    price: price,
-    doc_type: docType,
-    display_name: displayName
-  };
+selectedOrder={
+tier:tier,
+price:price,
+doc_type:docType
+};
 
-  sessionStorage.setItem("orderData", JSON.stringify(orderData));
+updateDebug();
 
-  window.location.href = "intake.html";
 }
 
+function updateDebug(){
 
-/* ======================================
-   INIT
-====================================== */
+if(!selectedOrder){
+document.getElementById("debug").innerHTML="No selection yet";
+return;
+}
+
+document.getElementById("debug").innerHTML=`
+doc_type: ${selectedOrder.doc_type}<br>
+tier: ${selectedOrder.tier}<br>
+price: ${selectedOrder.price}
+`;
+
+}
+
+function continueToIntake(){
+
+if(!selectedOrder){
+alert("Please select a document first.");
+return;
+}
+
+/* 🔥 clear old session keys */
+sessionStorage.clear();
+
+/* store clean order */
+sessionStorage.setItem(
+"elegal_selected_order",
+JSON.stringify(selectedOrder)
+);
+
+window.location.href="intake.html";
+
+}
 
 buildCatalog();
 
