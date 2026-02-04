@@ -1,82 +1,98 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>E-LegalBoom Intake</title>
 
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 
 <style>
-
 :root{
-  --primary:#0c2340;
-  --accent:#c99700;
-  --bg:#f5f7fa;
-  --card:#ffffff;
-  --border:#e5e7eb;
+--primary:#0c2340;
+--accent:#c99700;
+--bg:#f5f7fa;
+--card:#ffffff;
+--border:#e5e7eb;
 }
 
 body{
-  font-family:Arial;
-  margin:0;
-  background:var(--bg);
+margin:0;
+font-family:Arial;
+background:var(--bg);
 }
 
 header{
-  background:var(--primary);
-  color:white;
-  padding:18px;
-  text-align:center;
-  font-size:22px;
-  font-weight:bold;
+background:var(--primary);
+color:white;
+padding:18px;
+text-align:center;
+font-size:22px;
+font-weight:bold;
 }
 
 .container{
-  max-width:850px;
-  margin:30px auto;
-  padding:20px;
+max-width:950px;
+margin:30px auto;
+padding:20px;
 }
 
 .card{
-  background:var(--card);
-  border-radius:12px;
-  box-shadow:0 4px 12px rgba(0,0,0,.08);
-  border-top:6px solid var(--accent);
-  padding:25px;
+background:var(--card);
+border-radius:12px;
+border-top:6px solid var(--accent);
+padding:25px;
+box-shadow:0 4px 12px rgba(0,0,0,.08);
 }
+
+.section{
+margin-top:25px;
+font-size:18px;
+font-weight:bold;
+color:var(--primary);
+}
+
+.grid{
+display:grid;
+grid-template-columns:repeat(12,1fr);
+gap:12px;
+margin-top:10px;
+}
+
+.col-12{grid-column:span 12;}
+.col-6{grid-column:span 6;}
+.col-4{grid-column:span 4;}
 
 label{
-  display:block;
-  margin-top:15px;
-  font-weight:bold;
+display:block;
+font-weight:bold;
+font-size:12px;
+margin-top:10px;
 }
 
-input{
-  width:100%;
-  padding:10px;
-  border:1px solid var(--border);
-  border-radius:6px;
-  margin-top:5px;
-}
-
-.section-title{
-  margin-top:25px;
-  font-size:18px;
-  font-weight:bold;
+input,textarea,select{
+width:100%;
+padding:10px;
+border:1px solid var(--border);
+border-radius:8px;
+margin-top:5px;
 }
 
 button{
-  margin-top:30px;
-  padding:14px;
-  width:100%;
-  background:var(--primary);
-  color:white;
-  border:none;
-  border-radius:8px;
-  font-size:16px;
-  cursor:pointer;
+margin-top:30px;
+width:100%;
+padding:14px;
+background:var(--primary);
+color:white;
+border:none;
+border-radius:10px;
+font-size:16px;
+cursor:pointer;
 }
 
+@media(max-width:720px){
+.col-6,.col-4{grid-column:span 12;}
+}
 </style>
 </head>
 
@@ -89,42 +105,87 @@ button{
 
 <form id="intakeForm">
 
-<div class="section-title">General Information</div>
+<div class="section">Order</div>
 
+<div class="grid">
+<div class="col-6">
 <label>Tier</label>
 <input name="tier" readonly>
+</div>
 
+<div class="col-6">
 <label>Document Type</label>
 <input name="doc_type" readonly>
+</div>
+</div>
 
-<label>Full Name</label>
-<input name="full_name" required>
+<div class="section">Customer</div>
 
-<label>Email</label>
+<div class="grid">
+<div class="col-6">
+<label>First Name *</label>
+<input name="first_name" required>
+</div>
+
+<div class="col-6">
+<label>Last Name *</label>
+<input name="last_name" required>
+</div>
+
+<div class="col-6">
+<label>Email *</label>
 <input name="email" required>
+</div>
 
+<div class="col-6">
 <label>Phone</label>
 <input name="phone">
+</div>
+</div>
 
-<label>Street Address</label>
+<div class="section">Address</div>
+
+<div class="grid">
+<div class="col-12">
+<label>Street</label>
 <input name="street">
+</div>
 
+<div class="col-4">
 <label>City</label>
 <input name="city">
+</div>
 
+<div class="col-4">
 <label>State</label>
 <input name="state">
+</div>
 
+<div class="col-4">
 <label>ZIP</label>
 <input name="zip">
+</div>
+</div>
 
+<div class="section">Agreement Metadata</div>
 
-<!-- ===== MODULE CONTAINER ===== -->
+<div class="grid">
+<div class="col-6">
+<label>Effective Date</label>
+<input type="date" name="effective_date">
+</div>
+
+<div class="col-6">
+<label>Governing State</label>
+<input name="governing_state">
+</div>
+</div>
+
+<div class="section">Document Details</div>
 
 <div id="docSpecificSection"></div>
 
-
-<button type="submit">Continue to Review</button>
+<button type="submit">Continue to Review & Pay</button>
 
 </form>
 
@@ -132,83 +193,130 @@ button{
 </div>
 
 <script>
+const orderRaw=sessionStorage.getItem("elegal_selected_order");
 
-/* ================================
-   LOAD ORDER FROM CATALOG
-================================ */
-
-document.addEventListener("DOMContentLoaded", () => {
-
-  const storedOrder = sessionStorage.getItem("elegal_selected_order");
-
-  if (!storedOrder){
-    window.location.replace("catalog.html?v=4");
-    return;
-  }
-
-  const order = JSON.parse(storedOrder);
-
-  document.querySelector("[name='tier']").value = order.tier;
-  document.querySelector("[name='doc_type']").value = order.doc_type;
-
-  loadDocumentModule(order.doc_type);
-
-});
-
-
-/* ================================
-   MODULE LOADER (OPTION B CORE)
-================================ */
-
-function loadDocumentModule(docType){
-
-  const container = document.getElementById("docSpecificSection");
-
-  switch(docType){
-
-    case "RESIDENTIAL_LEASE":
-      container.innerHTML = `
-        <div class="section-title">Lease Details</div>
-
-        <label>Property Address</label>
-        <input name="lease_property">
-
-        <label>Monthly Rent</label>
-        <input name="lease_rent">
-
-        <label>Security Deposit</label>
-        <input name="lease_deposit">
-      `;
-      break;
-
-    default:
-      container.innerHTML = "";
-  }
-
+if(!orderRaw){
+window.location.replace("catalog.html?v=1");
 }
 
+const order=JSON.parse(orderRaw);
 
-/* ================================
-   SUBMIT INTAKE
-================================ */
+document.querySelector("[name='tier']").value=order.tier;
+document.querySelector("[name='doc_type']").value=order.doc_type;
 
-document.getElementById("intakeForm").addEventListener("submit", e => {
+loadModule(order.doc_type);
 
-  e.preventDefault();
+function loadModule(doc){
 
-  const formData = Object.fromEntries(
-    new FormData(e.target).entries()
-  );
+const container=document.getElementById("docSpecificSection");
 
-  sessionStorage.setItem(
-    "elegal_intake_data",
-    JSON.stringify(formData)
-  );
+switch(doc){
 
-  window.location.href = "review.html?v=4";
+case "RESIDENTIAL_LEASE":
+container.innerHTML=`
+<div class="grid">
+<div class="col-12">
+<label>Property Address *</label>
+<input name="lease_property" required>
+</div>
 
+<div class="col-4">
+<label>Monthly Rent *</label>
+<input name="lease_rent" required>
+</div>
+
+<div class="col-4">
+<label>Deposit</label>
+<input name="lease_deposit">
+</div>
+
+<div class="col-4">
+<label>Rent Due Day</label>
+<input name="lease_due_day">
+</div>
+
+<div class="col-6">
+<label>Lease Start *</label>
+<input type="date" name="lease_start" required>
+</div>
+
+<div class="col-6">
+<label>Lease End *</label>
+<input type="date" name="lease_end" required>
+</div>
+</div>`;
+break;
+
+case "NDA":
+container.innerHTML=`
+<div class="grid">
+<div class="col-6">
+<label>Disclosing Party *</label>
+<input name="nda_disclosing" required>
+</div>
+
+<div class="col-6">
+<label>Receiving Party *</label>
+<input name="nda_receiving" required>
+</div>
+
+<div class="col-6">
+<label>Term Months *</label>
+<input name="nda_term" required>
+</div>
+</div>`;
+break;
+
+case "PROMISSORY_NOTE":
+container.innerHTML=`
+<div class="grid">
+<div class="col-6">
+<label>Borrower *</label>
+<input name="loan_borrower" required>
+</div>
+
+<div class="col-6">
+<label>Lender *</label>
+<input name="loan_lender" required>
+</div>
+
+<div class="col-4">
+<label>Loan Amount *</label>
+<input name="loan_amount" required>
+</div>
+
+<div class="col-4">
+<label>Interest Rate</label>
+<input name="loan_rate">
+</div>
+
+<div class="col-4">
+<label>Due Date *</label>
+<input type="date" name="loan_due" required>
+</div>
+</div>`;
+break;
+
+default:
+container.innerHTML=`
+<div class="grid">
+<div class="col-12">
+<label>Document Requirements *</label>
+<textarea name="doc_requirements" required></textarea>
+</div>
+</div>`;
+}
+}
+
+document.getElementById("intakeForm").addEventListener("submit",e=>{
+e.preventDefault();
+
+const data=Object.fromEntries(new FormData(e.target));
+
+sessionStorage.setItem("elegal_intake_data",JSON.stringify(data));
+
+window.location.href="review-and-pay.html?v=1";
 });
-
 </script>
 
 </body>
