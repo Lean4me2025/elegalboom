@@ -1,4 +1,4 @@
-!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -8,75 +8,75 @@
 <style>
 body {
   font-family: Arial, sans-serif;
-  background: #f4f6fb;
-  margin: 0;
-  padding: 20px;
+  background:#f4f6fb;
+  margin:0;
+  padding:20px;
 }
 
-h1 {
-  text-align: center;
-}
+h1 { text-align:center; }
 
 .layout {
-  display: flex;
-  gap: 20px;
+  display:flex;
+  gap:20px;
 }
 
 .catalog-grid {
-  flex: 3;
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 20px;
+  flex:3;
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:20px;
 }
 
 .tier-card {
-  background: white;
-  border-radius: 10px;
-  padding: 15px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  background:white;
+  border-radius:10px;
+  padding:15px;
+  box-shadow:0 2px 6px rgba(0,0,0,.1);
+  display:flex;
+  flex-direction:column;
 }
 
 .tier-header {
-  background: #2563eb;
-  color: white;
-  padding: 10px;
-  border-radius: 8px;
-  margin-bottom: 10px;
-  font-weight: bold;
-  text-align: center;
+  background:#2563eb;
+  color:white;
+  padding:10px;
+  border-radius:8px;
+  text-align:center;
+  font-weight:bold;
+  margin-bottom:10px;
 }
 
 .doc-option {
-  border: 1px solid #ccc;
-  padding: 8px;
-  margin: 6px 0;
-  border-radius: 6px;
-  cursor: pointer;
+  border:1px solid #ccc;
+  padding:8px;
+  margin:5px 0;
+  border-radius:6px;
+  cursor:pointer;
 }
 
 .doc-option.selected {
-  background: #2563eb;
-  color: white;
+  background:#2563eb;
+  color:white;
 }
 
 .summary-panel {
-  flex: 1;
-  background: white;
-  padding: 20px;
-  border-radius: 10px;
-  height: fit-content;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  flex:1;
+  background:white;
+  padding:20px;
+  border-radius:10px;
+  height:fit-content;
+  box-shadow:0 2px 6px rgba(0,0,0,.1);
 }
 
 button {
-  margin-top: 20px;
-  width: 100%;
-  padding: 10px;
-  background: #2563eb;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
+  margin-top:20px;
+  width:100%;
+  padding:10px;
+  background:#2563eb;
+  color:white;
+  border:none;
+  border-radius:8px;
+  cursor:pointer;
 }
 </style>
 </head>
@@ -102,158 +102,133 @@ button {
 const MAX_TIER4 = 3;
 
 const tiers = [
-  {
-    tier_name: "Tier 1",
-    tier_price: 39,
-    docs: [
-      { label:"Promissory Note", doc_type:"PROMISSORY_NOTE" },
-      { label:"Non-Disclosure Agreement", doc_type:"NDA" },
-      { label:"Bill of Sale", doc_type:"BILL_OF_SALE" }
-    ]
-  },
-  {
-    tier_name: "Tier 2",
-    tier_price: 59,
-    docs: [
-      { label:"LLC Operating Agreement", doc_type:"LLC_OPERATING" },
-      { label:"Partnership Agreement", doc_type:"PARTNERSHIP" }
-    ]
-  },
-  {
-    tier_name: "Tier 3",
-    tier_price: 99,
-    docs: [
-      { label:"Employment Agreement", doc_type:"EMPLOYMENT" },
-      { label:"Commercial Lease", doc_type:"COMMERCIAL_LEASE" }
-    ]
-  },
-  {
-    tier_name: "Tier 4",
-    tier_price: 149,
-    docs: [
-      { label:"Select up to 3 documents", doc_type:"TIER4_MULTI" }
-    ]
-  }
+{
+tier_name:"Tier 1 — Core Personal & Business",
+tier_price:39,
+docs:[
+{label:"Promissory Note",doc_type:"PROMISSORY_NOTE"},
+{label:"Non-Disclosure Agreement",doc_type:"NDA"},
+{label:"Independent Contractor Agreement",doc_type:"INDEPENDENT_CONTRACTOR"},
+{label:"Bill of Sale",doc_type:"BILL_OF_SALE"}
+]
+},
+{
+tier_name:"Tier 2 — Business Formation & Operations",
+tier_price:59,
+docs:[
+{label:"Operating Agreement (LLC)",doc_type:"LLC_OPERATING"},
+{label:"Partnership Agreement",doc_type:"PARTNERSHIP"},
+{label:"Business Loan Agreement",doc_type:"BUSINESS_LOAN"},
+{label:"Service Agreement",doc_type:"SERVICE_AGREEMENT"}
+]
+},
+{
+tier_name:"Tier 3 — Employment, Real Estate & Advanced",
+tier_price:99,
+docs:[
+{label:"Employment Agreement",doc_type:"EMPLOYMENT"},
+{label:"Residential Lease Agreement",doc_type:"RESIDENTIAL_LEASE"},
+{label:"Commercial Lease Agreement",doc_type:"COMMERCIAL_LEASE"},
+{label:"Non-Compete Agreement",doc_type:"NON_COMPETE"}
+]
+},
+{
+tier_name:"Tier 4 — Entrepreneur Package",
+tier_price:149,
+docs:[
+{label:"Choose up to 3 documents",doc_type:"TIER4_MULTI"}
+]
+}
 ];
 
-let selectedOrder = null;
-let tier4Selections = [];
+let selectedOrder=null;
+let tier4Selections=[];
 
-function buildCatalog() {
+function buildCatalog(){
+const container=document.getElementById("catalog");
 
-  const container = document.getElementById("catalog");
+tiers.forEach(tier=>{
+const card=document.createElement("div");
+card.className="tier-card";
 
-  tiers.forEach(tier => {
+const header=document.createElement("div");
+header.className="tier-header";
+header.textContent=`${tier.tier_name} — $${tier.tier_price}`;
+card.appendChild(header);
 
-    const card = document.createElement("div");
-    card.className = "tier-card";
+tier.docs.forEach(doc=>{
+const option=document.createElement("div");
+option.className="doc-option";
+option.textContent=doc.label;
 
-    const header = document.createElement("div");
-    header.className = "tier-header";
-    header.textContent = `${tier.tier_name} — $${tier.tier_price}`;
-    card.appendChild(header);
+option.onclick=()=>{
+if(tier.tier_name!=="Tier 4"){
+document.querySelectorAll(".doc-option").forEach(el=>el.classList.remove("selected"));
+option.classList.add("selected");
 
-    if(tier.tier_name !== "Tier 4") {
+selectedOrder={
+tier_name:tier.tier_name,
+tier_price:tier.tier_price,
+doc_type:doc.doc_type
+};
 
-      tier.docs.forEach(doc => {
+}else{
 
-        const option = document.createElement("div");
-        option.className = "doc-option";
-        option.textContent = doc.label;
+const code=prompt("Enter document type code (example: NDA)");
+if(!code) return;
 
-        option.onclick = () => {
-
-          document.querySelectorAll(".doc-option").forEach(el => el.classList.remove("selected"));
-          option.classList.add("selected");
-
-          selectedOrder = {
-            tier_name: tier.tier_name,
-            tier_price: tier.tier_price,
-            doc_type: doc.doc_type
-          };
-
-          updateSummary();
-        };
-
-        card.appendChild(option);
-      });
-
-    } else {
-
-      tier.docs.forEach(doc => {
-
-        const option = document.createElement("div");
-        option.className = "doc-option";
-        option.textContent = doc.label;
-
-        option.onclick = () => {
-
-          const choice = prompt("Enter document type code (example: NDA, LLC_OPERATING)");
-
-          if(!choice) return;
-
-          if(tier4Selections.length >= MAX_TIER4) {
-            alert("Max 3 documents allowed.");
-            return;
-          }
-
-          tier4Selections.push(choice);
-
-          selectedOrder = {
-            tier_name: tier.tier_name,
-            tier_price: tier.tier_price,
-            doc_types: tier4Selections
-          };
-
-          updateSummary();
-        };
-
-        card.appendChild(option);
-      });
-    }
-
-    container.appendChild(card);
-  });
+if(tier4Selections.length>=MAX_TIER4){
+alert("Maximum 3 documents.");
+return;
 }
 
-function updateSummary() {
+tier4Selections.push(code);
 
-  const s = document.getElementById("summary");
-
-  if(!selectedOrder) {
-    s.innerHTML = "No selection yet.";
-    return;
-  }
-
-  if(selectedOrder.doc_type) {
-    s.innerHTML = `
-      <p><b>${selectedOrder.tier_name}</b></p>
-      <p>$${selectedOrder.tier_price}</p>
-      <p>${selectedOrder.doc_type}</p>
-    `;
-  }
-
-  if(selectedOrder.doc_types) {
-    s.innerHTML = `
-      <p><b>${selectedOrder.tier_name}</b></p>
-      <p>$${selectedOrder.tier_price}</p>
-      <p>${selectedOrder.doc_types.join(", ")}</p>
-    `;
-  }
+selectedOrder={
+tier_name:tier.tier_name,
+tier_price:tier.tier_price,
+doc_types:tier4Selections
+};
 }
 
-function continueToIntake() {
+updateSummary();
+};
 
-  if(!selectedOrder) {
-    alert("Select a document first.");
-    return;
-  }
+card.appendChild(option);
+});
 
-  sessionStorage.setItem("elegal_selected_order", JSON.stringify(selectedOrder));
-  window.location.href = "intake.html";
+container.appendChild(card);
+});
 }
 
-document.addEventListener("DOMContentLoaded", buildCatalog);
+function updateSummary(){
+const s=document.getElementById("summary");
+
+if(!selectedOrder){
+s.innerHTML="No selection yet.";
+return;
+}
+
+if(selectedOrder.doc_type){
+s.innerHTML=`<b>${selectedOrder.tier_name}</b><br>$${selectedOrder.tier_price}<br>${selectedOrder.doc_type}`;
+}
+
+if(selectedOrder.doc_types){
+s.innerHTML=`<b>${selectedOrder.tier_name}</b><br>$${selectedOrder.tier_price}<br>${selectedOrder.doc_types.join("<br>")}`;
+}
+}
+
+function continueToIntake(){
+if(!selectedOrder){
+alert("Select a document first.");
+return;
+}
+
+sessionStorage.setItem("elegal_selected_order",JSON.stringify(selectedOrder));
+window.location.href="intake.html";
+}
+
+document.addEventListener("DOMContentLoaded",buildCatalog);
 
 </script>
 
