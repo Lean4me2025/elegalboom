@@ -28,8 +28,6 @@ h1{
   border-radius:10px;
   padding:15px;
   box-shadow:0 2px 8px rgba(0,0,0,.1);
-  display:flex;
-  flex-direction:column;
 }
 
 .tier-header{
@@ -37,7 +35,6 @@ h1{
   color:white;
   padding:10px;
   border-radius:8px;
-  font-weight:bold;
   text-align:center;
   margin-bottom:10px;
 }
@@ -69,17 +66,6 @@ button{
   border-radius:8px;
   cursor:pointer;
 }
-
-button:hover{
-  background:#1849cc;
-}
-
-.debug{
-  border:2px dashed #ccc;
-  margin:20px;
-  padding:10px;
-  font-family:monospace;
-}
 </style>
 </head>
 
@@ -93,47 +79,22 @@ button:hover{
 <button onclick="continueToIntake()">Continue</button>
 </div>
 
-<div class="debug" id="debug">No selection yet</div>
-
 <script>
 
-let selectedOrder = null;
+let selectedOrder=null;
 
-/* ===============================
-   TIER + DOCUMENT MASTER LIST
-================================ */
+const tiers=[
 
-const tiers = [
-{
-name:"Tier 1 — Core Personal & Business",
-price:39,
-docs:[
-{label:"Promissory Note",type:"PROMISSORY_NOTE"},
-{label:"Non-Disclosure Agreement",type:"NDA"},
-{label:"Independent Contractor Agreement",type:"INDEPENDENT_CONTRACTOR"},
-{label:"Bill of Sale",type:"BILL_OF_SALE"}
-]
-},
 {
 name:"Tier 2 — Business Formation & Operations",
 price:59,
 docs:[
 {label:"Operating Agreement (LLC)",type:"LLC_OPERATING"},
 {label:"Partnership Agreement",type:"PARTNERSHIP"},
-{label:"Business Loan Agreement",type:"BUSINESS_LOAN"},
 {label:"Service Agreement",type:"SERVICE_AGREEMENT"}
 ]
 },
-{
-name:"Tier 3 — Employment, Real Estate & Advanced",
-price:99,
-docs:[
-{label:"Employment Agreement",type:"EMPLOYMENT"},
-{label:"Residential Lease Agreement",type:"RESIDENTIAL_LEASE"},
-{label:"Commercial Lease Agreement",type:"COMMERCIAL_LEASE"},
-{label:"Non-Compete Agreement",type:"NON_COMPETE"}
-]
-},
+
 {
 name:"Tier 4 — Entrepreneur Bundle",
 price:149,
@@ -141,31 +102,27 @@ docs:[
 {label:"Entrepreneur Starter Bundle",type:"ENTREPRENEUR_BUNDLE"}
 ]
 }
+
 ];
-
-
-/* ===============================
-   BUILD UI
-================================ */
 
 function buildCatalog(){
 
 const container=document.getElementById("catalog");
 
-tiers.forEach(tier => {
+tiers.forEach(tier=>{
 
 let card=document.createElement("div");
 card.className="tier-card";
 
 let html=`
 <div class="tier-header">
-${tier.name}<br>$${tier.price} per document
+${tier.name}<br>$${tier.price}
 </div>
 `;
 
-tier.docs.forEach(doc => {
+tier.docs.forEach(doc=>{
 
-html += `
+html+=`
 <div class="doc-option"
 onclick="selectDoc('${tier.name}',${tier.price},'${doc.type}',this)">
 ${doc.label}
@@ -174,83 +131,45 @@ ${doc.label}
 
 });
 
-card.innerHTML = html;
+card.innerHTML=html;
 container.appendChild(card);
 
 });
 
 }
 
-
-/* ===============================
-   SELECTION LOGIC
-================================ */
-
 function selectDoc(tier,price,docType,element){
 
 document.querySelectorAll(".doc-option")
-.forEach(e => e.classList.remove("selected"));
+.forEach(e=>e.classList.remove("selected"));
 
 element.classList.add("selected");
 
-selectedOrder = {
-tier:tier,
-price:price,
+selectedOrder={
+tier,
+price,
 doc_type:docType
 };
 
-updateDebug();
-
 }
-
-
-/* ===============================
-   DEBUG DISPLAY
-================================ */
-
-function updateDebug(){
-
-if(!selectedOrder){
-document.getElementById("debug").innerHTML="No selection yet";
-return;
-}
-
-document.getElementById("debug").innerHTML=`
-doc_type: ${selectedOrder.doc_type}<br>
-tier: ${selectedOrder.tier}<br>
-price: ${selectedOrder.price}
-`;
-
-}
-
-
-/* ===============================
-   CONTINUE → INTAKE
-   🔥 LOCKED CONTRACT STORAGE
-================================ */
 
 function continueToIntake(){
 
 if(!selectedOrder){
-alert("Please select a document first.");
+alert("Please select a document.");
 return;
 }
 
-/* 🔥 CLEAR OLD SESSION */
 sessionStorage.clear();
 
-/* 🔥 STORE USING LOCKED CONTRACT */
 sessionStorage.setItem(
-"orderState",
+"dataFlow",
 JSON.stringify(selectedOrder)
 );
 
-window.location.href="intake.html";
+window.location="intake.html";
 
 }
-
-
-/* =============================== */
 
 buildCatalog();
 
