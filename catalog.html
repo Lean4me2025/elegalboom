@@ -13,15 +13,19 @@ body {
   padding:20px;
 }
 
-h1 { text-align:center; }
+h1 {
+  text-align:center;
+  margin-bottom:30px;
+}
 
-.layout {
-  display:flex;
-  gap:20px;
+/* ===== Layout ===== */
+
+.catalog-wrapper {
+  max-width:1400px;
+  margin:auto;
 }
 
 .catalog-grid {
-  flex:3;
   display:grid;
   grid-template-columns:repeat(4,1fr);
   gap:20px;
@@ -43,8 +47,19 @@ h1 { text-align:center; }
   border-radius:8px;
   text-align:center;
   font-weight:bold;
-  margin-bottom:10px;
+  margin-bottom:8px;
 }
+
+/* ===== Help Text ===== */
+
+.tier-help {
+  font-size:13px;
+  color:#666;
+  text-align:center;
+  margin-bottom:12px;
+}
+
+/* ===== Document Options ===== */
 
 .doc-option {
   border:1px solid #ccc;
@@ -52,6 +67,11 @@ h1 { text-align:center; }
   margin:5px 0;
   border-radius:6px;
   cursor:pointer;
+  font-size:14px;
+}
+
+.doc-option:hover {
+  background:#eef2ff;
 }
 
 .doc-option.selected {
@@ -59,24 +79,27 @@ h1 { text-align:center; }
   color:white;
 }
 
-.summary-panel {
-  flex:1;
+/* ===== Summary Section ===== */
+
+.summary-section {
+  max-width:700px;
+  margin:40px auto 0 auto;
   background:white;
   padding:20px;
   border-radius:10px;
-  height:fit-content;
   box-shadow:0 2px 6px rgba(0,0,0,.1);
+  text-align:center;
 }
 
 button {
-  margin-top:20px;
-  width:100%;
-  padding:10px;
+  margin-top:15px;
+  padding:10px 20px;
   background:#2563eb;
   color:white;
   border:none;
   border-radius:8px;
   cursor:pointer;
+  font-size:16px;
 }
 </style>
 </head>
@@ -85,11 +108,11 @@ button {
 
 <h1>Select Your Legal Document</h1>
 
-<div class="layout">
+<div class="catalog-wrapper">
 
 <div id="catalog" class="catalog-grid"></div>
 
-<div class="summary-panel">
+<div class="summary-section">
 <h3>Selection Summary</h3>
 <div id="summary">No selection yet.</div>
 <button onclick="continueToIntake()">Continue</button>
@@ -105,6 +128,7 @@ const tiers = [
 {
 tier_name:"Tier 1 — Core Personal & Business",
 tier_price:39,
+help:"Best for essential personal and basic business protection documents.",
 docs:[
 {label:"Promissory Note",doc_type:"PROMISSORY_NOTE"},
 {label:"Non-Disclosure Agreement",doc_type:"NDA"},
@@ -115,6 +139,7 @@ docs:[
 {
 tier_name:"Tier 2 — Business Formation & Operations",
 tier_price:59,
+help:"Best for creating and managing structured business operations.",
 docs:[
 {label:"Operating Agreement (LLC)",doc_type:"LLC_OPERATING"},
 {label:"Partnership Agreement",doc_type:"PARTNERSHIP"},
@@ -125,6 +150,7 @@ docs:[
 {
 tier_name:"Tier 3 — Employment, Real Estate & Advanced",
 tier_price:99,
+help:"Best for employment agreements and real estate legal protection.",
 docs:[
 {label:"Employment Agreement",doc_type:"EMPLOYMENT"},
 {label:"Residential Lease Agreement",doc_type:"RESIDENTIAL_LEASE"},
@@ -135,6 +161,7 @@ docs:[
 {
 tier_name:"Tier 4 — Entrepreneur Package",
 tier_price:149,
+help:"Designed for growing businesses needing multiple protections. Choose up to 3 documents and save compared to purchasing individually.",
 docs:[
 {label:"Choose up to 3 documents",doc_type:"TIER4_MULTI"}
 ]
@@ -148,21 +175,33 @@ function buildCatalog(){
 const container=document.getElementById("catalog");
 
 tiers.forEach(tier=>{
+
 const card=document.createElement("div");
 card.className="tier-card";
 
+/* Header */
 const header=document.createElement("div");
 header.className="tier-header";
 header.textContent=`${tier.tier_name} — $${tier.tier_price}`;
 card.appendChild(header);
 
+/* Help Text */
+const help=document.createElement("div");
+help.className="tier-help";
+help.textContent=tier.help;
+card.appendChild(help);
+
+/* Documents */
 tier.docs.forEach(doc=>{
+
 const option=document.createElement("div");
 option.className="doc-option";
 option.textContent=doc.label;
 
 option.onclick=()=>{
+
 if(tier.tier_name!=="Tier 4"){
+
 document.querySelectorAll(".doc-option").forEach(el=>el.classList.remove("selected"));
 option.classList.add("selected");
 
@@ -178,7 +217,7 @@ const code=prompt("Enter document type code (example: NDA)");
 if(!code) return;
 
 if(tier4Selections.length>=MAX_TIER4){
-alert("Maximum 3 documents.");
+alert("Maximum 3 documents allowed.");
 return;
 }
 
@@ -189,6 +228,7 @@ tier_name:tier.tier_name,
 tier_price:tier.tier_price,
 doc_types:tier4Selections
 };
+
 }
 
 updateSummary();
@@ -202,6 +242,7 @@ container.appendChild(card);
 }
 
 function updateSummary(){
+
 const s=document.getElementById("summary");
 
 if(!selectedOrder){
@@ -219,6 +260,7 @@ s.innerHTML=`<b>${selectedOrder.tier_name}</b><br>$${selectedOrder.tier_price}<b
 }
 
 function continueToIntake(){
+
 if(!selectedOrder){
 alert("Select a document first.");
 return;
