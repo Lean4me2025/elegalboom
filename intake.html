@@ -11,16 +11,17 @@
 
 <form id="intakeForm">
 
-<input name="client_first_name" placeholder="First Name" required><br>
-<input name="client_last_name" placeholder="Last Name" required><br>
-<input name="client_email" placeholder="Email" required><br>
-<input name="client_phone" placeholder="Phone" required><br>
-<input name="client_street" placeholder="Street Address"><br>
-<input name="client_city" placeholder="City"><br>
-<input name="client_state" placeholder="State"><br>
-<input name="client_zip" placeholder="Zip"><br>
+<input name="client_first_name" placeholder="First Name" required><br><br>
+<input name="client_last_name" placeholder="Last Name" required><br><br>
+<input name="client_email" placeholder="Email" required><br><br>
+<input name="client_phone" placeholder="Phone" required><br><br>
 
-<textarea name="details" placeholder="Details / Requirements"></textarea>
+<input name="client_street" placeholder="Street Address"><br><br>
+<input name="client_city" placeholder="City"><br><br>
+<input name="client_state" placeholder="State"><br><br>
+<input name="client_zip" placeholder="Zip"><br><br>
+
+<textarea name="order_notes" placeholder="Details / Requirements"></textarea><br><br>
 
 <button type="submit">Continue To Review</button>
 
@@ -28,36 +29,31 @@
 
 <script>
 
-/* 🔒 Load Frozen Contract */
-const orderState = JSON.parse(sessionStorage.getItem("orderState"))
+const order = JSON.parse(sessionStorage.getItem("dataFlow"));
 
-if(!orderState){
-   alert("Missing order. Returning to catalog.")
-   window.location = "catalog.html"
+if(!order){
+   alert("Missing order. Returning to catalog.");
+   window.location = "catalog.html";
 }
 
 document.getElementById("intakeForm").addEventListener("submit", e => {
 
-   e.preventDefault()
+   e.preventDefault();
 
-   const formData = new FormData(e.target)
+   const formData = new FormData(e.target);
+   const intake = Object.fromEntries(formData.entries());
 
-   /* 🔒 Merge Intake Into Contract */
-   for(const [key,value] of formData.entries()){
-      orderState[key] = value
-   }
+   const payload = {
+      ...order,
+      ...intake,
+      order_status: "payment_pending"
+   };
 
-   /* 🔒 Update Lifecycle */
-   orderState.order_status = "intake_complete"
+   sessionStorage.setItem("dataFlow", JSON.stringify(payload));
 
-   /* 🔒 Save Updated Contract */
-   sessionStorage.setItem("orderState", JSON.stringify(orderState))
+   window.location = "review-and-pay.html";
 
-   console.log("Intake Updated OrderState:", orderState)
-
-   window.location = "review-and-pay.html"
-
-})
+});
 
 </script>
 
