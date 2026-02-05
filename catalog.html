@@ -18,7 +18,7 @@ h1{
 
 .catalog-grid{
   display:grid;
-  grid-template-columns:repeat(4,1fr);
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
   gap:20px;
   padding:20px;
 }
@@ -35,6 +35,7 @@ h1{
   color:white;
   padding:10px;
   border-radius:8px;
+  font-weight:bold;
   text-align:center;
   margin-bottom:10px;
 }
@@ -72,7 +73,6 @@ button{
 <body>
 
 <h1>Document Catalog</h1>
-
 <div class="catalog-grid" id="catalog"></div>
 
 <div class="continue-bar">
@@ -84,17 +84,36 @@ button{
 let selectedOrder=null;
 
 const tiers=[
-
+{
+name:"Tier 1 — Core Personal & Business",
+price:39,
+docs:[
+{label:"Promissory Note",type:"PROMISSORY_NOTE"},
+{label:"Non-Disclosure Agreement",type:"NDA"},
+{label:"Independent Contractor Agreement",type:"INDEPENDENT_CONTRACTOR"},
+{label:"Bill of Sale",type:"BILL_OF_SALE"}
+]
+},
 {
 name:"Tier 2 — Business Formation & Operations",
 price:59,
 docs:[
 {label:"Operating Agreement (LLC)",type:"LLC_OPERATING"},
 {label:"Partnership Agreement",type:"PARTNERSHIP"},
+{label:"Business Loan Agreement",type:"BUSINESS_LOAN"},
 {label:"Service Agreement",type:"SERVICE_AGREEMENT"}
 ]
 },
-
+{
+name:"Tier 3 — Employment, Real Estate & Advanced",
+price:99,
+docs:[
+{label:"Employment Agreement",type:"EMPLOYMENT"},
+{label:"Residential Lease Agreement",type:"RESIDENTIAL_LEASE"},
+{label:"Commercial Lease Agreement",type:"COMMERCIAL_LEASE"},
+{label:"Non-Compete Agreement",type:"NON_COMPETE"}
+]
+},
 {
 name:"Tier 4 — Entrepreneur Bundle",
 price:149,
@@ -102,40 +121,28 @@ docs:[
 {label:"Entrepreneur Starter Bundle",type:"ENTREPRENEUR_BUNDLE"}
 ]
 }
-
 ];
 
 function buildCatalog(){
-
 const container=document.getElementById("catalog");
 
 tiers.forEach(tier=>{
-
 let card=document.createElement("div");
 card.className="tier-card";
 
-let html=`
-<div class="tier-header">
-${tier.name}<br>$${tier.price}
-</div>
-`;
+let html=`<div class="tier-header">${tier.name}<br>$${tier.price}</div>`;
 
 tier.docs.forEach(doc=>{
-
 html+=`
 <div class="doc-option"
 onclick="selectDoc('${tier.name}',${tier.price},'${doc.type}',this)">
 ${doc.label}
-</div>
-`;
-
+</div>`;
 });
 
 card.innerHTML=html;
 container.appendChild(card);
-
 });
-
 }
 
 function selectDoc(tier,price,docType,element){
@@ -146,34 +153,29 @@ document.querySelectorAll(".doc-option")
 element.classList.add("selected");
 
 selectedOrder={
-tier,
-price,
+tier:tier,
+price:price,
 doc_type:docType
 };
-
 }
 
 function continueToIntake(){
 
 if(!selectedOrder){
-alert("Please select a document.");
+alert("Please select a document first.");
 return;
 }
 
-sessionStorage.clear();
-
 sessionStorage.setItem(
-"dataFlow",
+"elegal_selected_order",
 JSON.stringify(selectedOrder)
 );
 
-window.location="intake.html";
-
+window.location.href="intake.html";
 }
 
 buildCatalog();
 
 </script>
-
 </body>
 </html>
