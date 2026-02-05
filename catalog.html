@@ -1,80 +1,95 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta charset="UTF-8">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>E-LegalBoom Catalog</title>
 
 <style>
+  body {
+    font-family: Arial, sans-serif;
+    background: #f5f7fb;
+    margin: 0;
+    padding: 20px;
+  }
 
-body{
-  font-family:Arial;
-  background:#f3f6fb;
-  margin:0;
-}
+  h1 {
+    text-align: center;
+    margin-bottom: 30px;
+  }
 
-h1{
-  text-align:center;
-  margin-top:20px;
-}
+  .layout {
+    display: flex;
+    gap: 20px;
+  }
 
-.catalog-grid{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:20px;
-  padding:20px;
-}
+  .catalog-container {
+    flex: 3;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
 
-.tier-card{
-  background:white;
-  border-radius:10px;
-  padding:15px;
-  box-shadow:0 2px 8px rgba(0,0,0,.1);
-  display:flex;
-  flex-direction:column;
-}
+  .tier-card {
+    background: white;
+    border-radius: 10px;
+    padding: 15px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  }
 
-.tier-header{
-  background:#1e5bff;
-  color:white;
-  padding:10px;
-  border-radius:8px;
-  font-weight:bold;
-  text-align:center;
-  margin-bottom:10px;
-}
+  .tier-header {
+    background: linear-gradient(to right, #1d4ed8, #2563eb);
+    color: white;
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    font-weight: bold;
+    text-align: center;
+  }
 
-.doc-option{
-  border:1px solid #ddd;
-  padding:8px;
-  margin-bottom:8px;
-  border-radius:6px;
-  cursor:pointer;
-}
+  .doc-option {
+    border: 1px solid #ddd;
+    padding: 8px;
+    margin: 6px 0;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: 0.2s;
+  }
 
-.doc-option.selected{
-  border:2px solid #1e5bff;
-  background:#eef3ff;
-}
+  .doc-option:hover {
+    background: #eef2ff;
+  }
 
-.continue-bar{
-  text-align:center;
-  margin:20px;
-}
+  .doc-option.selected {
+    background: #2563eb;
+    color: white;
+    border-color: #2563eb;
+  }
 
-button{
-  padding:12px 30px;
-  font-size:16px;
-  background:#1e5bff;
-  color:white;
-  border:none;
-  border-radius:8px;
-  cursor:pointer;
-}
+  .summary-panel {
+    flex: 1;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    height: fit-content;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  }
 
-button:hover{
-  background:#1849cc;
-}
+  .continue-btn {
+    margin-top: 20px;
+    padding: 10px;
+    width: 100%;
+    background: #2563eb;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+  }
 
+  .continue-btn:hover {
+    background: #1e40af;
+  }
 </style>
 </head>
 
@@ -82,129 +97,48 @@ button:hover{
 
 <h1>Document Catalog</h1>
 
-<div class="catalog-grid" id="catalog"></div>
+<div class="layout">
 
-<div class="continue-bar">
-<button onclick="continueToIntake()">Continue</button>
+  <div id="catalog" class="catalog-container"></div>
+
+  <div class="summary-panel">
+    <h3>Selection Summary</h3>
+    <div id="summaryContent">No selection yet.</div>
+    <button class="continue-btn" onclick="continueToIntake()">Continue</button>
+  </div>
+
 </div>
 
 <script>
 
-let selectedOrder=null;
+const MAX_TIER4_DOCS = 3;
 
-const tiers=[
-
-{
-name:"Tier 1 — Core Personal & Business",
-price:39,
-docs:[
-{label:"Promissory Note", type:"PROMISSORY_NOTE"},
-{label:"Non-Disclosure Agreement", type:"NDA"},
-{label:"Independent Contractor Agreement", type:"INDEPENDENT_CONTRACTOR"},
-{label:"Bill of Sale", type:"BILL_OF_SALE"}
-]
-},
-
-{
-name:"Tier 2 — Business Formation & Operations",
-price:59,
-docs:[
-{label:"Operating Agreement (LLC)", type:"LLC_OPERATING"},
-{label:"Partnership Agreement", type:"PARTNERSHIP"},
-{label:"Business Loan Agreement", type:"BUSINESS_LOAN"},
-{label:"Service Agreement", type:"SERVICE_AGREEMENT"}
-]
-},
-
-{
-name:"Tier 3 — Employment, Real Estate & Advanced",
-price:99,
-docs:[
-{label:"Employment Agreement", type:"EMPLOYMENT"},
-{label:"Residential Lease Agreement", type:"RESIDENTIAL_LEASE"},
-{label:"Commercial Lease Agreement", type:"COMMERCIAL_LEASE"},
-{label:"Non-Compete Agreement", type:"NON_COMPETE"}
-]
-},
-
-{
-name:"Tier 4 — Entrepreneur Bundle",
-price:149,
-docs:[
-{label:"Entrepreneur Starter Bundle", type:"ENTREPRENEUR_BUNDLE"}
-]
-}
-
-];
-
-function buildCatalog(){
-
-const container=document.getElementById("catalog");
-
-tiers.forEach(tier=>{
-
-let card=document.createElement("div");
-card.className="tier-card";
-
-let html=`
-<div class="tier-header">
-${tier.name}<br>$${tier.price} per document
-</div>
-`;
-
-tier.docs.forEach(doc=>{
-
-html+=`
-<div class="doc-option"
-onclick="selectDoc('${tier.name}',${tier.price},'${doc.type}',this)">
-${doc.label}
-</div>
-`;
-
-});
-
-card.innerHTML=html;
-container.appendChild(card);
-
-});
-
-}
-
-function selectDoc(tier,price,docType,element){
-
-document.querySelectorAll(".doc-option")
-.forEach(e=>e.classList.remove("selected"));
-
-element.classList.add("selected");
-
-selectedOrder={
-tier:tier,
-price:price,
-doc_type:docType
-};
-
-}
-
-function continueToIntake(){
-
-if(!selectedOrder){
-alert("Please select a document.");
-return;
-}
-
-/* CANONICAL STORAGE KEY */
-sessionStorage.setItem(
-"elegal_selected_order",
-JSON.stringify(selectedOrder)
-);
-
-window.location.href="intake.html";
-
-}
-
-buildCatalog();
-
-</script>
-
-</body>
-</html>
+const tiers = [
+  {
+    tier_name: "Tier 1 — Core Personal & Business",
+    tier_price: 39,
+    docs: [
+      { label:"Promissory Note", doc_type:"PROMISSORY_NOTE" },
+      { label:"Non-Disclosure Agreement", doc_type:"NDA" },
+      { label:"Independent Contractor Agreement", doc_type:"INDEPENDENT_CONTRACTOR" },
+      { label:"Bill of Sale", doc_type:"BILL_OF_SALE" }
+    ]
+  },
+  {
+    tier_name: "Tier 2 — Business Formation & Operations",
+    tier_price: 59,
+    docs: [
+      { label:"Operating Agreement (LLC)", doc_type:"LLC_OPERATING" },
+      { label:"Partnership Agreement", doc_type:"PARTNERSHIP" },
+      { label:"Business Loan Agreement", doc_type:"BUSINESS_LOAN" },
+      { label:"Service Agreement", doc_type:"SERVICE_AGREEMENT" }
+    ]
+  },
+  {
+    tier_name: "Tier 3 — Employment, Real Estate & Advanced",
+    tier_price: 99,
+    docs: [
+      { label:"Employment Agreement", doc_type:"EMPLOYMENT" },
+      { label:"Residential Lease Agreement", doc_type:"RESIDENTIAL_LEASE" },
+      { label:"Commercial Lease Agreement", doc_type:"COMMERCIAL_LEASE" },
+      {
