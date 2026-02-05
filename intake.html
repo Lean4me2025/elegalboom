@@ -2,7 +2,6 @@
 <html>
 <head>
 <title>E-LegalBoom Intake</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 </head>
 
 <body>
@@ -11,17 +10,12 @@
 
 <form id="intakeForm">
 
-<input name="client_first_name" placeholder="First Name" required><br><br>
-<input name="client_last_name" placeholder="Last Name" required><br><br>
-<input name="client_email" placeholder="Email" required><br><br>
-<input name="client_phone" placeholder="Phone" required><br><br>
+<input name="client_first_name" placeholder="First Name" required><br>
+<input name="client_last_name" placeholder="Last Name" required><br>
+<input name="client_email" placeholder="Email" required><br>
+<input name="client_phone" placeholder="Phone" required><br>
 
-<input name="client_street" placeholder="Street Address"><br><br>
-<input name="client_city" placeholder="City"><br><br>
-<input name="client_state" placeholder="State"><br><br>
-<input name="client_zip" placeholder="Zip"><br><br>
-
-<textarea name="order_notes" placeholder="Details / Requirements"></textarea><br><br>
+<textarea name="details" placeholder="Details / Requirements"></textarea>
 
 <button type="submit">Continue To Review</button>
 
@@ -29,33 +23,29 @@
 
 <script>
 
-const order = JSON.parse(sessionStorage.getItem("dataFlow"));
+const order = JSON.parse(sessionStorage.getItem("elegal_selected_order"));
 
 if(!order){
-   alert("Missing order. Returning to catalog.");
-   window.location = "catalog.html";
+alert("Missing order. Returning to catalog.");
+window.location="catalog.html";
 }
 
-document.getElementById("intakeForm").addEventListener("submit", e => {
+document.getElementById("intakeForm").addEventListener("submit",e=>{
 
-   e.preventDefault();
+e.preventDefault();
 
-   const formData = new FormData(e.target);
-   const intake = Object.fromEntries(formData.entries());
+const formData=new FormData(e.target);
+const intake=Object.fromEntries(formData.entries());
 
-   const payload = {
-      ...order,
-      ...intake,
-      order_status: "payment_pending"
-   };
+const payload={
+...order,
+...intake
+};
 
-   sessionStorage.setItem("dataFlow", JSON.stringify(payload));
+sessionStorage.setItem("intakeData",JSON.stringify(payload));
 
-   window.location = "review-and-pay.html";
-
+window.location="review-and-pay.html";
 });
-
 </script>
-
 </body>
 </html>
