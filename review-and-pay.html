@@ -2,58 +2,46 @@
 <html>
 <head>
 <title>Review & Pay</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 </head>
 
 <body>
 
 <h2>Review Your Order</h2>
-
 <div id="reviewBox"></div>
 
-<br>
 <button id="payBtn">Proceed To Payment</button>
 
 <script type="module">
 
 import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm"
 
-/* ===== INSERT YOUR SUPABASE KEYS ===== */
-
-const supabase = createClient(
+const supabase=createClient(
 "https://vvjbjfltqsivvxxifnvi.supabase.co",
 "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ2amJqZmx0cXNpdnZ4eGlmbnZpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc5NzYzNTAsImV4cCI6MjA3MzU1MjM1MH0.F4zzcpCHl9v-Rnj0wgKJ5zBf1HteVyXelMLQDDEN28Q"
 );
 
-/* ===== LOAD FINAL PAYLOAD ===== */
-
-const intake = JSON.parse(sessionStorage.getItem("dataFlow"));
+const intake=JSON.parse(sessionStorage.getItem("intakeData"));
 
 if(!intake){
-   alert("Missing intake data. Returning to intake.");
-   window.location = "intake.html";
+alert("Missing intake data.");
+window.location="intake.html";
 }
 
-/* ===== DISPLAY REVIEW ===== */
-
-document.getElementById("reviewBox").innerHTML = `
-
-<strong>Tier:</strong> ${intake.tier}<br>
-<strong>Document:</strong> ${intake.doc_type}<br>
-<strong>Price:</strong> $${intake.price}<br><br>
-
-<strong>Client:</strong><br>
+document.getElementById("reviewBox").innerHTML=`
+Tier: ${intake.tier}<br>
+Document: ${intake.doc_type}<br>
+Price: $${intake.price}<br><br>
 ${intake.client_first_name} ${intake.client_last_name}<br>
-${intake.client_email}<br>
-${intake.client_phone}
-
+${intake.client_email}
 `;
 
-/* ===== PAYMENT LINKS BY TIER ===== */
+function generateOrderId(){
+return "ELB-"+Date.now();
+}
 
 function paymentLinkByTier(tier){
 
-const links = {
+const links={
 
 "Tier 2 — Business Formation & Operations":
 "https://pay.elegalboom.org/aeda586f-65f5-4bf0-9813-7a2",
@@ -64,42 +52,38 @@ const links = {
 };
 
 return links[tier];
-
 }
 
-/* ===== PAYMENT BUTTON ===== */
+document.getElementById("payBtn").onclick=async()=>{
 
-document.getElementById("payBtn").onclick = async () => {
-
-const paymentLink = paymentLinkByTier(intake.tier);
+const paymentLink=paymentLinkByTier(intake.tier);
 
 if(!paymentLink){
-   alert("Payment link missing.");
-   return;
+alert("Payment link missing.");
+return;
 }
 
-/* ===== INSERT ORDER INTO DATABASE ===== */
+const payload={
+order_id:generateOrderId(),
+...intake,
+notes:intake.details || null,
+order_status:"payment_pending",
+created_at:new Date().toISOString()
+};
 
-const { error } = await supabase
-   .from("pweb_orders")
-   .insert({
-      ...intake,
-      created_at: new Date().toISOString()
-   });
+delete payload.details;
+
+const {error}=await supabase.from("pweb_orders").insert(payload);
 
 if(error){
-   alert("Database insert failed.");
-   console.error(error);
-   return;
+alert("Database insert failed.");
+console.error(error);
+return;
 }
 
-/* ===== REDIRECT TO PAYMENT ===== */
-
-window.location = paymentLink;
-
+window.location=paymentLink;
 };
 
 </script>
-
 </body>
 </html>
