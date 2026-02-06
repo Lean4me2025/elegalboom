@@ -1,51 +1,257 @@
 <!DOCTYPE html>
 <html>
 <head>
+<meta charset="UTF-8">
 <title>E-LegalBoom Intake</title>
+
+<style>
+
+body {
+    font-family: Arial, sans-serif;
+    background:#f4f6fb;
+    margin:0;
+    padding:30px;
+}
+
+.container {
+    max-width:1000px;
+    margin:auto;
+}
+
+.card {
+    background:white;
+    padding:20px;
+    border-radius:10px;
+    margin-bottom:25px;
+    box-shadow:0 2px 6px rgba(0,0,0,.1);
+}
+
+.section-title {
+    font-weight:bold;
+    margin-bottom:15px;
+    font-size:18px;
+}
+
+input, textarea, select {
+    width:100%;
+    padding:10px;
+    margin-bottom:15px;
+    border-radius:6px;
+    border:1px solid #ccc;
+}
+
+button {
+    background:#1f4ed8;
+    color:white;
+    padding:12px 25px;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+}
+
+button:hover {
+    background:#163bb3;
+}
+
+.order-summary {
+    background:#eef2ff;
+    padding:15px;
+    border-radius:8px;
+}
+
+.hidden {
+    display:none;
+}
+
+</style>
 </head>
 
 <body>
 
+<div class="container">
+
 <h2>Client Intake</h2>
 
-<form id="intakeForm">
+<!-- ORDER SUMMARY -->
+<div class="card order-summary">
+<div class="section-title">Selected Order</div>
 
-<input name="client_first_name" placeholder="First Name" required><br>
-<input name="client_last_name" placeholder="Last Name" required><br>
-<input name="client_email" placeholder="Email" required><br>
-<input name="client_phone" placeholder="Phone" required><br>
+<p id="tierDisplay"></p>
+<p id="docDisplay"></p>
+<p id="priceDisplay"></p>
 
-<textarea name="details" placeholder="Details / Requirements"></textarea>
+</div>
 
-<button type="submit">Continue To Review</button>
 
-</form>
+<!-- UNIVERSAL ARM SECTION -->
+<div class="card">
+<div class="section-title">Client Information</div>
+
+<input id="first_name" placeholder="First Name">
+<input id="last_name" placeholder="Last Name">
+<input id="email" placeholder="Email">
+<input id="phone" placeholder="Phone">
+
+<input id="street" placeholder="Street Address">
+<input id="city" placeholder="City">
+<input id="state" placeholder="State">
+<input id="zip" placeholder="ZIP">
+
+<textarea id="order_notes" placeholder="Details / Requirements"></textarea>
+
+</div>
+
+
+<!-- LLC HAND SECTION -->
+<div id="llcSection" class="card hidden">
+<div class="section-title">LLC Details</div>
+
+<input id="llc_name" placeholder="LLC Name">
+<input id="llc_state" placeholder="State of Formation">
+<input id="llc_members" placeholder="Member Names (comma separated)">
+<input id="llc_management" placeholder="Management Type (Member / Manager)">
+
+</div>
+
+
+<!-- PARTNERSHIP HAND -->
+<div id="partnershipSection" class="card hidden">
+<div class="section-title">Partnership Details</div>
+
+<input id="partner_names" placeholder="Partner Names">
+<input id="profit_split" placeholder="Profit Split %">
+<input id="partnership_purpose" placeholder="Business Purpose">
+
+</div>
+
+
+<!-- EMPLOYMENT HAND -->
+<div id="employmentSection" class="card hidden">
+<div class="section-title">Employment Agreement Details</div>
+
+<input id="employee_name" placeholder="Employee Name">
+<input id="job_title" placeholder="Job Title">
+<input id="salary" placeholder="Salary">
+<input id="start_date" type="date">
+
+</div>
+
+
+<button onclick="continueToReview()">Continue To Review</button>
+
+</div>
+
 
 <script>
 
-const order = JSON.parse(sessionStorage.getItem("elegal_selected_order"));
+/* -------------------------
+   LOAD ORDER FROM CATALOG
+------------------------- */
 
-if(!order){
-alert("Missing order. Returning to catalog.");
-window.location="catalog.html";
+const order =
+    JSON.parse(sessionStorage.getItem("elegal_selected_order"));
+
+if (!order) {
+    alert("No order found. Returning to catalog.");
+    window.location.href = "catalog.html";
 }
 
-document.getElementById("intakeForm").addEventListener("submit",e=>{
+/* DISPLAY ORDER */
 
-e.preventDefault();
+document.getElementById("tierDisplay").innerText =
+    "Tier: " + order.tier;
 
-const formData=new FormData(e.target);
-const intake=Object.fromEntries(formData.entries());
+document.getElementById("docDisplay").innerText =
+    "Document: " + order.doc_type;
 
-const payload={
-...order,
-...intake
-};
+document.getElementById("priceDisplay").innerText =
+    "Price: $" + order.price;
 
-sessionStorage.setItem("intakeData",JSON.stringify(payload));
 
-window.location="review-and-pay.html";
-});
+/* -------------------------
+   SHOW DOC SPECIFIC HAND
+------------------------- */
+
+function revealDocSection() {
+
+    switch(order.doc_type) {
+
+        case "LLC_OPERATING":
+            document.getElementById("llcSection").classList.remove("hidden");
+            break;
+
+        case "PARTNERSHIP":
+            document.getElementById("partnershipSection").classList.remove("hidden");
+            break;
+
+        case "EMPLOYMENT":
+            document.getElementById("employmentSection").classList.remove("hidden");
+            break;
+    }
+}
+
+revealDocSection();
+
+
+/* -------------------------
+   CONTINUE TO REVIEW
+------------------------- */
+
+function continueToReview() {
+
+    const intakeData = {
+
+        /* ORDER DATA */
+        tier: order.tier,
+        price: order.price,
+        doc_type: order.doc_type,
+
+        /* CLIENT ARM */
+        first_name: val("first_name"),
+        last_name: val("last_name"),
+        email: val("email"),
+        phone: val("phone"),
+        street: val("street"),
+        city: val("city"),
+        state: val("state"),
+        zip: val("zip"),
+        order_notes: val("order_notes"),
+
+        /* LLC HAND */
+        llc_name: val("llc_name"),
+        llc_state: val("llc_state"),
+        llc_members: val("llc_members"),
+        llc_management: val("llc_management"),
+
+        /* PARTNERSHIP HAND */
+        partner_names: val("partner_names"),
+        profit_split: val("profit_split"),
+        partnership_purpose: val("partnership_purpose"),
+
+        /* EMPLOYMENT HAND */
+        employee_name: val("employee_name"),
+        job_title: val("job_title"),
+        salary: val("salary"),
+        start_date: val("start_date")
+
+    };
+
+    sessionStorage.setItem(
+        "elegal_intake",
+        JSON.stringify(intakeData)
+    );
+
+    window.location.href = "review.html";
+}
+
+/* HELPER */
+
+function val(id) {
+    const el = document.getElementById(id);
+    return el ? el.value : null;
+}
+
 </script>
+
 </body>
 </html>
