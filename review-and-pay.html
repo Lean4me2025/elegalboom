@@ -1,184 +1,246 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>E-LegalBoom — Review & Pay</title>
 
-<script type="module">
-import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
+<!-- SUPABASE CDN -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-/* =============================
-   🔐 SUPABASE CONFIG
-   ============================= */
+<style>
+:root{
+  --bg:#f6f8fb;
+  --card:#ffffff;
+  --ink:#0b1220;
+  --muted:#5b6b86;
+  --line:#d7deea;
+  --blue:#1a4cff;
+  --blue2:#0f39d8;
+  --soft:#eef3ff;
+  --radius:14px;
+}
 
+body{
+  margin:0;
+  background:var(--bg);
+  font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+  padding:24px;
+  color:var(--ink);
+}
+
+.wrap{
+  max-width:900px;
+  margin:0 auto;
+}
+
+.header{
+  text-align:center;
+  margin-bottom:18px;
+}
+
+.panel{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  padding:20px;
+  box-shadow:0 10px 25px rgba(10,20,40,.06);
+}
+
+.summary{
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+  gap:12px;
+  margin-bottom:16px;
+}
+
+.pill{
+  background:var(--soft);
+  border:1px solid #d9e3ff;
+  border-radius:12px;
+  padding:14px;
+  text-align:center;
+}
+
+.section{
+  margin-top:16px;
+}
+
+.row{
+  display:flex;
+  justify-content:space-between;
+  padding:8px 0;
+  border-bottom:1px dashed var(--line);
+}
+
+.actions{
+  margin-top:20px;
+  text-align:center;
+}
+
+button{
+  background:linear-gradient(180deg,var(--blue),var(--blue2));
+  color:white;
+  border:none;
+  border-radius:14px;
+  padding:14px 24px;
+  font-size:16px;
+  font-weight:800;
+  cursor:pointer;
+  width:min(420px,100%);
+}
+</style>
+</head>
+
+<body>
+
+<div class="wrap">
+
+<div class="header">
+<h1>Review & Pay</h1>
+<p>Please review your order before payment.</p>
+</div>
+
+<div class="panel">
+
+<div class="summary">
+  <div class="pill">
+    <small>Document</small>
+    <div id="doc"></div>
+  </div>
+
+  <div class="pill">
+    <small>Tier</small>
+    <div id="tier"></div>
+  </div>
+
+  <div class="pill">
+    <small>Price</small>
+    <div id="price"></div>
+  </div>
+</div>
+
+<div class="section">
+  <h3>Client Information</h3>
+
+  <div class="row"><span>Name</span><span id="clientName"></span></div>
+  <div class="row"><span>Email</span><span id="clientEmail"></span></div>
+  <div class="row"><span>Phone</span><span id="clientPhone"></span></div>
+</div>
+
+<div class="actions">
+  <button id="payBtn">Proceed To Payment</button>
+</div>
+
+</div>
+</div>
+
+<script>
+
+// ================================
+// 🔧 INSERT YOUR SUPABASE DETAILS
+// ================================
 const SUPABASE_URL = "https://vvjbjfltqsivvxxifnvi.supabase.co";
-const SUPABASE_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ2amJqZmx0cXNpdnZ4eGlmbnZpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc5NzYzNTAsImV4cCI6MjA3MzU1MjM1MH0.F4zzcpCHl9v-Rnj0wgKJ5zBf1HteVyXelMLQDDEN28Q";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ2amJqZmx0cXNpdnZ4eGlmbnZpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc5NzYzNTAsImV4cCI6MjA3MzU1MjM1MH0.F4zzcpCHl9v-Rnj0wgKJ5zBf1HteVyXelMLQDDEN28Q";
 
-const supabase = createClient(SUPABASE_URL, SUPABASE_ANON);
+const supabase = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_ANON_KEY
+);
 
 
-/* =============================
-   💳 PAYMENT LINKS BY TIER
-   ============================= */
-
-const PAYMENT_LINKS = {
-  "Tier 1": "https://pay.elegalboom.org/e4b79a60-0fd7-431c-8bfc-0e0",
-  "Tier 2": "https://pay.elegalboom.org/aed0586f-6515-4bf0-98f3-7a2",
+// ================================
+// 💳 PAY LINKS (LOCKED)
+// ================================
+const PAY_LINKS = {
+  "Tier 1": "https://pay.elegalboom.org/e4b79a60-0fd7-431c-8bfc-ae0",
+  "Tier 2": "https://pay.elegalboom.org/eeda586f-65f5-4bf0-98f3-7a2",
   "Tier 3": "https://pay.elegalboom.org/71ca7144-e537-4fbd-823d-c10",
   "Tier 4": "https://pay.elegalboom.org/55c7cd3d-1048-4b8c-aadb-843"
 };
 
 
-/* =============================
-   📦 LOAD SESSION DATA
-   ============================= */
+// ================================
+// LOAD PAYLOAD
+// ================================
+function safeParse(str){
+  try { return JSON.parse(str); }
+  catch { return null; }
+}
 
-const selectedOrder = JSON.parse(sessionStorage.getItem("eLegal_selected_order") || "null");
-const intakeData = JSON.parse(sessionStorage.getItem("intakeData") || "{}");
+const payload = safeParse(
+  sessionStorage.getItem("elegal_intake_data")
+);
 
-if (!selectedOrder || !selectedOrder.doc_type) {
-  alert("Missing order selection");
-  window.location.href = "catalog.html";
+if(!payload){
+  alert("Missing intake data. Returning to intake.");
+  window.location.href = "intake.html";
 }
 
 
-/* =============================
-   🖥 DISPLAY ORDER SUMMARY
-   ============================= */
+// ================================
+// DISPLAY SUMMARY
+// ================================
+document.getElementById("doc").textContent = payload.doc_type || "—";
+document.getElementById("tier").textContent = payload.tier || "—";
+document.getElementById("price").textContent = "$" + (payload.price ?? 0);
 
-window.addEventListener("DOMContentLoaded", () => {
+document.getElementById("clientName").textContent =
+  (payload.client_first_name || "") + " " +
+  (payload.client_last_name || "");
 
-  document.getElementById("docType").innerText = selectedOrder.doc_type;
-  document.getElementById("tier").innerText = selectedOrder.tier;
-  document.getElementById("price").innerText = `$${selectedOrder.price}`;
+document.getElementById("clientEmail").textContent =
+  payload.client_email || "—";
+
+document.getElementById("clientPhone").textContent =
+  payload.client_phone || "—";
+
+
+// ================================
+// PAYMENT BUTTON
+// ================================
+document.getElementById("payBtn").addEventListener("click", async () => {
+
+  console.log("Creating order in pweb_orders...");
+
+  const { data, error } = await supabase
+    .from("pweb_orders")
+    .insert({
+      doc_type: payload.doc_type,
+      tier: payload.tier,
+      price: payload.price,
+      client_first_name: payload.client_first_name,
+      client_last_name: payload.client_last_name,
+      client_email: payload.client_email,
+      client_phone: payload.client_phone,
+      order_notes: payload.order_notes || null,
+      intake_json: payload,
+      status: "pending_payment"
+    })
+    .select()
+    .single();
+
+  if(error){
+    console.error("Order insert failed:", error);
+    alert("Order creation failed. Check console.");
+    return;
+  }
+
+  const orderId = data.order_id;
+
+  console.log("Order created:", orderId);
+
+  const payLink = PAY_LINKS[payload.tier];
+
+  if(!payLink){
+    alert("Missing pay link for tier.");
+    return;
+  }
+
+  window.location.href = payLink;
 
 });
-
-
-/* =============================
-   🧾 CREATE ORDER + REDIRECT
-   ============================= */
-
-async function createOrder() {
-
-  try {
-
-    const insertPayload = {
-      doc_type: selectedOrder.doc_type,
-      tier: selectedOrder.tier,
-      price: selectedOrder.price,
-
-      client_first_name: intakeData.client_first_name || null,
-      client_last_name: intakeData.client_last_name || null,
-      client_email: intakeData.client_email || null,
-      client_phone: intakeData.client_phone || null,
-
-      client_street: intakeData.client_street || null,
-      client_city: intakeData.client_city || null,
-      client_state: intakeData.client_state || null,
-      client_zip: intakeData.client_zip || null,
-
-      governing_state: intakeData.governing_state || null,
-
-      details: intakeData,
-      order_status: "pending"
-    };
-
-    const { data, error } = await supabase
-      .from("pweb_orders")
-      .insert(insertPayload)
-      .select()
-      .single();
-
-    if (error) throw error;
-
-    /* Save Order ID for downstream fulfillment */
-    sessionStorage.setItem("order_id", data.id);
-
-    /* Redirect to payment */
-    const payLink = PAYMENT_LINKS[selectedOrder.tier];
-    window.location.href = payLink;
-
-  }
-  catch (err) {
-    console.error(err);
-    alert("Order creation failed");
-  }
-
-}
-
-window.createOrder = createOrder;
-
 </script>
-
-
-<style>
-
-body {
-  font-family: Arial, sans-serif;
-  background: #f5f7fa;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-}
-
-.card {
-  background: white;
-  padding: 40px;
-  width: 420px;
-  border-radius: 10px;
-  box-shadow: 0 3px 12px rgba(0,0,0,0.15);
-  text-align: center;
-}
-
-h2 {
-  margin-bottom: 30px;
-}
-
-.summary {
-  background: #eef3ff;
-  padding: 20px;
-  border-radius: 8px;
-  margin-bottom: 25px;
-  text-align: left;
-}
-
-button {
-  width: 100%;
-  padding: 14px;
-  border: none;
-  background: #3b5bff;
-  color: white;
-  font-size: 16px;
-  border-radius: 6px;
-  cursor: pointer;
-}
-
-button:hover {
-  background: #2746d8;
-}
-
-</style>
-
-</head>
-
-
-<body>
-
-<div class="card">
-
-  <h2>Review Your Order</h2>
-
-  <div class="summary">
-    <strong>Document:</strong> <span id="docType"></span><br/>
-    <strong>Tier:</strong> <span id="tier"></span><br/>
-    <strong>Price:</strong> <span id="price"></span>
-  </div>
-
-  <button onclick="createOrder()">Proceed To Payment</button>
-
-</div>
 
 </body>
 </html>
