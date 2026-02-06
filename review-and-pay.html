@@ -2,191 +2,183 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<title>Review & Pay</title>
+<title>E-LegalBoom — Review & Pay</title>
 
-<style>
-body {
-    font-family: Arial, sans-serif;
-    background:#f6f8fb;
+<script type="module">
+import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
+
+/* =============================
+   🔐 SUPABASE CONFIG
+   ============================= */
+
+const SUPABASE_URL = "https://vvjbjfltqsivvxxifnvi.supabase.co";
+const SUPABASE_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ2amJqZmx0cXNpdnZ4eGlmbnZpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc5NzYzNTAsImV4cCI6MjA3MzU1MjM1MH0.F4zzcpCHl9v-Rnj0wgKJ5zBf1HteVyXelMLQDDEN28Q";
+
+const supabase = createClient(SUPABASE_URL, SUPABASE_ANON);
+
+
+/* =============================
+   💳 PAYMENT LINKS BY TIER
+   ============================= */
+
+const PAYMENT_LINKS = {
+  "Tier 1": "https://pay.elegalboom.org/e4b79a60-0fd7-431c-8bfc-0e0",
+  "Tier 2": "https://pay.elegalboom.org/aed0586f-6515-4bf0-98f3-7a2",
+  "Tier 3": "https://pay.elegalboom.org/71ca7144-e537-4fbd-823d-c10",
+  "Tier 4": "https://pay.elegalboom.org/55c7cd3d-1048-4b8c-aadb-843"
+};
+
+
+/* =============================
+   📦 LOAD SESSION DATA
+   ============================= */
+
+const selectedOrder = JSON.parse(sessionStorage.getItem("eLegal_selected_order") || "null");
+const intakeData = JSON.parse(sessionStorage.getItem("intakeData") || "{}");
+
+if (!selectedOrder || !selectedOrder.doc_type) {
+  alert("Missing order selection");
+  window.location.href = "catalog.html";
 }
 
-.container {
-    width:420px;
-    margin:60px auto;
-    background:white;
-    padding:30px;
-    border-radius:12px;
-    box-shadow:0 2px 12px rgba(0,0,0,0.1);
+
+/* =============================
+   🖥 DISPLAY ORDER SUMMARY
+   ============================= */
+
+window.addEventListener("DOMContentLoaded", () => {
+
+  document.getElementById("docType").innerText = selectedOrder.doc_type;
+  document.getElementById("tier").innerText = selectedOrder.tier;
+  document.getElementById("price").innerText = `$${selectedOrder.price}`;
+
+});
+
+
+/* =============================
+   🧾 CREATE ORDER + REDIRECT
+   ============================= */
+
+async function createOrder() {
+
+  try {
+
+    const insertPayload = {
+      doc_type: selectedOrder.doc_type,
+      tier: selectedOrder.tier,
+      price: selectedOrder.price,
+
+      client_first_name: intakeData.client_first_name || null,
+      client_last_name: intakeData.client_last_name || null,
+      client_email: intakeData.client_email || null,
+      client_phone: intakeData.client_phone || null,
+
+      client_street: intakeData.client_street || null,
+      client_city: intakeData.client_city || null,
+      client_state: intakeData.client_state || null,
+      client_zip: intakeData.client_zip || null,
+
+      governing_state: intakeData.governing_state || null,
+
+      details: intakeData,
+      order_status: "pending"
+    };
+
+    const { data, error } = await supabase
+      .from("pweb_orders")
+      .insert(insertPayload)
+      .select()
+      .single();
+
+    if (error) throw error;
+
+    /* Save Order ID for downstream fulfillment */
+    sessionStorage.setItem("order_id", data.id);
+
+    /* Redirect to payment */
+    const payLink = PAYMENT_LINKS[selectedOrder.tier];
+    window.location.href = payLink;
+
+  }
+  catch (err) {
+    console.error(err);
+    alert("Order creation failed");
+  }
+
+}
+
+window.createOrder = createOrder;
+
+</script>
+
+
+<style>
+
+body {
+  font-family: Arial, sans-serif;
+  background: #f5f7fa;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.card {
+  background: white;
+  padding: 40px;
+  width: 420px;
+  border-radius: 10px;
+  box-shadow: 0 3px 12px rgba(0,0,0,0.15);
+  text-align: center;
+}
+
+h2 {
+  margin-bottom: 30px;
+}
+
+.summary {
+  background: #eef3ff;
+  padding: 20px;
+  border-radius: 8px;
+  margin-bottom: 25px;
+  text-align: left;
 }
 
 button {
-    width:100%;
-    padding:14px;
-    background:#2d5bff;
-    color:white;
-    border:none;
-    border-radius:8px;
-    font-size:16px;
-    cursor:pointer;
+  width: 100%;
+  padding: 14px;
+  border: none;
+  background: #3b5bff;
+  color: white;
+  font-size: 16px;
+  border-radius: 6px;
+  cursor: pointer;
 }
 
 button:hover {
-    background:#1f47d6;
+  background: #2746d8;
 }
 
-.reviewBox {
-    background:#eef2ff;
-    padding:15px;
-    border-radius:8px;
-    margin-bottom:20px;
-}
 </style>
+
 </head>
+
 
 <body>
 
-<div class="container">
+<div class="card">
 
-<h2>Review Your Order</h2>
+  <h2>Review Your Order</h2>
 
-<div id="reviewBox" class="reviewBox"></div>
+  <div class="summary">
+    <strong>Document:</strong> <span id="docType"></span><br/>
+    <strong>Tier:</strong> <span id="tier"></span><br/>
+    <strong>Price:</strong> <span id="price"></span>
+  </div>
 
-<button id="payBtn">Proceed To Payment</button>
+  <button onclick="createOrder()">Proceed To Payment</button>
 
 </div>
-
-<script type="module">
-
-import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
-
-/* ===============================
-   🔑 SUPABASE CONFIG
-================================ */
-
-const SUPABASE_URL = "https://vvjbjfltqsivvxxifnvi.supabase.co";
-const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ2amJqZmx0cXNpdnZ4eGlmbnZpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc5NzYzNTAsImV4cCI6MjA3MzU1MjM1MH0.F4zzcpCHl9v-Rnj0wgKJ5zBf1HteVyXelMLQDDEN28Q";
-
-const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-/* ===============================
-   PAYMENT LINKS
-================================ */
-
-const PAYMENT_LINKS = {
-    "Tier 1": "https://pay.elegalboom.org/e4b79a60-0fd7-431c-8bfc-0e0",
-    "Tier 2": "https://pay.elegalboom.org/aeda586f-65f5-4bf0-98f3-7a2",
-    "Tier 3": "https://pay.elegalboom.org/71ca7144-e537-4fbd-823d-c10",
-    "Tier 4": "https://pay.elegalboom.org/55c7cd3d-1048-4b8c-aadb-843"
-};
-
-/* ===============================
-   DOCUMENT → TIER / PRICE MAP
-================================ */
-
-const DOC_MAP = {
-
-PROMISSORY_NOTE: { tier:"Tier 1", price:39 },
-NDA: { tier:"Tier 1", price:39 },
-
-LLC_OPERATING: { tier:"Tier 2", price:59 },
-
-EMPLOYMENT: { tier:"Tier 3", price:99 },
-COMMERCIAL_LEASE: { tier:"Tier 3", price:99 },
-
-ENTREPRENEUR_BUNDLE: { tier:"Tier 4", price:149 }
-
-};
-
-/* ===============================
-   LOAD SESSION DATA
-================================ */
-
-const selectedOrder =
-JSON.parse(sessionStorage.getItem("eLegal_selected_order"));
-
-const intake =
-JSON.parse(sessionStorage.getItem("intakeData"));
-
-if(!selectedOrder || !selectedOrder.doc_type){
-    alert("Missing order selection");
-    window.location.href = "catalog.html";
-}
-
-const doc = selectedOrder.doc_type;
-
-const tier = DOC_MAP[doc].tier;
-const price = DOC_MAP[doc].price;
-
-/* ===============================
-   DISPLAY REVIEW
-================================ */
-
-document.getElementById("reviewBox").innerHTML = `
-Document: ${doc}<br>
-Tier: ${tier}<br>
-Price: $${price}
-`;
-
-/* ===============================
-   CREATE ORDER + REDIRECT PAYMENT
-================================ */
-
-document.getElementById("payBtn").onclick = async () => {
-
-try {
-
-const { data, error } = await supabase
-.from("pweb_orders")
-.insert([{
-
-doc_type: doc,
-tier: tier,
-price: price,
-
-client_first_name: intake.client_first_name,
-client_last_name: intake.client_last_name,
-client_email: intake.client_email,
-client_phone: intake.client_phone,
-
-client_business_name: intake.client_business_name,
-client_street: intake.client_street,
-client_city: intake.client_city,
-client_state: intake.client_state,
-client_zip: intake.client_zip,
-client_country: intake.client_country,
-
-governing_state: intake.governing_state,
-details: intake.details,
-file_option: intake.file_option,
-
-order_status: "pending",
-notes: ""
-
-}])
-.select()
-.single();
-
-if(error) throw error;
-
-/* Save order ID for backend */
-
-sessionStorage.setItem("order_id", data.id);
-
-/* Redirect to Payment */
-
-window.location.href = PAYMENT_LINKS[tier];
-
-}
-catch(err){
-
-console.error(err);
-alert("Order creation failed");
-
-}
-
-};
-
-</script>
 
 </body>
 </html>
