@@ -2,88 +2,192 @@
 <html>
 <head>
 <title>Review & Pay</title>
+
+<style>
+body{
+font-family:Arial;
+background:#f4f7fb;
+padding:40px;
+}
+
+.container{
+max-width:700px;
+margin:auto;
+background:white;
+padding:30px;
+border-radius:10px;
+box-shadow:0 2px 10px rgba(0,0,0,.1);
+}
+
+.review{
+background:#eef2ff;
+padding:20px;
+border-radius:8px;
+margin-bottom:20px;
+}
+
+button{
+width:100%;
+padding:14px;
+background:#1d4ed8;
+color:white;
+border:none;
+border-radius:6px;
+font-size:18px;
+cursor:pointer;
+}
+</style>
 </head>
+
 
 <body>
 
+<div class="container">
+
 <h2>Review Your Order</h2>
-<div id="reviewBox"></div>
+
+<div id="reviewBox" class="review"></div>
 
 <button id="payBtn">Proceed To Payment</button>
 
+</div>
+
+
 <script type="module">
 
-import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm"
+import { createClient }
+from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
 
-const supabase=createClient(
-"https://vvjbjfltqsivvxxifnvi.supabase.co",
-"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ2amJqZmx0cXNpdnZ4eGlmbnZpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc5NzYzNTAsImV4cCI6MjA3MzU1MjM1MH0.F4zzcpCHl9v-Rnj0wgKJ5zBf1HteVyXelMLQDDEN28Q"
+
+/* --------------------
+SUPABASE
+--------------------- */
+
+const supabase = createClient(
+  "https://YOUR_PROJECT.supabase.co",
+  "YOUR_ANON_KEY"
 );
 
-const intake=JSON.parse(sessionStorage.getItem("intakeData"));
 
-if(!intake){
-alert("Missing intake data.");
-window.location="intake.html";
+/* --------------------
+CATALOG MASTER MAP
+--------------------- */
+
+const DOC_CATALOG = {
+
+  PROMISSORY_NOTE:{ tier:"Tier 1", price:39 },
+  NDA:{ tier:"Tier 1", price:39 },
+
+  LLC_OPERATING:{ tier:"Tier 2", price:59 },
+
+  EMPLOYMENT:{ tier:"Tier 3", price:99 },
+  COMMERCIAL_LEASE:{ tier:"Tier 3", price:99 },
+
+  ENTREPRENEUR_BUNDLE:{ tier:"Tier 4", price:149 }
+
+};
+
+
+/* --------------------
+PAYMENT LINKS BY TIER
+--------------------- */
+
+const PAYMENT_LINKS = {
+  "Tier 1":"TIER1_PAYMENT_LINK",
+  "Tier 2":"TIER2_PAYMENT_LINK",
+  "Tier 3":"TIER3_PAYMENT_LINK",
+  "Tier 4":"TIER4_PAYMENT_LINK"
+};
+
+
+/* --------------------
+LOAD SESSION DATA
+--------------------- */
+
+const selectedOrder =
+JSON.parse(sessionStorage.getItem("elegal_selected_order"));
+
+const intakeData =
+JSON.parse(sessionStorage.getItem("intakeData")) || {};
+
+if(!selectedOrder?.doc_type){
+alert("Missing order selection");
+window.location.href="catalog.html";
 }
 
-document.getElementById("reviewBox").innerHTML=`
-Tier: ${intake.tier}<br>
-Document: ${intake.doc_type}<br>
-Price: $${intake.price}<br><br>
-${intake.client_first_name} ${intake.client_last_name}<br>
-${intake.client_email}
+
+/* --------------------
+DERIVE PRODUCT DATA
+--------------------- */
+
+const product =
+DOC_CATALOG[selectedOrder.doc_type];
+
+const tier = product.tier;
+const price = product.price;
+
+
+/* --------------------
+DISPLAY ORDER
+--------------------- */
+
+document.getElementById("reviewBox").innerHTML = `
+Document: ${selectedOrder.doc_type}<br>
+Tier: ${tier}<br>
+Price: $${price}
 `;
 
+
+/* --------------------
+ORDER ID GENERATOR
+--------------------- */
+
 function generateOrderId(){
-return "ELB-"+Date.now();
+return "ELB-" + Date.now();
 }
 
-function paymentLinkByTier(tier){
 
-const links={
+/* --------------------
+PAYMENT CLICK
+--------------------- */
 
-"Tier 2 — Business Formation & Operations":
-"https://pay.elegalboom.org/aeda586f-65f5-4bf0-9813-7a2",
+document.getElementById("payBtn").onclick = async ()=>{
 
-"Tier 4 — Entrepreneur Bundle":
-"https://pay.elegalboom.org/55c7cd3d-1048-4b8c-aadb-843"
+const orderId = generateOrderId();
 
-};
+const payload = {
 
-return links[tier];
-}
-
-document.getElementById("payBtn").onclick=async()=>{
-
-const paymentLink=paymentLinkByTier(intake.tier);
-
-if(!paymentLink){
-alert("Payment link missing.");
-return;
-}
-
-const payload={
-order_id:generateOrderId(),
-...intake,
-notes:intake.details || null,
+order_id: orderId,
+doc_type: selectedOrder.doc_type,
+tier: tier,
+price: price,
+intake_json: intakeData,
 order_status:"payment_pending",
-created_at:new Date().toISOString()
+created_at: new Date().toISOString()
+
 };
 
-delete payload.details;
 
-const {error}=await supabase.from("pweb_orders").insert(payload);
+/* -------- DB INSERT -------- */
+
+const { error } = await supabase
+.from("pweb_orders")
+.insert(payload);
 
 if(error){
-alert("Database insert failed.");
+alert("Order creation failed");
 console.error(error);
 return;
 }
 
-window.location=paymentLink;
+
+/* -------- REDIRECT PAYMENT -------- */
+
+window.location.href = PAYMENT_LINKS[tier];
+
 };
 
 </script>
+
 </body>
 </html>
