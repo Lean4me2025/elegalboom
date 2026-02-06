@@ -1,44 +1,47 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+<meta charset="UTF-8" />
 <title>Review & Pay</title>
 
 <style>
-body{
-font-family:Arial;
-background:#f4f7fb;
-padding:40px;
+body {
+    font-family: Arial, sans-serif;
+    background:#f6f8fb;
 }
 
-.container{
-max-width:700px;
-margin:auto;
-background:white;
-padding:30px;
-border-radius:10px;
-box-shadow:0 2px 10px rgba(0,0,0,.1);
+.container {
+    width:420px;
+    margin:60px auto;
+    background:white;
+    padding:30px;
+    border-radius:12px;
+    box-shadow:0 2px 12px rgba(0,0,0,0.1);
 }
 
-.review{
-background:#eef2ff;
-padding:20px;
-border-radius:8px;
-margin-bottom:20px;
+button {
+    width:100%;
+    padding:14px;
+    background:#2d5bff;
+    color:white;
+    border:none;
+    border-radius:8px;
+    font-size:16px;
+    cursor:pointer;
 }
 
-button{
-width:100%;
-padding:14px;
-background:#1d4ed8;
-color:white;
-border:none;
-border-radius:6px;
-font-size:18px;
-cursor:pointer;
+button:hover {
+    background:#1f47d6;
+}
+
+.reviewBox {
+    background:#eef2ff;
+    padding:15px;
+    border-radius:8px;
+    margin-bottom:20px;
 }
 </style>
 </head>
-
 
 <body>
 
@@ -46,144 +49,140 @@ cursor:pointer;
 
 <h2>Review Your Order</h2>
 
-<div id="reviewBox" class="review"></div>
+<div id="reviewBox" class="reviewBox"></div>
 
 <button id="payBtn">Proceed To Payment</button>
 
 </div>
 
-
 <script type="module">
 
-import { createClient }
-from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
+import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
 
+/* ===============================
+   🔑 SUPABASE CONFIG
+================================ */
 
-/* --------------------
-SUPABASE
---------------------- */
+const SUPABASE_URL = "PUT_YOUR_URL_HERE";
+const SUPABASE_ANON_KEY = "PUT_YOUR_ANON_KEY_HERE";
 
-const supabase = createClient(
-  "https://vvjbjfltqsivvxxifnvi.supabase.co",
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ2amJqZmx0cXNpdnZ4eGlmbnZpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc5NzYzNTAsImV4cCI6MjA3MzU1MjM1MH0.F4zzcpCHl9v-Rnj0wgKJ5zBf1HteVyXelMLQDDEN28Q"
-);
+const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-
-/* --------------------
-CATALOG MASTER MAP
---------------------- */
-
-const DOC_CATALOG = {
-
-  PROMISSORY_NOTE:{ tier:"Tier 1", price:39 },
-  NDA:{ tier:"Tier 1", price:39 },
-
-  LLC_OPERATING:{ tier:"Tier 2", price:59 },
-
-  EMPLOYMENT:{ tier:"Tier 3", price:99 },
-  COMMERCIAL_LEASE:{ tier:"Tier 3", price:99 },
-
-  ENTREPRENEUR_BUNDLE:{ tier:"Tier 4", price:149 }
-
-};
-
-
-/* --------------------
-PAYMENT LINKS BY TIER
---------------------- */
+/* ===============================
+   PAYMENT LINKS
+================================ */
 
 const PAYMENT_LINKS = {
-  "Tier 1":"TIER1_PAYMENT_LINK",
-  "Tier 2":"TIER2_PAYMENT_LINK",
-  "Tier 3":"TIER3_PAYMENT_LINK",
-  "Tier 4":"TIER4_PAYMENT_LINK"
+    "Tier 1": "https://pay.elegalboom.org/e4b79a60-0fd7-431c-8bfc-0e0",
+    "Tier 2": "https://pay.elegalboom.org/aeda586f-65f5-4bf0-98f3-7a2",
+    "Tier 3": "https://pay.elegalboom.org/71ca7144-e537-4fbd-823d-c10",
+    "Tier 4": "https://pay.elegalboom.org/55c7cd3d-1048-4b8c-aadb-843"
 };
 
+/* ===============================
+   DOCUMENT → TIER / PRICE MAP
+================================ */
 
-/* --------------------
-LOAD SESSION DATA
---------------------- */
+const DOC_MAP = {
+
+PROMISSORY_NOTE: { tier:"Tier 1", price:39 },
+NDA: { tier:"Tier 1", price:39 },
+
+LLC_OPERATING: { tier:"Tier 2", price:59 },
+
+EMPLOYMENT: { tier:"Tier 3", price:99 },
+COMMERCIAL_LEASE: { tier:"Tier 3", price:99 },
+
+ENTREPRENEUR_BUNDLE: { tier:"Tier 4", price:149 }
+
+};
+
+/* ===============================
+   LOAD SESSION DATA
+================================ */
 
 const selectedOrder =
-JSON.parse(sessionStorage.getItem("elegal_selected_order"));
+JSON.parse(sessionStorage.getItem("eLegal_selected_order"));
 
-const intakeData =
-JSON.parse(sessionStorage.getItem("intakeData")) || {};
+const intake =
+JSON.parse(sessionStorage.getItem("intakeData"));
 
-if(!selectedOrder?.doc_type){
-alert("Missing order selection");
-window.location.href="catalog.html";
+if(!selectedOrder || !selectedOrder.doc_type){
+    alert("Missing order selection");
+    window.location.href = "catalog.html";
 }
 
+const doc = selectedOrder.doc_type;
 
-/* --------------------
-DERIVE PRODUCT DATA
---------------------- */
+const tier = DOC_MAP[doc].tier;
+const price = DOC_MAP[doc].price;
 
-const product =
-DOC_CATALOG[selectedOrder.doc_type];
-
-const tier = product.tier;
-const price = product.price;
-
-
-/* --------------------
-DISPLAY ORDER
---------------------- */
+/* ===============================
+   DISPLAY REVIEW
+================================ */
 
 document.getElementById("reviewBox").innerHTML = `
-Document: ${selectedOrder.doc_type}<br>
+Document: ${doc}<br>
 Tier: ${tier}<br>
 Price: $${price}
 `;
 
+/* ===============================
+   CREATE ORDER + REDIRECT PAYMENT
+================================ */
 
-/* --------------------
-ORDER ID GENERATOR
---------------------- */
+document.getElementById("payBtn").onclick = async () => {
 
-function generateOrderId(){
-return "ELB-" + Date.now();
-}
+try {
 
+const { data, error } = await supabase
+.from("pweb_orders")
+.insert([{
 
-/* --------------------
-PAYMENT CLICK
---------------------- */
-
-document.getElementById("payBtn").onclick = async ()=>{
-
-const orderId = generateOrderId();
-
-const payload = {
-
-order_id: orderId,
-doc_type: selectedOrder.doc_type,
+doc_type: doc,
 tier: tier,
 price: price,
-intake_json: intakeData,
-order_status:"payment_pending",
-created_at: new Date().toISOString()
 
-};
+client_first_name: intake.client_first_name,
+client_last_name: intake.client_last_name,
+client_email: intake.client_email,
+client_phone: intake.client_phone,
 
+client_business_name: intake.client_business_name,
+client_street: intake.client_street,
+client_city: intake.client_city,
+client_state: intake.client_state,
+client_zip: intake.client_zip,
+client_country: intake.client_country,
 
-/* -------- DB INSERT -------- */
+governing_state: intake.governing_state,
+details: intake.details,
+file_option: intake.file_option,
 
-const { error } = await supabase
-.from("pweb_orders")
-.insert(payload);
+order_status: "pending",
+notes: ""
 
-if(error){
-alert("Order creation failed");
-console.error(error);
-return;
-}
+}])
+.select()
+.single();
 
+if(error) throw error;
 
-/* -------- REDIRECT PAYMENT -------- */
+/* Save order ID for backend */
+
+sessionStorage.setItem("order_id", data.id);
+
+/* Redirect to Payment */
 
 window.location.href = PAYMENT_LINKS[tier];
+
+}
+catch(err){
+
+console.error(err);
+alert("Order creation failed");
+
+}
 
 };
 
