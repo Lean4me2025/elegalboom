@@ -1,257 +1,400 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>E-LegalBoom Intake</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>E-LegalBoom — Client Intake</title>
 
-<style>
+  <style>
+    :root{
+      --bg:#eef2f7;
+      --card:#ffffff;
+      --text:#0f172a;
+      --muted:#475569;
+      --border:#cbd5e1;
+      --blue:#1d4ed8;
+      --blue2:#2563eb;
+      --shadow:0 6px 18px rgba(15,23,42,.10);
+      --radius:12px;
+    }
+    body{
+      margin:0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+    .wrap{
+      max-width:1100px;
+      margin: 28px auto;
+      padding: 0 18px 40px;
+    }
+    h1{
+      margin: 0 0 14px;
+      text-align:center;
+      font-size: 34px;
+      font-weight: 800;
+      letter-spacing: .2px;
+    }
+    .grid{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap: 18px;
+    }
+    .card{
+      background: var(--card);
+      border:1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 16px 16px 6px;
+    }
+    .card h2{
+      margin: 0 0 10px;
+      font-size: 16px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .08em;
+    }
+    .orderSummary{
+      display:flex;
+      gap: 16px;
+      flex-wrap:wrap;
+      align-items:center;
+      justify-content:space-between;
+    }
+    .pill{
+      background:#eef2ff;
+      border:1px solid #c7d2fe;
+      padding: 10px 12px;
+      border-radius: 10px;
+      min-width: 220px;
+    }
+    .pill b{ display:block; font-size:12px; color:#334155; margin-bottom:4px; }
+    .pill span{ font-size:14px; color:#0f172a; }
+    .banner{
+      background:#fff7ed;
+      border:1px solid #fed7aa;
+      color:#9a3412;
+      padding:10px 12px;
+      border-radius: 10px;
+      margin-bottom: 12px;
+      font-size: 13px;
+    }
 
-body {
-    font-family: Arial, sans-serif;
-    background:#f4f6fb;
-    margin:0;
-    padding:30px;
-}
+    form{ margin:0; }
+    .row{
+      display:grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+    .field{
+      grid-column: span 12;
+    }
+    .field label{
+      display:block;
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 6px;
+      font-weight: 700;
+      letter-spacing:.02em;
+    }
+    .field input, .field select, .field textarea{
+      width:100%;
+      box-sizing:border-box;
+      padding: 10px 10px;
+      border:1px solid var(--border);
+      border-radius: 10px;
+      outline:none;
+      font-size:14px;
+      background:#fff;
+    }
+    .field textarea{ min-height: 84px; resize: vertical; }
 
-.container {
-    max-width:1000px;
-    margin:auto;
-}
+    /* responsive columns */
+    @media(min-width: 820px){
+      .field.col-3{ grid-column: span 3; }
+      .field.col-4{ grid-column: span 4; }
+      .field.col-6{ grid-column: span 6; }
+      .field.col-8{ grid-column: span 8; }
+      .field.col-12{ grid-column: span 12; }
+    }
 
-.card {
-    background:white;
-    padding:20px;
-    border-radius:10px;
-    margin-bottom:25px;
-    box-shadow:0 2px 6px rgba(0,0,0,.1);
-}
+    .docSpecific{
+      display:none;
+      border-top: 1px dashed var(--border);
+      margin-top: 12px;
+      padding-top: 12px;
+    }
+    .docSpecific.active{ display:block; }
 
-.section-title {
-    font-weight:bold;
-    margin-bottom:15px;
-    font-size:18px;
-}
-
-input, textarea, select {
-    width:100%;
-    padding:10px;
-    margin-bottom:15px;
-    border-radius:6px;
-    border:1px solid #ccc;
-}
-
-button {
-    background:#1f4ed8;
-    color:white;
-    padding:12px 25px;
-    border:none;
-    border-radius:8px;
-    cursor:pointer;
-}
-
-button:hover {
-    background:#163bb3;
-}
-
-.order-summary {
-    background:#eef2ff;
-    padding:15px;
-    border-radius:8px;
-}
-
-.hidden {
-    display:none;
-}
-
-</style>
+    .actions{
+      display:flex;
+      justify-content:center;
+      margin-top: 10px;
+      padding-bottom: 10px;
+    }
+    .btn{
+      background: linear-gradient(180deg, var(--blue2), var(--blue));
+      color:#fff;
+      border:none;
+      border-radius: 10px;
+      padding: 12px 18px;
+      font-weight: 800;
+      cursor:pointer;
+      min-width: 220px;
+      box-shadow: 0 10px 18px rgba(37,99,235,.22);
+    }
+    .btn:active{ transform: translateY(1px); }
+    .smallNote{
+      text-align:center;
+      color: var(--muted);
+      font-size: 12px;
+      margin-top: 8px;
+    }
+  </style>
 </head>
 
 <body>
+  <div class="wrap">
+    <h1>Client Intake</h1>
 
-<div class="container">
+    <div id="testBanner" class="banner" style="display:none;">
+      SAFE MODE: No order found in session. Intake is shown for testing. (Catalog → Continue will populate real values.)
+    </div>
 
-<h2>Client Intake</h2>
+    <div class="grid">
 
-<!-- ORDER SUMMARY -->
-<div class="card order-summary">
-<div class="section-title">Selected Order</div>
+      <!-- ORDER SUMMARY -->
+      <div class="card">
+        <h2>Selected Order</h2>
+        <div class="orderSummary">
+          <div class="pill"><b>Tier</b><span id="tierDisplay">—</span></div>
+          <div class="pill"><b>Document</b><span id="docDisplay">—</span></div>
+          <div class="pill"><b>Price</b><span id="priceDisplay">—</span></div>
+        </div>
+      </div>
 
-<p id="tierDisplay"></p>
-<p id="docDisplay"></p>
-<p id="priceDisplay"></p>
+      <!-- INTAKE FORM -->
+      <div class="card">
+        <h2>Client Information</h2>
 
-</div>
+        <form id="intakeForm" autocomplete="on">
+          <!-- ARM (General fields) -->
+          <div class="row">
+            <div class="field col-6">
+              <label for="client_first_name">First Name</label>
+              <input id="client_first_name" name="client_first_name" required />
+            </div>
+            <div class="field col-6">
+              <label for="client_last_name">Last Name</label>
+              <input id="client_last_name" name="client_last_name" required />
+            </div>
 
+            <div class="field col-6">
+              <label for="client_email">Email</label>
+              <input id="client_email" name="client_email" type="email" required />
+            </div>
+            <div class="field col-6">
+              <label for="client_phone">Phone</label>
+              <input id="client_phone" name="client_phone" />
+            </div>
 
-<!-- UNIVERSAL ARM SECTION -->
-<div class="card">
-<div class="section-title">Client Information</div>
+            <div class="field col-8">
+              <label for="client_street">Street Address</label>
+              <input id="client_street" name="client_street" />
+            </div>
+            <div class="field col-4">
+              <label for="client_unit">Unit / Apt</label>
+              <input id="client_unit" name="client_unit" />
+            </div>
 
-<input id="first_name" placeholder="First Name">
-<input id="last_name" placeholder="Last Name">
-<input id="email" placeholder="Email">
-<input id="phone" placeholder="Phone">
+            <div class="field col-4">
+              <label for="client_city">City</label>
+              <input id="client_city" name="client_city" />
+            </div>
+            <div class="field col-4">
+              <label for="client_state">State</label>
+              <input id="client_state" name="client_state" />
+            </div>
+            <div class="field col-4">
+              <label for="client_zip">ZIP</label>
+              <input id="client_zip" name="client_zip" />
+            </div>
 
-<input id="street" placeholder="Street Address">
-<input id="city" placeholder="City">
-<input id="state" placeholder="State">
-<input id="zip" placeholder="ZIP">
+            <div class="field col-12">
+              <label for="order_notes">Order Notes</label>
+              <textarea id="order_notes" name="order_notes" placeholder="Anything special we should know?"></textarea>
+            </div>
+          </div>
 
-<textarea id="order_notes" placeholder="Details / Requirements"></textarea>
+          <!-- HAND (Doc-specific sections) -->
+          <div id="hand_nda" class="docSpecific">
+            <h2>Non-Disclosure Agreement Details</h2>
+            <div class="row">
+              <div class="field col-6">
+                <label for="nda_disclosing_party">Disclosing Party Name</label>
+                <input id="nda_disclosing_party" name="nda_disclosing_party" />
+              </div>
+              <div class="field col-6">
+                <label for="nda_receiving_party">Receiving Party Name</label>
+                <input id="nda_receiving_party" name="nda_receiving_party" />
+              </div>
+              <div class="field col-12">
+                <label for="nda_confidential_info">What is considered confidential?</label>
+                <textarea id="nda_confidential_info" name="nda_confidential_info"></textarea>
+              </div>
+            </div>
+          </div>
 
-</div>
+          <div id="hand_llc" class="docSpecific">
+            <h2>LLC Operating Agreement Details</h2>
+            <div class="row">
+              <div class="field col-6">
+                <label for="llc_name">LLC Name</label>
+                <input id="llc_name" name="llc_name" />
+              </div>
+              <div class="field col-6">
+                <label for="llc_state">State of Formation</label>
+                <input id="llc_state" name="llc_state" />
+              </div>
+              <div class="field col-12">
+                <label for="llc_members">Members (names + ownership %)</label>
+                <textarea id="llc_members" name="llc_members" placeholder="Example: John Doe 60%, Jane Doe 40%"></textarea>
+              </div>
+            </div>
+          </div>
 
+          <div id="hand_lease_commercial" class="docSpecific">
+            <h2>Commercial Lease Details</h2>
+            <div class="row">
+              <div class="field col-6">
+                <label for="lease_landlord">Landlord Name</label>
+                <input id="lease_landlord" name="lease_landlord" />
+              </div>
+              <div class="field col-6">
+                <label for="lease_tenant">Tenant Name</label>
+                <input id="lease_tenant" name="lease_tenant" />
+              </div>
+              <div class="field col-6">
+                <label for="lease_term">Lease Term (months)</label>
+                <input id="lease_term" name="lease_term" />
+              </div>
+              <div class="field col-6">
+                <label for="lease_rent">Monthly Rent</label>
+                <input id="lease_rent" name="lease_rent" />
+              </div>
+              <div class="field col-12">
+                <label for="lease_property_address">Property Address</label>
+                <input id="lease_property_address" name="lease_property_address" />
+              </div>
+            </div>
+          </div>
 
-<!-- LLC HAND SECTION -->
-<div id="llcSection" class="card hidden">
-<div class="section-title">LLC Details</div>
+          <div class="actions">
+            <button class="btn" type="submit">Continue To Review</button>
+          </div>
+          <div class="smallNote">This will save your intake and take you to the Review page.</div>
+        </form>
+      </div>
+    </div>
+  </div>
 
-<input id="llc_name" placeholder="LLC Name">
-<input id="llc_state" placeholder="State of Formation">
-<input id="llc_members" placeholder="Member Names (comma separated)">
-<input id="llc_management" placeholder="Management Type (Member / Manager)">
+  <script>
+    /*********************************************************
+     * Canonical keys (LOCKED)
+     *  - order selected in catalog: "elegal_selected_order"
+     *  - intake payload for review: "elegal_intake"
+     *********************************************************/
 
-</div>
-
-
-<!-- PARTNERSHIP HAND -->
-<div id="partnershipSection" class="card hidden">
-<div class="section-title">Partnership Details</div>
-
-<input id="partner_names" placeholder="Partner Names">
-<input id="profit_split" placeholder="Profit Split %">
-<input id="partnership_purpose" placeholder="Business Purpose">
-
-</div>
-
-
-<!-- EMPLOYMENT HAND -->
-<div id="employmentSection" class="card hidden">
-<div class="section-title">Employment Agreement Details</div>
-
-<input id="employee_name" placeholder="Employee Name">
-<input id="job_title" placeholder="Job Title">
-<input id="salary" placeholder="Salary">
-<input id="start_date" type="date">
-
-</div>
-
-
-<button onclick="continueToReview()">Continue To Review</button>
-
-</div>
-
-
-<script>
-
-/* -------------------------
-   LOAD ORDER FROM CATALOG
-------------------------- */
-
-const order =
-    JSON.parse(sessionStorage.getItem("elegal_selected_order"));
-
-if (!order) {
-    alert("No order found. Returning to catalog.");
-    window.location.href = "catalog.html";
-}
-
-/* DISPLAY ORDER */
-
-document.getElementById("tierDisplay").innerText =
-    "Tier: " + order.tier;
-
-document.getElementById("docDisplay").innerText =
-    "Document: " + order.doc_type;
-
-document.getElementById("priceDisplay").innerText =
-    "Price: $" + order.price;
-
-
-/* -------------------------
-   SHOW DOC SPECIFIC HAND
-------------------------- */
-
-function revealDocSection() {
-
-    switch(order.doc_type) {
-
-        case "LLC_OPERATING":
-            document.getElementById("llcSection").classList.remove("hidden");
-            break;
-
-        case "PARTNERSHIP":
-            document.getElementById("partnershipSection").classList.remove("hidden");
-            break;
-
-        case "EMPLOYMENT":
-            document.getElementById("employmentSection").classList.remove("hidden");
-            break;
+    function safeJsonParse(raw){
+      try { return JSON.parse(raw); } catch(e){ return null; }
     }
-}
 
-revealDocSection();
+    // 1) Load order from catalog (SAFE MODE if missing)
+    let order = safeJsonParse(sessionStorage.getItem("elegal_selected_order"));
 
+    if(!order){
+      document.getElementById("testBanner").style.display = "block";
+      order = { tier:"TEST TIER", price:0, doc_type:"TEST_DOC" };
+    }
 
-/* -------------------------
-   CONTINUE TO REVIEW
-------------------------- */
+    // 2) Normalize: ensure required fields exist (prevents "undefined")
+    if(typeof order.tier === "undefined" || order.tier === null) order.tier = "UNKNOWN TIER";
+    if(typeof order.price === "undefined" || order.price === null || Number.isNaN(Number(order.price))) order.price = 0;
+    if(typeof order.doc_type === "undefined" || order.doc_type === null) order.doc_type = "UNKNOWN_DOC";
 
-function continueToReview() {
+    // 3) Display order summary
+    document.getElementById("tierDisplay").innerText  = String(order.tier);
+    document.getElementById("docDisplay").innerText   = String(order.doc_type);
+    document.getElementById("priceDisplay").innerText = "$" + String(order.price);
 
-    const intakeData = {
+    // 4) Show doc-specific HAND section based on doc_type (expand as needed)
+    function showHandSection(docType){
+      // hide all
+      document.querySelectorAll(".docSpecific").forEach(el => el.classList.remove("active"));
 
-        /* ORDER DATA */
+      // map doc_type -> section
+      const map = {
+        "NDA": "hand_nda",
+        "LLC_OPERATING": "hand_llc",
+        "COMMERCIAL_LEASE": "hand_lease_commercial"
+      };
+
+      const id = map[String(docType)] || null;
+      if(id){
+        const el = document.getElementById(id);
+        if(el) el.classList.add("active");
+      }
+    }
+
+    showHandSection(order.doc_type);
+
+    // 5) On submit: build intake object and store for review
+    document.getElementById("intakeForm").addEventListener("submit", (e) => {
+      e.preventDefault();
+
+      const intake = {
+        // Order (canonical)
         tier: order.tier,
-        price: order.price,
+        price: Number(order.price) || 0,
         doc_type: order.doc_type,
 
-        /* CLIENT ARM */
-        first_name: val("first_name"),
-        last_name: val("last_name"),
-        email: val("email"),
-        phone: val("phone"),
-        street: val("street"),
-        city: val("city"),
-        state: val("state"),
-        zip: val("zip"),
-        order_notes: val("order_notes"),
+        // ARM (canonical-ish; expand later)
+        client_first_name: v("client_first_name"),
+        client_last_name:  v("client_last_name"),
+        client_email:      v("client_email"),
+        client_phone:      v("client_phone"),
+        client_street:     v("client_street"),
+        client_unit:       v("client_unit"),
+        client_city:       v("client_city"),
+        client_state:      v("client_state"),
+        client_zip:        v("client_zip"),
+        order_notes:       v("order_notes"),
 
-        /* LLC HAND */
-        llc_name: val("llc_name"),
-        llc_state: val("llc_state"),
-        llc_members: val("llc_members"),
-        llc_management: val("llc_management"),
+        // HAND (doc specific)
+        nda_disclosing_party: v("nda_disclosing_party"),
+        nda_receiving_party:  v("nda_receiving_party"),
+        nda_confidential_info:v("nda_confidential_info"),
 
-        /* PARTNERSHIP HAND */
-        partner_names: val("partner_names"),
-        profit_split: val("profit_split"),
-        partnership_purpose: val("partnership_purpose"),
+        llc_name:     v("llc_name"),
+        llc_state:    v("llc_state"),
+        llc_members:  v("llc_members"),
 
-        /* EMPLOYMENT HAND */
-        employee_name: val("employee_name"),
-        job_title: val("job_title"),
-        salary: val("salary"),
-        start_date: val("start_date")
+        lease_landlord:        v("lease_landlord"),
+        lease_tenant:          v("lease_tenant"),
+        lease_term:            v("lease_term"),
+        lease_rent:            v("lease_rent"),
+        lease_property_address:v("lease_property_address")
+      };
 
-    };
+      sessionStorage.setItem("elegal_intake", JSON.stringify(intake));
+      window.location.href = "review.html";
+    });
 
-    sessionStorage.setItem(
-        "elegal_intake",
-        JSON.stringify(intakeData)
-    );
-
-    window.location.href = "review.html";
-}
-
-/* HELPER */
-
-function val(id) {
-    const el = document.getElementById(id);
-    return el ? el.value : null;
-}
-
-</script>
-
+    function v(id){
+      const el = document.getElementById(id);
+      return el ? (el.value || "").trim() : "";
+    }
+  </script>
 </body>
 </html>
