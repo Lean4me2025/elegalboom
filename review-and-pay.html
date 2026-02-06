@@ -24,70 +24,71 @@
 body{
   margin:0;
   background:var(--bg);
-  font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+  font-family:system-ui;
   padding:24px;
   color:var(--ink);
 }
 
 .wrap{
   max-width:900px;
-  margin:0 auto;
+  margin:auto;
 }
 
 .header{
   text-align:center;
-  margin-bottom:18px;
+  margin-bottom:20px;
 }
 
 .panel{
   background:var(--card);
-  border:1px solid var(--line);
   border-radius:var(--radius);
+  border:1px solid var(--line);
   padding:20px;
   box-shadow:0 10px 25px rgba(10,20,40,.06);
 }
 
-.summary{
+.orderBar{
   display:grid;
   grid-template-columns:1fr 1fr 1fr;
   gap:12px;
-  margin-bottom:16px;
+  margin-bottom:20px;
 }
 
 .pill{
   background:var(--soft);
-  border:1px solid #d9e3ff;
   border-radius:12px;
   padding:14px;
   text-align:center;
+  font-weight:800;
 }
 
-.section{
-  margin-top:16px;
+.pill small{
+  display:block;
+  font-weight:600;
+  color:var(--muted);
 }
 
 .row{
   display:flex;
   justify-content:space-between;
-  padding:8px 0;
   border-bottom:1px dashed var(--line);
+  padding:10px 0;
 }
 
 .actions{
-  margin-top:20px;
   text-align:center;
+  margin-top:24px;
 }
 
 button{
   background:linear-gradient(180deg,var(--blue),var(--blue2));
   color:white;
   border:none;
-  border-radius:14px;
-  padding:14px 24px;
+  padding:14px 28px;
   font-size:16px;
-  font-weight:800;
+  font-weight:900;
+  border-radius:14px;
   cursor:pointer;
-  width:min(420px,100%);
 }
 </style>
 </head>
@@ -103,33 +104,31 @@ button{
 
 <div class="panel">
 
-<div class="summary">
-  <div class="pill">
-    <small>Document</small>
-    <div id="doc"></div>
-  </div>
-
-  <div class="pill">
-    <small>Tier</small>
-    <div id="tier"></div>
-  </div>
-
-  <div class="pill">
-    <small>Price</small>
-    <div id="price"></div>
-  </div>
+<div class="orderBar">
+<div class="pill">
+<small>Document</small>
+<span id="docDisplay"></span>
 </div>
 
-<div class="section">
-  <h3>Client Information</h3>
-
-  <div class="row"><span>Name</span><span id="clientName"></span></div>
-  <div class="row"><span>Email</span><span id="clientEmail"></span></div>
-  <div class="row"><span>Phone</span><span id="clientPhone"></span></div>
+<div class="pill">
+<small>Tier</small>
+<span id="tierDisplay"></span>
 </div>
+
+<div class="pill">
+<small>Price</small>
+<span id="priceDisplay"></span>
+</div>
+</div>
+
+<h3>Client Information</h3>
+
+<div class="row"><span>Name</span><span id="clientName"></span></div>
+<div class="row"><span>Email</span><span id="clientEmail"></span></div>
+<div class="row"><span>Phone</span><span id="clientPhone"></span></div>
 
 <div class="actions">
-  <button id="payBtn">Proceed To Payment</button>
+<button id="payBtn">Proceed To Payment</button>
 </div>
 
 </div>
@@ -137,21 +136,23 @@ button{
 
 <script>
 
-// ================================
-// 🔧 INSERT YOUR SUPABASE DETAILS
-// ================================
-const SUPABASE_URL = "https://vvjbjfltqsivvxxifnvi.supabase.co";
-const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ2amJqZmx0cXNpdnZ4eGlmbnZpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc5NzYzNTAsImV4cCI6MjA3MzU1MjM1MH0.F4zzcpCHl9v-Rnj0wgKJ5zBf1HteVyXelMLQDDEN28Q";
+/* =============================
+   INSERT YOUR SUPABASE KEYS
+============================= */
 
-const supabaseClient = window.supabase.createClient(
+const SUPABASE_URL = "PASTE_URL_HERE";
+const SUPABASE_ANON_KEY = "PASTE_KEY_HERE";
+
+/* CREATE CLIENT (NO DUPLICATE BUG) */
+const supabaseClient = supabase.createClient(
   SUPABASE_URL,
   SUPABASE_ANON_KEY
 );
 
+/* =============================
+   PAY LINKS (LOCKED)
+============================= */
 
-// ================================
-// 💳 PAY LINKS (LOCKED)
-// ================================
 const PAY_LINKS = {
   "Tier 1": "https://pay.elegalboom.org/e4b79a60-0fd7-431c-8bfc-ae0",
   "Tier 2": "https://pay.elegalboom.org/eeda586f-65f5-4bf0-98f3-7a2",
@@ -159,87 +160,106 @@ const PAY_LINKS = {
   "Tier 4": "https://pay.elegalboom.org/55c7cd3d-1048-4b8c-aadb-843"
 };
 
+/* =============================
+   DOCUMENT → TIER MAP
+============================= */
 
-// ================================
-// LOAD PAYLOAD
-// ================================
-function safeParse(str){
-  try { return JSON.parse(str); }
-  catch { return null; }
-}
+const DOC_MAP = {
+  NDA: { tier:"Tier 1", price:39 },
+  PROMISSORY_NOTE:{ tier:"Tier 1", price:39 },
+  BILL_OF_SALE:{ tier:"Tier 1", price:39 },
 
-const payload = safeParse(
+  PARTNERSHIP:{ tier:"Tier 2", price:59 },
+  LLC_OPERATING:{ tier:"Tier 2", price:59 },
+
+  NON_COMPETE:{ tier:"Tier 3", price:99 },
+  SERVICE_AGREEMENT:{ tier:"Tier 3", price:99 },
+
+  ENTREPRENEUR_BUNDLE:{ tier:"Tier 4", price:149 }
+};
+
+/* =============================
+   LOAD INTAKE PAYLOAD
+============================= */
+
+const payload = JSON.parse(
   sessionStorage.getItem("elegal_intake_data")
 );
 
 if(!payload){
-  alert("Missing intake data. Returning to intake.");
-  window.location.href = "intake.html";
+  alert("Missing intake data");
+  window.location.href = "catalog.html";
 }
 
+/* DOCUMENT */
+const docType = payload.doc_type;
 
-// ================================
-// DISPLAY SUMMARY
-// ================================
-document.getElementById("doc").textContent = payload.doc_type || "—";
-document.getElementById("tier").textContent = payload.tier || "—";
-document.getElementById("price").textContent = "$" + (payload.price ?? 0);
+/* DERIVE TIER + PRICE */
+const config = DOC_MAP[docType] || {tier:"Tier 1",price:39};
+
+payload.tier = config.tier;
+payload.price = config.price;
+
+/* DISPLAY */
+document.getElementById("docDisplay").textContent = docType;
+document.getElementById("tierDisplay").textContent = config.tier;
+document.getElementById("priceDisplay").textContent = "$"+config.price;
 
 document.getElementById("clientName").textContent =
-  (payload.client_first_name || "") + " " +
-  (payload.client_last_name || "");
+  payload.client_first_name+" "+payload.client_last_name;
 
 document.getElementById("clientEmail").textContent =
-  payload.client_email || "—";
+  payload.client_email;
 
 document.getElementById("clientPhone").textContent =
-  payload.client_phone || "—";
+  payload.client_phone;
 
+/* =============================
+   PAYMENT CLICK
+============================= */
 
-// ================================
-// PAYMENT BUTTON
-// ================================
-document.getElementById("payBtn").addEventListener("click", async () => {
+document.getElementById("payBtn").addEventListener("click", async ()=>{
 
-  console.log("Creating order in pweb_orders...");
+console.log("Creating order...");
 
-  const { data, error } = await supabaseClient
-    .from("pweb_orders")
-    .insert({
-      doc_type: payload.doc_type,
-      tier: payload.tier,
-      price: payload.price,
-      client_first_name: payload.client_first_name,
-      client_last_name: payload.client_last_name,
-      client_email: payload.client_email,
-      client_phone: payload.client_phone,
-      order_notes: payload.order_notes || null,
-      intake_json: payload,
-      status: "pending_payment"
-    })
-    .select()
-    .single();
+const { data, error } = await supabaseClient
+.from("pweb_orders")
+.insert({
 
-  if(error){
-    console.error("Order insert failed:", error);
-    alert("Order creation failed. Check console.");
-    return;
-  }
+doc_type: payload.doc_type,
+tier: payload.tier,
+price: payload.price,
 
-  const orderId = data.order_id;
+client_first_name: payload.client_first_name,
+client_last_name: payload.client_last_name,
+client_email: payload.client_email,
+client_phone: payload.client_phone,
 
-  console.log("Order created:", orderId);
+order_notes: payload.order_notes || null,
+intake_json: payload,
 
-  const payLink = PAY_LINKS[payload.tier];
+order_status: "pending_payment"
 
-  if(!payLink){
-    alert("Missing pay link for tier.");
-    return;
-  }
+})
+.select()
+.single();
 
-  window.location.href = payLink;
+if(error){
+console.error(error);
+alert("Order creation failed");
+return;
+}
+
+const orderID = data.order_id;
+
+console.log("Order Created:", orderID);
+
+const payLink = PAY_LINKS[payload.tier];
+
+window.location.href = payLink;
 
 });
+
 </script>
 
 </body>
