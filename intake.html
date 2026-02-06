@@ -830,6 +830,48 @@
     function cssEscape(s){
       return String(s).replace(/"/g, '\\"');
     }
-  </script>
+ 
+  // ---- Intake Header Display Hydration ----
+(function hydrateHeaderFromPayload(){
+
+  document.addEventListener("DOMContentLoaded", () => {
+
+    try {
+
+      const payload = safeParse(sessionStorage.getItem("legal_intake_data"));
+      if (!payload) return;
+
+      const primaryDoc =
+        payload.doc_type ||
+        (payload.doc_types && payload.doc_types[0]);
+
+      if (!primaryDoc) return;
+
+      // Display mapping (UI only)
+      const DISPLAY_MAP = {
+        "PARTNERSHIP": { tier: "Tier 2", price: 59 },
+        "LLC_SINGLE": { tier: "Tier 2", price: 59 },
+        "LLC_MULTI": { tier: "Tier 3", price: 99 },
+        "NDA": { tier: "Tier 1", price: 39 },
+        "ENTREPRENEUR_BUNDLE": { tier: "Tier 4", price: 149 }
+      };
+
+      const config = DISPLAY_MAP[primaryDoc];
+      if (!config) return;
+
+      const tierEl = document.getElementById("intake-tier");
+      const priceEl = document.getElementById("intake-price");
+
+      if (tierEl) tierEl.textContent = config.tier;
+      if (priceEl) priceEl.textContent = "$" + config.price;
+
+      console.log("Header Hydrated:", primaryDoc, config);
+
+    } catch(err){
+      console.warn("Header hydration failed:", err);
+    }
+
+  });
+})();  </script>
 </body>
 </html>
