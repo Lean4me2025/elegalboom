@@ -768,30 +768,69 @@
     }
 
     // Normalize: allow either doc_type (string) or doc_types (array)
-    const docTypes = Array.isArray(order.doc_types) ? order.doc_types
-                    : (order.doc_type ? [order.doc_type] : []);
+    const docTypes = Array.isArray(order.doc_types)
+      ? order.doc_types
+      : (order.doc_type ? [order.doc_type] : []);
 
-    // Display
-    document.getElementById("tierDisplay").textContent = order.tier || "UNKNOWN TIER";
-    document.getElementById("docDisplay").textContent = docTypes.length ? docTypes.join(", ") : "UNKNOWN DOC";
-    document.getElementById("priceDisplay").textContent = (order.price != null) ? ("$" + order.price) : "$0";
+    // ---------- HEADER DISPLAY CLEANUP ----------
+    const tierEl = document.getElementById("tierDisplay");
+    const docEl = document.getElementById("docDisplay");
+    const priceEl = document.getElementById("priceDisplay");
+
+    if(order.tier && order.tier !== "UNKNOWN TIER"){
+      tierEl.textContent = order.tier;
+    } else {
+      tierEl.closest(".pill").style.display = "none";
+    }
+
+    docEl.textContent = docTypes.length ? docTypes.join(", ") : "Document";
+
+    if(order.price != null && Number(order.price) > 0){
+      priceEl.textContent = "$" + order.price;
+    } else {
+      priceEl.closest(".pill").style.display = "none";
+    }
 
     // ---------- SHOW DOC-SPECIFIC SECTION ----------
-    // If multiple doc_types, show first section + Tier 4 bundle notes (future-safe).
     showDocSection(docTypes);
 
     // ---------- SUBMIT ----------
-    document.getElementById("intakeForm").addEventListener("submit", (e) => {
+    document.getElementById("intakeForm").addEventListener("submit", async (e) => {
       e.preventDefault();
 
       const formData = new FormData(e.target);
       const intake = Object.fromEntries(formData.entries());
 
-      // Merge payload (order is canonical; intake adds fields)
+      // ⭐ ORDER ID CREATION
+      const order_id = "ORD-" + Date.now() + "-" + Math.floor(Math.random()*1000);
+
+      // ⭐ ORDER HEADER OBJECT
+      const orderHeader = {
+        order_id,
+        tier: order.tier || null,
+        price: order.price || null,
+        doc_type: order.doc_type || (docTypes[0] || null),
+        client_email: intake.client_email || null,
+        order_status: "INTAKE_SUBMITTED",
+        created_at: new Date().toISOString()
+      };
+
+      // ⭐ SAFE INSERT INTO pweb_orders
+      try {
+        if(window.supabase){
+          await window.supabase
+            .from("pweb_orders")
+            .insert(orderHeader);
+        }
+      } catch(err){
+        console.warn("Order header insert skipped:", err);
+      }
+
+      // Merge payload
       const payload = {
         ...order,
         ...intake,
-        // ensure canonical keys exist
+        order_id,
         doc_type: order.doc_type || (docTypes[0] || ""),
         doc_types: docTypes.length ? docTypes : undefined
       };
@@ -809,69 +848,31 @@
     }
 
     function showDocSection(docTypes){
-      // Hide all
       document.querySelectorAll(".docBox").forEach(b => b.classList.remove("active"));
 
       if(!docTypes || !docTypes.length) return;
 
-      // Show the section for the first doc_type
       const first = docTypes[0];
       const match = document.querySelector(`.docBox[data-doc="${cssEscape(first)}"]`);
       if(match) match.classList.add("active");
 
-      // If tier 4 / bundle, also show the Tier 4 notes box (if present)
       if(first === "ENTREPRENEUR_BUNDLE" || docTypes.length > 1){
         const t4 = document.querySelector(`.docBox[data-doc="ENTREPRENEUR_BUNDLE"]`);
         if(t4) t4.classList.add("active");
       }
     }
 
-    // minimal CSS.escape replacement for older browsers
-    function cssEscape(s){
-      return String(s).replace(/"/g, '\\"');
-    }
- 
-  // ---- Intake Header Display Hydration ----
-(function hydrateHeaderFromPayload(){
-
-  document.addEventListener("DOMContentLoaded", () => {
-
-    try {
-
-      const payload = safeParse(sessionStorage.getItem("legal_intake_data"));
-      if (!payload) return;
-
-      const primaryDoc =
-        payload.doc_type ||
-        (payload.doc_types && payload.doc_types[0]);
-
-      if (!primaryDoc) return;
-
-      // Display mapping (UI only)
-      const DISPLAY_MAP = {
-        "PARTNERSHIP": { tier: "Tier 2", price: 59 },
-        "LLC_SINGLE": { tier: "Tier 2", price: 59 },
-        "LLC_MULTI": { tier: "Tier 3", price: 99 },
-        "NDA": { tier: "Tier 1", price: 39 },
-        "ENTREPRENEUR_BUNDLE": { tier: "Tier 4", price: 149 }
-      };
-
-      const config = DISPLAY_MAP[primaryDoc];
-      if (!config) return;
-
-      const tierEl = document.getElementById("intake-tier");
-      const priceEl = document.getElementById("intake-price");
-
-      if (tierEl) tierEl.textContent = config.tier;
-      if (priceEl) priceEl.textContent = "$" + config.price;
-
-      console.log("Header Hydrated:", primaryDoc, config);
-
-    } catch(err){
-      console.warn("Header hydration failed:", err);
+    // ⭐ SAFER CSS ESCAPE (fixes edge browsers)
+    function cssEscape(str){
+      if(window.CSS && CSS.escape){
+        return CSS.escape(str);
+      }
+      return String(str).replace(/"/g, '\\"');
     }
 
-  });
+  </script>
+</body>
+</html>
 })();  </script>
 </body>
 </html>
