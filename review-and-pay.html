@@ -226,6 +226,7 @@ const { data, error } = await supabaseClient
 .from("pweb_orders")
 .insert({
 
+order_id: payload.order_id,
 doc_type: payload.doc_type,
 tier: payload.tier,
 price: payload.price,
