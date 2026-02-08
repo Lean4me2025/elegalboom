@@ -133,7 +133,7 @@ async function transferOrder(){
     price: payload.price,
     client_email: payload.client_email,
     intake_json: payload,
-    order_status:"CREATED",
+    order_status:"pending",
     created_at:new Date().toISOString()
   };
 
