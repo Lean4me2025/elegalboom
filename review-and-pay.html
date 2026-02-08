@@ -86,18 +86,24 @@ if(!payload.order_id){
 const docType = payload.doc_type || payload.doc_types?.[0];
 
 const DOC_MAP = {
-  NDA:{tier:"Tier 1",price:39,pay:"PAY_LINK_T1"},
-  PROMISSORY_NOTE:{tier:"Tier 1",price:39,pay:"PAY_LINK_T1"},
-  BILL_OF_SALE:{tier:"Tier 1",price:39,pay:"PAY_LINK_T1"},
 
-  PARTNERSHIP:{tier:"Tier 2",price:59,pay:"PAY_LINK_T2"},
-  LLC_OPERATING:{tier:"Tier 2",price:59,pay:"PAY_LINK_T2"},
+  // ----- Tier 1 -----
+  NDA:{tier:"Tier 1",price:39,pay:"https://pay.elegalboom.org/e4b79a60-0fd7-431c-8bfc-ae0"},
+  PROMISSORY_NOTE:{tier:"Tier 1",price:39,pay:"https://pay.elegalboom.org/e4b79a60-0fd7-431c-8bfc-ae0"},
+  BILL_OF_SALE:{tier:"Tier 1",price:39,pay:"https://pay.elegalboom.org/e4b79a60-0fd7-431c-8bfc-ae0"},
 
-  SERVICE_AGREEMENT:{tier:"Tier 3",price:99,pay:"PAY_LINK_T3"},
-  EMPLOYMENT:{tier:"Tier 3",price:99,pay:"PAY_LINK_T3"},
-  COMMERCIAL_LEASE:{tier:"Tier 3",price:99,pay:"PAY_LINK_T3"},
+  // ----- Tier 2 -----
+  PARTNERSHIP:{tier:"Tier 2",price:59,pay:"https://pay.elegalboom.org/eeda586f-65f5-4bf0-98f3-7a2"},
+  LLC_OPERATING:{tier:"Tier 2",price:59,pay:"https://pay.elegalboom.org/eeda586f-65f5-4bf0-98f3-7a2"},
 
-  ENTREPRENEUR_BUNDLE:{tier:"Tier 4",price:149,pay:"PAY_LINK_T4"}
+  // ----- Tier 3 -----
+  SERVICE_AGREEMENT:{tier:"Tier 3",price:99,pay:"https://pay.elegalboom.org/71ca7144-e537-4fbd-823d-c10"},
+  EMPLOYMENT:{tier:"Tier 3",price:99,pay:"https://pay.elegalboom.org/71ca7144-e537-4fbd-823d-c10"},
+  COMMERCIAL_LEASE:{tier:"Tier 3",price:99,pay:"https://pay.elegalboom.org/71ca7144-e537-4fbd-823d-c10"},
+
+  // ----- Tier 4 -----
+  ENTREPRENEUR_BUNDLE:{tier:"Tier 4",price:149,pay:"https://pay.elegalboom.org/55c7cd3d-1048-4b8c-aadb-843"}
+
 };
 
 if(!payload.tier || !payload.price){
