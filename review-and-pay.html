@@ -1,186 +1,166 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Review & Pay</title>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>E-LegalBoom — Review & Pay</title>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
-body {
-  font-family: Arial, sans-serif;
-  background: #f5f7fb;
-  padding: 40px;
+body{
+  font-family:system-ui;
+  background:#f6f8fb;
+  padding:30px;
 }
 
-.container {
-  max-width: 700px;
-  margin: auto;
-  background: white;
-  padding: 30px;
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+.card{
+  background:white;
+  padding:25px;
+  border-radius:14px;
+  max-width:700px;
+  margin:auto;
+  box-shadow:0 10px 30px rgba(0,0,0,.05);
 }
 
-.card {
-  background: #eef2ff;
-  padding: 20px;
-  border-radius: 8px;
-  margin-bottom: 20px;
+h1{margin-top:0}
+
+.row{
+  margin-bottom:12px;
+  font-size:16px;
 }
 
-h1 {
-  text-align: center;
-}
-
-.btn {
-  width: 100%;
-  padding: 14px;
-  background: #4f46e5;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  font-size: 16px;
-  cursor: pointer;
-}
-
-.btn:hover {
-  background: #4338ca;
+button{
+  width:100%;
+  padding:16px;
+  font-size:18px;
+  background:#1a4cff;
+  color:white;
+  border:none;
+  border-radius:12px;
+  cursor:pointer;
+  font-weight:bold;
 }
 </style>
 </head>
 
 <body>
 
-<div class="container">
-
+<div class="card">
 <h1>Review & Pay</h1>
 
-<div class="card">
-  <p><strong>Document:</strong> <span id="docDisplay"></span></p>
-  <p><strong>Tier:</strong> <span id="tierDisplay"></span></p>
-  <p><strong>Price:</strong> $<span id="priceDisplay"></span></p>
-</div>
+<div class="row"><strong>Order ID:</strong> <span id="orderID"></span></div>
+<div class="row"><strong>Document:</strong> <span id="docType"></span></div>
+<div class="row"><strong>Tier:</strong> <span id="tier"></span></div>
+<div class="row"><strong>Price:</strong> $<span id="price"></span></div>
+<div class="row"><strong>Email:</strong> <span id="email"></span></div>
 
-<div class="card">
-  <p><strong>Name:</strong> <span id="nameDisplay"></span></p>
-  <p><strong>Email:</strong> <span id="emailDisplay"></span></p>
-  <p><strong>Phone:</strong> <span id="phoneDisplay"></span></p>
-</div>
-
-<button class="btn" id="payBtn">Proceed To Payment</button>
+<br>
+<button id="payBtn">Proceed To Payment</button>
 
 </div>
 
 <script>
 
-/* ================= SUPABASE CONFIG ================= */
+// ---------------- SUPABASE INIT ----------------
+const supabase = window.supabase.createClient(
+  "https://vvjbjfltqsivvxxifnvi.supabase.co",
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ2amJqZmx0cXNpdnZ4eGlmbnZpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc5NzYzNTAsImV4cCI6MjA3MzU1MjM1MH0.F4zzcpCHl9v-Rnj0wgKJ5zBf1HteVyXelMLQDDEN28Q"
+);
 
-const SUPABASE_URL = "https://vvjbjfltqsivvxxifnvi.supabase.co";
-const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ2amJqZmx0cXNpdnZ4eGlmbnZpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc5NzYzNTAsImV4cCI6MjA3MzU1MjM1MH0.F4zzcpCHl9v-Rnj0wgKJ5zBf1HteVyXelMLQDDEN28Q";
-
-const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-
-/* ================= GODADDY PAY LINKS ================= */
-
-const PAY_LINKS = {
-
-  "Tier 1": "https://pay.elegalboom.org/e4b79a60-0fd7-431c-8bfc-ae0",
-  "tier1": "https://pay.elegalboom.org/e4b79a60-0fd7-431c-8bfc-ae0",
-
-  "Tier 2": "https://pay.elegalboom.org/eeda586f-65f5-4bf0-98f3-7a2",
-  "tier2": "https://pay.elegalboom.org/eeda586f-65f5-4bf0-98f3-7a2",
-
-  "Tier 3": "https://pay.elegalboom.org/71ca7144-e537-4fbd-823d-c10",
-  "tier3": "https://pay.elegalboom.org/71ca7144-e537-4fbd-823d-c10",
-
-  "Tier 4": "https://pay.elegalboom.org/55c7cd3d-1048-4b8c-aadb-843",
-  "tier4": "https://pay.elegalboom.org/55c7cd3d-1048-4b8c-aadb-843"
-
-};
-
-
-/* ================= LOAD SESSION ================= */
-
+// ---------------- LOAD INTAKE PAYLOAD ----------------
 const payload = JSON.parse(sessionStorage.getItem("elegal_intake_data"));
 
-if (!payload) {
-  alert("Missing intake data.");
-  window.location.href = "catalog.html";
+if(!payload){
+  alert("Missing intake data");
+  window.location.href="catalog.html";
+}
+
+// ---------------- ENSURE ORDER ID ----------------
+if(!payload.order_id){
+  payload.order_id = "ELB-" + Date.now();
+  sessionStorage.setItem("elegal_intake_data", JSON.stringify(payload));
+}
+
+// ---------------- DERIVE COMMERCE FIELDS ----------------
+const docType = payload.doc_type || payload.doc_types?.[0];
+
+const DOC_MAP = {
+  NDA:{tier:"Tier 1",price:39,pay:"PAY_LINK_T1"},
+  PROMISSORY_NOTE:{tier:"Tier 1",price:39,pay:"PAY_LINK_T1"},
+  BILL_OF_SALE:{tier:"Tier 1",price:39,pay:"PAY_LINK_T1"},
+
+  PARTNERSHIP:{tier:"Tier 2",price:59,pay:"PAY_LINK_T2"},
+  LLC_OPERATING:{tier:"Tier 2",price:59,pay:"PAY_LINK_T2"},
+
+  SERVICE_AGREEMENT:{tier:"Tier 3",price:99,pay:"PAY_LINK_T3"},
+  EMPLOYMENT:{tier:"Tier 3",price:99,pay:"PAY_LINK_T3"},
+  COMMERCIAL_LEASE:{tier:"Tier 3",price:99,pay:"PAY_LINK_T3"},
+
+  ENTREPRENEUR_BUNDLE:{tier:"Tier 4",price:149,pay:"PAY_LINK_T4"}
+};
+
+if(!payload.tier || !payload.price){
+  const map = DOC_MAP[docType];
+  if(map){
+    payload.tier = map.tier;
+    payload.price = map.price;
+  }
+}
+
+// ---------------- DISPLAY ----------------
+document.getElementById("orderID").textContent = payload.order_id;
+document.getElementById("docType").textContent = docType;
+document.getElementById("tier").textContent = payload.tier;
+document.getElementById("price").textContent = payload.price;
+document.getElementById("email").textContent = payload.client_email;
+
+
+// ---------------- INSERT ORDER (TRANSFER STEP) ----------------
+async function transferOrder(){
+
+  const record = {
+    order_id: payload.order_id,
+    doc_type: docType,
+    tier: payload.tier,
+    price: payload.price,
+    client_email: payload.client_email,
+    intake_json: payload,
+    order_status:"CREATED",
+    created_at:new Date().toISOString()
+  };
+
+  const {error} = await supabase
+    .from("pweb_orders")
+    .insert(record);
+
+  if(error){
+    console.error(error);
+    alert("Order creation failed");
+    return false;
+  }
+
+  return true;
 }
 
 
-/* ================= DISPLAY ================= */
+// ---------------- PAYMENT ROUTING ----------------
+document.getElementById("payBtn").onclick = async () => {
 
-document.getElementById("docDisplay").textContent = payload.doc_type;
-document.getElementById("tierDisplay").textContent = payload.tier;
-document.getElementById("priceDisplay").textContent = payload.price;
+  const ok = await transferOrder();
+  if(!ok) return;
 
-document.getElementById("nameDisplay").textContent =
-  payload.client_first_name + " " + payload.client_last_name;
+  const payLink = DOC_MAP[docType]?.pay;
 
-document.getElementById("emailDisplay").textContent = payload.client_email;
-document.getElementById("phoneDisplay").textContent = payload.client_phone;
-
-
-/* ================= PAYMENT CLICK ================= */
-
-document.getElementById("payBtn").addEventListener("click", async () => {
-
-  console.log("Creating order...");
-
-  /* Guarantee Order ID */
-  if (!payload.order_id) {
-    payload.order_id = "ELB-" + Date.now();
-  }
-
-  /* Insert Order */
-  const { data, error } = await supabaseClient
-    .from("pweb_orders")
-    .insert({
-
-      order_id: payload.order_id,
-      doc_type: payload.doc_type,
-      tier: payload.tier,
-      price: payload.price,
-
-      client_first_name: payload.client_first_name,
-      client_last_name: payload.client_last_name,
-      client_email: payload.client_email,
-      client_phone: payload.client_phone,
-
-      order_notes: payload.order_notes || null,
-      intake_json: payload,
-
-      order_status: "pending_payment"
-
-    })
-    .select()
-    .single();
-
-  if (error) {
-    console.error(error);
-    alert("Order creation failed.");
-    return;
-  }
-
-  console.log("Order Created:", data.order_id);
-
-  /* Redirect To Payment */
-  const payLink = PAY_LINKS[payload.tier];
-
-  if (!payLink) {
-    alert("Missing payment link.");
+  if(!payLink){
+    alert("Missing pay link");
     return;
   }
 
   window.location.href = payLink;
 
-});
+};
 
 </script>
-
 </body>
 </html>
