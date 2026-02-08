@@ -143,8 +143,8 @@ document.getElementById("payBtn").addEventListener("click", async () => {
 
       order_id: payload.order_id,
       doc_type: payload.doc_type,
-      tier: payload.tier,
-      price: payload.price,
+      tier: order.tier,
+      price: order.price,
 
       client_first_name: payload.client_first_name,
       client_last_name: payload.client_last_name,
