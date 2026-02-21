@@ -807,9 +807,9 @@
       // ⭐ ORDER HEADER OBJECT
      const orderHeader = {
   order_id,
-  tier: order.tier || null,
-  price: order.price || null,
-  doc_type: order.doc_type || (docTypes[0] || null),
+  tier: order.tier_name || null,
+  price: order.tier_price || null,
+  doc_type: order.doc_type || null,
   client_email: intake.client_email || null,
 
   // ✅ PRODUCTION ALIGNMENT
