@@ -120,9 +120,7 @@ button {
 
 </div>
 
-<script>
-const MAX_TIER4 = 3;
-
+  <script>
 const tiers = [
 {
   tier_name: "Tier 1 – Core Personal & Business",
@@ -152,6 +150,16 @@ const tiers = [
     {label:"Residential Lease Agreement", doc_type:"RESIDENTIAL_LEASE"},
     {label:"Commercial Lease Agreement", doc_type:"COMMERCIAL_LEASE"},
     {label:"Non-Compete Agreement", doc_type:"NON_COMPETE"}
+  ]
+},
+{
+  tier_name: "Tier 4 – Strategic & Premium Documents",
+  tier_price: 149,
+  docs: [
+    {label:"Executive Employment Agreement", doc_type:"EXEC_EMPLOYMENT"},
+    {label:"Equity Agreement", doc_type:"EQUITY_AGREEMENT"},
+    {label:"Investor Term Sheet", doc_type:"TERM_SHEET"},
+    {label:"Custom Contract Draft", doc_type:"CUSTOM_CONTRACT"}
   ]
 }
 ];
@@ -212,5 +220,6 @@ function continueToIntake(){
 
 document.addEventListener("DOMContentLoaded", buildCatalog);
 </script>
+  
 </body>
 </html>
