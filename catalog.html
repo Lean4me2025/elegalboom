@@ -245,18 +245,10 @@ function updateSummary(){
 
 const s=document.getElementById("summary");
 
-if(!selectedOrder){
-s.innerHTML="No selection yet.";
-return;
-}
 
-if(selectedOrder.doc_type){
 s.innerHTML=`<b>${selectedOrder.tier_name}</b><br>$${selectedOrder.tier_price}<br>${selectedOrder.doc_type}`;
 }
 
-if(selectedOrder.doc_types){
-s.innerHTML=`<b>${selectedOrder.tier_name}</b><br>$${selectedOrder.tier_price}<br>${selectedOrder.doc_types.join("<br>")}`;
-}
 }
 
 function continueToIntake(){
