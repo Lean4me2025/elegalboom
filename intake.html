@@ -805,14 +805,19 @@
       const order_id = "ORD-" + Date.now() + "-" + Math.floor(Math.random()*1000);
 
       // ⭐ ORDER HEADER OBJECT
-      const orderHeader = {
-        order_id,
-        tier: order.tier || null,
-        price: order.price || null,
-        doc_type: order.doc_type || (docTypes[0] || null),
-        client_email: intake.client_email || null,
-        order_status: "INTAKE_SUBMITTED",
-        created_at: new Date().toISOString()
+     const orderHeader = {
+  order_id,
+  tier: order.tier || null,
+  price: order.price || null,
+  doc_type: order.doc_type || (docTypes[0] || null),
+  client_email: intake.client_email || null,
+
+  // ✅ PRODUCTION ALIGNMENT
+  order_status: "ready",
+  payment_status: "pending",
+
+  created_at: new Date().toISOString()
+};
       };
 
       // ⭐ SAFE INSERT INTO pweb_orders
