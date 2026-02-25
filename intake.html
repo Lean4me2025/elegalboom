@@ -819,16 +819,35 @@
   created_at: new Date().toISOString()
 };
 
-      // ⭐ SAFE INSERT INTO pweb_orders
-      try {
-        if(window.supabase){
-          await window.supabase
-            .from("pweb_orders")
-            .insert(orderHeader);
-        }
-      } catch(err){
-        console.warn("Order header insert skipped:", err);
-      }
+     // 1️⃣ Insert order
+const { data, error } = await window.supabase
+  .from("pweb_orders")
+  .insert(orderHeader)
+  .select()
+  .single();
+
+if (error) {
+  console.error("Order insert failed:", error);
+  alert("There was an issue saving your order.");
+  return;
+}
+
+// 2️⃣ Immediately build document
+const { error: buildError } = await window.supabase.functions.invoke(
+  "document_generate",
+  {
+    body: { order_id: data.order_id }
+  }
+);
+
+if (buildError) {
+  console.error("Document build failed:", buildError);
+  alert("There was an issue generating your document.");
+  return;
+}
+
+// 3️⃣ Redirect to review page
+window.location.href = "/review.html?order_id=" + data.order_id; LG
 
       // Merge payload
       const payload = {
