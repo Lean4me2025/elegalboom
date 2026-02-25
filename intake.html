@@ -818,36 +818,32 @@
 
   created_at: new Date().toISOString()
 };
-
-     // 1️⃣ Insert order
-const { data, error } = await window.supabase
-  .from("pweb_orders")
-  .insert(orderHeader)
-  .select()
-  .single();
-
-if (error) {
-  console.error("Order insert failed:", error);
-  alert("There was an issue saving your order.");
-  return;
-}
-
-// 2️⃣ Immediately build document
-const { error: buildError } = await window.supabase.functions.invoke(
-  "document_generate",
+// 1️⃣ Call Edge Function to create order
+const response = await fetch(
+  "https://vvjbjfltqsivvxxifnvi.supabase.co/functions/v1/intake-create-order",
   {
-    body: { order_id: data.order_id }
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(orderHeader)
   }
 );
 
-if (buildError) {
-  console.error("Document build failed:", buildError);
-  alert("There was an issue generating your document.");
+const result = await response.json();
+
+if (!result.success) {
+  alert("There was an issue creating your order.");
+  console.error(result);
   return;
 }
 
+// 2️⃣ Redirect to review page
+window.location.href = "/review-and-pay.html?order_id=" + result.order_id; 
+}
+
 // 3️⃣ Redirect to review page
-window.location.href = "/review.html?order_id=" + data.order_id; LG
+window.location.href = "/review-and-pay.html?order_id=" + data.order_id; LG
 
       // Merge payload
       const payload = {
