@@ -1,167 +1,57 @@
-<!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>E-LegalBoom — Review & Pay</title>
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<style>
-body{
-  font-family:system-ui;
-  background:#f6f8fb;
-  padding:30px;
-}
-.card{
-  background:white;
-  padding:25px;
-  border-radius:14px;
-  max-width:700px;
-  margin:auto;
-  box-shadow:0 10px 30px rgba(0,0,0,.05);
-}
-h1{margin-top:0}
-.row{margin-bottom:12px;font-size:16px;}
-button{
-  width:100%;
-  padding:16px;
-  font-size:18px;
-  background:#1a4cff;
-  color:white;
-  border:none;
-  border-radius:12px;
-  cursor:pointer;
-  font-weight:bold;
-}
-</style>
-</head>
-
-<body>
-
-<div class="card">
-<h1>Review & Pay</h1>
-
-<div class="row"><strong>Order ID:</strong> <span id="orderID"></span></div>
-<div class="row"><strong>Document:</strong> <span id="docType"></span></div>
-<div class="row"><strong>Tier:</strong> <span id="tier"></span></div>
-<div class="row"><strong>Price:</strong> $<span id="price"></span></div>
-<div class="row"><strong>Email:</strong> <span id="email"></span></div>
-
-<br>
-<button id="payBtn">Proceed To Payment</button>
-</div>
-
 <script>
 
-// ---------------- SUPABASE INIT ----------------
 const sb = window.supabase.createClient(
   "https://vvjbjfltqsivvxxifnvi.supabase.co",
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ2amJqZmx0cXNpdnZ4eGlmbnZpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc5NzYzNTAsImV4cCI6MjA3MzU1MjM1MH0.F4zzcpCHl9v-Rnj0wgKJ5zBf1HteVyXelMLQDDEN28Q"
 );
 
+(async () => {
 
+  // ---------------- GET ORDER ID FROM URL ----------------
+  const params = new URLSearchParams(window.location.search);
+  const orderId = params.get("order_id");
 
-// ---------------- ENSURE ORDER ID ----------------
-if(!payload.order_id){
-  payload.order_id = "ELB-" + Date.now();
-  sessionStorage.setItem("elegal_intake_data", JSON.stringify(payload));
-}
-
-// ---------------- DETERMINE DOC TYPE ----------------
-const docType = payload.doc_type 
-  ? payload.doc_type 
-  : (Array.isArray(payload.doc_types) ? payload.doc_types[0] : null);
-
-if(!docType){
-  alert("Document type missing.");
-  window.location.href = "catalog.html";
-  throw new Error("docType undefined");
-}
-
-// ---------------- MASTER DOCUMENT MAP ----------------
-const DOC_MAP = {
-
-  // Tier 1
-  PROMISSORY_NOTE:{tier:"Tier 1",price:39,pay:"https://pay.elegalboom.org/e4b79a60-0fd7-431c-8bfc-ae0"},
-  NDA:{tier:"Tier 1",price:39,pay:"https://pay.elegalboom.org/e4b79a60-0fd7-431c-8bfc-ae0"},
-  INDEPENDENT_CONTRACTOR:{tier:"Tier 1",price:39,pay:"https://pay.elegalboom.org/e4b79a60-0fd7-431c-8bfc-ae0"},
-  BILL_OF_SALE:{tier:"Tier 1",price:39,pay:"https://pay.elegalboom.org/e4b79a60-0fd7-431c-8bfc-ae0"},
-
-  // Tier 2
-  LLC_OPERATING:{tier:"Tier 2",price:59,pay:"https://pay.elegalboom.org/aeda586f-65f5-4bf0-98f3-7a2"},
-  PARTNERSHIP:{tier:"Tier 2",price:59,pay:"https://pay.elegalboom.org/aeda586f-65f5-4bf0-98f3-7a2"},
-  BUSINESS_LOAN:{tier:"Tier 2",price:59,pay:"https://pay.elegalboom.org/aeda586f-65f5-4bf0-98f3-7a2"},
-  SERVICE_AGREEMENT:{tier:"Tier 2",price:59,pay:"https://pay.elegalboom.org/aeda586f-65f5-4bf0-98f3-7a2"},
-
-  // Tier 3
-  EMPLOYMENT:{tier:"Tier 3",price:99,pay:"https://pay.elegalboom.org/71ca7144-e537-4fbd-823d-c10"},
-  RESIDENTIAL_LEASE:{tier:"Tier 3",price:99,pay:"https://pay.elegalboom.org/71ca7144-e537-4fbd-823d-c10"},
-  COMMERCIAL_LEASE:{tier:"Tier 3",price:99,pay:"https://pay.elegalboom.org/71ca7144-e537-4fbd-823d-c10"},
-  NON_COMPETE:{tier:"Tier 3",price:99,pay:"https://pay.elegalboom.org/71ca7144-e537-4fbd-823d-c10"},
-
-  // Tier 4
-  EXEC_EMPLOYMENT:{tier:"Tier 4",price:149,pay:"https://pay.elegalboom.org/55c7cd3d-1048-4b8c-aadb-843"},
-  EQUITY_AGREEMENT:{tier:"Tier 4",price:149,pay:"https://pay.elegalboom.org/55c7cd3d-1048-4b8c-aadb-843"},
-  TERM_SHEET:{tier:"Tier 4",price:149,pay:"https://pay.elegalboom.org/55c7cd3d-1048-4b8c-aadb-843"},
-  CUSTOM_CONTRACT:{tier:"Tier 4",price:149,pay:"https://pay.elegalboom.org/55c7cd3d-1048-4b8c-aadb-843"}
-};
-
-const map = DOC_MAP[docType];
-
-if(!map){
-  alert("Document mapping not found.");
-  window.location.href="catalog.html";
-  throw new Error("Mapping missing for "+docType);
-}
-
-// ---------------- APPLY TIER & PRICE ----------------
-payload.tier = map.tier;
-payload.price = map.price;
-
-// ---------------- DISPLAY ----------------
-document.getElementById("orderID").textContent = payload.order_id;
-document.getElementById("docType").textContent = docType;
-document.getElementById("tier").textContent = payload.tier;
-document.getElementById("price").textContent = payload.price;
-document.getElementById("email").textContent = payload.client_email;
-
-// ---------------- INSERT ORDER ----------------
-async function transferOrder(){
-
-  const record = {
-    order_id: payload.order_id,
-    doc_type: docType,
-    tier: payload.tier,
-    price: payload.price,
-    client_email: payload.client_email,
-    intake_json: payload,
-    order_status:"pending",
-    payment_status:"pending",
-    created_at:new Date().toISOString()
-  };
-
-  const {error} = await sb.from("pweb_orders").insert(record);
-
-  if(error){
-    console.error(error);
-    alert("Order creation failed");
-    return false;
+  if (!orderId) {
+    alert("Missing order ID.");
+    window.location.href = "catalog.html";
+    return;
   }
 
-  return true;
-}
+  // ---------------- FETCH ORDER FROM DATABASE ----------------
+  const { data: order, error } = await sb
+    .from("pweb_orders")
+    .select("*")
+    .eq("order_id", orderId)
+    .single();
 
-// ---------------- PAYMENT BUTTON ----------------
-document.getElementById("payBtn").onclick = async () => {
+  if (error || !order) {
+    alert("Order not found.");
+    console.error(error);
+    return;
+  }
 
-  const ok = await transferOrder();
-  if(!ok) return;
+  // ---------------- DISPLAY ORDER SUMMARY ----------------
+  document.getElementById("orderId").textContent = order.order_id;
+  document.getElementById("docType").textContent = order.doc_type;
+  document.getElementById("tier").textContent = order.tier;
+  document.getElementById("price").textContent = "$" + order.price;
+  document.getElementById("email").textContent = order.email;
 
-  window.location.href = map.pay;
+  // ---------------- SELECT PAY LINK BY TIER ----------------
+  const payLinks = {
+    "Tier 1": "YOUR_TIER_1_PAY_LINK",
+    "Tier 2": "YOUR_TIER_2_PAY_LINK",
+    "Tier 3": "YOUR_TIER_3_PAY_LINK",
+    "Tier 4": "YOUR_TIER_4_PAY_LINK"
+  };
 
-};
+  const payButton = document.getElementById("payButton");
 
+  if (payLinks[order.tier]) {
+    payButton.href = payLinks[order.tier];
+  } else {
+    payButton.style.display = "none";
+  }
+
+})();
 </script>
-</body>
-</html>
