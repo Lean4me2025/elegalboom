@@ -1,57 +1,84 @@
-<script>
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>Review & Pay</title>
 
-const sb = window.supabase.createClient(
-  "https://vvjbjfltqsivvxxifnvi.supabase.co",
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ2amJqZmx0cXNpdnZ4eGlmbnZpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc5NzYzNTAsImV4cCI6MjA3MzU1MjM1MH0.F4zzcpCHl9v-Rnj0wgKJ5zBf1HteVyXelMLQDDEN28Q"
-);
+  <!-- Load Supabase ONCE -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
 
-(async () => {
+<body>
 
-  // ---------------- GET ORDER ID FROM URL ----------------
-  const params = new URLSearchParams(window.location.search);
-  const orderId = params.get("order_id");
+  <h1>Review & Pay</h1>
 
-  if (!orderId) {
-    alert("Missing order ID.");
-    window.location.href = "catalog.html";
-    return;
-  }
+  <p><strong>Order ID:</strong> <span id="orderId"></span></p>
+  <p><strong>Document:</strong> <span id="docType"></span></p>
+  <p><strong>Tier:</strong> <span id="tier"></span></p>
+  <p><strong>Price:</strong> $<span id="price"></span></p>
+  <p><strong>Email:</strong> <span id="email"></span></p>
 
-  // ---------------- FETCH ORDER FROM DATABASE ----------------
-  const { data: order, error } = await sb
-    .from("pweb_orders")
-    .select("*")
-    .eq("order_id", orderId)
-    .single();
+  <br>
+  <a id="payButton" target="_blank">Proceed To Payment</a>
 
-  if (error || !order) {
-    alert("Order not found.");
-    console.error(error);
-    return;
-  }
+  <script>
 
-  // ---------------- DISPLAY ORDER SUMMARY ----------------
-  document.getElementById("orderId").textContent = order.order_id;
-  document.getElementById("docType").textContent = order.doc_type;
-  document.getElementById("tier").textContent = order.tier;
-  document.getElementById("price").textContent = "$" + order.price;
-  document.getElementById("email").textContent = order.email;
+    const sb = window.supabase.createClient(
+      "https://vvjbjfltqsivvxxifnvi.supabase.co",
+      "ReyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ2amJqZmx0cXNpdnZ4eGlmbnZpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc5NzYzNTAsImV4cCI6MjA3MzU1MjM1MH0.F4zzcpCHl9v-Rnj0wgKJ5zBf1HteVyXelMLQDDEN28Q"
+    );
 
-  // ---------------- SELECT PAY LINK BY TIER ----------------
-  const payLinks = {
-    "Tier 1": "YOUR_TIER_1_PAY_LINK",
-    "Tier 2": "YOUR_TIER_2_PAY_LINK",
-    "Tier 3": "YOUR_TIER_3_PAY_LINK",
-    "Tier 4": "YOUR_TIER_4_PAY_LINK"
-  };
+    (async () => {
 
-  const payButton = document.getElementById("payButton");
+      const params = new URLSearchParams(window.location.search);
+      const orderId = params.get("order_id");
 
-  if (payLinks[order.tier]) {
-    payButton.href = payLinks[order.tier];
-  } else {
-    payButton.style.display = "none";
-  }
+      if (!orderId) {
+        alert("Missing order ID.");
+        window.location.href = "catalog.html";
+        return;
+      }
 
-})();
-</script>
+      const { data: order, error } = await sb
+        .from("pweb_orders")
+        .select("*")
+        .eq("order_id", orderId)
+        .single();
+
+      if (error || !order) {
+        alert("Order not found.");
+        console.error(error);
+        return;
+      }
+
+      // Display Order
+      document.getElementById("orderId").textContent = order.order_id;
+      document.getElementById("docType").textContent = order.doc_type;
+      document.getElementById("tier").textContent = order.tier;
+      document.getElementById("price").textContent = order.price;
+      document.getElementById("email").textContent = order.email;
+
+      // Tier Pay Links
+      let payLink = "";
+
+      if (order.tier === "Tier 1") {
+        payLink = "https://pay.elegalboom.org/e4b79a60-0fd7-431c-8bfc-ae0";
+      }
+      else if (order.tier === "Tier 2") {
+        payLink = "https://pay.elegalboom.org/aeda586f-65f5-4bf0-98f3-7a2";
+      }
+      else if (order.tier === "Tier 3") {
+        payLink = "https://pay.elegalboom.org/71ca7144-e537-4fbd-823d-c10";
+      }
+      else if (order.tier === "Tier 4") {
+        payLink = "https://pay.elegalboom.org/55c7cd3d-1048-4b8c-aadb-843";
+      }
+
+      document.getElementById("payButton").href = payLink;
+
+    })();
+
+  </script>
+
+</body>
+</html>
