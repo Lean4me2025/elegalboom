@@ -859,9 +859,16 @@
         return;
       }
 
-      sessionStorage.setItem("legal_intake_data", JSON.stringify(payload));
+      // Store canonical review object
+sessionStorage.setItem("legal_selected_order", JSON.stringify({
+    order_id: result.order_id,
+    tier: payload.tier,
+    doc_type: payload.doc_type,
+    price: payload.price      
+}));
 
-      window.location.href = "review-and-pay.html?order_id=" + order_id;
+// Redirect using returned order_id
+window.location.href = "review-and-pay.html?order_id=" + result.order_id;
 
     } catch(err){
       console.error(err);
