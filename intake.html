@@ -840,41 +840,35 @@
       payment_status: "pending",
       created_at: new Date().toISOString()
     };
+try {
 
-    try {
-      const response = await fetch(
-        "https://vvjbjfltqsivvxxifnvi.supabase.co/functions/v1/intake-create-order",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload)
-        }
-      );
+    const { data, error } = await supabase
+        .from("pweb_orders")
+        .insert([payload])
+        .select()
+        .single();
 
-      const result = await response.json();
-
-      if(!result.success){
+    if (error) {
+        console.error(error);
         alert("There was an issue creating your order.");
-        console.error(result);
         return;
-      }
-
-      // Store canonical review object
-sessionStorage.setItem("legal_selected_order", JSON.stringify({
-    order_id: result.order_id,
-    tier: payload.tier,
-    doc_type: payload.doc_type,
-    price: payload.price      
-}));
-
-// Redirect using returned order_id
-window.location.href = "review-and-pay.html?order_id=" + result.order_id;
-
-    } catch(err){
-      console.error(err);
-      alert("Network error. Please try again.");
     }
-  });
+
+    // Store canonical review object
+    sessionStorage.setItem("legal_selected_order", JSON.stringify({
+        order_id: data.order_id,
+        tier: data.tier,
+        doc_type: data.doc_type,
+        price: data.price
+    }));
+
+    // Redirect to review page
+    window.location.href = "review-and-pay.html?order_id=" + data.order_id;
+
+} catch (err) {
+    console.error(err);
+    alert("Network error. Please try again.");
+}   
 </script>
  
 </body>
