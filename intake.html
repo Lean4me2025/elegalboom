@@ -1,117 +1,68 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Operating Agreement Intake</title>
 
-<!-- Supabase CDN -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
-body { font-family: Arial, sans-serif; background:#f4f6f9; margin:0; padding:0; }
-.container { max-width:800px; margin:40px auto; background:white; padding:40px; border-radius:8px; box-shadow:0 4px 15px rgba(0,0,0,0.08); }
-h2 { margin-top:0; }
-.progress { height:8px; background:#e5e7eb; border-radius:6px; margin-bottom:25px; overflow:hidden; }
-.progress-bar { height:100%; width:0%; background:#1e3a8a; transition:width 0.3s ease; }
-.section { display:none; }
-.section.active { display:block; }
-input, textarea { width:100%; padding:10px; margin:6px 0 16px; border-radius:6px; border:1px solid #ccc; font-size:14px; }
-button { padding:10px 16px; border:none; border-radius:6px; cursor:pointer; margin-right:8px; }
-.primary { background:#1e3a8a; color:white; }
-.secondary { background:#d1d5db; }
-.error { background:#fee2e2; color:#991b1b; padding:12px; margin-bottom:20px; border-radius:6px; display:none; }
-.note { font-size:13px; color:#555; margin-bottom:20px; }
+body { font-family: Arial; background:#f4f6f9; padding:40px; }
+.container { max-width:800px; margin:auto; background:white; padding:40px; border-radius:8px; }
+input, textarea { width:100%; padding:10px; margin-bottom:15px; }
+button { padding:10px 15px; }
+.primary { background:#1e3a8a; color:white; border:none; }
+.secondary { background:#ccc; border:none; }
 </style>
 </head>
+
 <body>
 
 <div class="container">
 <h2>Single-Member LLC Operating Agreement</h2>
 
-<div class="progress">
-<div id="progressBar" class="progress-bar"></div>
-</div>
+<h3>Client Information</h3>
 
-<div id="errorBox" class="error"></div>
+<label>First Name</label>
+<input id="client_first_name">
 
-<!-- STEP 0 -->
-<div id="step0" class="section active">
-  <p>This intake includes three structured sections and typically takes 20–30 minutes.</p>
-  <p>Please have ready:</p>
-  <ul>
-    <li>LLC legal name</li>
-    <li>Principal business address</li>
-    <li>Member legal name and address</li>
-    <li>Capital contribution description</li>
-  </ul>
-  <p class="note">This Operating Agreement is designed for a single-member LLC.</p>
-  <button class="primary" onclick="nextStep()">Begin Intake</button>
-</div>
+<label>Last Name</label>
+<input id="client_last_name">
 
-<!-- STEP 1 -->
-<div id="step1" class="section">
-  <h3>Core Information</h3>
+<label>Email</label>
+<input id="client_email">
 
-  <label>Customer Full Name</label>
-  <input id="customer_full_name">
+<label>Phone</label>
+<input id="client_phone">
 
-  <label>Customer Email</label>
-  <input id="customer_email" type="email">
+<label>Governing State</label>
+<input id="governing_state">
 
-  <label>Customer Phone</label>
-  <input id="customer_phone">
+<label>Agreement Date</label>
+<input id="agreement_date" type="date">
 
-  <label>Governing State</label>
-  <input id="governing_state">
+<h3>LLC Details</h3>
 
-  <label>Agreement Date</label>
-  <input id="agreement_date" type="date">
+<label>LLC Name</label>
+<input id="llc_name">
 
-  <h4>Member Information</h4>
+<label>Member Name</label>
+<input id="member_name">
 
-  <label>Member Legal Name</label>
-  <input id="member_name">
+<label>Member Address</label>
+<input id="member_address">
 
-  <label>Member Address</label>
-  <input id="member_address">
+<label>Principal Business Address</label>
+<input id="principal_business_address">
 
-  <button class="secondary" onclick="prevStep()">Back</button>
-  <button class="primary" onclick="nextStep()">Next</button>
-</div>
+<label>Capital Contribution Description</label>
+<textarea id="capital_contribution_description"></textarea>
 
-<!-- STEP 2 -->
-<div id="step2" class="section">
-  <h3>LLC Details</h3>
-
-  <label>LLC Name</label>
-  <input id="llc_name">
-
-  <label>Principal Business Address</label>
-  <input id="principal_business_address">
-
-  <label>Capital Contribution Description</label>
-  <textarea id="capital_contribution_description"></textarea>
-
-  <button class="secondary" onclick="prevStep()">Back</button>
-  <button class="primary" onclick="nextStep()">Next</button>
-</div>
-
-<!-- STEP 3 -->
-<div id="step3" class="section">
-  <h3>Review & Confirm</h3>
-  <div id="reviewContent"></div>
-  <button class="secondary" onclick="prevStep()">Back</button>
-  <button class="primary" onclick="submitIntake()">Confirm & Continue</button>
-</div>
+<button class="primary" onclick="submitIntake()">Confirm & Continue</button>
 
 </div>
 
 <script>
-
-/* ===========================
-   SUPABASE INITIALIZATION
-=========================== */
 
 const SUPABASE_URL = "https://vvjbjfltqsivvxxifnvi.supabase.co";
 const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ2amJqZmx0cXNpdnZ4eGlmbnZpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc5NzYzNTAsImV4cCI6MjA3MzU1MjM1MH0.F4zzcpCHl9v-Rnj0wgKJ5zBf1HteVyXelMLQDDEN28Q";
@@ -121,176 +72,55 @@ const supabaseClient = supabase.createClient(
   SUPABASE_ANON_KEY
 );
 
-/* ===========================
-   INTAKE ENGINE
-=========================== */
-
-let currentStep = 0;
-const totalSteps = 4;
-const STORAGE_KEY = "elegalboom_intake_operating_agreement_llc";
-let intake = {};
-
-function updateProgress() {
-  const percent = (currentStep / (totalSteps - 1)) * 100;
-  document.getElementById("progressBar").style.width = percent + "%";
-}
-
-function showStep(step) {
-  document.querySelectorAll(".section").forEach(s => s.classList.remove("active"));
-  document.getElementById("step" + step).classList.add("active");
-  updateProgress();
-}
-
-function nextStep() {
-  if (currentStep === 1 && !validateCore()) return;
-  if (currentStep === 2 && !validateFlex()) return;
-  currentStep++;
-  if (currentStep === 3) buildReview();
-  showStep(currentStep);
-}
-
-function prevStep() {
-  currentStep--;
-  showStep(currentStep);
-}
-
-function validateCore() {
-  return validate([
-    "customer_full_name",
-    "customer_email",
-    "governing_state",
-    "agreement_date",
-    "member_name",
-    "member_address"
-  ]);
-}
-
-function validateFlex() {
-  return validate([
-    "llc_name",
-    "principal_business_address",
-    "capital_contribution_description"
-  ]);
-}
-
-function validate(fields) {
-  const missing = fields.filter(id => !document.getElementById(id).value.trim());
-  if (missing.length) {
-    showError("Please complete all required fields.");
-    return false;
-  }
-  hideError();
-  return true;
-}
-
-function showError(msg) {
-  const box = document.getElementById("errorBox");
-  box.innerText = msg;
-  box.style.display = "block";
-}
-
-function hideError() {
-  document.getElementById("errorBox").style.display = "none";
-}
-
-function buildReview() {
-  const fields = document.querySelectorAll("input, textarea");
-  fields.forEach(f => intake[f.id] = f.value);
-
-  let html = "<ul>";
-  Object.keys(intake).forEach(key => {
-    html += `<li><strong>${key.replaceAll("_"," ")}</strong>: ${intake[key]}</li>`;
-  });
-  html += "</ul>";
-
-  document.getElementById("reviewContent").innerHTML = html;
-  saveDraft();
-}
-
-function saveDraft() {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(intake));
-}
-
-function loadDraft() {
-  const saved = localStorage.getItem(STORAGE_KEY);
-  if (!saved) return;
-  intake = JSON.parse(saved);
-  Object.keys(intake).forEach(key => {
-    const field = document.getElementById(key);
-    if (field) field.value = intake[key];
-  });
-}
-
-document.querySelectorAll("input, textarea").forEach(field => {
-  field.addEventListener("input", () => {
-    intake[field.id] = field.value;
-    saveDraft();
-  });
-});
-
-loadDraft();
-updateProgress();
-
-/* ===========================
-   SUBMIT TO SUPABASE
-=========================== */
-
 async function submitIntake() {
-  try {
 
-    const orderRaw = sessionStorage.getItem("legal_selected_order");
-    if (!orderRaw) {
-      alert("Order not found.");
-      window.location.href = "catalog.html";
-      return;
-    }
+  const orderRaw = sessionStorage.getItem("legal_selected_order");
 
-    const order = JSON.parse(orderRaw);
-
-    function splitName(fullName) {
-      const parts = fullName.trim().split(/\s+/);
-      return {
-        customer_first: parts[0] || "",
-        customer_last: parts.slice(1).join(" ") || ""
-      };
-    }
-
-    const nameParts = splitName(intake.customer_full_name);
-
-    const payload = {
-      ...intake,
-      ...nameParts,
-      doc_type: order.doc_type,
-      tier: order.tier,
-      price: order.price
-    };
-
-    const { error } = await supabaseClient
-      .from("pweb_orders")
-      .update({
-        intake_data: payload,
-        customer_first: nameParts.customer_first,
-        customer_last: nameParts.customer_last,
-        order_status: "intake_complete"
-      })
-      .eq("order_id", order.order_id);
-
-    if (error) {
-      console.error(error);
-      alert("Error saving intake.");
-      return;
-    }
-
-    localStorage.removeItem(STORAGE_KEY);
-
-    window.location.href = "review.html";
-
-  } catch (err) {
-    console.error(err);
-    alert("Unexpected error.");
+  if (!orderRaw) {
+    alert("Order not found in session.");
+    return;
   }
+
+  const order = JSON.parse(orderRaw);
+
+  if (!order.order_id) {
+    alert("Order ID missing.");
+    console.log(order);
+    return;
+  }
+
+  const intakePayload = {
+    llc_name: document.getElementById("llc_name").value,
+    agreement_date: document.getElementById("agreement_date").value,
+    member_name: document.getElementById("member_name").value,
+    member_address: document.getElementById("member_address").value,
+    principal_business_address: document.getElementById("principal_business_address").value,
+    capital_contribution_description: document.getElementById("capital_contribution_description").value
+  };
+
+  const { error } = await supabaseClient
+    .from("pweb_orders")
+    .update({
+      client_first_name: document.getElementById("client_first_name").value,
+      client_last_name: document.getElementById("client_last_name").value,
+      client_email: document.getElementById("client_email").value,
+      client_phone: document.getElementById("client_phone").value,
+      governing_state: document.getElementById("governing_state").value,
+      intake_json: intakePayload,
+      order_status: "intake_complete"
+    })
+    .eq("order_id", order.order_id);
+
+  if (error) {
+    console.error(error);
+    alert("Error saving intake.");
+    return;
+  }
+
+  window.location.href = "review.html";
 }
 
 </script>
+
 </body>
 </html>
