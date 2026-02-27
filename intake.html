@@ -5,6 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Operating Agreement Intake</title>
 
+<!-- Supabase CDN -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <style>
 body { font-family: Arial, sans-serif; background:#f4f6f9; margin:0; padding:0; }
 .container { max-width:800px; margin:40px auto; background:white; padding:40px; border-radius:8px; box-shadow:0 4px 15px rgba(0,0,0,0.08); }
@@ -14,7 +17,7 @@ h2 { margin-top:0; }
 .section { display:none; }
 .section.active { display:block; }
 input, textarea { width:100%; padding:10px; margin:6px 0 16px; border-radius:6px; border:1px solid #ccc; font-size:14px; }
-button { padding:10px 16px; border:none; border-radius:6px; cursor:pointer; }
+button { padding:10px 16px; border:none; border-radius:6px; cursor:pointer; margin-right:8px; }
 .primary { background:#1e3a8a; color:white; }
 .secondary { background:#d1d5db; }
 .error { background:#fee2e2; color:#991b1b; padding:12px; margin-bottom:20px; border-radius:6px; display:none; }
@@ -46,7 +49,7 @@ button { padding:10px 16px; border:none; border-radius:6px; cursor:pointer; }
   <button class="primary" onclick="nextStep()">Begin Intake</button>
 </div>
 
-<!-- STEP 1 CORE -->
+<!-- STEP 1 -->
 <div id="step1" class="section">
   <h3>Core Information</h3>
 
@@ -77,7 +80,7 @@ button { padding:10px 16px; border:none; border-radius:6px; cursor:pointer; }
   <button class="primary" onclick="nextStep()">Next</button>
 </div>
 
-<!-- STEP 2 FLEX -->
+<!-- STEP 2 -->
 <div id="step2" class="section">
   <h3>LLC Details</h3>
 
@@ -94,7 +97,7 @@ button { padding:10px 16px; border:none; border-radius:6px; cursor:pointer; }
   <button class="primary" onclick="nextStep()">Next</button>
 </div>
 
-<!-- STEP 3 REVIEW -->
+<!-- STEP 3 -->
 <div id="step3" class="section">
   <h3>Review & Confirm</h3>
   <div id="reviewContent"></div>
@@ -105,6 +108,23 @@ button { padding:10px 16px; border:none; border-radius:6px; cursor:pointer; }
 </div>
 
 <script>
+
+/* ===========================
+   SUPABASE INITIALIZATION
+=========================== */
+
+const SUPABASE_URL = "https://vvjbjfltqsivvxxifnvi.supabase.co";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ2amJqZmx0cXNpdnZ4eGlmbnZpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc5NzYzNTAsImV4cCI6MjA3MzU1MjM1MH0.F4zzcpCHl9v-Rnj0wgKJ5zBf1HteVyXelMLQDDEN28Q";
+
+const supabaseClient = supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_ANON_KEY
+);
+
+/* ===========================
+   INTAKE ENGINE
+=========================== */
+
 let currentStep = 0;
 const totalSteps = 4;
 const STORAGE_KEY = "elegalboom_intake_operating_agreement_llc";
@@ -135,24 +155,22 @@ function prevStep() {
 }
 
 function validateCore() {
-  const required = [
+  return validate([
     "customer_full_name",
     "customer_email",
     "governing_state",
     "agreement_date",
     "member_name",
     "member_address"
-  ];
-  return validate(required);
+  ]);
 }
 
 function validateFlex() {
-  const required = [
+  return validate([
     "llc_name",
     "principal_business_address",
     "capital_contribution_description"
-  ];
-  return validate(required);
+  ]);
 }
 
 function validate(fields) {
@@ -189,12 +207,6 @@ function buildReview() {
   saveDraft();
 }
 
-function submitIntake() {
-  localStorage.removeItem(STORAGE_KEY);
-  alert("Intake Complete. Proceed to Review & Pay.");
-  // integrate with existing flow here
-}
-
 function saveDraft() {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(intake));
 }
@@ -218,7 +230,67 @@ document.querySelectorAll("input, textarea").forEach(field => {
 
 loadDraft();
 updateProgress();
-</script>
 
+/* ===========================
+   SUBMIT TO SUPABASE
+=========================== */
+
+async function submitIntake() {
+  try {
+
+    const orderRaw = sessionStorage.getItem("legal_selected_order");
+    if (!orderRaw) {
+      alert("Order not found.");
+      window.location.href = "catalog.html";
+      return;
+    }
+
+    const order = JSON.parse(orderRaw);
+
+    function splitName(fullName) {
+      const parts = fullName.trim().split(/\s+/);
+      return {
+        customer_first: parts[0] || "",
+        customer_last: parts.slice(1).join(" ") || ""
+      };
+    }
+
+    const nameParts = splitName(intake.customer_full_name);
+
+    const payload = {
+      ...intake,
+      ...nameParts,
+      doc_type: order.doc_type,
+      tier: order.tier,
+      price: order.price
+    };
+
+    const { error } = await supabaseClient
+      .from("pweb_orders")
+      .update({
+        intake_data: payload,
+        customer_first: nameParts.customer_first,
+        customer_last: nameParts.customer_last,
+        order_status: "intake_complete"
+      })
+      .eq("order_id", order.order_id);
+
+    if (error) {
+      console.error(error);
+      alert("Error saving intake.");
+      return;
+    }
+
+    localStorage.removeItem(STORAGE_KEY);
+
+    window.location.href = "review.html";
+
+  } catch (err) {
+    console.error(err);
+    alert("Unexpected error.");
+  }
+}
+
+</script>
 </body>
-</html>            
+</html>
