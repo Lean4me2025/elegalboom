@@ -799,78 +799,48 @@
       if(el) el.classList.add("active");
     });
   }
-
-  showDocSection(docTypes);
-
-  // -------------------------------
-  // SUBMIT HANDLER
-  // -------------------------------
-  document.getElementById("intakeForm").addEventListener("submit", async (e) => {
-    e.preventDefault();
-
-    const formData = new FormData(e.target);
-    const intake = Object.fromEntries(formData.entries());
-
-    const order_id = "ORD-" + Date.now() + "-" + Math.floor(Math.random()*1000);
-
-    const payload = {
-      order_id,
-      request_uuid: crypto.randomUUID(),
-
-      // catalog info
-      tier: order.tier_name || order.tier || null,
-      price: order.tier_price || order.price || null,
-      doc_type: order.doc_type || null,
-
-      // client
-      client_first_name: intake.client_first_name || null,
-      client_last_name: intake.client_last_name || null,
-      client_email: intake.client_email || null,
-      client_phone: intake.client_phone || null,
-      client_street: intake.street_address || null,
-      client_city: intake.city || null,
-      client_state: intake.state || null,
-      client_zip: intake.zip || null,
-
-      // full intake JSON
-      intake_json: intake,
-
-      // production alignment
-      order_status: "ready",
-      payment_status: "pending",
-      created_at: new Date().toISOString()
-    };
 try {
 
-    const { data, error } = await supabase
-        .from("pweb_orders")
-        .insert([payload])
-        .select()
-        .single();
+  const { data, error } = await supabase
+    .from('pweb_orders')
+    .insert([payload])
+    .select()
+    .single();
 
-    if (error) {
-        console.error(error);
-        alert("There was an issue creating your order.");
-        return;
-    }
+  if (error) {
+    console.error(error);
+    alert("There was an issue creating your order.");
+    return;
+  }
 
-    // Store canonical review object
-    sessionStorage.setItem("legal_selected_order", JSON.stringify({
-        order_id: data.order_id,
-        tier: data.tier,
-        doc_type: data.doc_type,
-        price: data.price
-    }));
+  // Store canonical review object
+  sessionStorage.setItem(
+    "legal_selected_order",
+    JSON.stringify({
+      order_id: data.order_id,
+      tier: data.tier,
+      doc_type: data.doc_type,
+      price: data.price
+    })
+  );
 
-    // Redirect to review page
-    window.location.href = "review-and-pay.html?order_id=" + data.order_id;
+  // Also store full intake JSON if review page needs it
+  sessionStorage.setItem(
+    "legal_intake_data",
+    JSON.stringify(payload.intake_json)
+  );
+
+  // Redirect to review page
+  window.location.href =
+    "review-and-pay.html?order_id=" + data.order_id;
 
 } catch (err) {
-    console.error(err);
-    alert("Network error. Please try again.");
-
-
+  console.error(err);
+  alert("Network error. Please try again.");
 }
+
+});
 </script>
 </body>
 </html>
+
