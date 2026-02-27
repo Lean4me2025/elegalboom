@@ -1,863 +1,224 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>E-LegalBoom — Client Intake</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Operating Agreement Intake</title>
 
-  <style>
-    :root{
-      --bg:#f6f8fb;
-      --card:#ffffff;
-      --ink:#0b1220;
-      --muted:#5b6b86;
-      --line:#d7deea;
-      --blue:#1a4cff;
-      --blue2:#0f39d8;
-      --soft:#eef3ff;
-      --soft2:#f3f6ff;
-      --radius:14px;
-    }
-    *{ box-sizing:border-box; }
-    body{
-      margin:0;
-      background:var(--bg);
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      color:var(--ink);
-      padding:24px;
-    }
-    .wrap{
-      max-width:1100px;
-      margin:0 auto;
-    }
-    .header{
-      text-align:center;
-      margin-bottom:18px;
-    }
-    .header h1{
-      margin:0 0 6px 0;
-      font-size:40px;
-      letter-spacing:.2px;
-    }
-    .header p{
-      margin:0;
-      color:var(--muted);
-      font-size:14px;
-    }
-
-    .panel{
-      background:var(--card);
-      border:1px solid var(--line);
-      border-radius:var(--radius);
-      box-shadow:0 10px 25px rgba(10,20,40,.06);
-      padding:18px;
-    }
-
-    .orderBar{
-      display:grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      gap:12px;
-      margin-bottom:14px;
-    }
-    .pill{
-      background:var(--soft);
-      border:1px solid #d9e3ff;
-      border-radius:12px;
-      padding:14px;
-      text-align:center;
-      min-height:68px;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      font-weight:700;
-    }
-    .pill small{
-      display:block;
-      font-weight:600;
-      color:var(--muted);
-      margin-bottom:6px;
-    }
-    .pill .val{
-      display:block;
-      font-size:14px;
-      font-weight:800;
-      letter-spacing:.2px;
-    }
-
-    .sectionTitle{
-      margin:16px 0 10px;
-      padding:10px 12px;
-      border-radius:12px;
-      background:var(--soft2);
-      border:1px solid var(--line);
-      font-weight:900;
-      letter-spacing:.2px;
-      text-transform:uppercase;
-      font-size:12px;
-      color:#21304c;
-    }
-
-    .grid2{
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap:12px;
-    }
-    .grid3{
-      display:grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      gap:12px;
-    }
-    .grid1{ display:grid; grid-template-columns:1fr; gap:12px; }
-
-    label{
-      display:block;
-      font-size:12px;
-      color:var(--muted);
-      margin:0 0 6px;
-      font-weight:700;
-      letter-spacing:.15px;
-    }
-    input, select, textarea{
-      width:100%;
-      padding:12px 12px;
-      border-radius:12px;
-      border:1px solid var(--line);
-      background:#fff;
-      outline:none;
-      font-size:14px;
-    }
-    textarea{ min-height:110px; resize:vertical; }
-    input:focus, select:focus, textarea:focus{
-      border-color:#9bb2ff;
-      box-shadow:0 0 0 3px rgba(26,76,255,.12);
-    }
-
-    .hint{
-      color:var(--muted);
-      font-size:12px;
-      margin:6px 0 0;
-      line-height:1.35;
-    }
-
-    .docBox{
-      display:none;
-      border:1px dashed #b9c7e6;
-      background:#fbfcff;
-      border-radius:14px;
-      padding:14px;
-      margin-top:10px;
-    }
-    .docBox.active{ display:block; }
-
-    .actions{
-      display:flex;
-      justify-content:center;
-      margin-top:16px;
-    }
-    button{
-      background:linear-gradient(180deg, var(--blue), var(--blue2));
-      color:#fff;
-      border:none;
-      border-radius:14px;
-      padding:14px 22px;
-      font-size:16px;
-      font-weight:900;
-      letter-spacing:.2px;
-      cursor:pointer;
-      width:min(520px, 100%);
-      box-shadow:0 14px 26px rgba(26,76,255,.22);
-    }
-    button:active{ transform:translateY(1px); }
-
-    .footerNote{
-      text-align:center;
-      margin-top:10px;
-      color:var(--muted);
-      font-size:12px;
-    }
-
-    @media (max-width: 900px){
-      .orderBar{ grid-template-columns:1fr; }
-      .grid2, .grid3{ grid-template-columns:1fr; }
-      .header h1{ font-size:30px; }
-    }
-  </style>
+<style>
+body { font-family: Arial, sans-serif; background:#f4f6f9; margin:0; padding:0; }
+.container { max-width:800px; margin:40px auto; background:white; padding:40px; border-radius:8px; box-shadow:0 4px 15px rgba(0,0,0,0.08); }
+h2 { margin-top:0; }
+.progress { height:8px; background:#e5e7eb; border-radius:6px; margin-bottom:25px; overflow:hidden; }
+.progress-bar { height:100%; width:0%; background:#1e3a8a; transition:width 0.3s ease; }
+.section { display:none; }
+.section.active { display:block; }
+input, textarea { width:100%; padding:10px; margin:6px 0 16px; border-radius:6px; border:1px solid #ccc; font-size:14px; }
+button { padding:10px 16px; border:none; border-radius:6px; cursor:pointer; }
+.primary { background:#1e3a8a; color:white; }
+.secondary { background:#d1d5db; }
+.error { background:#fee2e2; color:#991b1b; padding:12px; margin-bottom:20px; border-radius:6px; display:none; }
+.note { font-size:13px; color:#555; margin-bottom:20px; }
+</style>
 </head>
-
 <body>
-  <div class="wrap">
-    <div class="header">
-      <h1>Client Intake</h1>
-      <p>This intake collects your information and document details. Next step is Review &amp; Pay.</p>
-    </div>
 
-    <div class="panel">
-      <!-- ORDER SUMMARY (from sessionStorage legal_selected_order) -->
-      <div class="orderBar">
-        <div class="pill">
-          <div>
-            <small>Tier</small>
-            <span class="val" id="tierDisplay">—</span>
-          </div>
-        </div>
-        <div class="pill">
-          <div>
-            <small>Document</small>
-            <span class="val" id="docDisplay">—</span>
-          </div>
-        </div>
-        <div class="pill">
-          <div>
-            <small>Price</small>
-            <span class="val" id="priceDisplay">—</span>
-          </div>
-        </div>
-      </div>
+<div class="container">
+<h2>Single-Member LLC Operating Agreement</h2>
 
-      <form id="intakeForm" autocomplete="on">
-        <!-- ARM: GENERAL INFO -->
-        <div class="sectionTitle">Client information</div>
-        <div class="grid2">
-          <div>
-            <label>First Name</label>
-            <input name="client_first_name" required />
-          </div>
-          <div>
-            <label>Last Name</label>
-            <input name="client_last_name" required />
-          </div>
-        </div>
+<div class="progress">
+<div id="progressBar" class="progress-bar"></div>
+</div>
 
-        <div class="grid2">
-          <div>
-            <label>Email</label>
-            <input name="client_email" type="email" required />
-          </div>
-          <div>
-            <label>Phone</label>
-            <input name="client_phone" inputmode="tel" required />
-          </div>
-        </div>
+<div id="errorBox" class="error"></div>
 
-        <div class="sectionTitle">Mailing address</div>
-        <div class="grid2">
-          <div>
-            <label>Street Address</label>
-            <input name="street_address" />
-          </div>
-          <div>
-            <label>Unit / Apt</label>
-            <input name="unit" />
-          </div>
-        </div>
-        <div class="grid3">
-          <div>
-            <label>City</label>
-            <input name="city" />
-          </div>
-          <div>
-            <label>State</label>
-            <input name="state" />
-          </div>
-          <div>
-            <label>ZIP</label>
-            <input name="zip" inputmode="numeric" />
-          </div>
-        </div>
+<!-- STEP 0 -->
+<div id="step0" class="section active">
+  <p>This intake includes three structured sections and typically takes 20–30 minutes.</p>
+  <p>Please have ready:</p>
+  <ul>
+    <li>LLC legal name</li>
+    <li>Principal business address</li>
+    <li>Member legal name and address</li>
+    <li>Capital contribution description</li>
+  </ul>
+  <p class="note">This Operating Agreement is designed for a single-member LLC.</p>
+  <button class="primary" onclick="nextStep()">Begin Intake</button>
+</div>
 
-        <div class="sectionTitle">Parties overview</div>
-        <div class="grid2">
-          <div>
-            <label>Other Party Name (if applicable)</label>
-            <input name="other_party_name" placeholder="Person or Company" />
-          </div>
-          <div>
-            <label>Other Party Email (optional)</label>
-            <input name="other_party_email" type="email" />
-          </div>
-        </div>
+<!-- STEP 1 CORE -->
+<div id="step1" class="section">
+  <h3>Core Information</h3>
 
-        <div class="sectionTitle">Order notes</div>
-        <div class="grid1">
-          <div>
-            <label>Order Notes</label>
-            <textarea name="order_notes" placeholder="Anything special we should know?"></textarea>
-            <div class="hint">These notes are included with your intake for fulfillment.</div>
-          </div>
-        </div>
+  <label>Customer Full Name</label>
+  <input id="customer_full_name">
 
-        <!-- HAND: DOC SPECIFIC (shown based on doc_type) -->
-        <div class="sectionTitle">Document details</div>
+  <label>Customer Email</label>
+  <input id="customer_email" type="email">
 
-        <!-- PROMISSORY_NOTE -->
-        <div class="docBox" data-doc="PROMISSORY_NOTE">
-          <div class="grid2">
-            <div>
-              <label>Lender Name</label>
-              <input name="pn_lender_name" />
-            </div>
-            <div>
-              <label>Borrower Name</label>
-              <input name="pn_borrower_name" />
-            </div>
-          </div>
-          <div class="grid3">
-            <div>
-              <label>Principal Amount ($)</label>
-              <input name="pn_principal_amount" inputmode="decimal" />
-            </div>
-            <div>
-              <label>Interest Rate (%)</label>
-              <input name="pn_interest_rate" inputmode="decimal" />
-            </div>
-            <div>
-              <label>Start Date</label>
-              <input name="pn_start_date" type="date" />
-            </div>
-          </div>
-          <div class="grid2">
-            <div>
-              <label>Payment Frequency</label>
-              <select name="pn_payment_frequency">
-                <option value="">—</option>
-                <option>Monthly</option>
-                <option>Bi-Weekly</option>
-                <option>Weekly</option>
-                <option>One-Time</option>
-              </select>
-            </div>
-            <div>
-              <label>Maturity Date</label>
-              <input name="pn_maturity_date" type="date" />
-            </div>
-          </div>
-          <div class="grid1">
-            <div>
-              <label>Collateral (if any)</label>
-              <input name="pn_collateral" />
-            </div>
-          </div>
-        </div>
+  <label>Customer Phone</label>
+  <input id="customer_phone">
 
-        <!-- NDA -->
-        <div class="docBox" data-doc="NDA">
-          <div class="grid2">
-            <div>
-              <label>Disclosing Party</label>
-              <input name="nda_disclosing_party" />
-            </div>
-            <div>
-              <label>Receiving Party</label>
-              <input name="nda_receiving_party" />
-            </div>
-          </div>
-          <div class="grid2">
-            <div>
-              <label>Effective Date</label>
-              <input name="nda_effective_date" type="date" />
-            </div>
-            <div>
-              <label>Term (months)</label>
-              <input name="nda_term_months" inputmode="numeric" />
-            </div>
-          </div>
-          <div class="grid1">
-            <div>
-              <label>Purpose / Description of Confidential Info</label>
-              <textarea name="nda_purpose" placeholder="Short description of what’s being shared and why."></textarea>
-            </div>
-          </div>
-        </div>
+  <label>Governing State</label>
+  <input id="governing_state">
 
-        <!-- INDEPENDENT_CONTRACTOR -->
-        <div class="docBox" data-doc="INDEPENDENT_CONTRACTOR">
-          <div class="grid2">
-            <div>
-              <label>Client / Company Name</label>
-              <input name="ic_client_name" />
-            </div>
-            <div>
-              <label>Contractor Name</label>
-              <input name="ic_contractor_name" />
-            </div>
-          </div>
-          <div class="grid2">
-            <div>
-              <label>Start Date</label>
-              <input name="ic_start_date" type="date" />
-            </div>
-            <div>
-              <label>End Date (optional)</label>
-              <input name="ic_end_date" type="date" />
-            </div>
-          </div>
-          <div class="grid2">
-            <div>
-              <label>Compensation</label>
-              <input name="ic_compensation" placeholder="e.g., $50/hr or $2,000 flat" />
-            </div>
-            <div>
-              <label>Payment Schedule</label>
-              <input name="ic_payment_schedule" placeholder="e.g., net 15, weekly, upon delivery" />
-            </div>
-          </div>
-          <div class="grid1">
-            <div>
-              <label>Scope of Work</label>
-              <textarea name="ic_scope_of_work"></textarea>
-            </div>
-          </div>
-        </div>
+  <label>Agreement Date</label>
+  <input id="agreement_date" type="date">
 
-        <!-- BILL_OF_SALE -->
-        <div class="docBox" data-doc="BILL_OF_SALE">
-          <div class="grid2">
-            <div>
-              <label>Seller Name</label>
-              <input name="bos_seller_name" />
-            </div>
-            <div>
-              <label>Buyer Name</label>
-              <input name="bos_buyer_name" />
-            </div>
-          </div>
-          <div class="grid2">
-            <div>
-              <label>Item Description</label>
-              <input name="bos_item_description" />
-            </div>
-            <div>
-              <label>Sale Price ($)</label>
-              <input name="bos_sale_price" inputmode="decimal" />
-            </div>
-          </div>
-          <div class="grid2">
-            <div>
-              <label>Sale Date</label>
-              <input name="bos_sale_date" type="date" />
-            </div>
-            <div>
-              <label>Condition</label>
-              <select name="bos_condition">
-                <option value="">—</option>
-                <option>As-Is</option>
-                <option>With Warranty</option>
-              </select>
-            </div>
-          </div>
-        </div>
+  <h4>Member Information</h4>
 
-        <!-- LLC_OPERATING -->
-        <div class="docBox" data-doc="LLC_OPERATING">
-          <div class="grid2">
-            <div>
-              <label>LLC Name</label>
-              <input name="llc_name" />
-            </div>
-            <div>
-              <label>State of Formation</label>
-              <input name="llc_state" />
-            </div>
-          </div>
-          <div class="grid2">
-            <div>
-              <label>Single-Member or Multi-Member?</label>
-              <select name="llc_member_type">
-                <option value="">—</option>
-                <option>Single-Member</option>
-                <option>Multi-Member</option>
-              </select>
-            </div>
-            <div>
-              <label>Manager-Managed?</label>
-              <select name="llc_management">
-                <option value="">—</option>
-                <option>Member-Managed</option>
-                <option>Manager-Managed</option>
-              </select>
-            </div>
-          </div>
-          <div class="grid1">
-            <div>
-              <label>Members / Ownership Notes</label>
-              <textarea name="llc_members_notes" placeholder="List members and % ownership (or attach in notes)."></textarea>
-            </div>
-          </div>
-        </div>
+  <label>Member Legal Name</label>
+  <input id="member_name">
 
-        <!-- PARTNERSHIP -->
-        <div class="docBox" data-doc="PARTNERSHIP">
-          <div class="grid1">
-            <div>
-              <label>Partnership Name (if any)</label>
-              <input name="partnership_name" />
-            </div>
-          </div>
-          <div class="grid1">
-            <div>
-              <label>Partners & Ownership Split</label>
-              <textarea name="partnership_partners" placeholder="Partner names and ownership split."></textarea>
-            </div>
-          </div>
-          <div class="grid2">
-            <div>
-              <label>Start Date</label>
-              <input name="partnership_start_date" type="date" />
-            </div>
-            <div>
-              <label>Purpose / Business Description</label>
-              <input name="partnership_purpose" />
-            </div>
-          </div>
-        </div>
+  <label>Member Address</label>
+  <input id="member_address">
 
-        <!-- BUSINESS_LOAN -->
-        <div class="docBox" data-doc="BUSINESS_LOAN">
-          <div class="grid2">
-            <div>
-              <label>Lender</label>
-              <input name="bl_lender" />
-            </div>
-            <div>
-              <label>Borrower (Business)</label>
-              <input name="bl_borrower" />
-            </div>
-          </div>
-          <div class="grid3">
-            <div>
-              <label>Loan Amount ($)</label>
-              <input name="bl_amount" inputmode="decimal" />
-            </div>
-            <div>
-              <label>Interest Rate (%)</label>
-              <input name="bl_rate" inputmode="decimal" />
-            </div>
-            <div>
-              <label>Term (months)</label>
-              <input name="bl_term_months" inputmode="numeric" />
-            </div>
-          </div>
-          <div class="grid1">
-            <div>
-              <label>Purpose of Loan</label>
-              <input name="bl_purpose" />
-            </div>
-          </div>
-        </div>
+  <button class="secondary" onclick="prevStep()">Back</button>
+  <button class="primary" onclick="nextStep()">Next</button>
+</div>
 
-        <!-- SERVICE_AGREEMENT -->
-        <div class="docBox" data-doc="SERVICE_AGREEMENT">
-          <div class="grid2">
-            <div>
-              <label>Service Provider</label>
-              <input name="sa_provider" />
-            </div>
-            <div>
-              <label>Client</label>
-              <input name="sa_client" />
-            </div>
-          </div>
-          <div class="grid2">
-            <div>
-              <label>Start Date</label>
-              <input name="sa_start_date" type="date" />
-            </div>
-            <div>
-              <label>End Date (optional)</label>
-              <input name="sa_end_date" type="date" />
-            </div>
-          </div>
-          <div class="grid2">
-            <div>
-              <label>Fee / Compensation</label>
-              <input name="sa_fee" />
-            </div>
-            <div>
-              <label>Payment Terms</label>
-              <input name="sa_payment_terms" />
-            </div>
-          </div>
-          <div class="grid1">
-            <div>
-              <label>Services Description</label>
-              <textarea name="sa_services"></textarea>
-            </div>
-          </div>
-        </div>
+<!-- STEP 2 FLEX -->
+<div id="step2" class="section">
+  <h3>LLC Details</h3>
 
-        <!-- EMPLOYMENT -->
-        <div class="docBox" data-doc="EMPLOYMENT">
-          <div class="grid2">
-            <div>
-              <label>Employer</label>
-              <input name="emp_employer" />
-            </div>
-            <div>
-              <label>Employee</label>
-              <input name="emp_employee" />
-            </div>
-          </div>
-          <div class="grid2">
-            <div>
-              <label>Job Title</label>
-              <input name="emp_job_title" />
-            </div>
-            <div>
-              <label>Start Date</label>
-              <input name="emp_start_date" type="date" />
-            </div>
-          </div>
-          <div class="grid3">
-            <div>
-              <label>Pay Rate</label>
-              <input name="emp_pay_rate" placeholder="e.g., $30/hr or $70,000/yr" />
-            </div>
-            <div>
-              <label>Pay Frequency</label>
-              <select name="emp_pay_frequency">
-                <option value="">—</option>
-                <option>Hourly</option>
-                <option>Salary</option>
-                <option>Commission</option>
-              </select>
-            </div>
-            <div>
-              <label>Work Location</label>
-              <input name="emp_work_location" />
-            </div>
-          </div>
-        </div>
+  <label>LLC Name</label>
+  <input id="llc_name">
 
-        <!-- RESIDENTIAL_LEASE -->
-        <div class="docBox" data-doc="RESIDENTIAL_LEASE">
-          <div class="grid2">
-            <div>
-              <label>Landlord Name</label>
-              <input name="rl_landlord" />
-            </div>
-            <div>
-              <label>Tenant Name(s)</label>
-              <input name="rl_tenants" />
-            </div>
-          </div>
-          <div class="grid2">
-            <div>
-              <label>Property Address</label>
-              <input name="rl_property_address" />
-            </div>
-            <div>
-              <label>Lease Start Date</label>
-              <input name="rl_start_date" type="date" />
-            </div>
-          </div>
-          <div class="grid3">
-            <div>
-              <label>Monthly Rent ($)</label>
-              <input name="rl_monthly_rent" inputmode="decimal" />
-            </div>
-            <div>
-              <label>Security Deposit ($)</label>
-              <input name="rl_security_deposit" inputmode="decimal" />
-            </div>
-            <div>
-              <label>Lease Term (months)</label>
-              <input name="rl_term_months" inputmode="numeric" />
-            </div>
-          </div>
-        </div>
+  <label>Principal Business Address</label>
+  <input id="principal_business_address">
 
-        <!-- COMMERCIAL_LEASE -->
-        <div class="docBox" data-doc="COMMERCIAL_LEASE">
-          <div class="grid2">
-            <div>
-              <label>Landlord</label>
-              <input name="cl_landlord" />
-            </div>
-            <div>
-              <label>Tenant (Business)</label>
-              <input name="cl_tenant" />
-            </div>
-          </div>
-          <div class="grid2">
-            <div>
-              <label>Premises Address</label>
-              <input name="cl_premises_address" />
-            </div>
-            <div>
-              <label>Use of Premises</label>
-              <input name="cl_use" />
-            </div>
-          </div>
-          <div class="grid3">
-            <div>
-              <label>Base Rent ($)</label>
-              <input name="cl_base_rent" inputmode="decimal" />
-            </div>
-            <div>
-              <label>Lease Start</label>
-              <input name="cl_start_date" type="date" />
-            </div>
-            <div>
-              <label>Term (months)</label>
-              <input name="cl_term_months" inputmode="numeric" />
-            </div>
-          </div>
-        </div>
+  <label>Capital Contribution Description</label>
+  <textarea id="capital_contribution_description"></textarea>
 
-        <!-- NON_COMPETE -->
-        <div class="docBox" data-doc="NON_COMPETE">
-          <div class="grid2">
-            <div>
-              <label>Company / Employer</label>
-              <input name="nc_company" />
-            </div>
-            <div>
-              <label>Restricted Party</label>
-              <input name="nc_person" />
-            </div>
-          </div>
-          <div class="grid3">
-            <div>
-              <label>Duration (months)</label>
-              <input name="nc_duration_months" inputmode="numeric" />
-            </div>
-            <div>
-              <label>Geographic Scope</label>
-              <input name="nc_geo_scope" placeholder="e.g., 25 miles / Statewide" />
-            </div>
-            <div>
-              <label>Effective Date</label>
-              <input name="nc_effective_date" type="date" />
-            </div>
-          </div>
-          <div class="grid1">
-            <div>
-              <label>Restricted Activities</label>
-              <textarea name="nc_activities"></textarea>
-            </div>
-          </div>
-        </div>
+  <button class="secondary" onclick="prevStep()">Back</button>
+  <button class="primary" onclick="nextStep()">Next</button>
+</div>
 
-        <!-- ENTREPRENEUR_BUNDLE (Tier 4 placeholder) -->
-        <div class="docBox" data-doc="ENTREPRENEUR_BUNDLE">
-          <div class="grid1">
-            <div>
-              <label>Tier 4 Selection Notes</label>
-              <textarea name="t4_selection_notes" placeholder="If Tier 4: list up to 3 documents you want, or any bundle instructions."></textarea>
-              <div class="hint">If your catalog later supports selecting 2–3 documents directly, this section will still accept notes as a backup.</div>
-            </div>
-          </div>
-        </div>
+<!-- STEP 3 REVIEW -->
+<div id="step3" class="section">
+  <h3>Review & Confirm</h3>
+  <div id="reviewContent"></div>
+  <button class="secondary" onclick="prevStep()">Back</button>
+  <button class="primary" onclick="submitIntake()">Confirm & Continue</button>
+</div>
 
-        <div class="actions">
-          <button type="submit">Continue To Review</button>
-        </div>
+</div>
 
-        <div class="footerNote">This saves your intake and takes you to the Review page.</div>
-      </form>
-    </div>
-  </div>
 <script>
-  const SUPABASE_URL = "https://vvjbjfltqsivvxxifnvi.supabase.co";
-const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ2amJqZmx0cXNpdnZ4eGlmbnZpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc5NzYzNTAsImV4cCI6MjA3MzU1MjM1MH0.F4zzcpCHl9v-Rnj0wgKJ5zBf1HteVyXelMLQDDEN28Q";
+let currentStep = 0;
+const totalSteps = 4;
+const STORAGE_KEY = "elegalboom_intake_operating_agreement_llc";
+let intake = {};
 
-const supabase = window.supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_ANON_KEY
-);
-  function safeParse(v){
-    try { return JSON.parse(v); } catch { return null; }
+function updateProgress() {
+  const percent = (currentStep / (totalSteps - 1)) * 100;
+  document.getElementById("progressBar").style.width = percent + "%";
+}
+
+function showStep(step) {
+  document.querySelectorAll(".section").forEach(s => s.classList.remove("active"));
+  document.getElementById("step" + step).classList.add("active");
+  updateProgress();
+}
+
+function nextStep() {
+  if (currentStep === 1 && !validateCore()) return;
+  if (currentStep === 2 && !validateFlex()) return;
+  currentStep++;
+  if (currentStep === 3) buildReview();
+  showStep(currentStep);
+}
+
+function prevStep() {
+  currentStep--;
+  showStep(currentStep);
+}
+
+function validateCore() {
+  const required = [
+    "customer_full_name",
+    "customer_email",
+    "governing_state",
+    "agreement_date",
+    "member_name",
+    "member_address"
+  ];
+  return validate(required);
+}
+
+function validateFlex() {
+  const required = [
+    "llc_name",
+    "principal_business_address",
+    "capital_contribution_description"
+  ];
+  return validate(required);
+}
+
+function validate(fields) {
+  const missing = fields.filter(id => !document.getElementById(id).value.trim());
+  if (missing.length) {
+    showError("Please complete all required fields.");
+    return false;
   }
+  hideError();
+  return true;
+}
 
-  // -------------------------------
-  // LOAD ORDER FROM SESSION
-  // -------------------------------
-  const order = safeParse(sessionStorage.getItem("legal_selected_order"));
+function showError(msg) {
+  const box = document.getElementById("errorBox");
+  box.innerText = msg;
+  box.style.display = "block";
+}
 
-  if(!order){
-    alert("Missing order. Returning to catalog.");
-    window.location.href = "catalog.html";
-  }
+function hideError() {
+  document.getElementById("errorBox").style.display = "none";
+}
 
-  // Normalize document types
-  const docTypes = Array.isArray(order.doc_types)
-    ? order.doc_types
-    : (order.doc_type ? [order.doc_type] : []);
+function buildReview() {
+  const fields = document.querySelectorAll("input, textarea");
+  fields.forEach(f => intake[f.id] = f.value);
 
-  // -------------------------------
-  // HEADER DISPLAY
-  // -------------------------------
-  document.getElementById("tierDisplay").textContent =
-    order.tier_name || order.tier || "—";
+  let html = "<ul>";
+  Object.keys(intake).forEach(key => {
+    html += `<li><strong>${key.replaceAll("_"," ")}</strong>: ${intake[key]}</li>`;
+  });
+  html += "</ul>";
 
-  document.getElementById("docDisplay").textContent =
-    docTypes.length ? docTypes.join(", ") : "Document";
+  document.getElementById("reviewContent").innerHTML = html;
+  saveDraft();
+}
 
-  document.getElementById("priceDisplay").textContent =
-    order.tier_price ? "$" + order.tier_price : "—";
+function submitIntake() {
+  localStorage.removeItem(STORAGE_KEY);
+  alert("Intake Complete. Proceed to Review & Pay.");
+  // integrate with existing flow here
+}
 
- // ------------------------------
-// SHOW DOC SECTION
-// ------------------------------
-function showDocSection(types) {
-  document.querySelectorAll(".docBox").forEach(b => b.classList.remove("active"));
-  types.forEach(t => {
-    const el = document.querySelector(`.docBox[data-doc="${t}"]`);
-    if (el) el.classList.add("active");
+function saveDraft() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(intake));
+}
+
+function loadDraft() {
+  const saved = localStorage.getItem(STORAGE_KEY);
+  if (!saved) return;
+  intake = JSON.parse(saved);
+  Object.keys(intake).forEach(key => {
+    const field = document.getElementById(key);
+    if (field) field.value = intake[key];
   });
 }
 
-// ------------------------------
-// SUBMIT HANDLER
-// ------------------------------
-document.getElementById("intakeForm").addEventListener("submit", async (e) => {
-  e.preventDefault();
-
-  try {
-
-    // IMPORTANT:
-    // This assumes you already built:
-    //   const intake = {...}
-    //   const payload = {...}
-    // ABOVE this section.
-
-    const { data, error } = await supabase
-      .from("pweb_orders")
-      .insert([payload])
-      .select()
-      .single();
-
-    if (error) throw error;
-    if (!data || !data.order_id)
-      throw new Error("Insert succeeded but no order_id was returned.");
-
-    // Store canonical review object
-    sessionStorage.setItem(
-      "legal_selected_order",
-      JSON.stringify({
-        order_id: data.order_id,
-        tier: data.tier ?? payload.tier,
-        doc_type: data.doc_type ?? payload.doc_type,
-        price: data.price ?? payload.price
-      })
-    );
-
-    // Store intake JSON for review page
-    sessionStorage.setItem(
-      "legal_intake_data",
-      JSON.stringify(intake)
-    );
-
-    // Redirect
-    window.location.href =
-      `review-and-pay.html?order_id=${encodeURIComponent(data.order_id)}`;
-
-  } catch (err) {
-    console.error(err);
-    alert("Network/Database error. Please try again.");
-  }
+document.querySelectorAll("input, textarea").forEach(field => {
+  field.addEventListener("input", () => {
+    intake[field.id] = field.value;
+    saveDraft();
+  });
 });
 
+loadDraft();
+updateProgress();
 </script>
+
 </body>
-</html>
+</html>            
