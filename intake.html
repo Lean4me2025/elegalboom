@@ -799,56 +799,42 @@
       if(el) el.classList.add("active");
     });
   }
-Delete it completely.
-
----
-
-## ✅ Then paste THIS exactly:
-
-```html
 try {
+  const { data, error } = await supabase
+    .from("pweb_orders")
+    .insert([payload])
+    .select()
+    .single();
 
-    const { data, error } = await supabase
-        .from('pweb_orders')
-        .insert([payload])
-        .select()
-        .single();
+  if (error) throw error;
+  if (!data || !data.order_id) {
+    throw new Error("Insert succeeded but no order_id was returned.");
+  }
 
-    if (error) {
-        console.error(error);
-        alert("There was an issue creating your order.");
-        return;
-    }
+  // Store canonical review object
+  sessionStorage.setItem(
+    "legal_selected_order",
+    JSON.stringify({
+      order_id: data.order_id,
+      tier: data.tier ?? payload.tier,
+      doc_type: data.doc_type ?? payload.doc_type,
+      price: data.price ?? payload.price,
+    })
+  );
 
-    // Store canonical review object
-    sessionStorage.setItem(
-        "legal_selected_order",
-        JSON.stringify({
-            order_id: data.order_id,
-            tier: data.tier,
-            doc_type: data.doc_type,
-            price: data.price
-        })
-    );
+  // Store full intake JSON (optional, but helpful for Review page)
+  sessionStorage.setItem("legal_intake_data", JSON.stringify(intake));
 
-    // Also store full intake JSON if review page needs it
-    sessionStorage.setItem(
-        "legal_intake_data",
-        JSON.stringify(payload.intake_json)
-    );
-
-    // Redirect to review page
-    window.location.href =
-        "review-and-pay.html?order_id=" + data.order_id;
-
+  // Redirect to review page
+  window.location.href = `review-and-pay.html?order_id=${encodeURIComponent(
+    data.order_id
+  )}`;
 } catch (err) {
-    console.error(err);
-    alert("Network error. Please try again.");
+  console.error(err);
+  alert("Network/Database error. Please try again.");
 }
-
-})();   // CLOSE your main IIFE
-
+}); // closes the submit event listener callback
+})(); // closes the (async () => { ... }) wrapper
 </script>
 </body>
 </html>
-
