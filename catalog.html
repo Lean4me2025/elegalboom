@@ -184,9 +184,10 @@ function buildCatalog(){
       btn.style.margin = "6px";
       btn.onclick = () => {
         selectedOrder = {
-          tier_name: tier.tier_name,
-          tier_price: tier.tier_price,
-          doc_type: doc.doc_type
+    order_id: "ELB-" + Date.now(),
+    tier_name: tier.tier_name,
+    tier_price: tier.tier_price,
+    doc_type: doc.doc_type
         };
         updateSummary();
       };
