@@ -789,52 +789,68 @@
   document.getElementById("priceDisplay").textContent =
     order.tier_price ? "$" + order.tier_price : "—";
 
-  // -------------------------------
-  // SHOW DOC SECTION
-  // -------------------------------
-  function showDocSection(types){
-    document.querySelectorAll(".docBox").forEach(b => b.classList.remove("active"));
-    types.forEach(t => {
-      const el = document.querySelector(`.docBox[data-doc="${t}"]`);
-      if(el) el.classList.add("active");
-    });
-  }
-try {
-  const { data, error } = await supabase
-    .from("pweb_orders")
-    .insert([payload])
-    .select()
-    .single();
-
-  if (error) throw error;
-  if (!data || !data.order_id) {
-    throw new Error("Insert succeeded but no order_id was returned.");
-  }
-
-  // Store canonical review object
-  sessionStorage.setItem(
-    "legal_selected_order",
-    JSON.stringify({
-      order_id: data.order_id,
-      tier: data.tier ?? payload.tier,
-      doc_type: data.doc_type ?? payload.doc_type,
-      price: data.price ?? payload.price,
-    })
-  );
-
-  // Store full intake JSON (optional, but helpful for Review page)
-  sessionStorage.setItem("legal_intake_data", JSON.stringify(intake));
-
-  // Redirect to review page
-  window.location.href = `review-and-pay.html?order_id=${encodeURIComponent(
-    data.order_id
-  )}`;
-} catch (err) {
-  console.error(err);
-  alert("Network/Database error. Please try again.");
+ // ------------------------------
+// SHOW DOC SECTION
+// ------------------------------
+function showDocSection(types) {
+  document.querySelectorAll(".docBox").forEach(b => b.classList.remove("active"));
+  types.forEach(t => {
+    const el = document.querySelector(`.docBox[data-doc="${t}"]`);
+    if (el) el.classList.add("active");
+  });
 }
-}); // closes the submit event listener callback
-})(); // closes the (async () => { ... }) wrapper
+
+// ------------------------------
+// SUBMIT HANDLER
+// ------------------------------
+document.getElementById("intakeForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  try {
+
+    // IMPORTANT:
+    // This assumes you already built:
+    //   const intake = {...}
+    //   const payload = {...}
+    // ABOVE this section.
+
+    const { data, error } = await supabase
+      .from("pweb_orders")
+      .insert([payload])
+      .select()
+      .single();
+
+    if (error) throw error;
+    if (!data || !data.order_id)
+      throw new Error("Insert succeeded but no order_id was returned.");
+
+    // Store canonical review object
+    sessionStorage.setItem(
+      "legal_selected_order",
+      JSON.stringify({
+        order_id: data.order_id,
+        tier: data.tier ?? payload.tier,
+        doc_type: data.doc_type ?? payload.doc_type,
+        price: data.price ?? payload.price
+      })
+    );
+
+    // Store intake JSON for review page
+    sessionStorage.setItem(
+      "legal_intake_data",
+      JSON.stringify(intake)
+    );
+
+    // Redirect
+    window.location.href =
+      `review-and-pay.html?order_id=${encodeURIComponent(data.order_id)}`;
+
+  } catch (err) {
+    console.error(err);
+    alert("Network/Database error. Please try again.");
+  }
+});
+
 </script>
 </body>
 </html>
