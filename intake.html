@@ -860,30 +860,41 @@
           tier: tierName,
           price: priceVal,
 
-          order_status: "intake_complete",
+          order_status: "created",
           payment_status: "pending",
 
           order_notes: intake.order_notes || "",
 
           intake_json: intakeJson
         };
+const { data, error } = await supabaseClient
+  .from("pweb_orders")
+  .insert(dbRow)
+  .select()
+  .single();
 
-        const { data, error } = await supabaseClient
-          .from("pweb_orders")
-          .insert(dbRow)
-          .select()
-          .single();
+if (error) {
+  console.error(error);
+  alert("Insert failed.");
+  return;
+}
 
-        if(error){
-          console.error("Supabase insert error:", error);
-          alert("Order creation failed. Check console/logs for details.");
-          return;
-        }
+// 🔥 STATUS TRANSITION — THIS FIRES TRIGGER
+const { error: updateError } = await supabaseClient
+  .from("pweb_orders")
+  .update({ order_status: "intake_complete" })
+  .eq("order_id", dbRow.order_id);
+
+if (updateError) {
+  console.error(updateError);
+  alert("Status update failed.");
+  return;
+}       
 
         // Store what Review needs (display only)
         sessionStorage.setItem("order_id", data.order_id);
         sessionStorage.setItem("elegal_intake_data", JSON.stringify({
-          ...order,
+          ...dbRow,
           ...intake,
           order_id: data.order_id
         }));
