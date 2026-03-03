@@ -83,11 +83,7 @@ async function submitIntake() {
 
   const order = JSON.parse(orderRaw);
 
-  if (!order.order_id) {
-    alert("Order ID missing.");
-    console.log(order);
-    return;
-  }
+
 
   const intakePayload = {
     llc_name: document.getElementById("llc_name").value,
