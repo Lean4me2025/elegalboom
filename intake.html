@@ -1,215 +1,110 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>E-LegalBoom | Intake</title>
-  <style>
-    body { font-family: Arial, sans-serif; margin: 0; background: #f6f6f8; }
-    .wrap { max-width: 860px; margin: 28px auto; padding: 18px; }
-    .card { background: #fff; border-radius: 12px; padding: 18px; box-shadow: 0 6px 22px rgba(0,0,0,.08); }
-    h1 { margin: 0 0 12px 0; font-size: 22px; }
-    .sub { color:#555; margin: 0 0 18px 0; }
-    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-    label { display:block; font-size: 12px; color:#444; margin: 8px 0 6px; }
-    input, textarea, select { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 10px; font-size: 14px; }
-    textarea { min-height: 90px; resize: vertical; }
-    .row { margin-top: 14px; display:flex; gap: 12px; align-items:center; }
-    .primary { background:#111; color:#fff; border:none; padding: 12px 16px; border-radius: 10px; cursor:pointer; }
-    .primary:disabled { opacity:.6; cursor:not-allowed; }
-    .muted { color:#666; font-size: 12px; }
-    .summary { background:#f1f3f7; border-radius: 10px; padding: 12px; margin-bottom: 14px; }
-    .summary b { display:inline-block; margin-right: 6px; }
-    @media (max-width: 720px) { .grid { grid-template-columns: 1fr; } }
-  </style>
-</head>
+<script>
+  const SUPABASE_URL = "https://vvjbjfltqsivvxxifnvi.supabase.co";
+  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ2amJqZmx0cXNpdnZ4eGlmbnZpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc5NzYzNTAsImV4cCI6MjA3MzU1MjM1MH0.F4zzcpCHl9v-Rnj0wgKJ5zBf1HteVyXelMLQDDEN28Q";
 
-<body>
-  <div class="wrap">
-    <div class="card">
-      <h1>Intake</h1>
-      <p class="sub">Complete the intake below to continue to review and payment.</p>
+  const supabaseClient = supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_ANON_KEY
+  );
 
-      <div class="summary" id="orderSummary">
-        Loading selected order…
-      </div>
+  function generateOrderId() {
+    const now = new Date();
+    const stamp =
+      now.getFullYear().toString() +
+      String(now.getMonth() + 1).padStart(2, "0") +
+      String(now.getDate()).padStart(2, "0") +
+      String(now.getHours()).padStart(2, "0") +
+      String(now.getMinutes()).padStart(2, "0") +
+      String(now.getSeconds()).padStart(2, "0");
 
-      <div class="grid">
-        <div>
-          <label for="client_first_name">Client First Name</label>
-          <input id="client_first_name" type="text" placeholder="First name" />
-        </div>
-        <div>
-          <label for="client_last_name">Client Last Name</label>
-          <input id="client_last_name" type="text" placeholder="Last name" />
-        </div>
+    return "ELB-" + stamp;
+  }
 
-        <div>
-          <label for="client_email">Client Email</label>
-          <input id="client_email" type="email" placeholder="email@example.com" />
-        </div>
-        <div>
-          <label for="client_phone">Client Phone</label>
-          <input id="client_phone" type="tel" placeholder="(###) ###-####" />
-        </div>
+  function getSelectedOrder() {
+    const raw = sessionStorage.getItem("legal_selected_order");
+    if (!raw) return null;
 
-        <div>
-          <label for="governing_state">Governing State</label>
-          <input id="governing_state" type="text" placeholder="e.g., VA" />
-        </div>
+    try {
+      return JSON.parse(raw);
+    } catch (e) {
+      console.log("Session parse error:", e);
+      return null;
+    }
+  }
 
-        <div></div>
-
-        <div>
-          <label for="llc_name">LLC Name</label>
-          <input id="llc_name" type="text" placeholder="LLC name" />
-        </div>
-        <div>
-          <label for="agreement_date">Agreement Date</label>
-          <input id="agreement_date" type="date" />
-        </div>
-
-        <div>
-          <label for="member_name">Member Name</label>
-          <input id="member_name" type="text" placeholder="Member name" />
-        </div>
-        <div>
-          <label for="member_address">Member Address</label>
-          <input id="member_address" type="text" placeholder="Street, City, State, ZIP" />
-        </div>
-
-        <div style="grid-column: 1 / -1;">
-          <label for="principal_business_address">Principal Business Address</label>
-          <input id="principal_business_address" type="text" placeholder="Street, City, State, ZIP" />
-        </div>
-
-        <div style="grid-column: 1 / -1;">
-          <label for="capital_contribution_description">Capital Contribution Description</label>
-          <textarea id="capital_contribution_description" placeholder="Describe capital contribution…"></textarea>
-        </div>
-      </div>
-
-      <div class="row">
-        <button class="primary" id="btnSubmit" onclick="submitIntake()">Confirm &amp; Continue</button>
-        <span class="muted" id="statusText"></span>
-      </div>
-    </div>
-  </div>
-
-  <!-- Supabase JS (ensure this script exists in your project or is already loaded elsewhere) -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-  <script>
-    // ===== Supabase Config =====
-    const SUPABASE_URL = "https://vvjbjfltqsivvxxifnvi.supabase.co";
-    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ2amJqZmx0cXNpdnZ4eGlmbnZpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc5NzYzNTAsImV4cCI6MjA3MzU1MjM1MH0.F4zzcpCHl9v-Rnj0wgKJ5zBf1HteVyXelMLQDDEN28Q";
-
-    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-    // ===== Helpers =====
-    function getSelectedOrder() {
-      const raw = sessionStorage.getItem("legal_selected_order");
-      if (!raw) return null;
-
-      try {
-        return JSON.parse(raw);
-      } catch (e) {
-        console.log("Failed to parse legal_selected_order:", e);
-        return null;
-      }
+  function renderSummary(order) {
+    const el = document.getElementById("orderSummary");
+    if (!order) {
+      el.innerHTML = "No selected order found.";
+      return;
     }
 
-    function renderOrderSummary(order) {
-      const el = document.getElementById("orderSummary");
-      if (!order) {
-        el.textContent = "No selected order found. Please return to catalog.";
-        return;
-      }
+    el.innerHTML = `
+      <strong>Tier:</strong> ${order.tier_name}<br/>
+      <strong>Price:</strong> $${order.tier_price}<br/>
+      <strong>Document:</strong> ${order.doc_type}
+    `;
+  }
 
-      const tierName = order.tier_name ?? "(missing tier_name)";
-      const tierPrice = order.tier_price ?? "(missing tier_price)";
-      const docType = order.doc_type ?? "(missing doc_type)";
+  document.addEventListener("DOMContentLoaded", () => {
+    const selected = getSelectedOrder();
+    renderSummary(selected);
+  });
 
-      el.innerHTML = `
-        <div><b>Tier:</b> ${tierName}</div>
-        <div><b>Price:</b> $${tierPrice}</div>
-        <div><b>Document:</b> ${docType}</div>
-      `;
+  async function submitIntake() {
+    const selected = getSelectedOrder();
+
+    if (!selected) {
+      alert("No order selected. Return to catalog.");
+      return;
     }
 
-    // Render summary on load
-    document.addEventListener("DOMContentLoaded", () => {
-      const order = getSelectedOrder();
-      renderOrderSummary(order);
-    });
-
-    // ===== Main Submit =====
-    async function submitIntake() {
-      const btn = document.getElementById("btnSubmit");
-      const statusText = document.getElementById("statusText");
-
-      btn.disabled = true;
-      statusText.textContent = "Saving…";
-
-      const order = getSelectedOrder();
-      if (!order) {
-        alert("Order not found in session. Please return to catalog and select a document.");
-        btn.disabled = false;
-        statusText.textContent = "";
-        return;
-      }
-
-      // Build intake payload (matches your existing IDs)
-      const intakePayload = {
-        llc_name: document.getElementById("llc_name").value,
-        agreement_date: document.getElementById("agreement_date").value,
-        member_name: document.getElementById("member_name").value,
-        member_address: document.getElementById("member_address").value,
-        principal_business_address: document.getElementById("principal_business_address").value,
-        capital_contribution_description: document.getElementById("capital_contribution_description").value
-      };
-
-      // Minimal order payload for V1 flow
-      const orderPayload = {
-        tier_name: order.tier_name,
-        tier_price: order.tier_price,
-        doc_type: order.doc_type,
-
-        // Keep your intake data in a single JSON column
-        intake_json: intakePayload,
-
-        // Optional client fields (remove if your table doesn't have these columns)
-        client_first_name: document.getElementById("client_first_name").value,
-        client_last_name: document.getElementById("client_last_name").value,
-        client_email: document.getElementById("client_email").value,
-        client_phone: document.getElementById("client_phone").value,
-        governing_state: document.getElementById("governing_state").value,
-
-        order_status: "intake_complete",
-        payment_status: "pending"
-      };
-
-      // Insert order and return created row (to get order_id)
-      const { data, error } = await supabaseClient
-        .from("pweb_orders")
-        .insert(orderPayload)
-        .select()
-        .single();
-
-      if (error) {
-        console.log("Insert error:", error);
-        alert("Order creation failed. Check console/logs for details.");
-        btn.disabled = false;
-        statusText.textContent = "";
-        return;
-      }
-
-      // Save generated ID for review page
-      sessionStorage.setItem("order_id", data.order_id);
-
-      // Continue
-      window.location.href = "review-and-pay.html";
+    if (!selected.tier_name || !selected.tier_price || !selected.doc_type) {
+      alert("Selected order is incomplete.");
+      return;
     }
-  </script>
-</body>
-</html>
+
+    const orderId = generateOrderId();
+
+    const intakePayload = {
+      client_first_name: document.getElementById("client_first_name")?.value || "",
+      client_last_name: document.getElementById("client_last_name")?.value || "",
+      client_email: document.getElementById("client_email")?.value || "",
+      client_phone: document.getElementById("client_phone")?.value || "",
+      governing_state: document.getElementById("governing_state")?.value || "",
+      llc_name: document.getElementById("llc_name")?.value || "",
+      agreement_date: document.getElementById("agreement_date")?.value || "",
+      member_name: document.getElementById("member_name")?.value || "",
+      member_address: document.getElementById("member_address")?.value || "",
+      principal_business_address:
+        document.getElementById("principal_business_address")?.value || "",
+      capital_contribution_description:
+        document.getElementById("capital_contribution_description")?.value || ""
+    };
+
+    const orderPayload = {
+      order_id: orderId,
+      tier_name: selected.tier_name,
+      tier_price: selected.tier_price,
+      doc_type: selected.doc_type,
+      intake_json: intakePayload,
+      order_status: "intake_complete",
+      payment_status: "pending",
+      created_at: new Date().toISOString()
+    };
+
+    const { error } = await supabaseClient
+      .from("pweb_orders")
+      .insert(orderPayload);
+
+    if (error) {
+      console.log("INSERT ERROR:", error);
+      alert("Database error: " + error.message);
+      return;
+    }
+
+    sessionStorage.setItem("order_id", orderId);
+
+    window.location.href = "review-and-pay.html";
+  }
+</script>        
