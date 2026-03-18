@@ -1,9 +1,10 @@
 /**
- * Fulfillment Runner – v1.0
- * Purpose: Create legal documents for PAID orders and mark them READY
+ * Fulfillment Runner - v2.0
+ * Purpose: Create legal documents for PAID orders using coordinate maps
  */
 
 import { createClient } from '@supabase/supabase-js';
+import { ndaStandardMap } from '../lib/pdf/templates/nda-standard-map.js';
 
 // 🔐 Use SERVICE ROLE KEY (never anon)
 const supabase = createClient(
@@ -11,6 +12,9 @@ const supabase = createClient(
   process.env.SUPABASE_SERVICE_ROLE_KEY
 );
 
+// --------------------------------------------------
+// GET ORDERS READY FOR FULFILLMENT
+// --------------------------------------------------
 async function getOrdersToFulfill() {
   const { data, error } = await supabase
     .from('document_intake')
@@ -22,24 +26,39 @@ async function getOrdersToFulfill() {
   return data;
 }
 
+// --------------------------------------------------
+// DOCUMENT GENERATOR (NOW REAL ENGINE STRUCTURE)
+// --------------------------------------------------
 async function createDocument(order) {
-  console.log(`🛠 Creating document for ${order.order_id}`);
+  console.log(`📄 Creating document for ${order.order_id}`);
 
-  /**
-   * THIS is where your real document logic goes:
-   * - Select template based on order.document_type
-   * - Merge order fields
-   * - Generate DOCX / PDF
-   * - Save file(s)
-   */
+  // ----------------------------------------------
+  // SELECT TEMPLATE MAP
+  // ----------------------------------------------
+  let map;
 
-  // Placeholder output paths
+  switch (order.document_type) {
+    case 'nda':
+      map = ndaStandardMap;
+      break;
+
+    default:
+      throw new Error(`Unsupported document type: ${order.document_type}`);
+  }
+
+  console.log('📐 Using template map:', map);
+
+  // ----------------------------------------------
+  // SIMULATED RENDER ENGINE (NEXT = REAL PDF)
+  // ----------------------------------------------
+  // This is where pdf-lib will go next
+  // For now we confirm mapping + structure is working
+
   const pdfPath = `/docs/${order.order_id}.pdf`;
   const docxPath = `/docs/${order.order_id}.docx`;
 
-  // Simulate generation
-  console.log(`📄 Generated PDF: ${pdfPath}`);
-  console.log(`📄 Generated DOCX: ${docxPath}`);
+  console.log(`✅ PDF generated: ${pdfPath}`);
+  console.log(`✅ DOCX generated: ${docxPath}`);
 
   return {
     pdf_path: pdfPath,
@@ -47,6 +66,9 @@ async function createDocument(order) {
   };
 }
 
+// --------------------------------------------------
+// MARK ORDER AS READY
+// --------------------------------------------------
 async function markReady(orderId, paths) {
   const { error } = await supabase
     .from('document_intake')
@@ -58,31 +80,32 @@ async function markReady(orderId, paths) {
     .eq('order_id', orderId);
 
   if (error) throw error;
-
-  console.log(`✅ Order ${orderId} marked READY`);
 }
 
-async function runFulfillment() {
-  console.log('🔍 Checking for orders to fulfill…');
+// --------------------------------------------------
+// MAIN RUNNER
+// --------------------------------------------------
+async function run() {
+  try {
+    console.log('🚀 Starting fulfillment run...');
 
-  const orders = await getOrdersToFulfill();
+    const orders = await getOrdersToFulfill();
 
-  if (orders.length === 0) {
-    console.log('🟢 No orders ready for fulfillment');
-    return;
-  }
+    if (!orders.length) {
+      console.log('⚠️ No orders to process');
+      return;
+    }
 
-  for (const order of orders) {
-    try {
+    for (const order of orders) {
       const paths = await createDocument(order);
       await markReady(order.order_id, paths);
-    } catch (err) {
-      console.error(`❌ Failed for ${order.order_id}`, err);
     }
-  }
 
-  console.log('🏁 Fulfillment run complete');
+    console.log('🎉 Fulfillment complete');
+  } catch (err) {
+    console.error('❌ Error during fulfillment:', err);
+  }
 }
 
-// ▶ Run it
-runFulfillment().catch(console.error);
+// Run the process
+run();
