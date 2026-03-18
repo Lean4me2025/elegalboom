@@ -1,6 +1,6 @@
 import { createClient } from '@supabase/supabase-js'
 import { PDFDocument, StandardFonts } from 'pdf-lib'
-import ndaStandardMap from '../lib/pdf/templates/nda-standard-map.js'
+import ndaStandardMap from '../lib/pdf/templates/ndaMap.js'
 
 // -----------------------------
 // SUPABASE CLIENT
