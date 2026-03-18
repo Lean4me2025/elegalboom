@@ -1,20 +1,23 @@
 /**
  * API Trigger for Fulfillment Runner
- * Call this to generate PDFs instantly
+ * Generates PDFs from pweb_orders
  */
 
-import { createClient } from '@supabase/supabase-js';
-import { PDFDocument, StandardFonts, rgb } from 'pdf-lib';
-import { ndaStandardMap } from '../lib/pdf/templates/nda-standard-map.js';
+import { createClient } from '@supabase/supabase-js'
+import { PDFDocument, StandardFonts, rgb } from 'pdf-lib'
+import { ndaStandardMap } from '../lib/pdf/templates/nda-standard-map.js'
 
+// -----------------------------
+// INIT SUPABASE
+// -----------------------------
 const supabase = createClient(
   process.env.SUPABASE_URL,
   process.env.SUPABASE_SERVICE_ROLE_KEY
-);
+)
 
-// ----------------------
-// MAP YOUR DATA
-// ----------------------
+// -----------------------------
+// MAP ORDER DATA → TEMPLATE
+// -----------------------------
 function mapOrderToTemplate(order) {
   return {
     effective_date: new Date(order.created_at).toLocaleDateString(),
@@ -35,15 +38,15 @@ function mapOrderToTemplate(order) {
     disclosing_sign_title: order.party1_role || '',
 
     receiving_sign_name: order.party2_name || '',
-    receiving_sign_title: order.party2_role || '',
-  };
+    receiving_sign_title: order.party2_role || ''
+  }
 }
 
-// ----------------------
-// DRAW TEXT
-// ----------------------
+// -----------------------------
+// DRAW TEXT HELPER
+// -----------------------------
 function drawField(page, font, text, config) {
-  if (!text) return;
+  if (!text) return
 
   page.drawText(String(text), {
     x: config.x,
@@ -51,88 +54,109 @@ function drawField(page, font, text, config) {
     size: config.size || 11,
     font,
     color: rgb(0, 0, 0),
-    maxWidth: config.maxWidth || 200,
-  });
+    maxWidth: config.maxWidth || 200
+  })
 }
 
-// ----------------------
+// -----------------------------
 // CREATE DOCUMENT
-// ----------------------
+// -----------------------------
 async function createDocument(order) {
-  if (order.doc_type !== 'nda') return null;
+  // ✅ FIXED (string instead of undefined variable)
+  if (order.doc_type !== 'nda') return null
 
-  const data = mapOrderToTemplate(order);
+  const data = mapOrderToTemplate(order)
 
-  const pdfDoc = await PDFDocument.create();
+  const pdfDoc = await PDFDocument.create()
   const page = pdfDoc.addPage([
     ndaStandardMap.page.width,
     ndaStandardMap.page.height
-  ]);
+  ])
 
-  const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
-  const boldFont = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
+  const font = await pdfDoc.embedFont(StandardFonts.Helvetica)
+  const boldFont = await pdfDoc.embedFont(StandardFonts.HelveticaBold)
 
   // Title
   page.drawText(ndaStandardMap.static.title.text, {
     x: ndaStandardMap.static.title.x,
     y: ndaStandardMap.static.title.y,
     size: ndaStandardMap.static.title.size,
-    font: boldFont,
-  });
+    font: boldFont
+  })
 
   // Fields
   for (const key in ndaStandardMap.fields) {
-    const config = ndaStandardMap.fields[key];
-    const value = data[key];
-    drawField(page, font, value, config);
+    const config = ndaStandardMap.fields[key]
+    const value = data[key]
+    drawField(page, font, value, config)
   }
 
-  const pdfBytes = await pdfDoc.save();
-  const fileName = `${order.order_id}.pdf`;
+  const pdfBytes = await pdfDoc.save()
+  const fileName = `${order.order_id}.pdf`
 
-  await supabase.storage
+  // Upload to Supabase Storage
+  const { error: uploadError } = await supabase.storage
     .from('documents')
     .upload(fileName, pdfBytes, {
       contentType: 'application/pdf',
-      upsert: true,
-    });
+      upsert: true
+    })
 
-  return `documents/${fileName}`;
+  if (uploadError) {
+    console.error('UPLOAD ERROR:', uploadError)
+    throw uploadError
+  }
+
+  // ✅ FIXED (proper template string)
+  return `documents/${fileName}`
 }
 
-// ----------------------
+// -----------------------------
 // MAIN HANDLER
-// ----------------------
+// -----------------------------
 export default async function handler(req, res) {
   try {
-    const { data: orders } = await supabase
+    console.log('🚀 Fulfillment started')
+
+    const { data: orders, error } = await supabase
       .from('pweb_orders')
       .select('*')
       .eq('payment_status', 'paid')
-      .eq('order_status', 'intake_complete');
+      .eq('order_status', 'intake_complete')
 
-    if (!orders.length) {
-      return res.status(200).json({ message: 'No orders found' });
+    if (error) {
+      console.error('DB ERROR:', error)
+      return res.status(500).json({ error: error.message })
+    }
+
+    if (!orders || orders.length === 0) {
+      return res.status(200).json({ message: 'No orders found' })
     }
 
     for (const order of orders) {
-      const pdfPath = await createDocument(order);
+      console.log('Processing order:', order.order_id)
+
+      const pdfPath = await createDocument(order)
 
       if (pdfPath) {
         await supabase
           .from('pweb_orders')
           .update({
             order_status: 'document_created',
-            pdf_path: pdfPath
+            document_path: pdfPath
           })
-          .eq('order_id', order.order_id);
+          .eq('order_id', order.order_id)
       }
     }
 
-    res.status(200).json({ message: 'Fulfillment completed' });
+    return res.status(200).json({
+      message: 'Fulfillment complete 🚀'
+    })
 
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: err.message });
+    console.error('FATAL ERROR:', err)
+    return res.status(500).json({
+      error: err.message
+    })
   }
 }
