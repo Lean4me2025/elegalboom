@@ -1,211 +1,138 @@
-export const config = {
-  runtime: "nodejs",
-};
+/**
+ * API Trigger for Fulfillment Runner
+ * Call this to generate PDFs instantly
+ */
 
-import fs from "fs";
-import path from "path";
-import PizZip from "pizzip";
-import Docxtemplater from "docxtemplater";
-import { createClient } from "@supabase/supabase-js";
+import { createClient } from '@supabase/supabase-js';
+import { PDFDocument, StandardFonts, rgb } from 'pdf-lib';
+import { ndaStandardMap } from '../lib/pdf/templates/nda-standard-map.js';
 
-// ---------------------------
-// Initialize Supabase (SERVER-SIDE)
-// ---------------------------
 const supabase = createClient(
   process.env.SUPABASE_URL,
   process.env.SUPABASE_SERVICE_ROLE_KEY
 );
 
+// ----------------------
+// MAP YOUR DATA
+// ----------------------
+function mapOrderToTemplate(order) {
+  return {
+    effective_date: new Date(order.created_at).toLocaleDateString(),
+
+    disclosing_party_name: order.party1_name || '',
+    disclosing_party_state: order.client_state || '',
+
+    receiving_party_name: order.party2_name || '',
+    receiving_party_state: order.client_state || '',
+
+    purpose: order.details || '',
+
+    confidentiality_term_years: '3',
+
+    governing_state: order.governing_state || '',
+
+    disclosing_sign_name: order.party1_name || '',
+    disclosing_sign_title: order.party1_role || '',
+
+    receiving_sign_name: order.party2_name || '',
+    receiving_sign_title: order.party2_role || '',
+  };
+}
+
+// ----------------------
+// DRAW TEXT
+// ----------------------
+function drawField(page, font, text, config) {
+  if (!text) return;
+
+  page.drawText(String(text), {
+    x: config.x,
+    y: config.y,
+    size: config.size || 11,
+    font,
+    color: rgb(0, 0, 0),
+    maxWidth: config.maxWidth || 200,
+  });
+}
+
+// ----------------------
+// CREATE DOCUMENT
+// ----------------------
+async function createDocument(order) {
+  if (order.doc_type !== 'nda') return null;
+
+  const data = mapOrderToTemplate(order);
+
+  const pdfDoc = await PDFDocument.create();
+  const page = pdfDoc.addPage([
+    ndaStandardMap.page.width,
+    ndaStandardMap.page.height
+  ]);
+
+  const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
+  const boldFont = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
+
+  // Title
+  page.drawText(ndaStandardMap.static.title.text, {
+    x: ndaStandardMap.static.title.x,
+    y: ndaStandardMap.static.title.y,
+    size: ndaStandardMap.static.title.size,
+    font: boldFont,
+  });
+
+  // Fields
+  for (const key in ndaStandardMap.fields) {
+    const config = ndaStandardMap.fields[key];
+    const value = data[key];
+    drawField(page, font, value, config);
+  }
+
+  const pdfBytes = await pdfDoc.save();
+  const fileName = `${order.order_id}.pdf`;
+
+  await supabase.storage
+    .from('documents')
+    .upload(fileName, pdfBytes, {
+      contentType: 'application/pdf',
+      upsert: true,
+    });
+
+  return `documents/${fileName}`;
+}
+
+// ----------------------
+// MAIN HANDLER
+// ----------------------
 export default async function handler(req, res) {
   try {
-    // ---------------------------
-    // 1. Read input
-    // ---------------------------
-    const { order_id } = req.query;
+    const { data: orders } = await supabase
+      .from('pweb_orders')
+      .select('*')
+      .eq('payment_status', 'paid')
+      .eq('order_status', 'intake_complete');
 
-    if (!order_id) {
-      return res.status(400).json({ error: "Missing order_id" });
+    if (!orders.length) {
+      return res.status(200).json({ message: 'No orders found' });
     }
 
-    // ---------------------------
-    // 2. Fetch order
-    // ---------------------------
-    const { data: order, error: fetchError } = await supabase
-      .from("document_requests")
-      .select("*")
-      .eq("order_id", order_id)
-      .single();
+    for (const order of orders) {
+      const pdfPath = await createDocument(order);
 
-    if (fetchError || !order) {
-      return res.status(404).json({ error: "Order not found" });
+      if (pdfPath) {
+        await supabase
+          .from('pweb_orders')
+          .update({
+            order_status: 'document_created',
+            pdf_path: pdfPath
+          })
+          .eq('order_id', order.order_id);
+      }
     }
 
-    // ---------------------------
-    // 3. Safety check
-    // ---------------------------
-    if (order.order_status !== "pending") {
-      return res.status(200).json({
-        message: "Order not pending, document not created",
-        current_status: order.order_status,
-      });
-    }
-
-    // ---------------------------
-    // 4. Load DOCX template
-    // ---------------------------
-    const templatePath = path.join(
-      process.cwd(),
-      "templates",
-      "operating-agreement.docx"
-    );
-
-    if (!fs.existsSync(templatePath)) {
-      return res.status(500).json({ error: "Template file not found" });
-    }
-
-    const content = fs.readFileSync(templatePath, "binary");
-    const zip = new PizZip(content);
-
-    const doc = new Docxtemplater(zip, {
-      paragraphLoop: true,
-      linebreaks: true,
-    });
-
-    // ---------------------------
-    // 5. Inject data
-    // ---------------------------
-    doc.setData({
-      company_name: order.company_name,
-      state: order.governing_state,
-      effective_date: new Date().toLocaleDateString(),
-
-      member_1_name: order.member_1_name,
-      member_1_percent: order.member_1_percent,
-
-      member_2_name: order.member_2_name,
-      member_2_percent: order.member_2_percent,
-
-      member_3_name: order.member_3_name,
-      member_3_percent: order.member_3_percent,
-
-      member_4_name: order.member_4_name,
-      member_4_percent: order.member_4_percent,
-
-      member_5_name: order.member_5_name,
-      member_5_percent: order.member_5_percent,
-    });
-
-    doc.render();
-
-    // ---------------------------
-    // 6. Generate DOCX
-    // ---------------------------
-    const buffer = doc.getZip().generate({
-      type: "nodebuffer",
-      compression: "DEFLATE",
-    });
-
-    // ---------------------------
-    // 7. Upload to Supabase Storage
-    // ---------------------------
-    const fileName = `${order_id}-operating-agreement.docx`;
-    const storagePath = `documents/${fileName}`;
-
-    const { error: uploadError } = await supabase.storage
-      .from("documents")
-      .upload(storagePath, buffer, {
-        contentType:
-          "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-        upsert: true,
-      });
-
-    if (uploadError) {
-      return res.status(500).json({ error: "Storage upload failed" });
-    }
-
-    // ---------------------------
-    // 8. Update order status
-    // ---------------------------
-    await supabase
-      .from("document_requests")
-      .update({
-        order_status: "generated",
-        document_path: storagePath,
-      })
-      .eq("order_id", order_id);
-
-    // ---------------------------
-    // 9. Send file to browser
-    // ---------------------------
-    res.setHeader(
-      "Content-Disposition",
-      `attachment; filename="${fileName}"`
-    );
-    res.setHeader(
-      "Content-Type",
-      "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-    );
-
-    return res.send(buffer);
-  } catch (err) {
-    console.error("API ERROR:", err);
-    return res.status(500).json({ error: "Internal server error" });
-  }
-}
-    const content = fs.readFileSync(templatePath, "binary");
-    const zip = new PizZip(content);
-
-    const doc = new Docxtemplater(zip, {
-      paragraphLoop: true,
-      linebreaks: true,
-    });
-
-    // 5️⃣ Inject data into the template
-    doc.setData({
-      company_name: order.company_name,
-      state: order.governing_state,
-      effective_date: new Date().toLocaleDateString(),
-
-      member_1_name: order.member_1_name,
-      member_1_percent: order.member_1_percent,
-
-      member_2_name: order.member_2_name,
-      member_2_percent: order.member_2_percent,
-
-      member_3_name: order.member_3_name,
-      member_3_percent: order.member_3_percent,
-
-      member_4_name: order.member_4_name,
-      member_4_percent: order.member_4_percent,
-
-      member_5_name: order.member_5_name,
-      member_5_percent: order.member_5_percent,
-    });
-
-    doc.render();
-
-    // 6️⃣ Generate the DOCX file
-    const buffer = doc.getZip().generate({
-      type: "nodebuffer",
-      compression: "DEFLATE",
-    });
-
-    // 7️⃣ EXPLICITLY tell the browser what this is
-    res.setHeader(
-      "Content-Type",
-      "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-    );
-
-    res.setHeader(
-      "Content-Disposition",
-      `attachment; filename="Operating_Agreement_${order_id}.docx"`
-    );
-
-    // 8️⃣ Send the file
-    return res.status(200).send(buffer);
+    res.status(200).json({ message: 'Fulfillment completed' });
 
   } catch (err) {
-    console.error("Document generation error:", err);
-    return res.status(500).json({ error: "Internal server error" });
+    console.error(err);
+    res.status(500).json({ error: err.message });
   }
 }
