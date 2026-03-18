@@ -1,14 +1,9 @@
-/**
- * API Trigger for Fulfillment Runner
- * Generates PDFs from pweb_orders
- */
-
 import { createClient } from '@supabase/supabase-js'
-import { PDFDocument, StandardFonts, rgb } from 'pdf-lib'
-import { ndaStandardMap } from '../lib/pdf/templates/nda-standard-map.js'
+import { PDFDocument, StandardFonts } from 'pdf-lib'
+import ndaStandardMap from '../lib/pdf/templates/nda-standard-map.js'
 
 // -----------------------------
-// INIT SUPABASE
+// SUPABASE CLIENT
 // -----------------------------
 const supabase = createClient(
   process.env.SUPABASE_URL,
@@ -16,99 +11,84 @@ const supabase = createClient(
 )
 
 // -----------------------------
-// MAP ORDER DATA → TEMPLATE
+// DRAW FIELD HELPER
 // -----------------------------
-function mapOrderToTemplate(order) {
-  return {
-    effective_date: new Date(order.created_at).toLocaleDateString(),
+function drawField(page, font, value, config) {
+  if (!value) return
 
-    disclosing_party_name: order.party1_name || '',
-    disclosing_party_state: order.client_state || '',
-
-    receiving_party_name: order.party2_name || '',
-    receiving_party_state: order.client_state || '',
-
-    purpose: order.details || '',
-
-    confidentiality_term_years: '3',
-
-    governing_state: order.governing_state || '',
-
-    disclosing_sign_name: order.party1_name || '',
-    disclosing_sign_title: order.party1_role || '',
-
-    receiving_sign_name: order.party2_name || '',
-    receiving_sign_title: order.party2_role || ''
-  }
-}
-
-// -----------------------------
-// DRAW TEXT HELPER
-// -----------------------------
-function drawField(page, font, text, config) {
-  if (!text) return
-
-  page.drawText(String(text), {
+  page.drawText(String(value), {
     x: config.x,
     y: config.y,
-    size: config.size || 11,
-    font,
-    color: rgb(0, 0, 0),
-    maxWidth: config.maxWidth || 200
+    size: config.size || 10,
+    font
   })
 }
 
 // -----------------------------
-// CREATE DOCUMENT
+// GENERATE PDF
 // -----------------------------
-async function createDocument(order) {
-  // ✅ FIXED (string instead of undefined variable)
-  if (order.doc_type !== 'nda') return null
+async function generatePdf(order) {
+  try {
+    console.log('📄 Generating PDF for order:', order.order_id)
 
-  const data = mapOrderToTemplate(order)
+    const pdfDoc = await PDFDocument.create()
+    const page = pdfDoc.addPage([612, 792])
+    const font = await pdfDoc.embedFont(StandardFonts.Helvetica)
 
-  const pdfDoc = await PDFDocument.create()
-  const page = pdfDoc.addPage([
-    ndaStandardMap.page.width,
-    ndaStandardMap.page.height
-  ])
+    const data = order.intake_data || {}
 
-  const font = await pdfDoc.embedFont(StandardFonts.Helvetica)
-  const boldFont = await pdfDoc.embedFont(StandardFonts.HelveticaBold)
+    // Fill fields from map
+    for (const key in ndaStandardMap.fields) {
+      const config = ndaStandardMap.fields[key]
+      const value = data[key]
+      drawField(page, font, value, config)
+    }
 
-  // Title
-  page.drawText(ndaStandardMap.static.title.text, {
-    x: ndaStandardMap.static.title.x,
-    y: ndaStandardMap.static.title.y,
-    size: ndaStandardMap.static.title.size,
-    font: boldFont
-  })
+    // Save PDF
+    const pdfBytes = await pdfDoc.save()
 
-  // Fields
-  for (const key in ndaStandardMap.fields) {
-    const config = ndaStandardMap.fields[key]
-    const value = data[key]
-    drawField(page, font, value, config)
+    // 🔥 CRITICAL FIX: Convert to Buffer
+    const fileBuffer = Buffer.from(pdfBytes)
+
+    console.log('✅ PDF generated, size:', fileBuffer.length)
+
+    return fileBuffer
+
+  } catch (err) {
+    console.error('❌ PDF GENERATION ERROR:', err)
+    throw err
   }
+}
 
-  const pdfBytes = await pdfDoc.save()
-  const fileName = `${order.order_id}.pdf`
+// -----------------------------
+// UPLOAD TO SUPABASE STORAGE
+// -----------------------------
+async function uploadPdf(order, fileBuffer) {
+  try {
+    const fileName = `${order.order_id}.pdf`
 
-  // Upload to Supabase Storage
-  const { error: uploadError } = await supabase.storage
-    .from('documents')
-    .upload(fileName, pdfBytes, {
-      contentType: 'application/pdf',
-      upsert: true
-    })
+    console.log('☁️ Uploading:', fileName)
 
-  if (uploadError) {
-    console.error('UPLOAD ERROR:', uploadError)
-    throw uploadError
+    const { error } = await supabase.storage
+      .from('documents')
+      .upload(fileName, fileBuffer, {
+        contentType: 'application/pdf',
+        upsert: true
+      })
+
+    if (error) {
+      console.error('❌ UPLOAD ERROR:', error)
+      throw error
+    }
+
+    console.log('✅ Upload successful')
+
+    return `documents/${fileName}`
+
+  } catch (err) {
+    console.error('❌ STORAGE ERROR:', err)
+    throw err
   }
-
-  // ✅ FIXED (proper template string)
-  return `documents/${fileName}`
 }
 
 // -----------------------------
@@ -118,45 +98,86 @@ export default async function handler(req, res) {
   try {
     console.log('🚀 Fulfillment started')
 
+    // 1. Get orders ready for fulfillment
     const { data: orders, error } = await supabase
       .from('pweb_orders')
       .select('*')
-      .eq('payment_status', 'paid')
       .eq('order_status', 'intake_complete')
+      .eq('payment_status', 'paid')
+      .limit(5)
 
     if (error) {
-      console.error('DB ERROR:', error)
-      return res.status(500).json({ error: error.message })
+      console.error('❌ FETCH ORDERS ERROR:', error)
+      throw error
     }
 
     if (!orders || orders.length === 0) {
-      return res.status(200).json({ message: 'No orders found' })
+      console.log('⚠️ No orders found')
+      return res.status(200).json({
+        message: 'No orders found'
+      })
     }
 
+    console.log(`📦 Found ${orders.length} orders`)
+
+    const results = []
+
+    // 2. Process each order
     for (const order of orders) {
-      console.log('Processing order:', order.order_id)
+      try {
+        console.log('---------------------------')
+        console.log('Processing order:', order.order_id)
 
-      const pdfPath = await createDocument(order)
+        // Generate PDF
+        const fileBuffer = await generatePdf(order)
 
-      if (pdfPath) {
-        await supabase
+        // Upload PDF
+        const filePath = await uploadPdf(order, fileBuffer)
+
+        // Update order
+        const { error: updateError } = await supabase
           .from('pweb_orders')
           .update({
             order_status: 'document_created',
-            document_path: pdfPath
+            document_path: filePath
           })
           .eq('order_id', order.order_id)
+
+        if (updateError) {
+          console.error('❌ UPDATE ERROR:', updateError)
+          throw updateError
+        }
+
+        console.log('✅ Order completed:', order.order_id)
+
+        results.push({
+          order_id: order.order_id,
+          status: 'success'
+        })
+
+      } catch (err) {
+        console.error('❌ ORDER FAILED:', order.order_id, err)
+
+        results.push({
+          order_id: order.order_id,
+          status: 'failed',
+          error: err.message
+        })
       }
     }
 
+    // 3. Return results
     return res.status(200).json({
-      message: 'Fulfillment complete 🚀'
+      message: 'Fulfillment complete 🚀',
+      results
     })
 
   } catch (err) {
-    console.error('FATAL ERROR:', err)
+    console.error('🔥 FATAL ERROR:', err)
+
     return res.status(500).json({
-      error: err.message
+      error: err.message,
+      stack: err.stack
     })
   }
 }
