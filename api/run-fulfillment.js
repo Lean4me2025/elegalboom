@@ -20,16 +20,14 @@ export default async function handler(req, res) {
       });
     }
 
-    // 🔥 HARDCODED SUPABASE (PUT YOUR VALUES HERE)
+    // 🔥 HARDCODED SUPABASE (TEMP)
     const SUPABASE_URL = "https://vvjbjfltqsivvxxifnvi.supabase.co";
-    const SUPABASE_SERVICE_ROLE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ2amJqZmx0cXNpdnZ4eGlmbnZpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc5NzYzNTAsImV4cCI6MjA3MzU1MjM1MH0.F4zzcpCHl9v-Rnj0wgKJ5zBf1HteVyXelMLQDDEN28Q";
+    const SUPABASE_SERVICE_ROLE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ2amJqZmx0cXNpdnZ4eGlmbnZpIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1Nzk3NjM1MCwiZXhwIjoyMDczNTUyMzUwfQ.y1rOHt59kVEor5gX8Wz1OGpq26xDICCM8n_T_nuVaYs";
 
     const supabase = createClient(
       SUPABASE_URL,
       SUPABASE_SERVICE_ROLE_KEY,
-      {
-        auth: { persistSession: false }
-      }
+      { auth: { persistSession: false } }
     );
 
     console.log("🔌 Supabase connected");
@@ -48,13 +46,13 @@ export default async function handler(req, res) {
     const order = data?.[0];
 
     if (!order) {
-      console.error("❌ Order not found in DB");
+      console.error("❌ Order not found");
       return res.status(404).json({ error: "Order not found" });
     }
 
     console.log("✅ Order found:", order.order_id);
 
-    // 🔹 INTAKE DATA
+    // 🔹 INTAKE
     const intake = order.intake_json || {};
 
     // 🔹 BUILD DOCUMENT TEXT
@@ -78,7 +76,7 @@ Lender Signature: _______________________
 
     console.log("📄 Document built");
 
-    // 🔹 PDF GENERATION (SAFE WRAP)
+    // 🔹 CREATE PDF
     let pdfBytes;
 
     try {
@@ -86,11 +84,9 @@ Lender Signature: _______________________
 
       const pdfDoc = await PDFDocument.create();
       const page = pdfDoc.addPage();
-
       const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
 
       let y = 750;
-
       const lines = documentText.split('\n');
 
       for (const line of lines) {
@@ -109,7 +105,6 @@ Lender Signature: _______________________
 
     } catch (pdfError) {
       console.error("❌ PDF ERROR:", pdfError);
-
       return res.status(500).json({
         error: "PDF generation failed",
         details: pdfError.message
@@ -133,13 +128,13 @@ Lender Signature: _______________________
 
     console.log("📦 Uploaded to storage:", filePath);
 
-    // 🔹 UPDATE DATABASE
+    // 🔹 UPDATE DATABASE (ONLY REAL COLUMNS)
     const { error: updateError } = await supabase
       .from('pweb_orders')
       .update({
-        generated_document: documentText,
         pdf_path: filePath,
         order_status: "document_created",
+        fulfilled_at: new Date().toISOString()
       })
       .eq('order_id', order_id);
 
