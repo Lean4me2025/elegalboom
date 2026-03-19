@@ -1,5 +1,5 @@
 import { createClient } from "@supabase/supabase-js";
-import puppeteer from "puppeteer";
+import { PDFDocument, StandardFonts } from "pdf-lib";
 
 export default async function handler(req, res) {
   try {
@@ -30,7 +30,7 @@ export default async function handler(req, res) {
 
     const intake = order.intake_json || {};
 
-    // 2️⃣ BUILD DOCUMENT TEXT (YOUR EXISTING LOGIC CAN GO HERE)
+    // 2️⃣ BUILD DOCUMENT TEXT (YOUR EXISTING LOGIC)
     const documentText = `
 PROMISSORY NOTE
 
@@ -51,38 +51,42 @@ Lender Signature: ______________________
 
     console.log("📄 Document text created");
 
-    // 3️⃣ CONVERT TEXT → HTML
-    const html = `
-      <html>
-        <body style="font-family: Arial; padding:40px; white-space: pre-wrap;">
-          ${documentText}
-        </body>
-      </html>
-    `;
+    // 3️⃣ CREATE PDF USING pdf-lib
+    const pdfDoc = await PDFDocument.create();
+    const page = pdfDoc.addPage();
 
-    // 4️⃣ GENERATE PDF
-    const browser = await puppeteer.launch({
-      args: ["--no-sandbox", "--disable-setuid-sandbox"],
-    });
+    const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
 
-    const page = await browser.newPage();
-    await page.setContent(html);
+    const { width, height } = page.getSize();
 
-    const pdfBuffer = await page.pdf({
-      format: "A4",
-      printBackground: true,
-    });
+    const fontSize = 12;
+    const lineHeight = 18;
 
-    await browser.close();
+    // Split text into lines
+    const lines = documentText.split("\n");
 
-    console.log("✅ PDF generated");
+    let y = height - 40;
 
-    // 5️⃣ UPLOAD TO SUPABASE STORAGE
+    for (const line of lines) {
+      page.drawText(line, {
+        x: 40,
+        y: y,
+        size: fontSize,
+        font: font,
+      });
+      y -= lineHeight;
+    }
+
+    const pdfBytes = await pdfDoc.save();
+
+    console.log("✅ PDF created");
+
+    // 4️⃣ UPLOAD TO SUPABASE STORAGE
     const filePath = `documents/${order_id}.pdf`;
 
     const { error: uploadError } = await supabase.storage
       .from("documents")
-      .upload(filePath, pdfBuffer, {
+      .upload(filePath, pdfBytes, {
         contentType: "application/pdf",
         upsert: true,
       });
@@ -94,7 +98,7 @@ Lender Signature: ______________________
 
     console.log("📦 Uploaded to storage:", filePath);
 
-    // 6️⃣ SAVE TO DATABASE
+    // 5️⃣ SAVE TO DATABASE
     const { error: updateError } = await supabase
       .from("pweb_orders")
       .update({
@@ -111,10 +115,10 @@ Lender Signature: ______________________
 
     console.log("✅ Database updated");
 
-    // ✅ FINAL RESPONSE
+    // ✅ RESPONSE
     return res.status(200).json({
       success: true,
-      message: "Fulfillment completed",
+      message: "PDF created successfully",
       order_id,
       pdf_path: filePath,
     });
