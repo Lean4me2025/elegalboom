@@ -20,13 +20,19 @@ export default async function handler(req, res) {
       });
     }
 
-    // 🔥 HARDCODED SUPABASE (TEMP FIX)
+    // 🔥 HARDCODED SUPABASE (PUT YOUR VALUES HERE)
+    const SUPABASE_URL = "https://vvjbjfltqsivvxxifnvi.supabase.co";
+    const SUPABASE_SERVICE_ROLE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ2amJqZmx0cXNpdnZ4eGlmbnZpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc5NzYzNTAsImV4cCI6MjA3MzU1MjM1MH0.F4zzcpCHl9v-Rnj0wgKJ5zBf1HteVyXelMLQDDEN28Q";
+
     const supabase = createClient(
-      "https://YOUR_PROJECT_ID.supabase.co",
-      "YOUR_SERVICE_ROLE_KEY"
+      SUPABASE_URL,
+      SUPABASE_SERVICE_ROLE_KEY,
+      {
+        auth: { persistSession: false }
+      }
     );
 
-    console.log("🔌 Supabase initialized");
+    console.log("🔌 Supabase connected");
 
     // 🔹 FETCH ORDER
     const { data, error: fetchError } = await supabase
@@ -42,15 +48,16 @@ export default async function handler(req, res) {
     const order = data?.[0];
 
     if (!order) {
+      console.error("❌ Order not found in DB");
       return res.status(404).json({ error: "Order not found" });
     }
 
-    console.log("✅ Order found");
+    console.log("✅ Order found:", order.order_id);
 
-    // 🔹 INTAKE
+    // 🔹 INTAKE DATA
     const intake = order.intake_json || {};
 
-    // 🔹 BUILD DOCUMENT
+    // 🔹 BUILD DOCUMENT TEXT
     const documentText = `
 PROMISSORY NOTE
 
@@ -71,7 +78,7 @@ Lender Signature: _______________________
 
     console.log("📄 Document built");
 
-    // 🔹 PDF GENERATION (SAFE)
+    // 🔹 PDF GENERATION (SAFE WRAP)
     let pdfBytes;
 
     try {
@@ -109,7 +116,7 @@ Lender Signature: _______________________
       });
     }
 
-    // 🔹 UPLOAD
+    // 🔹 UPLOAD TO STORAGE
     const filePath = `documents/${order_id}.pdf`;
 
     const { error: uploadError } = await supabase.storage
@@ -124,7 +131,7 @@ Lender Signature: _______________________
       return res.status(500).json({ error: uploadError.message });
     }
 
-    console.log("📦 Uploaded");
+    console.log("📦 Uploaded to storage:", filePath);
 
     // 🔹 UPDATE DATABASE
     const { error: updateError } = await supabase
@@ -141,7 +148,7 @@ Lender Signature: _______________________
       return res.status(500).json({ error: updateError.message });
     }
 
-    console.log("✅ DONE");
+    console.log("✅ Database updated");
 
     return res.status(200).json({
       success: true,
