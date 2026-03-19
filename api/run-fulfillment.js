@@ -1,32 +1,39 @@
 import { createClient } from '@supabase/supabase-js';
-import { PDFDocument, StandardFonts } from 'pdf-lib';
 
 export default async function handler(req, res) {
   try {
-    // ✅ FIXED INPUT (supports query + body)
-    const order_id =
-      req.query.order_id ||
-      req.body?.order_id;
+    console.log("🚀 Run Fulfillment Triggered");
 
-    console.log("🚀 Incoming order_id:", order_id);
+    // ==============================
+    // ✅ GET ORDER ID (GET + POST)
+    // ==============================
+    let order_id = null;
+
+    if (req.method === "POST") {
+      order_id = req.body?.order_id;
+    } else if (req.method === "GET") {
+      order_id = req.query?.order_id;
+    }
 
     if (!order_id) {
       return res.status(400).json({
-        error: "Missing order_id",
-        query: req.query,
-        body: req.body
+        error: "Missing order_id"
       });
     }
 
-    // ✅ INIT SUPABASE
+    console.log("📦 Order ID:", order_id);
+
+    // ==============================
+    // ✅ SUPABASE CONNECTION (FORCED CORRECT)
+    // ==============================
     const supabase = createClient(
-      process.env.SUPABASE_URL,
+      "https://vvjbjfltqsivvxxifnvi.supabase.co",
       process.env.SUPABASE_SERVICE_ROLE_KEY
     );
 
-    console.log("🚀 Running fulfillment for:", order_id);
-
-    // 🔹 GET ORDER
+    // ==============================
+    // ✅ FETCH ORDER
+    // ==============================
     const { data: order, error: fetchError } = await supabase
       .from('pweb_orders')
       .select('*')
@@ -34,107 +41,34 @@ export default async function handler(req, res) {
       .single();
 
     if (fetchError || !order) {
-      console.error("❌ Order fetch error:", fetchError);
-      return res.status(400).json({ error: "Order not found" });
+      console.error("❌ Fetch Error:", fetchError);
+      return res.status(500).json({ error: "Order not found" });
     }
 
-    console.log("✅ Order found:", order.order_id);
+    console.log("✅ Order Loaded");
 
-    // 🔹 INTAKE DATA
     const intake = order.intake_json || {};
 
-    // 🔹 BUILD DOCUMENT TEXT (existing logic)
+    // ==============================
+    // 🧾 GENERATE DOCUMENT (V1 TEXT)
+    // ==============================
     const documentText = `
 PROMISSORY NOTE
 
-Date: ${intake.pn_start_date || "N/A"}
+Lender: ${intake.pn_lender_name || "N/A"}
+Borrower: ${intake.pn_borrower_name || "N/A"}
 
-Lender: ${intake.pn_lender_name || ""}
-Borrower: ${intake.pn_borrower_name || ""}
+Principal Amount: $${intake.pn_principal_amount || "0"}
+Interest Rate: ${intake.pn_interest_rate || "0"}%
 
-Amount: $${intake.pn_principal_amount || order.order_notes || ""}
-Maturity Date: ${intake.pn_maturity_date || ""}
+Maturity Date: ${intake.pn_maturity_date || "N/A"}
 
-The Borrower promises to repay the Lender the above amount.
+Address: ${intake.street_address || ""}
+City: ${intake.city || ""}
+State: ${intake.state || ""}
+Zip: ${intake.zip || ""}
 
-Borrower Signature: _______________________
-
-Lender Signature: _______________________
+This agreement is legally binding.
 `;
 
-    console.log("📄 Document text created");
-
-    // 🔹 CREATE PDF
-    const pdfDoc = await PDFDocument.create();
-    const page = pdfDoc.addPage();
-
-    const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
-
-    const { width, height } = page.getSize();
-
-    const fontSize = 12;
-    const lineHeight = 18;
-
-    let y = height - 40;
-
-    const lines = documentText.split('\n');
-
-    for (const line of lines) {
-      page.drawText(line, {
-        x: 40,
-        y: y,
-        size: fontSize,
-        font: font,
-      });
-      y -= lineHeight;
-    }
-
-    const pdfBytes = await pdfDoc.save();
-
-    console.log("✅ PDF created");
-
-    // 🔹 UPLOAD TO STORAGE
-    const filePath = `documents/${order_id}.pdf`;
-
-    const { error: uploadError } = await supabase.storage
-      .from('documents')
-      .upload(filePath, pdfBytes, {
-        contentType: 'application/pdf',
-        upsert: true,
-      });
-
-    if (uploadError) {
-      console.error("❌ Upload error:", uploadError);
-      return res.status(500).json({ error: uploadError.message });
-    }
-
-    console.log("📦 Uploaded to storage:", filePath);
-
-    // 🔹 UPDATE DATABASE
-    const { error: updateError } = await supabase
-      .from('pweb_orders')
-      .update({
-        generated_document: documentText,
-        pdf_path: filePath,
-        order_status: "document_created",
-      })
-      .eq('order_id', order_id);
-
-    if (updateError) {
-      console.error("❌ DB update error:", updateError);
-      return res.status(500).json({ error: updateError.message });
-    }
-
-    console.log("✅ Database updated");
-
-    return res.status(200).json({
-      success: true,
-      order_id,
-      pdf_path: filePath
-    });
-
-  } catch (err) {
-    console.error("🔥 Unexpected error:", err);
-    return res.status(500).json({ error: err.message });
-  }
-}
+    console.log("📄 Document Generated");
