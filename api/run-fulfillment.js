@@ -5,7 +5,7 @@ export default async function handler(req, res) {
     console.log("🚀 Run Fulfillment Triggered");
 
     // ==============================
-    // ✅ ACCEPT BOTH GET + POST
+    // ✅ GET ORDER ID (GET + POST)
     // ==============================
     let order_id = null;
 
@@ -17,15 +17,14 @@ export default async function handler(req, res) {
 
     if (!order_id) {
       return res.status(400).json({
-        error: "Missing order_id",
-        hint: "Use ?order_id=XXXX or send in POST body"
+        error: "Missing order_id"
       });
     }
 
     console.log("📦 Order ID:", order_id);
 
     // ==============================
-    // ✅ FORCE CORRECT SUPABASE
+    // ✅ SUPABASE CONNECTION (FORCED CORRECT)
     // ==============================
     const supabase = createClient(
       "https://vvjbjfltqsivvxxifnvi.supabase.co",
@@ -75,13 +74,14 @@ This agreement is legally binding.
     console.log("📄 Document Generated");
 
     // ==============================
-    // 💾 SAVE DOCUMENT
+    // 💾 SAVE RESULT (MATCHES YOUR SCHEMA)
     // ==============================
     const { error: updateError } = await supabase
       .from('pweb_orders')
       .update({
-        generated_document: documentText,
-        order_status: "document_created"
+        docx_path: `generated/promissory_note_${order_id}.txt`,
+        order_status: "document_created",
+        fulfilled_at: new Date().toISOString()
       })
       .eq('order_id', order_id);
 
@@ -98,7 +98,8 @@ This agreement is legally binding.
     return res.status(200).json({
       success: true,
       message: "Fulfillment completed",
-      order_id
+      order_id,
+      file_path: `generated/promissory_note_${order_id}.txt`
     });
 
   } catch (err) {
