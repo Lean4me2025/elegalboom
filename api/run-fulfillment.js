@@ -4,22 +4,37 @@ export default async function handler(req, res) {
   try {
     console.log("🚀 Run Fulfillment Triggered");
 
-    // ✅ FORCE CORRECT SUPABASE CONNECTION (temporary override)
+    // ==============================
+    // ✅ ACCEPT BOTH GET + POST
+    // ==============================
+    let order_id = null;
+
+    if (req.method === "POST") {
+      order_id = req.body?.order_id;
+    } else if (req.method === "GET") {
+      order_id = req.query?.order_id;
+    }
+
+    if (!order_id) {
+      return res.status(400).json({
+        error: "Missing order_id",
+        hint: "Use ?order_id=XXXX or send in POST body"
+      });
+    }
+
+    console.log("📦 Order ID:", order_id);
+
+    // ==============================
+    // ✅ FORCE CORRECT SUPABASE
+    // ==============================
     const supabase = createClient(
       "https://vvjbjfltqsivvxxifnvi.supabase.co",
       process.env.SUPABASE_SERVICE_ROLE_KEY
     );
 
-    // ✅ Get order ID from request
-    const { order_id } = req.body;
-
-    if (!order_id) {
-      return res.status(400).json({ error: "Missing order_id" });
-    }
-
-    console.log("📦 Processing Order:", order_id);
-
-    // ✅ Fetch order from database
+    // ==============================
+    // ✅ FETCH ORDER
+    // ==============================
     const { data: order, error: fetchError } = await supabase
       .from('pweb_orders')
       .select('*')
@@ -33,13 +48,11 @@ export default async function handler(req, res) {
 
     console.log("✅ Order Loaded");
 
-    // ✅ Extract intake JSON
     const intake = order.intake_json || {};
 
     // ==============================
-    // 🧾 SIMPLE DOCUMENT GENERATION
+    // 🧾 GENERATE DOCUMENT (V1 TEXT)
     // ==============================
-
     const documentText = `
 PROMISSORY NOTE
 
@@ -51,15 +64,19 @@ Interest Rate: ${intake.pn_interest_rate || "0"}%
 
 Maturity Date: ${intake.pn_maturity_date || "N/A"}
 
+Address: ${intake.street_address || ""}
+City: ${intake.city || ""}
+State: ${intake.state || ""}
+Zip: ${intake.zip || ""}
+
 This agreement is legally binding.
 `;
 
     console.log("📄 Document Generated");
 
     // ==============================
-    // 💾 STORE DOCUMENT (TEMP TEXT)
+    // 💾 SAVE DOCUMENT
     // ==============================
-
     const { error: updateError } = await supabase
       .from('pweb_orders')
       .update({
@@ -78,7 +95,6 @@ This agreement is legally binding.
     // ==============================
     // 🎉 SUCCESS RESPONSE
     // ==============================
-
     return res.status(200).json({
       success: true,
       message: "Fulfillment completed",
@@ -87,6 +103,7 @@ This agreement is legally binding.
 
   } catch (err) {
     console.error("🔥 FATAL ERROR:", err);
+
     return res.status(500).json({
       error: "Fulfillment failed",
       details: err.message
