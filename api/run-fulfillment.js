@@ -1,14 +1,24 @@
-import { createClient } from "@supabase/supabase-js";
-import { PDFDocument, StandardFonts } from "pdf-lib";
+import { createClient } from '@supabase/supabase-js';
+import { PDFDocument, StandardFonts } from 'pdf-lib';
 
 export default async function handler(req, res) {
   try {
-    const { order_id } = req.query;
+    // ✅ FIXED INPUT (supports query + body)
+    const order_id =
+      req.query.order_id ||
+      req.body?.order_id;
+
+    console.log("🚀 Incoming order_id:", order_id);
 
     if (!order_id) {
-      return res.status(400).json({ error: "Missing order_id" });
+      return res.status(400).json({
+        error: "Missing order_id",
+        query: req.query,
+        body: req.body
+      });
     }
 
+    // ✅ INIT SUPABASE
     const supabase = createClient(
       process.env.SUPABASE_URL,
       process.env.SUPABASE_SERVICE_ROLE_KEY
@@ -16,11 +26,11 @@ export default async function handler(req, res) {
 
     console.log("🚀 Running fulfillment for:", order_id);
 
-    // 1️⃣ GET ORDER
+    // 🔹 GET ORDER
     const { data: order, error: fetchError } = await supabase
-      .from("pweb_orders")
-      .select("*")
-      .eq("order_id", order_id)
+      .from('pweb_orders')
+      .select('*')
+      .eq('order_id', order_id)
       .single();
 
     if (fetchError || !order) {
@@ -28,9 +38,12 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: "Order not found" });
     }
 
+    console.log("✅ Order found:", order.order_id);
+
+    // 🔹 INTAKE DATA
     const intake = order.intake_json || {};
 
-    // 2️⃣ BUILD DOCUMENT TEXT (YOUR EXISTING LOGIC)
+    // 🔹 BUILD DOCUMENT TEXT (existing logic)
     const documentText = `
 PROMISSORY NOTE
 
@@ -44,14 +57,14 @@ Maturity Date: ${intake.pn_maturity_date || ""}
 
 The Borrower promises to repay the Lender the above amount.
 
-Borrower Signature: ______________________
+Borrower Signature: _______________________
 
-Lender Signature: ______________________
-    `;
+Lender Signature: _______________________
+`;
 
     console.log("📄 Document text created");
 
-    // 3️⃣ CREATE PDF USING pdf-lib
+    // 🔹 CREATE PDF
     const pdfDoc = await PDFDocument.create();
     const page = pdfDoc.addPage();
 
@@ -62,10 +75,9 @@ Lender Signature: ______________________
     const fontSize = 12;
     const lineHeight = 18;
 
-    // Split text into lines
-    const lines = documentText.split("\n");
-
     let y = height - 40;
+
+    const lines = documentText.split('\n');
 
     for (const line of lines) {
       page.drawText(line, {
@@ -81,13 +93,13 @@ Lender Signature: ______________________
 
     console.log("✅ PDF created");
 
-    // 4️⃣ UPLOAD TO SUPABASE STORAGE
+    // 🔹 UPLOAD TO STORAGE
     const filePath = `documents/${order_id}.pdf`;
 
     const { error: uploadError } = await supabase.storage
-      .from("documents")
+      .from('documents')
       .upload(filePath, pdfBytes, {
-        contentType: "application/pdf",
+        contentType: 'application/pdf',
         upsert: true,
       });
 
@@ -98,15 +110,15 @@ Lender Signature: ______________________
 
     console.log("📦 Uploaded to storage:", filePath);
 
-    // 5️⃣ SAVE TO DATABASE
+    // 🔹 UPDATE DATABASE
     const { error: updateError } = await supabase
-      .from("pweb_orders")
+      .from('pweb_orders')
       .update({
         generated_document: documentText,
         pdf_path: filePath,
         order_status: "document_created",
       })
-      .eq("order_id", order_id);
+      .eq('order_id', order_id);
 
     if (updateError) {
       console.error("❌ DB update error:", updateError);
@@ -115,16 +127,14 @@ Lender Signature: ______________________
 
     console.log("✅ Database updated");
 
-    // ✅ RESPONSE
     return res.status(200).json({
       success: true,
-      message: "PDF created successfully",
       order_id,
-      pdf_path: filePath,
+      pdf_path: filePath
     });
 
   } catch (err) {
-    console.error("🔥 FATAL ERROR:", err);
+    console.error("🔥 Unexpected error:", err);
     return res.status(500).json({ error: err.message });
   }
 }
