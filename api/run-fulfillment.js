@@ -5,7 +5,7 @@ export default async function handler(req, res) {
   console.log("🔥 FUNCTION STARTED");
 
   try {
-    // 🔹 SAFE INPUT
+    // 🔹 INPUT
     const raw_order_id =
       req.query?.order_id ||
       req.body?.order_id;
@@ -20,13 +20,15 @@ export default async function handler(req, res) {
       });
     }
 
-    // 🔹 INIT SUPABASE
+    // 🔥 HARDCODED SUPABASE (TEMP FIX)
     const supabase = createClient(
-      process.env.SUPABASE_URL,
-      process.env.SUPABASE_SERVICE_ROLE_KEY
+      "https://YOUR_PROJECT_ID.supabase.co",
+      "YOUR_SERVICE_ROLE_KEY"
     );
 
-    // 🔹 FETCH ORDER (NO .single())
+    console.log("🔌 Supabase initialized");
+
+    // 🔹 FETCH ORDER
     const { data, error: fetchError } = await supabase
       .from('pweb_orders')
       .select('*')
@@ -48,7 +50,7 @@ export default async function handler(req, res) {
     // 🔹 INTAKE
     const intake = order.intake_json || {};
 
-    // 🔹 BUILD TEXT
+    // 🔹 BUILD DOCUMENT
     const documentText = `
 PROMISSORY NOTE
 
@@ -69,7 +71,7 @@ Lender Signature: _______________________
 
     console.log("📄 Document built");
 
-    // 🔹 SAFE PDF GENERATION
+    // 🔹 PDF GENERATION (SAFE)
     let pdfBytes;
 
     try {
@@ -124,7 +126,7 @@ Lender Signature: _______________________
 
     console.log("📦 Uploaded");
 
-    // 🔹 UPDATE DB
+    // 🔹 UPDATE DATABASE
     const { error: updateError } = await supabase
       .from('pweb_orders')
       .update({
