@@ -883,7 +883,7 @@ if (error) {
 const { error: updateError } = await supabaseClient
   .from("pweb_orders")
   .update({ order_status: "intake_complete" })
-  .eq("order_id", dbRow.order_id);
+  .eq("id", data.id);
 
 if (updateError) {
   console.error(updateError);
@@ -896,7 +896,7 @@ if (updateError) {
         sessionStorage.setItem("elegal_intake_data", JSON.stringify({
           ...dbRow,
           ...intake,
-          order_id: data.order_id
+          order_id: data.id
         }));
 
         window.location.href = "review-and-pay.html";
