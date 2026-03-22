@@ -882,7 +882,7 @@ if (error) {
 // 🔥 STATUS TRANSITION — THIS FIRES TRIGGER
 const { error: updateError } = await supabaseClient
   .from("pweb_orders")
-  .update({ order_status: "intake_complete" })
+  .update({ order_status: "pending" })
   .eq("id", data.id);
 
 if (updateError) {
