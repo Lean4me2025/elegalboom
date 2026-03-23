@@ -39,89 +39,102 @@
   </div>
 
   <script>
-    function safeParse(str){try{return JSON.parse(str);}catch(e){return null;}}
-    function getFirstSessionObject(keys){
-      for(const k of keys){
-        const raw=sessionStorage.getItem(k);
-        if(!raw) continue;
-        const obj=safeParse(raw);
-        if(obj && typeof obj==="object") return {key:k,obj};
+    (function () {
+      const SESSION_KEY = "elegal_selected_order";
+
+      function safeParse(str) {
+        try { return JSON.parse(str); } catch (e) { return null; }
       }
-      return {key:null,obj:null};
-    }
-    function normTier(raw){
-      if(!raw) return "";
-      const s=String(raw).trim();
-      if(/^tier\s*\d/i.test(s)) return s;
-      if(/^\d$/.test(s)) return `Tier ${s}`;
-      return s;
-    }
-    function pickTier(payload){
-      return normTier(payload.tier || payload.tier_name || payload.selected_tier || payload.plan || "");
-    }
-    function pickPrice(payload){
-      const v = payload.price ?? payload.tier_price ?? payload.amount ?? payload.total ?? "";
-      if(v===null || v===undefined) return "";
-      const n = (typeof v==="string") ? v.replace(/[^0-9.]/g,"") : v;
-      return n;
-    }
-    function pickDoc(payload){
-      return payload.doc_type || payload.document_type || payload.doc || "";
-    }
-    function pickEmail(payload){
-      return payload.client_email || payload.email || payload.customer_email || "";
-    }
-    function pickOrderId(payload){
-      return payload.order_id || payload.orderId || "";
-    }
-    function setText(id,val){
-      const el=document.getElementById(id);
-      if(el) el.textContent = (val!==undefined && val!==null && String(val).length) ? String(val) : "—";
-    }
-    function getPayLink(tier){
-      const t=String(tier||"").toLowerCase();
-      if(t.startsWith("tier 1")) return "https://pay.elegalboom.org/e4b79a60-0fd7-431c-8bfc-ae0";
-      if(t.startsWith("tier 2")) return "https://pay.elegalboom.org/aeda586f-65f5-4bf0-98f3-7a2";
-      if(t.startsWith("tier 3")) return "https://pay.elegalboom.org/71ca7144-e537-4fbd-823d-c10";
-      if(t.startsWith("tier 4")) return "https://pay.elegalboom.org/55c7cd3d-1048-4b8c-aadb-843";
-      return "";
-    }
 
-    const {obj:payload}=getFirstSessionObject(["elegal_intake_data","legal_intake_data","elegal_order_payload","legal_order_payload","legal_selected_order"]);
-    if(!payload){
-      alert("Missing session data. Please return to Intake.");
-      window.location.href="intake.html";
-    }
+      function setText(id, val) {
+        const el = document.getElementById(id);
+        if (!el) return;
+        el.textContent = (val !== undefined && val !== null && String(val).length) ? String(val) : "—";
+      }
 
-    const orderId=pickOrderId(payload);
-    const tier=pickTier(payload);
-    const price=pickPrice(payload);
-    const doc=pickDoc(payload);
-    const email=pickEmail(payload);
+      function normTier(raw) {
+        if (!raw) return "";
+        const s = String(raw).trim();
+        if (/^tier\s*\d/i.test(s)) return s;
+        if (/^\d$/.test(s)) return `Tier ${s}`;
+        return s;
+      }
 
-    setText("orderId", orderId);
-    setText("docType", doc);
-    setText("tier", tier);
-    setText("price", price);
-    setText("email", email);
-}
-  const payLink = getPayLink(tier);
-const payBtn = document.getElementById("payButton");
+      function pickTier(payload) {
+        return normTier(payload.tier || payload.tier_name || payload.selected_tier || payload.plan || "");
+      }
 
-if (payLink) {
-  payBtn.href = payLink;
-  payBtn.classList.remove("disabled");
-} else {
-  payBtn.classList.add("disabled");
-  console.warn("No pay link match for tier:", tier);
-}
-    }else{
-      payBtn.classList.add("disabled");
-      console.warn("No pay link match for tier:", tier);
-    }
+      function pickPrice(payload) {
+        const v = payload.price ?? payload.tier_price ?? payload.amount ?? payload.total ?? "";
+        if (v === null || v === undefined || v === "") return "";
+        const n = (typeof v === "string") ? v.replace(/[^0-9.]/g, "") : v;
+        return n;
+      }
 
-    document.getElementById("backToIntake").addEventListener("click",()=>{window.location.href="intake.html";});
-    document.getElementById("backToCatalog").addEventListener("click",()=>{window.location.href="catalog.html";});
+      function pickDoc(payload) {
+        return payload.doc_type || payload.document_type || payload.doc || "";
+      }
+
+      function pickEmail(payload) {
+        return payload.client_email || payload.email || payload.customer_email || "";
+      }
+
+      function pickOrderId(payload) {
+        return payload.order_id || payload.orderId || "";
+      }
+
+      function getPayLink(tier) {
+        const t = String(tier || "").toLowerCase();
+        if (t.startsWith("tier 1")) return "https://pay.elegalboom.org/e4b79a60-0fd7-431c-8bfc-ae0";
+        if (t.startsWith("tier 2")) return "https://pay.elegalboom.org/aeda586f-65f5-4bf0-98f3-7a2";
+        if (t.startsWith("tier 3")) return "https://pay.elegalboom.org/71ca7144-e537-4fbd-823d-c10";
+        if (t.startsWith("tier 4")) return "https://pay.elegalboom.org/55c7cd3d-1048-4b8c-aadb-843";
+        return "";
+      }
+
+      const raw = sessionStorage.getItem(SESSION_KEY);
+      const payload = raw ? safeParse(raw) : {};
+
+      const orderId = pickOrderId(payload || {});
+      const tier = pickTier(payload || {});
+      const price = pickPrice(payload || {});
+      const doc = pickDoc(payload || {});
+      const email = pickEmail(payload || {});
+
+      setText("orderId", orderId);
+      setText("docType", doc);
+      setText("tier", tier);
+      setText("price", price);
+      setText("email", email);
+
+      const payBtn = document.getElementById("payButton");
+      const payLink = getPayLink(tier);
+
+      if (payBtn) {
+        if (payLink) {
+          payBtn.href = payLink;
+          payBtn.classList.remove("disabled");
+        } else {
+          payBtn.classList.add("disabled");
+          console.warn("No pay link match for tier:", tier);
+        }
+      }
+
+      const backToIntake = document.getElementById("backToIntake");
+      const backToCatalog = document.getElementById("backToCatalog");
+
+      if (backToIntake) {
+        backToIntake.addEventListener("click", function () {
+          window.location.href = "intake.html";
+        });
+      }
+
+      if (backToCatalog) {
+        backToCatalog.addEventListener("click", function () {
+          window.location.href = "catalog.html";
+        });
+      }
+    })();
   </script>
 </body>
-</html>
+</
