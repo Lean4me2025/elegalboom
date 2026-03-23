@@ -104,15 +104,16 @@
     setText("tier", tier);
     setText("price", price);
     setText("email", email);
+const payLink = getPayLink(tier);
+const payBtn = document.getElementById("payButton");
 
-    const payLink=getPayLink(tier);
-    const payBtn=document.getElementById("payButton");
-    if(payLink){
-      payBtn.href=payLink;
-      if (payLink) {
+if (payLink) {
   payBtn.href = payLink;
-  // 🔥 ADD THIS RIGHT HERE (LINE 112)
-  payBtn.addEventListener("click", function () {
+  payBtn.classList.remove("disabled");
+
+  payBtn.addEventListener("click", function (e) {
+    e.preventDefault();
+
     fetch("https://vvjbjfltqsivvxxifnvi.supabase.co/functions/v1/document_generate", {
       method: "POST",
       headers: {
@@ -121,12 +122,18 @@
       body: JSON.stringify({
         orderId: orderId
       })
+    })
+    .catch(err => console.error("Fetch error:", err))
+    .finally(() => {
+      window.location.href = payLink;
     });
   });
 
-  payBtn.classList.remove("disabled");
+} else {
+  payBtn.classList.add("disabled");
+  console.warn("No pay link match for tier:", tier);
 }
-      payBtn.classList.remove("disabled");
+  
     }else{
       payBtn.classList.add("disabled");
       console.warn("No pay link match for tier:", tier);
