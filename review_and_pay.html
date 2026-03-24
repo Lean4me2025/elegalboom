@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Review & Pay</title>
+  <style>
+    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;padding:20px;background:#f6f8fb;color:#0b1220;}
+    .card{max-width:760px;margin:0 auto;background:#fff;border:1px solid #e3e6ef;border-radius:12px;padding:18px;box-shadow:0 10px 25px rgba(10,20,40,.06);}
+    h1{margin:0 0 10px 0;}
+    .muted{color:#5b6b86;font-size:13px;margin-bottom:14px;}
+    .row{display:flex;gap:12px;align-items:flex-start;margin:10px 0;}
+    .row strong{width:140px;flex:0 0 140px;}
+    .val{flex:1;}
+    #payButton{display:inline-block;margin-top:14px;padding:12px 16px;border-radius:10px;background:#0f39d8;color:#fff;text-decoration:none;font-weight:800;}
+    #payButton.disabled{background:#9aa3b2;pointer-events:none;}
+    .actions{display:flex;gap:14px;align-items:center;flex-wrap:wrap;margin-top:10px;}
+    .link{color:#0f39d8;text-decoration:underline;cursor:pointer;font-weight:700;}
+    hr{border:none;border-top:1px solid #e3e6ef;margin:14px 0;}
+    code{background:#f3f5fb;padding:2px 6px;border-radius:6px;}
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>Review & Pay</h1>
+    <div class="muted">Confirm your details below, then proceed to payment.</div>
+    <hr>
+    <div class="row"><strong>Order ID:</strong><div class="val" id="orderId">—</div></div>
+    <div class="row"><strong>Document:</strong><div class="val" id="docType">—</div></div>
+    <div class="row"><strong>Tier:</strong><div class="val" id="tier">—</div></div>
+    <div class="row"><strong>Price:</strong><div class="val">$<span id="price">—</span></div></div>
+    <div class="row"><strong>Email:</strong><div class="val" id="email">—</div></div>
+    <div class="actions">
+      <a id="payButton" class="disabled" target="_blank" rel="noopener">Proceed To Payment</a>
+      <span class="link" id="backToIntake">Back to Intake</span>
+      <span class="link" id="backToCatalog">Back to Catalog</span>
+    </div>
+    <div class="muted" style="margin-top:12px;">This page is display-only. If data is missing, Intake didn’t save the session payload.</div>
+  </div>
+
+  <script>
+    (function () {
+      const SESSION_KEY = "elegal_selected_order";
+
+      function safeParse(str) {
+        try { return JSON.parse(str); } catch (e) { return null; }
+      }
+
+      function setText(id, val) {
+        const el = document.getElementById(id);
+        if (!el) return;
+        el.textContent = (val !== undefined && val !== null && String(val).length) ? String(val) : "—";
+      }
+
+      function normTier(raw) {
+        if (!raw) return "";
+        const s = String(raw).trim();
+        if (/^tier\s*\d/i.test(s)) return s;
+        if (/^\d$/.test(s)) return `Tier ${s}`;
+        return s;
+      }
+
+      function pickTier(payload) {
+        return normTier(payload.tier || payload.tier_name || payload.selected_tier || payload.plan || "");
+      }
+
+      function pickPrice(payload) {
+        const v = payload.price ?? payload.tier_price ?? payload.amount ?? payload.total ?? "";
+        if (v === null || v === undefined || v === "") return "";
+        const n = (typeof v === "string") ? v.replace(/[^0-9.]/g, "") : v;
+        return n;
+      }
+
+      function pickDoc(payload) {
+        return payload.doc_type || payload.document_type || payload.doc || "";
+      }
+
+      function pickEmail(payload) {
+        return payload.client_email || payload.email || payload.customer_email || "";
+      }
+
+      function pickOrderId(payload) {
+        return payload.order_id || payload.orderId || "";
+      }
+
+      function getPayLink(tier) {
+        const t = String(tier || "").toLowerCase();
+        if (t.startsWith("tier 1")) return "https://pay.elegalboom.org/e4b79a60-0fd7-431c-8bfc-ae0";
+        if (t.startsWith("tier 2")) return "https://pay.elegalboom.org/aeda586f-65f5-4bf0-98f3-7a2";
+        if (t.startsWith("tier 3")) return "https://pay.elegalboom.org/71ca7144-e537-4fbd-823d-c10";
+        if (t.startsWith("tier 4")) return "https://pay.elegalboom.org/55c7cd3d-1048-4b8c-aadb-843";
+        return "";
+      }
+
+      const raw = sessionStorage.getItem(SESSION_KEY);
+      const payload = raw ? safeParse(raw) : {};
+
+      const orderId = pickOrderId(payload || {});
+      const tier = pickTier(payload || {});
+      const price = pickPrice(payload || {});
+      const doc = pickDoc(payload || {});
+      const email = pickEmail(payload || {});
+
+      setText("orderId", orderId);
+      setText("docType", doc);
+      setText("tier", tier);
+      setText("price", price);
+      setText("email", email);
+
+      const payBtn = document.getElementById("payButton");
+      const payLink = getPayLink(tier);
+
+      if (payBtn) {
+        if (payLink) {
+          payBtn.href = payLink;
+          payBtn.classList.remove("disabled");
+        } else {
+          payBtn.classList.add("disabled");
+          console.warn("No pay link match for tier:", tier);
+        }
+      }
+
+      const backToIntake = document.getElementById("backToIntake");
+      const backToCatalog = document.getElementById("backToCatalog");
+
+      if (backToIntake) {
+        backToIntake.addEventListener("click", function () {
+          window.location.href = "intake.html";
+        });
+      }
+
+      if (backToCatalog) {
+        backToCatalog.addEventListener("click", function () {
+          window.location.href = "catalog.html";
+        });
+      }
+    })();
+  </script>
+</body>
+</
