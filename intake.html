@@ -898,7 +898,11 @@ if (updateError) {
           ...intake,
           order_id: data.id
         }));
-
+await supabaseClient.functions.invoke("document_generate", {
+  body: {
+    orderId: data.id
+  }
+});
         window.location.href = "review_and_pay.html";
 
       } finally {
