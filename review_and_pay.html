@@ -107,19 +107,18 @@
       setText("price", price);
       setText("email", email);
 
-      const payBtn = document.getElementById("payButton");
-      const payLink = getPayLink(tier);
+const payBtn = document.getElementById("payButton");
+const payLink = getPayLink(tier);
 
-      if (payBtn) {
-        if (payLink) {
-          payBtn.href = payLink;
-          payBtn.classList.remove("disabled");
-        } else {
-          payBtn.classList.add("disabled");
-          console.warn("No pay link match for tier:", tier);
-        }
-      }
-
+if (payBtn) {
+  if (payLink) {
+    payBtn.href = payLink;
+    payBtn.classList.remove("disabled");
+  } else {
+    payBtn.classList.add("disabled");
+    console.warn("No pay link match for tier:", tier);
+  }
+}
       const backToIntake = document.getElementById("backToIntake");
       const backToCatalog = document.getElementById("backToCatalog");
 
