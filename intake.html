@@ -1,4 +1,4 @@
-<!doctype html>
+insert<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8"/>
@@ -878,11 +878,6 @@ if (error) {
   alert("Insert failed.");
   return;
 }
-const { data, error } = await supabaseClient
-  .from("pweb_orders")
-  .insert(dbRow)
-  .select()
-  .single();
 
 if (error) {
   console.error(error);
