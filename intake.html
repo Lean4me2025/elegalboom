@@ -798,15 +798,18 @@ insert<!doctype html>
     setText("priceDisplay", "$" + (priceVal ?? 0));
 
     // -------------------- SHOW DOC SECTION --------------------
-    function showDocSection(doc){
-      document.querySelectorAll(".docBox").forEach(b => b.classList.remove("active"));
-      if(!doc) return;
+   function showDocSection(doc) {
+  document.querySelectorAll('.docBox').forEach(b => {
+    b.classList.remove("active");
+  });
 
-      const match = document.querySelector(`.docBox[data-doc="${cssEscape(doc)}"]`);
-      if(match) match.classList.add("active");
-    }
-    showDocSection(docType);
+  if (!doc) return;
 
+  const match = document.querySelector('.docBox[data-doc="' + doc + '"]');
+  if (match) {
+    match.classList.add("active");
+  }
+}
 document.addEventListener("DOMContentLoaded", () => {
 
   const form = document.getElementById("intakeForm");
@@ -828,6 +831,7 @@ document.addEventListener("DOMContentLoaded", () => {
     sessionStorage.setItem("legal_selected_order", JSON.stringify(intake));
 
     window.location.href = "review_and_pay.html";
+  });
   });
   </script>
 </body>
