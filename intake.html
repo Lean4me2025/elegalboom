@@ -878,7 +878,20 @@ if (error) {
   alert("Insert failed.");
   return;
 }
+const { data, error } = await supabaseClient
+  .from("pweb_orders")
+  .insert(dbRow)
+  .select()
+  .single();
 
+if (error) {
+  console.error(error);
+  alert("Insert failed.");
+  return;
+}
+
+// ✅ ADD THIS LINE RIGHT HERE
+sessionStorage.setItem("orderId", data.id);
 // 🔥 STATUS TRANSITION — THIS FIRES TRIGGER
 const { error: updateError } = await supabaseClient
   .from("pweb_orders")
