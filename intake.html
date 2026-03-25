@@ -820,8 +820,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
     console.log("SUBMIT WORKING");
 
-    // 🔥 FORCE MOVE (no DB yet)
-    window.location.href = "review_and_pay.html";
+// 🔹 collect form data
+const formData = new FormData(e.target);
+const intake = Object.fromEntries(formData.entries());
+
+// 🔹 store for review page
+sessionStorage.setItem("intake_data", JSON.stringify(intake));
+
+// 🔹 move forward
+window.location.href = "review_and_pay.html";
   });
 
 });
