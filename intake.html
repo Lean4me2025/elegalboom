@@ -806,67 +806,25 @@ insert<!doctype html>
       if(match) match.classList.add("active");
     }
     showDocSection(docType);
+document.addEventListener("DOMContentLoaded", () => {
 
-    // -------------------- ORDER ID (OPTION 2) --------------------
-    function generateOrderId(){
-      const now = new Date();
-      const y = now.getFullYear();
-      const m = String(now.getMonth()+1).padStart(2,"0");
-      const d = String(now.getDate()).padStart(2,"0");
-      const rand = Math.random().toString(36).slice(2, 8).toUpperCase();
-      return `ELB-${y}${m}${d}-${rand}`;
-    }
+  const form = document.getElementById("intakeForm");
 
-    // -------------------- SUBMIT HANDLER --------------------
-    document.getElementById("intakeForm").addEventListener("submit", async (e) => {
-      e.preventDefault();
+  if (!form) {
+    alert("Form not found");
+    return;
+  }
 
-      const btn = document.getElementById("submitBtn");
-      btn.disabled = true;
-      btn.textContent = "Saving...";
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
 
-      try{
-        const formData = new FormData(e.target);
-        const intake = Object.fromEntries(formData.entries());
+    console.log("SUBMIT WORKING");
 
-        // Build the JSON blob for doc generation (all fields)
-        const intakeJson = {
-          ...intake,
-          tier: tierName,
-          price: priceVal,
-          doc_type: docType
-        };
+    // 🔥 FORCE MOVE (no DB yet)
+    window.location.href = "review_and_pay.html";
+  });
 
-        // Map to your pweb_orders columns (from your screenshot)
-        const dbRow = {
-          order_id: generateOrderId(),
-
-          client_first_name: intake.client_first_name || "",
-          client_last_name: intake.client_last_name || "",
-          client_email: intake.client_email || "",
-          client_phone: intake.client_phone || "",
-
-          client_business_name: intake.client_business_name || "",
-
-          client_street: intake.street_address || "",
-          client_city: intake.city || "",
-          client_state: intake.state || "",
-          client_zip: intake.zip || "",
-          client_country: "US",
-
-          doc_type: docType,
-          governing_state: intake.governing_state || intake.state || "",
-
-          tier: tierName,
-          price: priceVal,
-
-          order_status: "created",
-          payment_status: "pending",
-
-          order_notes: intake.order_notes || "",
-
-          intake_json: intakeJson
-        };
+});
 const { data, error } = await supabaseClient
   .from("pweb_orders")
   .insert(dbRow)
@@ -879,33 +837,8 @@ if (error) {
   return;
 }
 
-if (error) {
-  console.error(error);
-  alert("Insert failed.");
-  return;
-}
-
 // ✅ ADD THIS LINE RIGHT HERE
 sessionStorage.setItem("orderId", data.id);
-// 🔥 STATUS TRANSITION — THIS FIRES TRIGGER
-const { error: updateError } = await supabaseClient
-  .from("pweb_orders")
-  .update({ order_status: "pending" })
-  .eq("id", data.id);
-
-if (updateError) {
-  console.error(updateError);
-  alert("Status update failed.");
-  return;
-}       
-
-        // Store what Review needs (display only)
-        sessionStorage.setItem("order_id", data.id);
-        sessionStorage.setItem("elegal_intake_data", JSON.stringify({
-          ...dbRow,
-          ...intake,
-          order_id: data.id
-        }));
 await supabaseClient.functions.invoke("document_generate", {
   body: {
     orderId: data.id
