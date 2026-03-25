@@ -806,6 +806,7 @@ insert<!doctype html>
       if(match) match.classList.add("active");
     }
     showDocSection(docType);
+
 document.addEventListener("DOMContentLoaded", () => {
 
   const form = document.getElementById("intakeForm");
@@ -820,19 +821,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
     console.log("SUBMIT WORKING");
 
-// 🔹 collect form data
-const formData = new FormData(e.target);
-const intake = Object.fromEntries(formData.entries());
+    const formData = new FormData(e.target);
+    const intake = Object.fromEntries(formData.entries());
 
-// 🔹 store for review page
-sessionStorage.setItem("intake_data", JSON.stringify(intake));
-sessionStorage.setItem('legal_selected_order", JSON.stringify(intake));
-// 🔹 move forward
-window.location.href = "review_and_pay.html";
+    sessionStorage.setItem("intake_data", JSON.stringify(intake));
+    sessionStorage.setItem("legal_selected_order", JSON.stringify(intake));
+
+    window.location.href = "review_and_pay.html";
   });
-
-});
-
   </script>
 </body>
 </html>
