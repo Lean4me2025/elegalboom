@@ -825,32 +825,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
 });
-const { data, error } = await supabaseClient
-  .from("pweb_orders")
-  .insert(dbRow)
-  .select()
-  .single();
 
-if (error) {
-  console.error(error);
-  alert("Insert failed.");
-  return;
-}
-
-// ✅ ADD THIS LINE RIGHT HERE
-sessionStorage.setItem("orderId", data.id);
-await supabaseClient.functions.invoke("document_generate", {
-  body: {
-    orderId: data.id
-  }
-});
-        window.location.href = "review_and_pay.html";
-
-      } finally {
-        btn.disabled = false;
-        btn.textContent = "Continue To Review";
-      }
-    });
   </script>
 </body>
 </html>
