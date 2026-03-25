@@ -826,9 +826,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const formData = new FormData(e.target);
     const intake = Object.fromEntries(formData.entries());
+    const payload = {
+  order_id: order.order_id || "",
+  doc_type: docType,
+  tier: intake.tier || intake.tier_name || tierName || "",
+  price: priceVal,
+  client_email: intake.email || ""
+};
 
-    sessionStorage.setItem("intake_data", JSON.stringify(intake));
-    sessionStorage.setItem("legal_selected_order", JSON.stringify(intake));
+sessionStorage.setItem("elegal_intake_data", JSON.stringify(payload));
+   
 
     window.location.href = "review_and_pay.html";
   });
