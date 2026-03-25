@@ -781,16 +781,33 @@ insert<!doctype html>
 
     // -------------------- LOAD ORDER FROM CATALOG --------------------
     // Catalog stores: Storage.setItem("legal_selected_order", JSON.stringify(selectedOrder))
-    const order = safeParse(sessionStorage.getItem("legal_selected_order"));
-    if(!order){
-      alert("Missing order. Returning to catalog.");
-      window.location.href = "catalog.html";
-    }
+ 
+    const params = new URLSearchParams(window.location.search);
+const orderId = params.get("order_id");
 
-    // Normalize the fields coming from catalog (your catalog uses tier_name, tier_price, doc_type)
-    const tierName = order.tier_name || order.tier || "";
-    const priceVal = (order.tier_price ?? order.price ?? 0);
-    const docType  = order.doc_type || "";
+if (!orderId) {
+  alert("Missing order ID");
+  window.location.href = "catalog.html";
+}
+
+const { data, error } = await supabaseClient
+  .from("pweb_orders")
+  .select("*")
+  .eq("order_id", orderId)
+  .single();
+
+if (error || !data) {
+  alert("Order not found");
+  window.location.href = "catalog.html";
+}
+
+const order = data;
+
+const tierName = (order.tier || "").split("–")[0].trim();
+const priceVal = order.price ?? 0;
+const docType = order.doc_type || "";
+
+
 
     // -------------------- DISPLAY HEADER --------------------
     setText("tierDisplay", tierName || "—");
@@ -837,7 +854,7 @@ document.addEventListener("DOMContentLoaded", () => {
 sessionStorage.setItem("elegal_intake_data", JSON.stringify(payload));
    
 
-    window.location.href = "review_and_pay.html";
+window.location.href = `review_and_pay.html?order_id=${payload.order_id}`;
   });
   });
   </script>
