@@ -41,7 +41,8 @@
   <script>
     (function () {
       const SESSION_KEY = "elegal_intake_data";
-
+const reviewPayload = JSON.parse(sessionStorage.getItem(SESSION_KEY) || "{}");
+console.log("REVIEW → RECEIVED ORDER:", reviewPayload);
       function safeParse(str) {
         try { return JSON.parse(str); } catch (e) { return null; }
       }
