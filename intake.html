@@ -780,8 +780,8 @@ insert<!doctype html>
     }
 
     // -------------------- LOAD ORDER FROM CATALOG --------------------
-    // Catalog stores: sessionStorage.setItem("legal_selected_order", JSON.stringify(selectedOrder))
-    const order = safeParse(sessionStorage.getItem("legal_selected_order"));
+    // Catalog stores: Storage.setItem("legal_selected_order", JSON.stringify(selectedOrder))
+    const order = safeParse(Storage.getItem("legal_selected_order"));
     if(!order){
       alert("Missing order. Returning to catalog.");
       window.location.href = "catalog.html";
@@ -826,7 +826,7 @@ const intake = Object.fromEntries(formData.entries());
 
 // 🔹 store for review page
 sessionStorage.setItem("intake_data", JSON.stringify(intake));
-
+sessionStorage.setItem('legal_selected_order", JSON.stringify(intake));
 // 🔹 move forward
 window.location.href = "review_and_pay.html";
   });
