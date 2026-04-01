@@ -836,16 +836,29 @@ const<!doctype html>
   intake: intake
 };
 
-sessionStorage.setItem("elegal_intake_data", JSON.stringify(payload));;
+sessionStorage.setItem("elegal_intake_data", JSON.stringify(payload));
 
-        const saved = sessionStorage.getItem("elegal_intake_data");
-        if (!saved) {
-          alert("Unable to save intake data");
-          return;
-        }
+const saved = sessionStorage.getItem("elegal_intake_data");
+if (!saved) {
+  alert("Unable to save intake data");
+  return;
+}
+
 await supabaseClient
   .from("pweb_orders")
   .insert([
+    {
+      order_id: payload.order_id,
+      doc_type: payload.doc_type,
+      tier: payload.tier_name,
+      price: payload.tier_price,
+      intake_json: payload,
+      order_status: "intake_complete",
+      payment_status: "pending"
+    }
+  ]);
+
+window.location.href = "review_and_pay.html";
     {
       order_id: payload.order_id,
       doc_type: payload.doc_type,
