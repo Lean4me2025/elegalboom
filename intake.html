@@ -821,7 +821,7 @@ const<!doctype html>
         return;
       }
 
-      form.addEventListener("submit", (e) => {
+      form.addEventListener("submit", async (e) => {
         e.preventDefault();
 
          formData = new FormData(e.target);
@@ -843,7 +843,19 @@ sessionStorage.setItem("elegal_intake_data", JSON.stringify(payload));;
           alert("Unable to save intake data");
           return;
         }
-
+await supabaseClient
+  .from("pweb_orders")
+  .insert([
+    {
+      order_id: payload.order_id,
+      doc_type: payload.doc_type,
+      tier: payload.tier_name,
+      price: payload.tier_price,
+      intake_json: payload,
+      order_status: "intake_complete",
+      payment_status: "pending"
+    }
+  ]);
         window.location.href = "review_and_pay.html";
       });
     });
