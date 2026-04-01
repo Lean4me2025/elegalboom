@@ -783,14 +783,7 @@ const selectedOrder = rawSelected ? JSON.parse(rawSelected) : null;
     // -------------------- LOAD ORDER FROM CATALOG --------------------
     // Catalog stores: Storage.setItem("legal_selected_order", JSON.stringify(selectedOrder))
  
-    const params = new URLSearchParams(window.location.search);
-const orderId = params.get("order_id");
-
-if (!orderId) {
-  alert("Missing order ID");
-  window.location.href = "catalog.html";
-}
-
+  
 const { data, error } = await supabaseClient
   .from("pweb_orders")
   .select("*")
