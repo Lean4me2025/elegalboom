@@ -1,4 +1,4 @@
-<!doctype html>
+const<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8"/>
@@ -763,9 +763,9 @@
 
   <script>
     // -------------------- SUPABASE CONFIG --------------------
-    const SUPABASE_URL = "https://vvjbjfltqsivvxxifnvi.supabase.co";
-    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ2amJqZmx0cXNpdnZ4eGlmbnZpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc5NzYzNTAsImV4cCI6MjA3MzU1MjM1MH0.F4zzcpCHl9v-Rnj0wgKJ5zBf1HteVyXelMLQDDEN28Q";
-    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+     SUPABASE_URL = "https://vvjbjfltqsivvxxifnvi.supabase.co";
+     SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ2amJqZmx0cXNpdnZ4eGlmbnZpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc5NzYzNTAsImV4cCI6MjA3MzU1MjM1MH0.F4zzcpCHl9v-Rnj0wgKJ5zBf1HteVyXelMLQDDEN28Q";
+     supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
     // -------------------- HELPERS --------------------
     function safeParse(str){
@@ -775,22 +775,22 @@
       return String(s).replace(/"/g, '\\"');
     }
     function setText(id, val){
-      const el = document.getElementById(id);
+       el = document.getElementById(id);
       if(el) el.textContent = val ?? "";
     }
 
     // -------------------- LOAD ORDER FROM CATALOG --------------------
-    const rawSelected = sessionStorage.getItem("legal_selected_order");
-    const selectedOrder = rawSelected ? safeParse(rawSelected) : null;
+     rawSelected = sessionStorage.getItem("legal_selected_order");
+     selectedOrder = rawSelected ? safeParse(rawSelected) : null;
 
     if (!selectedOrder) {
       alert("Missing selection from catalog");
       window.location.href = "catalog.html";
     }
 
-    const tierName = selectedOrder?.tier_name || "";
-    const priceVal = selectedOrder?.tier_price ?? 0;
-    const docType = selectedOrder?.doc_type || "";
+     tierName = selectedOrder?.tier_name || "";
+     priceVal = selectedOrder?.tier_price ?? 0;
+     docType = selectedOrder?.doc_type || "";
 
     // -------------------- DISPLAY HEADER --------------------
     setText("tierDisplay", tierName || "—");
@@ -805,7 +805,7 @@
 
       if (!doc) return;
 
-      const match = document.querySelector('.docBox[data-doc="' + doc + '"]');
+       match = document.querySelector('.docBox[data-doc="' + doc + '"]');
       if (match) {
         match.classList.add("active");
       }
@@ -814,7 +814,7 @@
     document.addEventListener("DOMContentLoaded", () => {
       showDocSection(docType);
 
-      const form = document.getElementById("intakeForm");
+       form = document.getElementById("intakeForm");
 
       if (!form) {
         alert("Form not found");
@@ -824,19 +824,19 @@
       form.addEventListener("submit", (e) => {
         e.preventDefault();
 
-        const formData = new FormData(e.target);
-        const intake = Object.fromEntries(formData.entries());
+         formData = new FormData(e.target);
+         intake = Object.fromEntries(formData.entries());
 
         const payload = {
-          order_id: selectedOrder.order_id || "",
-          doc_type: selectedOrder.doc_type || "",
-          tier_name: selectedOrder.tier_name || "",
-          tier_price: selectedOrder.tier_price ?? 0,
-          client_email: intake.client_email || "",
-          intake: intake
-        };
+  order_id: selectedOrder.order_id,
+  doc_type: selectedOrder.doc_type,
+  tier_name: selectedOrder.tier_name,
+  tier_price: selectedOrder.tier_price,
+  client_email: intake.client_email,
+  intake: intake
+};
 
-        sessionStorage.setItem("elegal_intake_data", JSON.stringify(payload));
+sessionStorage.setItem("elegal_intake_data", JSON.stringify(payload));;
 
         const saved = sessionStorage.getItem("elegal_intake_data");
         if (!saved) {
