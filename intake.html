@@ -778,7 +778,8 @@ insert<!doctype html>
       const el = document.getElementById(id);
       if(el) el.textContent = val ?? "";
     }
-
+const rawSelected = sessionStorage.getItem("legal_selected_order");
+const selectedOrder = rawSelected ? JSON.parse(rawSelected) : null;    
     // -------------------- LOAD ORDER FROM CATALOG --------------------
     // Catalog stores: Storage.setItem("legal_selected_order", JSON.stringify(selectedOrder))
  
