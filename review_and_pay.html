@@ -101,7 +101,7 @@ console.log("REVIEW → RECEIVED ORDER:", reviewPayload);
       const tier = pickTier(payload || {});
       const price = pickPrice(payload || {});
       const doc = pickDoc(payload || {});
-      const email = order?.client_email || "";
+      const email = pickEmail(payload || {});
 
       setText("orderId", orderId);
       setText("docType", doc);
