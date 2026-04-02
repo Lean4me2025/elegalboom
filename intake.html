@@ -857,18 +857,16 @@ await supabaseClient
       payment_status: "pending"
     }
   ]);
+// ✅ SAVE ORDER CONTEXT FOR NEXT PAGE
+sessionStorage.setItem("selectedOrder", JSON.stringify({
+  order_id: payload.order_id,
+  doc_type: payload.doc_type,
+  tier_name: payload.tier_name,
+  tier_price: payload.tier_price
+}));
 
+// ✅ NAVIGATE CLEANLY
 window.location.href = "review_and_pay.html";
-    {
-      order_id: payload.order_id,
-      doc_type: payload.doc_type,
-      tier: payload.tier_name,
-      price: payload.tier_price,
-      intake_json: payload,
-      order_status: "intake_complete",
-      payment_status: "pending"
-    }
-  ]);
         window.location.href = "review_and_pay.html";
       });
     });
