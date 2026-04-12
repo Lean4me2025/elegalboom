@@ -1,4 +1,4 @@
-const<!doctype html>
+<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8"/>
@@ -26,25 +26,10 @@ const<!doctype html>
       color:var(--ink);
       padding:24px;
     }
-    .wrap{
-      max-width:1100px;
-      margin:0 auto;
-    }
-    .header{
-      text-align:center;
-      margin-bottom:18px;
-    }
-    .header h1{
-      margin:0 0 6px 0;
-      font-size:40px;
-      letter-spacing:.2px;
-    }
-    .header p{
-      margin:0;
-      color:var(--muted);
-      font-size:14px;
-    }
-
+    .wrap{ max-width:1100px; margin:0 auto; }
+    .header{ text-align:center; margin-bottom:18px; }
+    .header h1{ margin:0 0 6px 0; font-size:40px; letter-spacing:.2px; }
+    .header p{ margin:0; color:var(--muted); font-size:14px; }
     .panel{
       background:var(--card);
       border:1px solid var(--line);
@@ -52,7 +37,6 @@ const<!doctype html>
       box-shadow:0 10px 25px rgba(10,20,40,.06);
       padding:18px;
     }
-
     .orderBar{
       display:grid;
       grid-template-columns: 1fr 1fr 1fr;
@@ -71,19 +55,8 @@ const<!doctype html>
       justify-content:center;
       font-weight:700;
     }
-    .pill small{
-      display:block;
-      font-weight:600;
-      color:var(--muted);
-      margin-bottom:6px;
-    }
-    .pill .val{
-      display:block;
-      font-size:14px;
-      font-weight:800;
-      letter-spacing:.2px;
-    }
-
+    .pill small{ display:block; font-weight:600; color:var(--muted); margin-bottom:6px; }
+    .pill .val{ display:block; font-size:14px; font-weight:800; letter-spacing:.2px; }
     .sectionTitle{
       margin:16px 0 10px;
       padding:10px 12px;
@@ -96,27 +69,10 @@ const<!doctype html>
       font-size:12px;
       color:#21304c;
     }
-
-    .grid2{
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap:12px;
-    }
-    .grid3{
-      display:grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      gap:12px;
-    }
+    .grid2{ display:grid; grid-template-columns: 1fr 1fr; gap:12px; }
+    .grid3{ display:grid; grid-template-columns: 1fr 1fr 1fr; gap:12px; }
     .grid1{ display:grid; grid-template-columns:1fr; gap:12px; }
-
-    label{
-      display:block;
-      font-size:12px;
-      color:var(--muted);
-      margin:0 0 6px;
-      font-weight:700;
-      letter-spacing:.15px;
-    }
+    label{ display:block; font-size:12px; color:var(--muted); margin:0 0 6px; font-weight:700; letter-spacing:.15px; }
     input, select, textarea{
       width:100%;
       padding:12px 12px;
@@ -131,14 +87,7 @@ const<!doctype html>
       border-color:#9bb2ff;
       box-shadow:0 0 0 3px rgba(26,76,255,.12);
     }
-
-    .hint{
-      color:var(--muted);
-      font-size:12px;
-      margin:6px 0 0;
-      line-height:1.35;
-    }
-
+    .hint{ color:var(--muted); font-size:12px; margin:6px 0 0; line-height:1.35; }
     .docBox{
       display:none;
       border:1px dashed #b9c7e6;
@@ -148,12 +97,7 @@ const<!doctype html>
       margin-top:10px;
     }
     .docBox.active{ display:block; }
-
-    .actions{
-      display:flex;
-      justify-content:center;
-      margin-top:16px;
-    }
+    .actions{ display:flex; justify-content:center; margin-top:16px; }
     button{
       background:linear-gradient(180deg, var(--blue), var(--blue2));
       color:#fff;
@@ -168,14 +112,7 @@ const<!doctype html>
       box-shadow:0 14px 26px rgba(26,76,255,.22);
     }
     button:active{ transform:translateY(1px); }
-
-    .footerNote{
-      text-align:center;
-      margin-top:10px;
-      color:var(--muted);
-      font-size:12px;
-    }
-
+    .footerNote{ text-align:center; margin-top:10px; color:var(--muted); font-size:12px; }
     @media (max-width: 900px){
       .orderBar{ grid-template-columns:1fr; }
       .grid2, .grid3{ grid-template-columns:1fr; }
@@ -183,10 +120,8 @@ const<!doctype html>
     }
   </style>
 
-  <!-- Supabase client -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
-
 <body>
   <div class="wrap">
     <div class="header">
@@ -195,89 +130,38 @@ const<!doctype html>
     </div>
 
     <div class="panel">
-      <!-- ORDER SUMMARY -->
       <div class="orderBar">
-        <div class="pill">
-          <div>
-            <small>Tier</small>
-            <span class="val" id="tierDisplay">—</span>
-          </div>
-        </div>
-        <div class="pill">
-          <div>
-            <small>Document</small>
-            <span class="val" id="docDisplay">—</span>
-          </div>
-        </div>
-        <div class="pill">
-          <div>
-            <small>Price</small>
-            <span class="val" id="priceDisplay">—</span>
-          </div>
-        </div>
+        <div class="pill"><div><small>Tier</small><span class="val" id="tierDisplay">—</span></div></div>
+        <div class="pill"><div><small>Document</small><span class="val" id="docDisplay">—</span></div></div>
+        <div class="pill"><div><small>Price</small><span class="val" id="priceDisplay">—</span></div></div>
       </div>
 
       <form id="intakeForm" autocomplete="on">
-        <!-- ARM: GENERAL INFO -->
         <div class="sectionTitle">Client information</div>
         <div class="grid2">
-          <div>
-            <label>First Name</label>
-            <input name="client_first_name" required />
-          </div>
-          <div>
-            <label>Last Name</label>
-            <input name="client_last_name" required />
-          </div>
+          <div><label>First Name</label><input name="client_first_name" required /></div>
+          <div><label>Last Name</label><input name="client_last_name" required /></div>
         </div>
-
         <div class="grid2">
-          <div>
-            <label>Email</label>
-            <input name="client_email" type="email" required />
-          </div>
-          <div>
-            <label>Phone</label>
-            <input name="client_phone" inputmode="tel" required />
-          </div>
+          <div><label>Email</label><input name="client_email" type="email" required /></div>
+          <div><label>Phone</label><input name="client_phone" inputmode="tel" required /></div>
         </div>
 
         <div class="sectionTitle">Mailing address</div>
         <div class="grid2">
-          <div>
-            <label>Street Address</label>
-            <input name="street_address" />
-          </div>
-          <div>
-            <label>Unit / Apt</label>
-            <input name="unit" />
-          </div>
+          <div><label>Street Address</label><input name="street_address" /></div>
+          <div><label>Unit / Apt</label><input name="unit" /></div>
         </div>
         <div class="grid3">
-          <div>
-            <label>City</label>
-            <input name="city" />
-          </div>
-          <div>
-            <label>State</label>
-            <input name="state" />
-          </div>
-          <div>
-            <label>ZIP</label>
-            <input name="zip" inputmode="numeric" />
-          </div>
+          <div><label>City</label><input name="city" /></div>
+          <div><label>State</label><input name="state" /></div>
+          <div><label>ZIP</label><input name="zip" inputmode="numeric" /></div>
         </div>
 
         <div class="sectionTitle">Parties overview</div>
         <div class="grid2">
-          <div>
-            <label>Other Party Name (if applicable)</label>
-            <input name="other_party_name" placeholder="Person or Company" />
-          </div>
-          <div>
-            <label>Other Party Email (optional)</label>
-            <input name="other_party_email" type="email" />
-          </div>
+          <div><label>Other Party Name (if applicable)</label><input name="other_party_name" placeholder="Person or Company" /></div>
+          <div><label>Other Party Email (optional)</label><input name="other_party_email" type="email" /></div>
         </div>
 
         <div class="sectionTitle">Order notes</div>
@@ -289,459 +173,242 @@ const<!doctype html>
           </div>
         </div>
 
-        <!-- HAND: DOC SPECIFIC -->
         <div class="sectionTitle">Document details</div>
 
-        <!-- PROMISSORY_NOTE -->
         <div class="docBox" data-doc="PROMISSORY_NOTE">
           <div class="grid2">
-            <div>
-              <label>Lender Name</label>
-              <input name="pn_lender_name" />
-            </div>
-            <div>
-              <label>Borrower Name</label>
-              <input name="pn_borrower_name" />
-            </div>
+            <div><label>Lender Name</label><input name="pn_lender_name" /></div>
+            <div><label>Borrower Name</label><input name="pn_borrower_name" /></div>
+          </div>
+          <div class="grid2">
+            <div><label>Lender Address</label><input name="pn_lender_address" /></div>
+            <div><label>Borrower Address</label><input name="pn_borrower_address" /></div>
           </div>
           <div class="grid3">
-            <div>
-              <label>Principal Amount ($)</label>
-              <input name="pn_principal_amount" inputmode="decimal" />
-            </div>
-            <div>
-              <label>Interest Rate (%)</label>
-              <input name="pn_interest_rate" inputmode="decimal" />
-            </div>
-            <div>
-              <label>Start Date</label>
-              <input name="pn_start_date" type="date" />
-            </div>
+            <div><label>Principal Amount ($)</label><input name="pn_principal_amount" inputmode="decimal" /></div>
+            <div><label>Interest Rate (%)</label><input name="pn_interest_rate" inputmode="decimal" /></div>
+            <div><label>Start Date</label><input name="pn_start_date" type="date" /></div>
           </div>
           <div class="grid2">
             <div>
               <label>Payment Frequency</label>
               <select name="pn_payment_frequency">
-                <option value="">—</option>
-                <option>Monthly</option>
-                <option>Bi-Weekly</option>
-                <option>Weekly</option>
-                <option>One-Time</option>
+                <option value="">—</option><option>Monthly</option><option>Bi-Weekly</option><option>Weekly</option><option>One-Time</option>
               </select>
             </div>
-            <div>
-              <label>Maturity Date</label>
-              <input name="pn_maturity_date" type="date" />
-            </div>
+            <div><label>Maturity Date</label><input name="pn_maturity_date" type="date" /></div>
           </div>
-          <div class="grid1">
-            <div>
-              <label>Collateral (if any)</label>
-              <input name="pn_collateral" />
-            </div>
-          </div>
+          <div class="grid1"><div><label>Collateral (if any)</label><input name="pn_collateral" /></div></div>
         </div>
 
-        <!-- NDA -->
         <div class="docBox" data-doc="NDA">
           <div class="grid2">
-            <div>
-              <label>Disclosing Party</label>
-              <input name="nda_disclosing_party" />
-            </div>
-            <div>
-              <label>Receiving Party</label>
-              <input name="nda_receiving_party" />
-            </div>
+            <div><label>Disclosing Party</label><input name="nda_disclosing_party" /></div>
+            <div><label>Receiving Party</label><input name="nda_receiving_party" /></div>
           </div>
           <div class="grid2">
-            <div>
-              <label>Effective Date</label>
-              <input name="nda_effective_date" type="date" />
-            </div>
-            <div>
-              <label>Term (months)</label>
-              <input name="nda_term_months" inputmode="numeric" />
-            </div>
+            <div><label>Disclosing Party Address</label><input name="nda_disclosing_party_address" /></div>
+            <div><label>Receiving Party Address</label><input name="nda_receiving_party_address" /></div>
           </div>
-          <div class="grid1">
-            <div>
-              <label>Purpose / Description of Confidential Info</label>
-              <textarea name="nda_purpose" placeholder="Short description of what’s being shared and why."></textarea>
-            </div>
+          <div class="grid2">
+            <div><label>Effective Date</label><input name="nda_effective_date" type="date" /></div>
+            <div><label>Term (months)</label><input name="nda_term_months" inputmode="numeric" /></div>
           </div>
+          <div class="grid1"><div><label>Purpose / Description of Confidential Info</label><textarea name="nda_purpose" placeholder="Short description of what’s being shared and why."></textarea></div></div>
         </div>
 
-        <!-- INDEPENDENT_CONTRACTOR -->
         <div class="docBox" data-doc="INDEPENDENT_CONTRACTOR">
           <div class="grid2">
-            <div>
-              <label>Client / Company Name</label>
-              <input name="ic_client_name" />
-            </div>
-            <div>
-              <label>Contractor Name</label>
-              <input name="ic_contractor_name" />
-            </div>
+            <div><label>Client / Company Name</label><input name="ic_client_name" /></div>
+            <div><label>Contractor Name</label><input name="ic_contractor_name" /></div>
           </div>
           <div class="grid2">
-            <div>
-              <label>Start Date</label>
-              <input name="ic_start_date" type="date" />
-            </div>
-            <div>
-              <label>End Date (optional)</label>
-              <input name="ic_end_date" type="date" />
-            </div>
+            <div><label>Client Address</label><input name="ic_client_address" /></div>
+            <div><label>Contractor Address</label><input name="ic_contractor_address" /></div>
           </div>
           <div class="grid2">
-            <div>
-              <label>Compensation</label>
-              <input name="ic_compensation" placeholder="e.g., $50/hr or $2,000 flat" />
-            </div>
-            <div>
-              <label>Payment Schedule</label>
-              <input name="ic_payment_schedule" placeholder="e.g., net 15, weekly, upon delivery" />
-            </div>
+            <div><label>Start Date</label><input name="ic_start_date" type="date" /></div>
+            <div><label>End Date (optional)</label><input name="ic_end_date" type="date" /></div>
           </div>
-          <div class="grid1">
-            <div>
-              <label>Scope of Work</label>
-              <textarea name="ic_scope_of_work"></textarea>
-            </div>
+          <div class="grid2">
+            <div><label>Compensation</label><input name="ic_compensation" placeholder="e.g., $50/hr or $2,000 flat" /></div>
+            <div><label>Payment Schedule</label><input name="ic_payment_schedule" placeholder="e.g., net 15, weekly, upon delivery" /></div>
           </div>
+          <div class="grid1"><div><label>Scope of Work</label><textarea name="ic_scope_of_work"></textarea></div></div>
         </div>
 
-        <!-- BILL_OF_SALE -->
         <div class="docBox" data-doc="BILL_OF_SALE">
           <div class="grid2">
-            <div>
-              <label>Seller Name</label>
-              <input name="bos_seller_name" />
-            </div>
-            <div>
-              <label>Buyer Name</label>
-              <input name="bos_buyer_name" />
-            </div>
+            <div><label>Seller Name</label><input name="bos_seller_name" /></div>
+            <div><label>Buyer Name</label><input name="bos_buyer_name" /></div>
           </div>
           <div class="grid2">
-            <div>
-              <label>Item Description</label>
-              <input name="bos_item_description" />
-            </div>
-            <div>
-              <label>Sale Price ($)</label>
-              <input name="bos_sale_price" inputmode="decimal" />
-            </div>
+            <div><label>Seller Address</label><input name="bos_seller_address" /></div>
+            <div><label>Buyer Address</label><input name="bos_buyer_address" /></div>
           </div>
           <div class="grid2">
-            <div>
-              <label>Sale Date</label>
-              <input name="bos_sale_date" type="date" />
-            </div>
+            <div><label>Item Description</label><input name="bos_item_description" /></div>
+            <div><label>Sale Price ($)</label><input name="bos_sale_price" inputmode="decimal" /></div>
+          </div>
+          <div class="grid2">
+            <div><label>Sale Date</label><input name="bos_sale_date" type="date" /></div>
             <div>
               <label>Condition</label>
-              <select name="bos_condition">
-                <option value="">—</option>
-                <option>As-Is</option>
-                <option>With Warranty</option>
-              </select>
+              <select name="bos_condition"><option value="">—</option><option>As-Is</option><option>With Warranty</option></select>
             </div>
           </div>
         </div>
 
-        <!-- LLC_OPERATING -->
         <div class="docBox" data-doc="LLC_OPERATING">
           <div class="grid2">
-            <div>
-              <label>LLC Name</label>
-              <input name="llc_name" />
-            </div>
-            <div>
-              <label>State of Formation</label>
-              <input name="llc_state" />
-            </div>
+            <div><label>LLC Name</label><input name="llc_name" /></div>
+            <div><label>State of Formation</label><input name="llc_state" /></div>
           </div>
           <div class="grid2">
             <div>
               <label>Single-Member or Multi-Member?</label>
-              <select name="llc_member_type">
-                <option value="">—</option>
-                <option>Single-Member</option>
-                <option>Multi-Member</option>
-              </select>
+              <select name="llc_member_type"><option value="">—</option><option>Single-Member</option><option>Multi-Member</option></select>
             </div>
             <div>
               <label>Manager-Managed?</label>
-              <select name="llc_management">
-                <option value="">—</option>
-                <option>Member-Managed</option>
-                <option>Manager-Managed</option>
-              </select>
+              <select name="llc_management"><option value="">—</option><option>Member-Managed</option><option>Manager-Managed</option></select>
             </div>
           </div>
-          <div class="grid1">
-            <div>
-              <label>Members / Ownership Notes</label>
-              <textarea name="llc_members_notes" placeholder="List members and % ownership (or attach in notes)."></textarea>
-            </div>
-          </div>
-        </div>
-
-        <!-- PARTNERSHIP -->
-        <div class="docBox" data-doc="PARTNERSHIP">
-          <div class="grid1">
-            <div>
-              <label>Partnership Name (if any)</label>
-              <input name="partnership_name" />
-            </div>
-          </div>
-          <div class="grid1">
-            <div>
-              <label>Partners & Ownership Split</label>
-              <textarea name="partnership_partners" placeholder="Partner names and ownership split."></textarea>
-            </div>
-          </div>
+          <div class="grid1"><div><label>Principal Business Address</label><input name="llc_principal_business_address" /></div></div>
           <div class="grid2">
-            <div>
-              <label>Start Date</label>
-              <input name="partnership_start_date" type="date" />
-            </div>
-            <div>
-              <label>Purpose / Business Description</label>
-              <input name="partnership_purpose" />
-            </div>
+            <div><label>Member Names</label><textarea name="llc_member_list" placeholder="List all member names."></textarea></div>
+            <div><label>Ownership Percentages</label><textarea name="llc_membership_interests" placeholder="List each member and ownership percentage."></textarea></div>
           </div>
+          <div class="grid1"><div><label>Capital Contributions</label><textarea name="llc_initial_capital_contributions" placeholder="List each member's capital contribution."></textarea></div></div>
+          <div class="grid1"><div><label>Members / Ownership Notes</label><textarea name="llc_members_notes" placeholder="Additional notes if needed."></textarea></div></div>
         </div>
 
-        <!-- BUSINESS_LOAN -->
+        <div class="docBox" data-doc="PARTNERSHIP">
+          <div class="grid1"><div><label>Partnership Name</label><input name="partnership_name" /></div></div>
+          <div class="grid1"><div><label>Business Address</label><input name="partnership_business_address" /></div></div>
+          <div class="grid2">
+            <div><label>Partner Names</label><textarea name="partnership_partner_list" placeholder="List the partner names."></textarea></div>
+            <div><label>Ownership Percentages</label><textarea name="partnership_ownership_percentages" placeholder="List each partner and ownership split."></textarea></div>
+          </div>
+          <div class="grid1"><div><label>Capital Contributions</label><textarea name="partnership_capital_contributions" placeholder="List each partner's capital contribution."></textarea></div></div>
+          <div class="grid2">
+            <div><label>Start Date</label><input name="partnership_start_date" type="date" /></div>
+            <div><label>Purpose / Business Description</label><input name="partnership_purpose" /></div>
+          </div>
+          <div class="grid1"><div><label>Partners &amp; Ownership Notes</label><textarea name="partnership_partners" placeholder="Optional notes."></textarea></div></div>
+        </div>
+
         <div class="docBox" data-doc="BUSINESS_LOAN">
           <div class="grid2">
-            <div>
-              <label>Lender</label>
-              <input name="bl_lender" />
-            </div>
-            <div>
-              <label>Borrower (Business)</label>
-              <input name="bl_borrower" />
-            </div>
+            <div><label>Lender</label><input name="bl_lender" /></div>
+            <div><label>Borrower (Business)</label><input name="bl_borrower" /></div>
+          </div>
+          <div class="grid2">
+            <div><label>Lender Address</label><input name="bl_lender_address" /></div>
+            <div><label>Borrower Address</label><input name="bl_borrower_address" /></div>
           </div>
           <div class="grid3">
-            <div>
-              <label>Loan Amount ($)</label>
-              <input name="bl_amount" inputmode="decimal" />
-            </div>
-            <div>
-              <label>Interest Rate (%)</label>
-              <input name="bl_rate" inputmode="decimal" />
-            </div>
-            <div>
-              <label>Term (months)</label>
-              <input name="bl_term_months" inputmode="numeric" />
-            </div>
+            <div><label>Loan Amount ($)</label><input name="bl_amount" inputmode="decimal" /></div>
+            <div><label>Interest Rate (%)</label><input name="bl_rate" inputmode="decimal" /></div>
+            <div><label>Term (months)</label><input name="bl_term_months" inputmode="numeric" /></div>
           </div>
-          <div class="grid1">
-            <div>
-              <label>Purpose of Loan</label>
-              <input name="bl_purpose" />
-            </div>
+          <div class="grid2">
+            <div><label>Maturity Date</label><input name="bl_maturity_date" type="date" /></div>
+            <div><label>Payment Method</label><input name="bl_payment_method" placeholder="ACH, check, wire, etc." /></div>
           </div>
+          <div class="grid1"><div><label>Purpose of Loan</label><input name="bl_purpose" /></div></div>
         </div>
 
-        <!-- SERVICE_AGREEMENT -->
         <div class="docBox" data-doc="SERVICE_AGREEMENT">
           <div class="grid2">
-            <div>
-              <label>Service Provider</label>
-              <input name="sa_provider" />
-            </div>
-            <div>
-              <label>Client</label>
-              <input name="sa_client" />
-            </div>
+            <div><label>Service Provider</label><input name="sa_provider" /></div>
+            <div><label>Client</label><input name="sa_client" /></div>
           </div>
           <div class="grid2">
-            <div>
-              <label>Start Date</label>
-              <input name="sa_start_date" type="date" />
-            </div>
-            <div>
-              <label>End Date (optional)</label>
-              <input name="sa_end_date" type="date" />
-            </div>
+            <div><label>Provider Address</label><input name="sa_provider_address" /></div>
+            <div><label>Client Address</label><input name="sa_client_address" /></div>
           </div>
           <div class="grid2">
-            <div>
-              <label>Fee / Compensation</label>
-              <input name="sa_fee" />
-            </div>
-            <div>
-              <label>Payment Terms</label>
-              <input name="sa_payment_terms" />
-            </div>
+            <div><label>Start Date</label><input name="sa_start_date" type="date" /></div>
+            <div><label>End Date (optional)</label><input name="sa_end_date" type="date" /></div>
           </div>
-          <div class="grid1">
-            <div>
-              <label>Services Description</label>
-              <textarea name="sa_services"></textarea>
-            </div>
+          <div class="grid2">
+            <div><label>Fee / Compensation</label><input name="sa_fee" /></div>
+            <div><label>Payment Terms</label><input name="sa_payment_terms" /></div>
           </div>
+          <div class="grid1"><div><label>Services Description</label><textarea name="sa_services"></textarea></div></div>
         </div>
 
-        <!-- EMPLOYMENT -->
         <div class="docBox" data-doc="EMPLOYMENT">
           <div class="grid2">
-            <div>
-              <label>Employer</label>
-              <input name="emp_employer" />
-            </div>
-            <div>
-              <label>Employee</label>
-              <input name="emp_employee" />
-            </div>
+            <div><label>Employer</label><input name="emp_employer" /></div>
+            <div><label>Employee</label><input name="emp_employee" /></div>
           </div>
           <div class="grid2">
-            <div>
-              <label>Job Title</label>
-              <input name="emp_job_title" />
-            </div>
-            <div>
-              <label>Start Date</label>
-              <input name="emp_start_date" type="date" />
-            </div>
+            <div><label>Employer Address</label><input name="emp_employer_address" /></div>
+            <div><label>Employee Address</label><input name="emp_employee_address" /></div>
+          </div>
+          <div class="grid2">
+            <div><label>Job Title</label><input name="emp_job_title" /></div>
+            <div><label>Start Date</label><input name="emp_start_date" type="date" /></div>
           </div>
           <div class="grid3">
-            <div>
-              <label>Pay Rate</label>
-              <input name="emp_pay_rate" placeholder="e.g., $30/hr or $70,000/yr" />
-            </div>
+            <div><label>Pay Rate</label><input name="emp_pay_rate" placeholder="e.g., $30/hr or $70,000/yr" /></div>
             <div>
               <label>Pay Frequency</label>
-              <select name="emp_pay_frequency">
-                <option value="">—</option>
-                <option>Hourly</option>
-                <option>Salary</option>
-                <option>Commission</option>
-              </select>
+              <select name="emp_pay_frequency"><option value="">—</option><option>Hourly</option><option>Salary</option><option>Commission</option></select>
             </div>
-            <div>
-              <label>Work Location</label>
-              <input name="emp_work_location" />
-            </div>
+            <div><label>Work Location</label><input name="emp_work_location" /></div>
           </div>
+          <div class="grid1"><div><label>Duties / Responsibilities</label><textarea name="emp_job_duties" placeholder="Describe the employee's main duties."></textarea></div></div>
         </div>
 
-        <!-- RESIDENTIAL_LEASE -->
         <div class="docBox" data-doc="RESIDENTIAL_LEASE">
           <div class="grid2">
-            <div>
-              <label>Landlord Name</label>
-              <input name="rl_landlord" />
-            </div>
-            <div>
-              <label>Tenant Name(s)</label>
-              <input name="rl_tenants" />
-            </div>
+            <div><label>Landlord Name</label><input name="rl_landlord" /></div>
+            <div><label>Tenant Name(s)</label><input name="rl_tenants" /></div>
           </div>
           <div class="grid2">
-            <div>
-              <label>Property Address</label>
-              <input name="rl_property_address" />
-            </div>
-            <div>
-              <label>Lease Start Date</label>
-              <input name="rl_start_date" type="date" />
-            </div>
+            <div><label>Property Address</label><input name="rl_property_address" /></div>
+            <div><label>Lease Start Date</label><input name="rl_start_date" type="date" /></div>
           </div>
           <div class="grid3">
-            <div>
-              <label>Monthly Rent ($)</label>
-              <input name="rl_monthly_rent" inputmode="decimal" />
-            </div>
-            <div>
-              <label>Security Deposit ($)</label>
-              <input name="rl_security_deposit" inputmode="decimal" />
-            </div>
-            <div>
-              <label>Lease Term (months)</label>
-              <input name="rl_term_months" inputmode="numeric" />
-            </div>
+            <div><label>Monthly Rent ($)</label><input name="rl_monthly_rent" inputmode="decimal" /></div>
+            <div><label>Security Deposit ($)</label><input name="rl_security_deposit" inputmode="decimal" /></div>
+            <div><label>Lease Term (months)</label><input name="rl_term_months" inputmode="numeric" /></div>
           </div>
         </div>
 
-        <!-- COMMERCIAL_LEASE -->
         <div class="docBox" data-doc="COMMERCIAL_LEASE">
           <div class="grid2">
-            <div>
-              <label>Landlord</label>
-              <input name="cl_landlord" />
-            </div>
-            <div>
-              <label>Tenant (Business)</label>
-              <input name="cl_tenant" />
-            </div>
+            <div><label>Landlord</label><input name="cl_landlord" /></div>
+            <div><label>Tenant (Business)</label><input name="cl_tenant" /></div>
           </div>
           <div class="grid2">
-            <div>
-              <label>Premises Address</label>
-              <input name="cl_premises_address" />
-            </div>
-            <div>
-              <label>Use of Premises</label>
-              <input name="cl_use" />
-            </div>
+            <div><label>Premises Address</label><input name="cl_premises_address" /></div>
+            <div><label>Use of Premises</label><input name="cl_use" /></div>
           </div>
           <div class="grid3">
-            <div>
-              <label>Base Rent ($)</label>
-              <input name="cl_base_rent" inputmode="decimal" />
-            </div>
-            <div>
-              <label>Lease Start</label>
-              <input name="cl_start_date" type="date" />
-            </div>
-            <div>
-              <label>Term (months)</label>
-              <input name="cl_term_months" inputmode="numeric" />
-            </div>
+            <div><label>Base Rent ($)</label><input name="cl_base_rent" inputmode="decimal" /></div>
+            <div><label>Security Deposit ($)</label><input name="cl_security_deposit" inputmode="decimal" /></div>
+            <div><label>Term (months)</label><input name="cl_term_months" inputmode="numeric" /></div>
           </div>
+          <div class="grid1"><div><label>Lease Start</label><input name="cl_start_date" type="date" /></div></div>
         </div>
 
-        <!-- NON_COMPETE -->
         <div class="docBox" data-doc="NON_COMPETE">
           <div class="grid2">
-            <div>
-              <label>Company / Employer</label>
-              <input name="nc_company" />
-            </div>
-            <div>
-              <label>Restricted Party</label>
-              <input name="nc_person" />
-            </div>
+            <div><label>Company / Employer</label><input name="nc_company" /></div>
+            <div><label>Restricted Party</label><input name="nc_person" /></div>
           </div>
           <div class="grid3">
-            <div>
-              <label>Duration (months)</label>
-              <input name="nc_duration_months" inputmode="numeric" />
-            </div>
-            <div>
-              <label>Geographic Scope</label>
-              <input name="nc_geo_scope" placeholder="e.g., 25 miles / Statewide" />
-            </div>
-            <div>
-              <label>Effective Date</label>
-              <input name="nc_effective_date" type="date" />
-            </div>
+            <div><label>Duration (months)</label><input name="nc_duration_months" inputmode="numeric" /></div>
+            <div><label>Geographic Scope</label><input name="nc_geo_scope" placeholder="e.g., 25 miles / Statewide" /></div>
+            <div><label>Effective Date</label><input name="nc_effective_date" type="date" /></div>
           </div>
-          <div class="grid1">
-            <div>
-              <label>Restricted Activities</label>
-              <textarea name="nc_activities"></textarea>
-            </div>
-          </div>
+          <div class="grid1"><div><label>Restricted Activities</label><textarea name="nc_activities"></textarea></div></div>
         </div>
 
-        <!-- ENTREPRENEUR_BUNDLE -->
         <div class="docBox" data-doc="ENTREPRENEUR_BUNDLE">
           <div class="grid1">
             <div>
@@ -755,67 +422,45 @@ const<!doctype html>
         <div class="actions">
           <button id="submitBtn" type="submit">Continue To review_and_pay</button>
         </div>
-
         <div class="footerNote">This saves your intake and takes you to the Review page.</div>
       </form>
     </div>
   </div>
 
   <script>
-    // -------------------- SUPABASE CONFIG --------------------
-     SUPABASE_URL = "https://vvjbjfltqsivvxxifnvi.supabase.co";
-     SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ2amJqZmx0cXNpdnZ4eGlmbnZpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc5NzYzNTAsImV4cCI6MjA3MzU1MjM1MH0.F4zzcpCHl9v-Rnj0wgKJ5zBf1HteVyXelMLQDDEN28Q";
-     supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    const SUPABASE_URL = "https://vvjbjfltqsivvxxifnvi.supabase.co";
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ2amJqZmx0cXNpdnZ4eGlmbnZpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc5NzYzNTAsImV4cCI6MjA3MzU1MjM1MH0.F4zzcpCHl9v-Rnj0wgKJ5zBf1HteVyXelMLQDDEN28Q";
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    // -------------------- HELPERS --------------------
-    function safeParse(str){
-      try { return JSON.parse(str); } catch(e){ return null; }
-    }
-    function cssEscape(s){
-      return String(s).replace(/"/g, '\\"');
-    }
-    function setText(id, val){
-       el = document.getElementById(id);
-      if(el) el.textContent = val ?? "";
-    }
+    function safeParse(str){ try { return JSON.parse(str); } catch(e){ return null; } }
+    function setText(id, val){ const el = document.getElementById(id); if(el) el.textContent = val ?? ""; }
 
-    // -------------------- LOAD ORDER FROM CATALOG --------------------
-     rawSelected = sessionStorage.getItem("legal_selected_order");
-     selectedOrder = rawSelected ? safeParse(rawSelected) : null;
+    const rawSelected = sessionStorage.getItem("legal_selected_order");
+    const selectedOrder = rawSelected ? safeParse(rawSelected) : null;
 
     if (!selectedOrder) {
       alert("Missing selection from catalog");
       window.location.href = "catalog.html";
     }
 
-     tierName = selectedOrder?.tier_name || "";
-     priceVal = selectedOrder?.tier_price ?? 0;
-     docType = selectedOrder?.doc_type || "";
+    const tierName = selectedOrder?.tier_name || "";
+    const priceVal = selectedOrder?.tier_price ?? 0;
+    const docType = selectedOrder?.doc_type || "";
 
-    // -------------------- DISPLAY HEADER --------------------
     setText("tierDisplay", tierName || "—");
     setText("docDisplay", docType || "—");
     setText("priceDisplay", "$" + (priceVal ?? 0));
 
-    // -------------------- SHOW DOC SECTION --------------------
     function showDocSection(doc) {
-      document.querySelectorAll('.docBox').forEach(b => {
-        b.classList.remove("active");
-      });
-
+      document.querySelectorAll('.docBox').forEach(b => b.classList.remove("active"));
       if (!doc) return;
-
-       match = document.querySelector('.docBox[data-doc="' + doc + '"]');
-      if (match) {
-        match.classList.add("active");
-      }
+      const match = document.querySelector('.docBox[data-doc="' + doc + '"]');
+      if (match) match.classList.add("active");
     }
 
     document.addEventListener("DOMContentLoaded", () => {
       showDocSection(docType);
-
-       form = document.getElementById("intakeForm");
-
+      const form = document.getElementById("intakeForm");
       if (!form) {
         alert("Form not found");
         return;
@@ -823,50 +468,46 @@ const<!doctype html>
 
       form.addEventListener("submit", async (e) => {
         e.preventDefault();
-
-         formData = new FormData(e.target);
-         intake = Object.fromEntries(formData.entries());
+        const formData = new FormData(e.target);
+        const intake = Object.fromEntries(formData.entries());
 
         const payload = {
-  order_id: selectedOrder.order_id,
-  doc_type: selectedOrder.doc_type,
-  tier_name: selectedOrder.tier_name,
-  tier_price: selectedOrder.tier_price,
-  client_email: intake.client_email,
-  intake: intake
-};
+          order_id: selectedOrder.order_id,
+          doc_type: selectedOrder.doc_type,
+          tier_name: selectedOrder.tier_name,
+          tier_price: selectedOrder.tier_price,
+          client_email: intake.client_email,
+          intake: intake
+        };
 
-sessionStorage.setItem("elegal_intake_data", JSON.stringify(payload));
+        sessionStorage.setItem("elegal_intake_data", JSON.stringify(payload));
+        const saved = sessionStorage.getItem("elegal_intake_data");
+        if (!saved) {
+          alert("Unable to save intake data");
+          return;
+        }
 
-const saved = sessionStorage.getItem("elegal_intake_data");
-if (!saved) {
-  alert("Unable to save intake data");
-  return;
-}
+        await supabaseClient
+          .from("pweb_orders")
+          .insert([
+            {
+              order_id: payload.order_id,
+              doc_type: payload.doc_type,
+              tier: payload.tier_name,
+              price: payload.tier_price,
+              intake_json: payload,
+              order_status: "intake_complete",
+              payment_status: "pending"
+            }
+          ]);
 
-await supabaseClient
-  .from("pweb_orders")
-  .insert([
-    {
-      order_id: payload.order_id,
-      doc_type: payload.doc_type,
-      tier: payload.tier_name,
-      price: payload.tier_price,
-      intake_json: payload,
-      order_status: "intake_complete",
-      payment_status: "pending"
-    }
-  ]);
-// ✅ SAVE ORDER CONTEXT FOR NEXT PAGE
-sessionStorage.setItem("selectedOrder", JSON.stringify({
-  order_id: payload.order_id,
-  doc_type: payload.doc_type,
-  tier_name: payload.tier_name,
-  tier_price: payload.tier_price
-}));
+        sessionStorage.setItem("selectedOrder", JSON.stringify({
+          order_id: payload.order_id,
+          doc_type: payload.doc_type,
+          tier_name: payload.tier_name,
+          tier_price: payload.tier_price
+        }));
 
-// ✅ NAVIGATE CLEANLY
-window.location.href = "review_and_pay.html";
         window.location.href = "review_and_pay.html";
       });
     });
