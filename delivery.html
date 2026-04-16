@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Your Document Delivery | e-legalboom.com</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: #ffffff;
+      color: #111;
+      line-height: 1.6;
+    }
+
+    .wrap {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 32px 24px 48px;
+    }
+
+    .center {
+      text-align: center;
+    }
+
+    .card {
+      border: 1px solid #d9d9d9;
+      border-radius: 10px;
+      padding: 24px;
+      margin-bottom: 24px;
+      background: #fafafa;
+    }
+
+    .card.white {
+      background: #fff;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 30px;
+    }
+
+    h2 {
+      margin-top: 0;
+      font-size: 22px;
+    }
+
+    p {
+      margin: 8px 0;
+    }
+
+    .button-row {
+      margin-top: 18px;
+    }
+
+    .button {
+      display: inline-block;
+      padding: 12px 20px;
+      text-decoration: none;
+      border-radius: 8px;
+      border: 1px solid #111;
+      font-weight: bold;
+      color: #111;
+      margin-right: 12px;
+      margin-bottom: 12px;
+    }
+
+    .muted {
+      color: #555;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .footer-tagline {
+      text-align: center;
+      margin-top: 30px;
+    }
+
+    .footer-tagline p {
+      margin: 0 0 10px 0;
+    }
+
+    .brand-line {
+      font-size: 16px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="center" style="margin-bottom: 28px;">
+      <h1>Your Document Delivery</h1>
+      <p style="margin-top: 10px; font-size: 16px;">Thank you for choosing e-legalboom.com.</p>
+    </div>
+
+    <div class="card" id="deliveryInfoCard">
+      <p style="margin-top: 0; font-size: 17px;">
+        Your document delivery information is shown below.
+      </p>
+
+      <p><strong>Order Number:</strong> <span id="orderId">—</span></p>
+      <p><strong>Document Type:</strong> <span id="docType">—</span></p>
+      <p><strong>Delivery Date:</strong> <span id="deliveryDate">—</span></p>
+      <p><strong>Delivery Link Expiration:</strong> <span id="linkExpiresAt">—</span></p>
+
+      <p style="margin-top: 18px;">
+        Your delivery link will remain active for <strong>7 days</strong> from the release date.
+      </p>
+    </div>
+
+    <div class="card white" id="statusCard">
+      <h2>Delivery Status</h2>
+
+      <div id="statusNotReady" class="hidden">
+        <p><strong>Your document is not yet available for download.</strong></p>
+        <p>Please check back later.</p>
+      </div>
+
+      <div id="statusReady" class="hidden">
+        <p><strong>Your document has been completed and released for delivery.</strong></p>
+      </div>
+
+      <div id="statusExpired" class="hidden">
+        <p><strong>Your delivery link has expired.</strong></p>
+        <p>Please contact <a href="mailto:Payments@elegalboom.com">Payments@elegalboom.com</a> for payment-related questions.</p>
+      </div>
+
+      <div id="statusMissing" class="hidden">
+        <p><strong>We could not locate delivery information for this order.</strong></p>
+      </div>
+    </div>
+
+    <div class="card white" id="downloadCard">
+      <h2>Download Your Files</h2>
+
+      <div class="button-row">
+        <a id="downloadDocumentBtn" class="button hidden" href="#" target="_blank" rel="noopener noreferrer">Download Document</a>
+        <a id="downloadDocxBtn" class="button hidden" href="#" target="_blank" rel="noopener noreferrer">Download DOCX Copy</a>
+      </div>
+    </div>
+
+    <div class="card" id="catalogCard">
+      <h2>Need Another Legal Document?</h2>
+      <p>You may view our catalog of additional legal documents below.</p>
+
+      <p style="margin-top: 18px;">
+        <a id="catalogBtn" class="button" href="catalog.html">View Legal Document Catalog</a>
+      </p>
+    </div>
+
+    <div class="card" id="contactCard">
+      <h2>Contact</h2>
+      <p style="margin: 0;">
+        For payment-related questions, please contact:
+        <a href="mailto:Payments@elegalboom.com">Payments@elegalboom.com</a>
+      </p>
+    </div>
+
+    <div class="footer-tagline">
+      <p>Thank you again for choosing e-legalboom.com.</p>
+      <p class="brand-line">e-legalboom.com — A better choice for legal documents.</p>
+    </div>
+  </div>
+
+  <script type="module">
+    import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+
+    const SUPABASE_URL = "https://vvjbjfltqsivvxxifnvi.supabase.co";
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ2amJqZmx0cXNpdnZ4eGlmbnZpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc5NzYzNTAsImV4cCI6MjA3MzU1MjM1MH0.F4zzcpCHl9v-Rnj0wgKJ5zBf1HteVyXelMLQDDEN28Q";
+
+    const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    const orderIdEl = document.getElementById("orderId");
+    const docTypeEl = document.getElementById("docType");
+    const deliveryDateEl = document.getElementById("deliveryDate");
+    const linkExpiresAtEl = document.getElementById("linkExpiresAt");
+
+    const statusNotReady = document.getElementById("statusNotReady");
+    const statusReady = document.getElementById("statusReady");
+    const statusExpired = document.getElementById("statusExpired");
+    const statusMissing = document.getElementById("statusMissing");
+
+    const downloadDocumentBtn = document.getElementById("downloadDocumentBtn");
+    const downloadDocxBtn = document.getElementById("downloadDocxBtn");
+    const catalogBtn = document.getElementById("catalogBtn");
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const id = urlParams.get("id");
+    const orderId = urlParams.get("order_id");
+
+    function showOnlyStatus(target) {
+      [statusNotReady, statusReady, statusExpired, statusMissing].forEach(el => {
+        el.classList.add("hidden");
+      });
+      target.classList.remove("hidden");
+    }
+
+    function formatDate(value) {
+      if (!value) return "—";
+      const d = new Date(value);
+      if (Number.isNaN(d.getTime())) return value;
+      return d.toLocaleString();
+    }
+
+    async function loadOrder() {
+      if (!id && !orderId) {
+        showOnlyStatus(statusMissing);
+        return;
+      }
+
+      let query = supabase
+        .from("pweb_orders")
+        .select(`
+          id,
+          order_id,
+          doc_type,
+          order_status,
+          delivery_link,
+          delivery_link_expires_at,
+          delivered_at,
+          docx_path
+        `)
+        .limit(1);
+
+      query = id ? query.eq("id", id) : query.eq("order_id", orderId);
+
+      const { data, error } = await query;
+
+      if (error || !data || !data.length) {
+        showOnlyStatus(statusMissing);
+        return;
+      }
+
+      const row = data[0];
+      const now = new Date();
+      const expiresAt = row.delivery_link_expires_at ? new Date(row.delivery_link_expires_at) : null;
+      const linkActive = !!row.delivery_link && !!expiresAt && expiresAt > now;
+
+      orderIdEl.textContent = row.order_id || "—";
+      docTypeEl.textContent = row.doc_type || "—";
+      deliveryDateEl.textContent = formatDate(row.delivered_at);
+      linkExpiresAtEl.textContent = formatDate(row.delivery_link_expires_at);
+
+      if (linkActive) {
+        showOnlyStatus(statusReady);
+        downloadDocumentBtn.href = row.delivery_link;
+        downloadDocumentBtn.classList.remove("hidden");
+      } else if (row.delivery_link && expiresAt && expiresAt <= now) {
+        showOnlyStatus(statusExpired);
+      } else if (row.order_status === "ready_for_delivery" || row.order_status === "document_created") {
+        showOnlyStatus(statusNotReady);
+      } else {
+        showOnlyStatus(statusMissing);
+      }
+
+      if (row.docx_path) {
+        try {
+          const { data: docxSigned, error: docxError } = await supabase
+            .storage
+            .from("documents")
+            .createSignedUrl(row.docx_path, 60 * 60 * 24 * 7);
+
+          if (!docxError && docxSigned?.signedUrl) {
+            downloadDocxBtn.href = docxSigned.signedUrl;
+            downloadDocxBtn.classList.remove("hidden");
+          }
+        } catch (e) {
+          console.error("DOCX signed URL error:", e);
+        }
+      }
+
+      catalogBtn.href = "catalog.html";
+    }
+
+    loadOrder();
+  </script>
+</body>
+</html>
