@@ -165,117 +165,127 @@
     </div>
   </div>
 
-  <script type="module">
-    import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+<script type="module">
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
-    const SUPABASE_URL = "https://vvjbjfltqsivvxxifnvi.supabase.co";
-    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ2amJqZmx0cXNpdnZ4eGlmbnZpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc5NzYzNTAsImV4cCI6MjA3MzU1MjM1MH0.F4zzcpCHl9v-Rnj0wgKJ5zBf1HteVyXelMLQDDEN28Q";
+const SUPABASE_URL = "https://vvjbjfltqsivvxxifnvi.supabase.co";
+const SUPABASE_ANON_KEY = "YOUR_SUPABASE_ANON_KEY_HERE";
 
-    const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    const orderIdEl = document.getElementById("orderId");
-    const docTypeEl = document.getElementById("docType");
-    const deliveryDateEl = document.getElementById("deliveryDate");
-    const linkExpiresAtEl = document.getElementById("linkExpiresAt");
+const orderIdEl = document.getElementById("orderId");
+const docTypeEl = document.getElementById("docType");
+const deliveryDateEl = document.getElementById("deliveryDate");
+const linkExpiresAtEl = document.getElementById("linkExpiresAt");
 
-    const statusNotReady = document.getElementById("statusNotReady");
-    const statusReady = document.getElementById("statusReady");
-    const statusExpired = document.getElementById("statusExpired");
-    const statusMissing = document.getElementById("statusMissing");
+const statusNotReady = document.getElementById("statusNotReady");
+const statusReady = document.getElementById("statusReady");
+const statusExpired = document.getElementById("statusExpired");
+const statusMissing = document.getElementById("statusMissing");
 
-    const downloadDocumentBtn = document.getElementById("downloadDocumentBtn");
-    const downloadDocxBtn = document.getElementById("downloadDocxBtn");
-    const catalogBtn = document.getElementById("catalogBtn");
+const downloadDocumentBtn = document.getElementById("downloadDocumentBtn");
+const downloadDocxBtn = document.getElementById("downloadDocxBtn");
+const catalogBtn = document.getElementById("catalogBtn");
 
-    const urlParams = new URLSearchParams(window.location.search);
-    const id = urlParams.get("id");
-    const orderId = urlParams.get("order_id");
+const urlParams = new URLSearchParams(window.location.search);
+const orderId = urlParams.get("order_id");
 
-    function showOnlyStatus(target) {
-      [statusNotReady, statusReady, statusExpired, statusMissing].forEach(el => {
-        el.classList.add("hidden");
-      });
-      target.classList.remove("hidden");
-    }
+function showOnlyStatus(target) {
+  [statusNotReady, statusReady, statusExpired, statusMissing].forEach((el) => {
+    if (el) el.classList.add("hidden");
+  });
+  if (target) target.classList.remove("hidden");
+}
 
-    function formatDate(value) {
-      if (!value) return "—";
-      const d = new Date(value);
-      if (Number.isNaN(d.getTime())) return value;
-      return d.toLocaleString();
-    }
+function formatDate(value) {
+  if (!value) return "—";
+  const d = new Date(value);
+  if (Number.isNaN(d.getTime())) return value;
+  return d.toISOString().slice(0, 10);
+}
 
-    async function loadOrder() {
-      if (!id && !orderId) {
-        showOnlyStatus(statusMissing);
-        return;
-      }
+function addDays(dateString, days) {
+  const d = new Date(dateString || Date.now());
+  if (Number.isNaN(d.getTime())) return null;
+  d.setDate(d.getDate() + days);
+  return d.toISOString().slice(0, 10);
+}
 
-      let query = supabase
-        .from("pweb_orders")
-        .select(`
-          id,
-          order_id,
-          doc_type,
-          order_status,
-          delivery_link,
-          delivery_link_expires_at,
-          delivered_at,
-          docx_path
-        `)
-        .limit(1);
+async function createSignedUrl(path) {
+  if (!path) return null;
 
-      query = id ? query.eq("id", id) : query.eq("order_id", orderId);
+  const { data, error } = await supabase
+    .storage
+    .from("documents")
+    .createSignedUrl(path, 60 * 60 * 24 * 7);
 
-      const { data, error } = await query;
+  if (error || !data?.signedUrl) {
+    console.error("Signed URL error for path:", path, error);
+    return null;
+  }
 
-      if (error || !data || !data.length) {
-        showOnlyStatus(statusMissing);
-        return;
-      }
+  return data.signedUrl;
+}
 
-      const row = data[0];
-      const now = new Date();
-      const expiresAt = row.delivery_link_expires_at ? new Date(row.delivery_link_expires_at) : null;
-      const linkActive = !!row.delivery_link && !!expiresAt && expiresAt > now;
+async function loadDelivery() {
+  if (!orderId) {
+    showOnlyStatus(statusMissing);
+    return;
+  }
 
-      orderIdEl.textContent = row.order_id || "—";
-      docTypeEl.textContent = row.doc_type || "—";
-      deliveryDateEl.textContent = formatDate(row.delivered_at);
-      linkExpiresAtEl.textContent = formatDate(row.delivery_link_expires_at);
+  if (orderIdEl) orderIdEl.textContent = orderId;
+  if (catalogBtn) catalogBtn.href = "catalog.html";
 
-      if (linkActive) {
-        showOnlyStatus(statusReady);
-        downloadDocumentBtn.href = row.delivery_link;
-        downloadDocumentBtn.classList.remove("hidden");
-      } else if (row.delivery_link && expiresAt && expiresAt <= now) {
-        showOnlyStatus(statusExpired);
-      } else if (row.order_status === "ready_for_delivery" || row.order_status === "document_created") {
-        showOnlyStatus(statusNotReady);
-      } else {
-        showOnlyStatus(statusMissing);
-      }
+  const { data: row, error } = await supabase
+    .from("order_email_queue")
+    .select("*")
+    .eq("order_id", orderId)
+    .maybeSingle();
 
-      if (row.docx_path) {
-        try {
-          const { data: docxSigned, error: docxError } = await supabase
-            .storage
-            .from("documents")
-            .createSignedUrl(row.docx_path, 60 * 60 * 24 * 7);
+  if (error) {
+    console.error("order_email_queue lookup error:", error);
+    showOnlyStatus(statusMissing);
+    return;
+  }
 
-          if (!docxError && docxSigned?.signedUrl) {
-            downloadDocxBtn.href = docxSigned.signedUrl;
-            downloadDocxBtn.classList.remove("hidden");
-          }
-        } catch (e) {
-          console.error("DOCX signed URL error:", e);
-        }
-      }
+  if (!row) {
+    showOnlyStatus(statusMissing);
+    return;
+  }
 
-      catalogBtn.href = "catalog.html";
-    }
+  const deliveryDate = row.email_sent_at || row.created_at || null;
+  const expiresAt = deliveryDate ? addDays(deliveryDate, 7) : "—";
 
-    loadOrder();
-  </script>
+  if (orderIdEl) orderIdEl.textContent = row.order_id || "—";
+  if (docTypeEl) docTypeEl.textContent = row.doc_type || "—";
+  if (deliveryDateEl) deliveryDateEl.textContent = formatDate(deliveryDate);
+  if (linkExpiresAtEl) linkExpiresAtEl.textContent = expiresAt || "—";
+
+  const pdfUrl = await createSignedUrl(row.pdf_path);
+  const docxUrl = await createSignedUrl(row.docx_path);
+
+  let hasAnyFile = false;
+
+  if (pdfUrl && downloadDocumentBtn) {
+    downloadDocumentBtn.href = pdfUrl;
+    downloadDocumentBtn.classList.remove("hidden");
+    hasAnyFile = true;
+  }
+
+  if (docxUrl && downloadDocxBtn) {
+    downloadDocxBtn.href = docxUrl;
+    downloadDocxBtn.classList.remove("hidden");
+    hasAnyFile = true;
+  }
+
+  if (hasAnyFile) {
+    showOnlyStatus(statusReady);
+  } else {
+    showOnlyStatus(statusNotReady);
+  }
+}
+
+loadDelivery();
+</script>
 </body>
 </html>
