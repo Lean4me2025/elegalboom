@@ -1,6 +1,84 @@
 import { createClient } from '@supabase/supabase-js';
+import { PDFDocument, StandardFonts, rgb } from 'pdf-lib';
 
-export default async function handler(req, res) {
+function decodeHtmlEntities(input: string): string {
+  return input
+    .replace(/&nbsp;/g, ' ')
+    .replace(/&amp;/g, '&')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+    .replace(/&#x27;/g, "'")
+    .replace(/&#x2F;/g, '/');
+}
+
+function htmlToPlainText(html: string): string {
+  return decodeHtmlEntities(
+    html
+      .replace(/<script[\s\S]*?<\/script>/gi, ' ')
+      .replace(/<style[\s\S]*?<\/style>/gi, ' ')
+      .replace(/<br\s*\/?>/gi, '\n')
+      .replace(/<\/p>/gi, '\n\n')
+      .replace(/<\/div>/gi, '\n')
+      .replace(/<\/h[1-6]>/gi, '\n\n')
+      .replace(/<\/li>/gi, '\n')
+      .replace(/<li>/gi, '• ')
+      .replace(/<[^>]+>/g, ' ')
+      .replace(/\r/g, '')
+      .replace(/[ \t]+\n/g, '\n')
+      .replace(/\n[ \t]+/g, '\n')
+      .replace(/\n{3,}/g, '\n\n')
+      .replace(/[ \t]{2,}/g, ' ')
+      .trim()
+  );
+}
+
+function wrapText(text: string, maxCharsPerLine = 95): string[] {
+  const paragraphs = text.split('\n');
+  const lines: string[] = [];
+
+  for (const paragraph of paragraphs) {
+    const trimmed = paragraph.trim();
+
+    if (!trimmed) {
+      lines.push('');
+      continue;
+    }
+
+    const words = trimmed.split(/\s+/);
+    let currentLine = '';
+
+    for (const word of words) {
+      const candidate = currentLine ? `${currentLine} ${word}` : word;
+
+      if (candidate.length <= maxCharsPerLine) {
+        currentLine = candidate;
+      } else {
+        if (currentLine) lines.push(currentLine);
+        currentLine = word;
+      }
+    }
+
+    if (currentLine) lines.push(currentLine);
+    lines.push('');
+  }
+
+  while (lines.length > 0 && lines[lines.length - 1] === '') {
+    lines.pop();
+  }
+
+  return lines;
+}
+
+function buildPdfFileName(htmlPath: string): string {
+  if (htmlPath.toLowerCase().endsWith('.html')) {
+    return htmlPath.replace(/\.html$/i, '.pdf');
+  }
+  return `${htmlPath}.pdf`;
+}
+
+export default async function handler(req: any, res: any) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
@@ -34,47 +112,145 @@ export default async function handler(req, res) {
     const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
     const bucketName = 'documents';
 
-    const { data: rootList, error: listError } = await supabase.storage
-      .from(bucketName)
-      .list('', { limit: 100 });
-
-    const rootNames = (rootList || []).map(item => item.name);
-    const exactMatch = rootNames.includes(html_path);
-
-    const { data, error } = await supabase.storage
+    const { data: htmlBlob, error: downloadError } = await supabase.storage
       .from(bucketName)
       .download(html_path);
 
-    if (error || !data) {
+    if (downloadError || !htmlBlob) {
       return res.status(404).json({
         success: false,
         error: 'Could not download HTML from storage',
-        details: error?.message || null,
+        details: downloadError?.message || null,
         bucket: bucketName,
         html_path,
-        exact_match_in_root_list: exactMatch,
-        root_list_error: listError?.message || null,
-        root_names_sample: rootNames.slice(0, 25),
       });
     }
 
-    const htmlText = await data.text();
+    const htmlText = await htmlBlob.text();
+    const plainText = htmlToPlainText(htmlText);
+
+    if (!plainText) {
+      return res.status(400).json({
+        success: false,
+        error: 'HTML converted to empty text; no PDF content to generate',
+        html_path,
+      });
+    }
+
+    const pdfDoc = await PDFDocument.create();
+    const font = await pdfDoc.embedFont(StandardFonts.TimesRoman);
+    const boldFont = await pdfDoc.embedFont(StandardFonts.TimesRomanBold);
+
+    const pageWidth = 612;
+    const pageHeight = 792;
+    const margin = 50;
+    const fontSize = 11;
+    const lineHeight = 15;
+    const maxCharsPerLine = 95;
+
+    let page = pdfDoc.addPage([pageWidth, pageHeight]);
+    let y = pageHeight - margin;
+
+    const pdfFileName = buildPdfFileName(html_path);
+
+    page.drawText('e-legalboom.com', {
+      x: margin,
+      y,
+      size: 12,
+      font: boldFont,
+      color: rgb(0, 0, 0),
+    });
+
+    y -= 22;
+
+    page.drawText(`Order ID: ${order_id}`, {
+      x: margin,
+      y,
+      size: 10,
+      font,
+      color: rgb(0, 0, 0),
+    });
+
+    y -= 16;
+
+    page.drawText(`Source HTML: ${html_path}`, {
+      x: margin,
+      y,
+      size: 9,
+      font,
+      color: rgb(0, 0, 0),
+    });
+
+    y -= 24;
+
+    const lines = wrapText(plainText, maxCharsPerLine);
+
+    for (const line of lines) {
+      if (y <= margin) {
+        page = pdfDoc.addPage([pageWidth, pageHeight]);
+        y = pageHeight - margin;
+      }
+
+      page.drawText(line, {
+        x: margin,
+        y,
+        size: fontSize,
+        font,
+        color: rgb(0, 0, 0),
+      });
+
+      y -= lineHeight;
+    }
+
+    const pdfBytes = await pdfDoc.save();
+
+    const { error: uploadError } = await supabase.storage
+      .from(bucketName)
+      .upload(pdfFileName, pdfBytes, {
+        contentType: 'application/pdf',
+        upsert: true,
+      });
+
+    if (uploadError) {
+      return res.status(500).json({
+        success: false,
+        error: 'PDF created but failed to upload to storage',
+        details: uploadError.message,
+        pdf_path: pdfFileName,
+      });
+    }
+
+    const { data: updateData, error: updateError } = await supabase
+      .from('pweb_orders')
+      .update({
+        pdf_path: pdfFileName,
+      })
+      .eq('order_id', order_id)
+      .select('id, order_id, pdf_path, docx_path')
+      .limit(1);
+
+    if (updateError) {
+      return res.status(500).json({
+        success: false,
+        error: 'PDF uploaded, but failed to update pweb_orders.pdf_path',
+        details: updateError.message,
+        pdf_path: pdfFileName,
+      });
+    }
 
     return res.status(200).json({
       success: true,
-      message: 'HTML file fetched successfully',
+      message: 'PDF generated, uploaded, and pdf_path updated successfully',
       order_id,
-      bucket: bucketName,
       html_path,
-      exact_match_in_root_list: exactMatch,
-      html_length: htmlText.length,
-      html_preview: htmlText.slice(0, 500),
+      pdf_path: pdfFileName,
+      updated_row: updateData?.[0] || null,
+      text_preview: plainText.slice(0, 500),
     });
-  } catch (error) {
-    const message = error instanceof Error ? error.message : 'Unknown error';
+  } catch (error: any) {
     return res.status(500).json({
       success: false,
-      error: message,
+      error: error?.message || 'Unknown error',
     });
   }
 }
