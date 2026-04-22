@@ -16,15 +16,15 @@ function decodeHtmlEntities(input: string): string {
 function htmlToPlainText(html: string): string {
   return decodeHtmlEntities(
     html
-      .replace(/<script[\s\S]*?<\/script>/gi, ' ')
-      .replace(/<style[\s\S]*?<\/style>/gi, ' ')
+      .replace(/<script[\s\S]*?<\/script>/gi, '')
+      .replace(/<style[\s\S]*?<\/style>/gi, '')
       .replace(/<br\s*\/?>/gi, '\n')
       .replace(/<\/p>/gi, '\n\n')
       .replace(/<\/div>/gi, '\n')
       .replace(/<\/h[1-6]>/gi, '\n\n')
       .replace(/<\/li>/gi, '\n')
       .replace(/<li>/gi, '• ')
-      .replace(/<[^>]+>/g, ' ')
+      .replace(/<[^>]+>/g, '')
       .replace(/\r/g, '')
       .replace(/[ \t]+\n/g, '\n')
       .replace(/\n[ \t]+/g, '\n')
@@ -71,11 +71,14 @@ function wrapText(text: string, maxCharsPerLine = 95): string[] {
   return lines;
 }
 
-function buildPdfFileName(htmlPath: string): string {
-  if (htmlPath.toLowerCase().endsWith('.html')) {
+function buildPdfFileName(orderId: string, htmlPath?: string | null): string {
+  const safeOrderId = String(orderId).trim();
+
+  if (htmlPath && htmlPath.toLowerCase().endsWith('.html')) {
     return htmlPath.replace(/\.html$/i, '.pdf');
   }
-  return `${htmlPath}.pdf`;
+
+  return `document-${safeOrderId}.pdf`;
 }
 
 export default async function handler(req: any, res: any) {
@@ -90,12 +93,11 @@ export default async function handler(req: any, res: any) {
   try {
     const source = req.method === 'GET' ? req.query : (req.body || {});
     const order_id = source.order_id;
-    const html_path = source.html_path;
 
-    if (!order_id || !html_path) {
+    if (!order_id) {
       return res.status(400).json({
         success: false,
-        error: 'order_id and html_path are required',
+        error: 'order_id is required',
       });
     }
 
@@ -112,28 +114,64 @@ export default async function handler(req: any, res: any) {
     const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
     const bucketName = 'documents';
 
-    const { data: htmlBlob, error: downloadError } = await supabase.storage
-      .from(bucketName)
-      .download(html_path);
+    const { data: orderRow, error: orderError } = await supabase
+      .from('pweb_orders')
+      .select('id, order_id, generated_doc_text, docx_path, pdf_path')
+      .eq('order_id', order_id)
+      .maybeSingle();
 
-    if (downloadError || !htmlBlob) {
+    if (orderError || !orderRow) {
       return res.status(404).json({
         success: false,
-        error: 'Could not download HTML from storage',
-        details: downloadError?.message || null,
-        bucket: bucketName,
-        html_path,
+        error: 'Order not found in pweb_orders',
+        details: orderError?.message || null,
+        order_id,
       });
     }
 
-    const htmlText = await htmlBlob.text();
+    let htmlText = '';
+    let sourceMode = 'row.generated_doc_text';
+    let sourceHtmlPath: string | null = orderRow.docx_path || null;
+
+    if (orderRow.generated_doc_text && String(orderRow.generated_doc_text).trim()) {
+      htmlText = String(orderRow.generated_doc_text);
+    } else if (sourceHtmlPath) {
+      sourceMode = 'storage.docx_path';
+
+      const { data: htmlBlob, error: downloadError } = await supabase.storage
+        .from(bucketName)
+        .download(sourceHtmlPath);
+
+      if (downloadError || !htmlBlob) {
+        return res.status(404).json({
+          success: false,
+          error: 'Could not obtain HTML source',
+          details: downloadError?.message || null,
+          bucket: bucketName,
+          order_id,
+          docx_path: sourceHtmlPath,
+          sourceMode,
+        });
+      }
+
+      htmlText = await htmlBlob.text();
+    } else {
+      return res.status(400).json({
+        success: false,
+        error: 'No HTML source found on order row',
+        order_id,
+      });
+    }
+
     const plainText = htmlToPlainText(htmlText);
 
     if (!plainText) {
       return res.status(400).json({
         success: false,
         error: 'HTML converted to empty text; no PDF content to generate',
-        html_path,
+        order_id,
+        docx_path: sourceHtmlPath,
+        sourceMode,
       });
     }
 
@@ -150,8 +188,6 @@ export default async function handler(req: any, res: any) {
 
     let page = pdfDoc.addPage([pageWidth, pageHeight]);
     let y = pageHeight - margin;
-
-    const pdfFileName = buildPdfFileName(html_path);
 
     page.drawText('e-legalboom.com', {
       x: margin,
@@ -173,7 +209,7 @@ export default async function handler(req: any, res: any) {
 
     y -= 16;
 
-    page.drawText(`Source HTML: ${html_path}`, {
+    page.drawText(`Source Mode: ${sourceMode}`, {
       x: margin,
       y,
       size: 9,
@@ -181,7 +217,21 @@ export default async function handler(req: any, res: any) {
       color: rgb(0, 0, 0),
     });
 
-    y -= 24;
+    y -= 14;
+
+    if (sourceHtmlPath) {
+      page.drawText(`Source HTML Ref: ${sourceHtmlPath}`, {
+        x: margin,
+        y,
+        size: 9,
+        font,
+        color: rgb(0, 0, 0),
+      });
+
+      y -= 24;
+    } else {
+      y -= 10;
+    }
 
     const lines = wrapText(plainText, maxCharsPerLine);
 
@@ -203,6 +253,7 @@ export default async function handler(req: any, res: any) {
     }
 
     const pdfBytes = await pdfDoc.save();
+    const pdfFileName = buildPdfFileName(order_id, sourceHtmlPath);
 
     const { error: uploadError } = await supabase.storage
       .from(bucketName)
@@ -217,6 +268,7 @@ export default async function handler(req: any, res: any) {
         error: 'PDF created but failed to upload to storage',
         details: uploadError.message,
         pdf_path: pdfFileName,
+        order_id,
       });
     }
 
@@ -235,6 +287,7 @@ export default async function handler(req: any, res: any) {
         error: 'PDF uploaded, but failed to update pweb_orders.pdf_path',
         details: updateError.message,
         pdf_path: pdfFileName,
+        order_id,
       });
     }
 
@@ -242,9 +295,10 @@ export default async function handler(req: any, res: any) {
       success: true,
       message: 'PDF generated, uploaded, and pdf_path updated successfully',
       order_id,
-      html_path,
+      sourceMode,
+      docx_path: sourceHtmlPath,
       pdf_path: pdfFileName,
-      updated_row: updateData?.[0] || null,
+      updated_row: Array.isArray(updateData) ? updateData[0] ?? null : updateData,
       text_preview: plainText.slice(0, 500),
     });
   } catch (error: any) {
