@@ -81,6 +81,15 @@ function buildPdfFileName(orderId: string, htmlPath?: string | null): string {
   return `document-${safeOrderId}.pdf`;
 }
 
+function buildPublicFileUrl(supabaseUrl: string, bucketName: string, filePath: string): string {
+  const encodedPath = filePath
+    .split('/')
+    .map((part) => encodeURIComponent(part))
+    .join('/');
+
+  return `${supabaseUrl}/storage/v1/object/public/${bucketName}/${encodedPath}`;
+}
+
 export default async function handler(req: any, res: any) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
@@ -93,7 +102,6 @@ export default async function handler(req: any, res: any) {
   try {
     const source = req.method === 'GET' ? req.query : (req.body || {});
     const order_id = source.order_id;
-    const debug = String(source.debug || '').toLowerCase() === 'true';
 
     if (!order_id) {
       return res.status(400).json({
@@ -109,8 +117,6 @@ export default async function handler(req: any, res: any) {
       return res.status(500).json({
         success: false,
         error: 'Missing SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY in Vercel environment variables',
-        hasSupabaseUrl: !!supabaseUrl,
-        hasServiceRoleKey: !!supabaseServiceRoleKey,
       });
     }
 
@@ -122,28 +128,6 @@ export default async function handler(req: any, res: any) {
       .select('id, order_id, generated_doc_text, docx_path, pdf_path')
       .eq('order_id', order_id)
       .limit(1);
-
-    if (debug) {
-      return res.status(200).json({
-        success: true,
-        debug: true,
-        runtimeOrderId: order_id,
-        hasSupabaseUrl: !!supabaseUrl,
-        hasServiceRoleKey: !!supabaseServiceRoleKey,
-        supabaseUrlPreview: supabaseUrl.slice(0, 40),
-        probeError: probeError ? probeError.message : null,
-        rowCount: Array.isArray(orderRows) ? orderRows.length : 0,
-        rowPreview: Array.isArray(orderRows) && orderRows[0]
-          ? {
-              id: orderRows[0].id,
-              order_id: orderRows[0].order_id,
-              has_generated_doc_text: !!String(orderRows[0].generated_doc_text || '').trim(),
-              docx_path: orderRows[0].docx_path || null,
-              pdf_path: orderRows[0].pdf_path || null,
-            }
-          : null,
-      });
-    }
 
     if (probeError) {
       return res.status(500).json({
@@ -307,6 +291,8 @@ export default async function handler(req: any, res: any) {
       });
     }
 
+    const pdfPublicUrl = buildPublicFileUrl(supabaseUrl, bucketName, pdfFileName);
+
     const { data: updateData, error: updateError } = await supabase
       .from('pweb_orders')
       .update({
@@ -322,17 +308,19 @@ export default async function handler(req: any, res: any) {
         error: 'PDF uploaded, but failed to update pweb_orders.pdf_path',
         details: updateError.message,
         pdf_path: pdfFileName,
+        pdf_url: pdfPublicUrl,
         order_id,
       });
     }
 
     return res.status(200).json({
       success: true,
-      message: 'PDF generated, uploaded, and pdf_path updated successfully',
+      message: 'PDF generated, uploaded, pdf_path updated, and delivery URL returned successfully',
       order_id,
       sourceMode,
       docx_path: sourceHtmlPath,
       pdf_path: pdfFileName,
+      pdf_url: pdfPublicUrl,
       updated_row: Array.isArray(updateData) ? updateData[0] ?? null : updateData,
       text_preview: plainText.slice(0, 500),
     });
