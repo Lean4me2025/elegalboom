@@ -93,6 +93,7 @@ export default async function handler(req: any, res: any) {
   try {
     const source = req.method === 'GET' ? req.query : (req.body || {});
     const order_id = source.order_id;
+    const debug = String(source.debug || '').toLowerCase() === 'true';
 
     if (!order_id) {
       return res.status(400).json({
@@ -108,23 +109,57 @@ export default async function handler(req: any, res: any) {
       return res.status(500).json({
         success: false,
         error: 'Missing SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY in Vercel environment variables',
+        hasSupabaseUrl: !!supabaseUrl,
+        hasServiceRoleKey: !!supabaseServiceRoleKey,
       });
     }
 
     const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
     const bucketName = 'documents';
 
-    const { data: orderRow, error: orderError } = await supabase
+    const { data: orderRows, error: probeError } = await supabase
       .from('pweb_orders')
       .select('id, order_id, generated_doc_text, docx_path, pdf_path')
       .eq('order_id', order_id)
-      .maybeSingle();
+      .limit(1);
 
-    if (orderError || !orderRow) {
+    if (debug) {
+      return res.status(200).json({
+        success: true,
+        debug: true,
+        runtimeOrderId: order_id,
+        hasSupabaseUrl: !!supabaseUrl,
+        hasServiceRoleKey: !!supabaseServiceRoleKey,
+        supabaseUrlPreview: supabaseUrl.slice(0, 40),
+        probeError: probeError ? probeError.message : null,
+        rowCount: Array.isArray(orderRows) ? orderRows.length : 0,
+        rowPreview: Array.isArray(orderRows) && orderRows[0]
+          ? {
+              id: orderRows[0].id,
+              order_id: orderRows[0].order_id,
+              has_generated_doc_text: !!String(orderRows[0].generated_doc_text || '').trim(),
+              docx_path: orderRows[0].docx_path || null,
+              pdf_path: orderRows[0].pdf_path || null,
+            }
+          : null,
+      });
+    }
+
+    if (probeError) {
+      return res.status(500).json({
+        success: false,
+        error: 'Database probe failed',
+        details: probeError.message,
+        order_id,
+      });
+    }
+
+    const orderRow = Array.isArray(orderRows) ? orderRows[0] : null;
+
+    if (!orderRow) {
       return res.status(404).json({
         success: false,
         error: 'Order not found in pweb_orders',
-        details: orderError?.message || null,
         order_id,
       });
     }
