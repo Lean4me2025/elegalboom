@@ -87,10 +87,10 @@ console.log("REVIEW → RECEIVED ORDER:", reviewPayload);
 
       function getPayLink(tier) {
         const t = String(tier || "").toLowerCase();
-        if (t.startsWith("tier 1")) return "https://pay.elegalboom.org/e4b79a60-0fd7-431c-8bfc-ae0";
-        if (t.startsWith("tier 2")) return "https://pay.elegalboom.org/aeda586f-65f5-4bf0-98f3-7a2";
-        if (t.startsWith("tier 3")) return "https://pay.elegalboom.org/71ca7144-e537-4fbd-823d-c10";
-        if (t.startsWith("tier 4")) return "https://pay.elegalboom.org/55c7cd3d-1048-4b8c-aadb-843";
+        if (t.startsWith("tier 1")) return "https://buy.stripe.com/00wcN7csK6AT0Ij4ZA6J202";
+        if (t.startsWith("tier 2")) return "https://buy.stripe.com/aFaeVf0K25wP62D2Rs6J204";
+        if (t.startsWith("tier 3")) return "https://buy.stripe.com/bJe28tcsK2kD8aLfEe6J205";
+        if (t.startsWith("tier 4")) return "";
         return "";
       }
 
